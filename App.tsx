@@ -5,17 +5,30 @@
  * @format
  */
 
+import { SplashScreen } from '@components/splash/SplashScreen';
 import { NewAppScreen } from '@react-native/new-app-screen';
+import HomeScreen from '@screens/HomeScreen';
+import { useEffect, useState } from 'react';
 import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 function App() {
-  const isDarkMode = useColorScheme() === 'dark';
+  const [isAppReady, setIsAppReady] = useState(false);
+
+  useEffect(() => {
+    // setTimeout(() => {
+    //   setIsAppReady(true);
+    // }, 900);
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <NewAppScreen templateFileName="App.tsx" />
-    </View>
+    <SplashScreen isAppReady={isAppReady} checkLocalStorage={false}>
+      {/* <NewAppScreen templateFileName="App.tsx" /> */}
+
+      <SafeAreaProvider>
+        <HomeScreen />
+      </SafeAreaProvider>
+    </SplashScreen>
   );
 }
 
