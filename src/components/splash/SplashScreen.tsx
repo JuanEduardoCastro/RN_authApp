@@ -52,7 +52,7 @@ export const Splash = ({ isAppReady, checkLoaclStorage }: SplashProps) => {
     if (imageState === IMG_STATE.FADE_IN_IMAGE) {
       Animated.timing(imageOpacity, {
         toValue: 1,
-        duration: 800, // FADE IN DURATION
+        duration: 1100, // FADE IN DURATION
         useNativeDriver: true,
       }).start(() => setImageState(IMG_STATE.WAIT_FOR_APP_TO_BE_READY));
     }

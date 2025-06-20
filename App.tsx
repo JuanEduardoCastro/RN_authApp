@@ -6,6 +6,7 @@
  */
 
 import { SplashScreen } from '@components/splash/SplashScreen';
+import { ThemeProvider } from '@context/ThemeContext';
 import { NewAppScreen } from '@react-native/new-app-screen';
 import HomeScreen from '@screens/HomeScreen';
 import { useEffect, useState } from 'react';
@@ -16,9 +17,9 @@ function App() {
   const [isAppReady, setIsAppReady] = useState(false);
 
   useEffect(() => {
-    // setTimeout(() => {
-    //   setIsAppReady(true);
-    // }, 900);
+    setTimeout(() => {
+      setIsAppReady(true);
+    }, 900);
   }, []);
 
   return (
@@ -26,7 +27,9 @@ function App() {
       {/* <NewAppScreen templateFileName="App.tsx" /> */}
 
       <SafeAreaProvider>
-        <HomeScreen />
+        <ThemeProvider>
+          <HomeScreen />
+        </ThemeProvider>
       </SafeAreaProvider>
     </SplashScreen>
   );
