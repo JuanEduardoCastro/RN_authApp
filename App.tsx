@@ -1,16 +1,9 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import { SplashScreen } from '@components/splash/SplashScreen';
 import { ThemeProvider } from '@context/ThemeContext';
-import { NewAppScreen } from '@react-native/new-app-screen';
-import HomeScreen from '@screens/HomeScreen';
+import HomeScreen from '@screens/home/HomeScreen';
+import WelcomeScreen from '@screens/auth/WelcomeScreen';
 import { useEffect, useState } from 'react';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 function App() {
@@ -24,11 +17,10 @@ function App() {
 
   return (
     <SplashScreen isAppReady={isAppReady} checkLocalStorage={false}>
-      {/* <NewAppScreen templateFileName="App.tsx" /> */}
-
       <SafeAreaProvider>
         <ThemeProvider>
-          <HomeScreen />
+          <WelcomeScreen />
+          {/* <HomeScreen /> */}
         </ThemeProvider>
       </SafeAreaProvider>
     </SplashScreen>

@@ -3,23 +3,35 @@ import React, { ReactNode } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 
-type Props = {
+type BGGradienteProps = {
   children: ReactNode;
+  colorInit?: string;
+  colorEnd?: string;
+  useAngle?: boolean;
+  angle?: number;
+  angleCenter?: { x: number; y: number } | undefined;
 };
 
 const { width, height } = Dimensions.get('screen');
 
-const BGGradient = ({ children }: Props) => {
+const BGGradient = ({
+  children,
+  colorInit = '#131313',
+  colorEnd = '#575757',
+  useAngle = true,
+  angle = 306.33,
+  angleCenter = { x: 0.5, y: 0.5 },
+}: BGGradienteProps) => {
   const insets = useSafeAreaInsets();
 
   return (
     <LinearGradient
       style={styles.gradientContainer}
-      colors={['#131313', '#575757']}
+      colors={[colorInit, colorEnd]}
       {...{
-        useAngle: true,
-        angle: 306.33,
-        angleCenter: { x: 0.5, y: 0.5 },
+        useAngle: useAngle,
+        angle: angle,
+        angleCenter: angleCenter,
       }}>
       <View
         style={{

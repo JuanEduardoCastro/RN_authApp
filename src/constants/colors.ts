@@ -15,12 +15,11 @@ export const darkMode = {
 
 export const sharedColors = {
   base: '#7646c9',
+  darkBase: '#3C1392',
   primary: '#007AFF',
   accept: '#008000',
   cancel: '#FF2C2C',
-};
-
-export const BnWColors = {
+  // black n white colors
   almostBlack: '#0000000d',
   dark: '#1B1B1E',
   darkCard: '#1F222A',

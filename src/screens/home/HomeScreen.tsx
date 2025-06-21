@@ -10,7 +10,6 @@ const HomeScreen = () => {
   const { mode, toggleMode } = useMode();
   const { colors, styles } = useStyles(createStyles);
 
-  console.log('THE MODE -->', Platform.OS === 'ios' ? 'ios' : 'android', mode);
   return (
     <View style={styles.container}>
       <Text style={styles.text}>HomeScreen</Text>
