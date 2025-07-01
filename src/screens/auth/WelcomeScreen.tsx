@@ -1,12 +1,16 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { WelcomeScreenNavigationProp } from 'src/navigators/types';
 import { TColors } from '@constants/types';
+import { SCREEN } from '@constants/screenSize';
 import useStyles from '@hooks/useStyles';
 import Separator from '@components/shared/Separator';
 import BGGradient from '@components/shared/BGGradient';
 import Button from '@components/shared/Button';
+import ButtonWithIcon from '@components/shared/ButtonWithIcon';
+import { AppleIcon, GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
 
-const WelcomeScreen = () => {
+const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
   const { colors, styles } = useStyles(createStyles);
 
   return (
@@ -18,15 +22,51 @@ const WelcomeScreen = () => {
       <View style={styles.container}>
         <View style={styles.titleBox}>
           <Text style={styles.title}>WELCOME TO AUTH APP</Text>
-          <Text style={styles.title}>FOR DEMO OF AUTHORIZATION APP</Text>
+          <Text style={styles.subTitle}>
+            USER CREDENTIAL AUTHORIZATION DEMO
+          </Text>
           <Separator border={false} height={60} />
-          <Text style={styles.subTitle}>Plase login and test the app</Text>
+        </View>
+        <View style={styles.titleBox}>
+          <Text style={styles.subTitle}>Plase login to your account </Text>
+          <Text style={styles.subTitle}>and try the app </Text>
+        </View>
+        <View style={styles.buttonBox}>
+          <ButtonWithIcon
+            title={'with your email'}
+            Icon={MailIcon}
+            iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
+            onPress={() => navigation.navigate('LoginScreen')}
+          />
+          <ButtonWithIcon
+            title={'with Google'}
+            Icon={GoogleIcon}
+            iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
+            onPress={() => Alert.alert('Enter with Google account')}
+          />
+          <ButtonWithIcon
+            title={'with GitHub'}
+            Icon={GithubIcon}
+            iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
+            onPress={() => Alert.alert('Enter with GitHub account')}
+          />
+          {Platform.OS === 'ios' && (
+            <ButtonWithIcon
+              title={' with apple'}
+              Icon={AppleIcon}
+              iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
+              onPress={() => Alert.alert('Enter with apple account')}
+            />
+          )}
+        </View>
+        <View style={styles.titleBox}>
+          <Text style={styles.subTitle}>or</Text>
         </View>
         <View style={styles.buttonBox}>
           <Button
-            title={'Login'}
+            title={'Register with your email'}
             textStyles={{ fontWeight: 600 }}
-            onPress={() => console.log('ajaaaaaaa')}
+            onPress={() => navigation.navigate('CheckEmailScreen')}
           />
         </View>
       </View>
@@ -44,6 +84,7 @@ const createStyles = (colors: TColors) =>
       alignItems: 'center',
     },
     titleBox: {
+      // backgroundColor: "pink",
       justifyContent: 'center',
       alignItems: 'center',
     },
@@ -58,7 +99,9 @@ const createStyles = (colors: TColors) =>
       fontSize: 18,
     },
     buttonBox: {
+      width: SCREEN.widthFixed * 320,
       paddingVertical: 12,
-      width: 240,
+      marginVertical: 8,
+      gap: 18,
     },
   });

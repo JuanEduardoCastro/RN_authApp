@@ -1,5 +1,6 @@
 import { ColorValue, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { SCREEN } from '@constants/screenSize';
 
 type SeparatorProps = {
   height?: number;
@@ -10,7 +11,7 @@ type SeparatorProps = {
   borderStyle?: 'solid' | 'dotted' | 'dashed' | undefined;
 };
 const Separator = ({
-  height = 32,
+  height = SCREEN.heightFixed * 32,
   background = 'transparent',
   border = true,
   borderColor = 'lightgray',
@@ -41,7 +42,7 @@ export default Separator;
 
 const styles = StyleSheet.create({
   separator: {
-    width: '100%',
+    width: SCREEN.width100,
     justifyContent: 'center',
   },
   line: {},

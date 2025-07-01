@@ -29,10 +29,10 @@ export const ThemeProvider = ({ children }: Props) => {
   useEffect(() => {
     const checkLocalStorage = async () => {
       const isInMode = await AsyncStorage.getItem('mode');
-      console.log(
-        'XX -> ThemeContext.tsx:32 -> checkLocalStorage -> isInMode :',
-        isInMode,
-      );
+      // console.log(
+      //   'XX -> ThemeContext.tsx:32 -> checkLocalStorage -> isInMode :',
+      //   isInMode,
+      // );
       if (isInMode) {
         if (isInMode === 'light') {
           setMode('light');

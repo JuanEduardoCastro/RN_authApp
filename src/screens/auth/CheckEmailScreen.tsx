@@ -1,41 +1,36 @@
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, Dimensions, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { LoginScreenNavigationProp } from 'src/navigators/types';
+import { CheckEmailScreenNavigationProps } from 'src/navigators/types';
+import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/screenSize';
-import useStyles from '@hooks/useStyles';
 import InputAuthField from '@components/shared/InputAuthField';
-import CheckBoxCustom from '@components/shared/CheckBoxCustom';
 import Button from '@components/shared/Button';
 
-interface FormDataProps {
+interface CheckEmailProps {
   email: string;
-  password: string;
-  rememberMe: boolean;
 }
 
-const LoginScreen = ({ navigation, route }: LoginScreenNavigationProp) => {
-  const methods = useForm<FormDataProps>();
-  const { handleSubmit, control } = methods;
+const CheckEmailScreen = ({
+  navigation,
+  route,
+}: CheckEmailScreenNavigationProps) => {
+  const method = useForm<CheckEmailProps>();
+  const { handleSubmit, control } = method;
   const { colors, styles } = useStyles(createStlyes);
-  // const dispatch = useDispatch();
 
-  const onSubmit = (data: FormDataProps) => {
-    if (data.email === 'test@mail.com') {
-      if (data.password === 'password') {
-        Alert.alert('user authorized');
-      }
+  const onSubmit = (data: CheckEmailProps) => {
+    console.log('CHECKEAR EMAIL', data);
+    if (data.email !== 'test@mail.com') {
+      navigation.navigate('SigninScreen', { email: data.email });
+    } else {
+      Alert.alert('This email is alredy use');
     }
-    // console.log('hizo click', typeof data, data);
-    // try {
-    //   // const res = dispatch(fetchUser(data));
-    // } catch (error) {
-    //   console.log('XX -> LoginScreen.tsx:22 -> onSubmit -> error :', error);
-    // }
   };
+
   return (
-    <FormProvider {...methods}>
+    <FormProvider {...method}>
       <View style={styles.container}>
         <View style={styles.inputBox}>
           <InputAuthField
@@ -53,29 +48,10 @@ const LoginScreen = ({ navigation, route }: LoginScreenNavigationProp) => {
             }}
             placeholder="Enter your email"
           />
-          <InputAuthField
-            inputStyles={styles.textinput}
-            name="password"
-            label="Password"
-            control={control}
-            rules={{
-              required: 'Password is required',
-              minLength: {
-                value: 6,
-                message: 'Password must be at least 6 characters',
-              },
-            }}
-            placeholder="Enter your password"
-            secureTextEntry
-          />
-          <CheckBoxCustom
-            name="rememberMe"
-            label="Remember me"
-            control={control}
-          />
         </View>
         <View style={styles.buttonBox}>
           <Button
+            title={'Check email'}
             onPress={handleSubmit(onSubmit)}
             buttonStyles={{ backgroundColor: colors.second }}
             textStyles={{ color: colors.textNgt, fontWeight: 600 }}
@@ -86,7 +62,7 @@ const LoginScreen = ({ navigation, route }: LoginScreenNavigationProp) => {
   );
 };
 
-export default LoginScreen;
+export default CheckEmailScreen;
 
 const createStlyes = (colors: TColors) =>
   StyleSheet.create({
