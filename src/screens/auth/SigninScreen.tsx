@@ -1,62 +1,45 @@
 import { Alert, StyleSheet, View } from 'react-native';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { LoginScreenNavigationProp } from 'src/navigators/types';
+import { SigninScreenNavigationProps } from 'src/navigators/types';
+import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/screenSize';
-import useStyles from '@hooks/useStyles';
-import InputAuthField from '@components/shared/InputAuthField';
-import CheckBoxCustom from '@components/shared/CheckBoxCustom';
 import Button from '@components/shared/Button';
+import InputAuthField from '@components/shared/InputAuthField';
 
-interface FormDataProps {
+interface FormNewDataProps {
   email: string;
-  password: string;
-  rememberMe: boolean;
+  new_password: string;
+  confirm_password: string;
 }
 
-const LoginScreen = ({ navigation, route }: LoginScreenNavigationProp) => {
-  const methods = useForm<FormDataProps>();
-  const { handleSubmit, control } = methods;
+const SigninScreen = ({ navigation, route }: SigninScreenNavigationProps) => {
+  const method = useForm<FormNewDataProps>();
+  const { handleSubmit, control } = method;
   const { colors, styles } = useStyles(createStlyes);
-  // const dispatch = useDispatch();
 
-  const onSubmit = (data: FormDataProps) => {
-    if (data.email === 'test@mail.com') {
-      if (data.password === 'password') {
-        Alert.alert('user authorized');
-      }
+  const onSubmit = (data: FormNewDataProps) => {
+    if (data.new_password !== data.confirm_password) {
+      Alert.alert('The passwords must be the same');
+    } else {
+      const fullData = {
+        email: route.params.email,
+        password: data.new_password,
+      };
+      Alert.alert('User created succesfully');
+      console.log('AGREGAR NUEVO USUARIO', fullData);
     }
-    // console.log('hizo click', typeof data, data);
-    // try {
-    //   // const res = dispatch(fetchUser(data));
-    // } catch (error) {
-    //   console.log('XX -> LoginScreen.tsx:22 -> onSubmit -> error :', error);
-    // }
   };
+
   return (
-    <FormProvider {...methods}>
+    <FormProvider {...method}>
       <View style={styles.container}>
         <View style={styles.inputBox}>
           <InputAuthField
             inputStyles={styles.textinput}
-            name="email"
-            label="Email"
-            control={control}
-            rules={{
-              required: 'Email is required',
-              pattern: {
-                value:
-                  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                message: 'Invalid email address',
-              },
-            }}
-            placeholder="Enter your email"
-          />
-          <InputAuthField
-            inputStyles={styles.textinput}
-            name="password"
-            label="Password"
+            name="new_password"
+            label="New password"
             control={control}
             rules={{
               required: 'Password is required',
@@ -65,17 +48,28 @@ const LoginScreen = ({ navigation, route }: LoginScreenNavigationProp) => {
                 message: 'Password must be at least 6 characters',
               },
             }}
-            placeholder="Enter your password"
+            placeholder="Enter your new password"
             secureTextEntry
           />
-          <CheckBoxCustom
-            name="rememberMe"
-            label="Remember me"
+          <InputAuthField
+            inputStyles={styles.textinput}
+            name="confirm_password"
+            label="Confirm password"
             control={control}
+            rules={{
+              required: 'Password is required',
+              minLength: {
+                value: 6,
+                message: 'Password must be at least 6 characters',
+              },
+            }}
+            placeholder="Confirm your new password"
+            secureTextEntry
           />
         </View>
         <View style={styles.buttonBox}>
           <Button
+            title={'Register user'}
             onPress={handleSubmit(onSubmit)}
             buttonStyles={{ backgroundColor: colors.second }}
             textStyles={{ color: colors.textNgt, fontWeight: 600 }}
@@ -86,7 +80,7 @@ const LoginScreen = ({ navigation, route }: LoginScreenNavigationProp) => {
   );
 };
 
-export default LoginScreen;
+export default SigninScreen;
 
 const createStlyes = (colors: TColors) =>
   StyleSheet.create({

@@ -5,6 +5,8 @@ import WelcomeScreen from '@screens/auth/WelcomeScreen';
 import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+import AuthNavigator from 'src/navigators/AuthNavigator';
 
 function App() {
   const [isAppReady, setIsAppReady] = useState(false);
@@ -19,7 +21,10 @@ function App() {
     <SplashScreen isAppReady={isAppReady} checkLocalStorage={false}>
       <SafeAreaProvider>
         <ThemeProvider>
-          <WelcomeScreen />
+          <NavigationContainer>
+            <AuthNavigator />
+            {/* <WelcomeScreen /> */}
+          </NavigationContainer>
           {/* <HomeScreen /> */}
         </ThemeProvider>
       </SafeAreaProvider>

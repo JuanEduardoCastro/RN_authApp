@@ -1,43 +1,57 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputProps,
+  TextStyle,
+  View,
+  ViewStyle,
+} from 'react-native';
 import React from 'react';
 import { Control, useController } from 'react-hook-form';
-import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
+import useStyles from '@hooks/useStyles';
+import { SCREEN } from '@constants/screenSize';
 
 type InputAuthFieldProps = {
   name: string;
   control: Control<any>;
   label?: string;
   rules?: any;
-  placeholder?: string;
-  secureTextEntry?: boolean;
-};
+  labelStyles?: ViewStyle;
+  inputStyles?: TextStyle;
+} & TextInputProps;
 
 const InputAuthField = ({
   name,
   control,
   label,
   rules,
-  placeholder,
-  secureTextEntry,
+  labelStyles,
+  inputStyles,
+  ...props
 }: InputAuthFieldProps) => {
   const { field, fieldState } = useController({ name, control, rules });
   const { colors, styles } = useStyles(createStlyes);
 
   return (
     <View style={styles.container}>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && <Text style={[styles.label, labelStyles]}>{label}</Text>}
       <TextInput
-        style={[styles.input, fieldState.error && styles.errorInput]}
+        style={[
+          styles.input,
+          inputStyles,
+          fieldState.error && styles.errorInput,
+        ]}
         value={field.value}
         onChangeText={
           name === 'email'
             ? text => field.onChange(text.toLowerCase())
             : field.onChange
         }
-        placeholder={placeholder}
-        secureTextEntry={secureTextEntry}
         onBlur={field.onBlur}
+        placeholderTextColor="gray"
+        {...props}
       />
       <View style={styles.errorBox}>
         {fieldState.error && (
@@ -60,6 +74,8 @@ const createStlyes = (colors: TColors) =>
       marginBottom: 5,
     },
     input: {
+      height: SCREEN.heightFixed * 40,
+      width: 'auto',
       borderWidth: 1,
       borderColor: '#ccc',
       padding: 10,
@@ -69,7 +85,7 @@ const createStlyes = (colors: TColors) =>
       borderColor: 'red',
     },
     errorBox: {
-      height: 16,
+      height: SCREEN.heightFixed * 16,
     },
     errorText: {
       color: 'red',

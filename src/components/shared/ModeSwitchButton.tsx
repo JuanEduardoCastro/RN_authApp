@@ -1,8 +1,9 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import React from 'react';
 import { useMode } from '@context/ThemeContext';
-import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
+import { SCREEN } from '@constants/screenSize';
+import useStyles from '@hooks/useStyles';
 
 type ModeSwitchButtonProps = {
   width?: number;
@@ -10,8 +11,8 @@ type ModeSwitchButtonProps = {
 };
 
 const ModeSwitchButton = ({
-  width = 45,
-  height = 25,
+  width = SCREEN.widthFixed * 45,
+  height = SCREEN.heightFixed * 25,
 }: ModeSwitchButtonProps) => {
   const { mode, toggleMode } = useMode();
   const { colors, styles } = useStyles(createStlyes);
@@ -40,8 +41,8 @@ const createStlyes = (colors: TColors) =>
       backgroundColor: colors.text,
     },
     button: {
-      width: '50%',
-      height: '100%',
+      width: SCREEN.width50,
+      height: SCREEN.height100,
       borderRadius: 50,
       backgroundColor: colors.background,
     },

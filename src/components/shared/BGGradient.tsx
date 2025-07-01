@@ -1,7 +1,8 @@
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import React, { ReactNode } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
+import { SCREEN } from '@constants/screenSize';
 
 type BGGradienteProps = {
   children: ReactNode;
@@ -11,8 +12,6 @@ type BGGradienteProps = {
   angle?: number;
   angleCenter?: { x: number; y: number } | undefined;
 };
-
-const { width, height } = Dimensions.get('screen');
 
 const BGGradient = ({
   children,
@@ -52,7 +51,7 @@ export default BGGradient;
 const styles = StyleSheet.create({
   gradientContainer: {
     flex: 1,
-    width: width,
-    height: height,
+    width: SCREEN.width100,
+    height: SCREEN.height100,
   },
 });

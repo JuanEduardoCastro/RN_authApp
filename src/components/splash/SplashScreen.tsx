@@ -1,7 +1,15 @@
-import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
+import {
+  Animated,
+  Dimensions,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import BGGradient from '@components/shared/BGGradient';
+import { SCREEN } from '@constants/screenSize';
 
 type SplashScreenProps = {
   children: ReactNode;
@@ -42,10 +50,19 @@ export const Splash = ({ isAppReady, checkLoaclStorage }: SplashProps) => {
   const imageOpacity = useRef(new Animated.Value(0)).current;
   const [imageState, setImageState] = useState(IMG_STATE.LOADING_IMAGE);
 
-  // const dispatch;
+  // console.log(
+  //   'XX -> SplashScreen.tsx:32 -> height :',
+  //   Platform.OS === 'ios' ? 'iOS' : 'Android',
+  //   height,
+  // );
+  // console.log(
+  //   'XX -> SplashScreen.tsx:32 -> width :',
+  //   Platform.OS === 'ios' ? 'iOS' : 'Android',
+  //   width,
+  // );
 
   const checkUserLogged = () => {
-    console.log('CHECK FOR USER LOGGED');
+    // console.log('CHECK FOR USER LOGGED');
   };
 
   useEffect(() => {
@@ -90,7 +107,7 @@ export const Splash = ({ isAppReady, checkLoaclStorage }: SplashProps) => {
           <Animated.Image
             style={[styles.image, { opacity: imageOpacity }]}
             resizeMode={'contain'}
-            source={require('@assets/Frame_125_gary.png')}
+            source={require('@assets/images/Frame_125_gary.png')}
             fadeDuration={0}
             onLoad={() => setImageState(IMG_STATE.FADE_IN_IMAGE)}
           />
@@ -107,19 +124,19 @@ const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
-    width: '100%',
-    height: '100%',
+    width: SCREEN.width100,
+    height: SCREEN.height100,
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
     flex: 1,
     alignSelf: 'center',
-    width: (width / 428) * 213,
-    height: (height / 926) * 75,
+    width: SCREEN.widthFixed * 213,
+    height: SCREEN.heightFixed * 75,
   },
   versionContainer: {
-    width: '100%',
+    width: SCREEN.width100,
     alignItems: 'center',
   },
   versionText: {
