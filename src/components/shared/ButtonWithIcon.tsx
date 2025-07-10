@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, { ElementType } from 'react';
 import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/screenSize';
+import { SCREEN } from '@constants/sizes';
 import useStyles from '@hooks/useStyles';
 
 type ButtonWithIconProps = {

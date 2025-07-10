@@ -4,9 +4,13 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { CheckEmailScreenNavigationProps } from 'src/navigators/types';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/screenSize';
+import { SCREEN } from '@constants/sizes';
 import InputAuthField from '@components/shared/InputAuthField';
 import Button from '@components/shared/Button';
+import { checkEmail, useAppDispatch, useAppSelector } from 'src/store/authHook';
+import { setError, userAuth } from 'src/store/authSlice';
+import Separator from '@components/shared/Separator';
+import { COLOR, sharedColors } from '@constants/colors';
 
 interface CheckEmailProps {
   email: string;
@@ -19,13 +23,24 @@ const CheckEmailScreen = ({
   const method = useForm<CheckEmailProps>();
   const { handleSubmit, control } = method;
   const { colors, styles } = useStyles(createStlyes);
+  const dispatch = useAppDispatch();
+  const { error } = useAppSelector(userAuth);
 
-  const onSubmit = (data: CheckEmailProps) => {
-    console.log('CHECKEAR EMAIL', data);
-    if (data.email !== 'test@mail.com') {
-      navigation.navigate('SigninScreen', { email: data.email });
-    } else {
-      Alert.alert('This email is alredy use');
+  const onSubmit = async (data: CheckEmailProps) => {
+    try {
+      const res = await dispatch(checkEmail(data));
+      if (res?.success) {
+        Alert.alert(res?.message || '');
+        navigation.navigate('NewPasswordScreen', { deepLink: null });
+      } else {
+        // Alert.alert(res?.message || '');
+        dispatch(setError(res?.message));
+      }
+    } catch (error) {
+      console.log(
+        'XX -> CheckEmailScreen.tsx:39 -> onSubmit -> error :',
+        error,
+      );
     }
   };
 
@@ -33,6 +48,10 @@ const CheckEmailScreen = ({
     <FormProvider {...method}>
       <View style={styles.container}>
         <View style={styles.inputBox}>
+          <Text style={styles.errorEmail}>
+            {error !== null && (error as string)}
+          </Text>
+          <Separator borderWidth={0} />
           <InputAuthField
             inputStyles={styles.textinput}
             name="email"
@@ -81,6 +100,11 @@ const createStlyes = (colors: TColors) =>
     inputBox: {
       width: SCREEN.width100,
       paddingHorizontal: 16,
+    },
+    errorEmail: {
+      color: sharedColors.cancel,
+      fontSize: 14,
+      fontWeight: 500,
     },
     textinput: {
       borderColor: colors.second,

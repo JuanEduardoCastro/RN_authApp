@@ -9,7 +9,7 @@ import {
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import BGGradient from '@components/shared/BGGradient';
-import { SCREEN } from '@constants/screenSize';
+import { SCREEN } from '@constants/sizes';
 
 type SplashScreenProps = {
   children: ReactNode;

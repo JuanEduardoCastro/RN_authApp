@@ -3,11 +3,13 @@ import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { LoginScreenNavigationProp } from 'src/navigators/types';
 import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/screenSize';
+import { SCREEN } from '@constants/sizes';
 import useStyles from '@hooks/useStyles';
 import InputAuthField from '@components/shared/InputAuthField';
 import CheckBoxCustom from '@components/shared/CheckBoxCustom';
 import Button from '@components/shared/Button';
+import { loginUser, useAppDispatch } from 'src/store/authHook';
+import { setError } from 'src/store/authSlice';
 
 interface FormDataProps {
   email: string;
@@ -19,20 +21,19 @@ const LoginScreen = ({ navigation, route }: LoginScreenNavigationProp) => {
   const methods = useForm<FormDataProps>();
   const { handleSubmit, control } = methods;
   const { colors, styles } = useStyles(createStlyes);
-  // const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const onSubmit = (data: FormDataProps) => {
-    if (data.email === 'test@mail.com') {
-      if (data.password === 'password') {
-        Alert.alert('user authorized');
+  const onSubmit = async (data: FormDataProps) => {
+    try {
+      const res = await dispatch(loginUser(data));
+      if (res?.success) {
+        navigation.navigate('HomeScreen');
+      } else {
+        dispatch(setError(res?.message));
       }
+    } catch (error) {
+      console.log('XX -> LoginScreen.tsx:36 -> onSubmit -> error :', error);
     }
-    // console.log('hizo click', typeof data, data);
-    // try {
-    //   // const res = dispatch(fetchUser(data));
-    // } catch (error) {
-    //   console.log('XX -> LoginScreen.tsx:22 -> onSubmit -> error :', error);
-    // }
   };
   return (
     <FormProvider {...methods}>
