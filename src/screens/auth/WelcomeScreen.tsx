@@ -2,16 +2,66 @@ import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { WelcomeScreenNavigationProp } from 'src/navigators/types';
 import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/screenSize';
+import { SCREEN } from '@constants/sizes';
 import useStyles from '@hooks/useStyles';
 import Separator from '@components/shared/Separator';
 import BGGradient from '@components/shared/BGGradient';
 import Button from '@components/shared/Button';
 import ButtonWithIcon from '@components/shared/ButtonWithIcon';
 import { AppleIcon, GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
+import {
+  googleLogin,
+  useAppDispatch,
+  useAppSelector,
+} from 'src/store/authHook';
+import { userAuth } from 'src/store/authSlice';
+
+GoogleSignin.configure({
+  webClientId: WEB_CLIENT_ID,
+  iosClientId: IOS_CLIENT_ID,
+  // offlineAccess: true,
+  scopes: ['profile', 'email'],
+});
 
 const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
+  const { user } = useAppSelector(userAuth);
   const { colors, styles } = useStyles(createStyles);
+  const dispatch = useAppDispatch();
+
+  console.log('EL USER ------>', user);
+
+  const GoogleLogin = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const googleUser = await GoogleSignin.signIn();
+
+      // console.log('EL RES EN GOOGLE LOGIN', googleUser);
+      return googleUser;
+    } catch (error) {
+      console.log(
+        'XX -> WelcomeScreen.tsx:35 -> GoogleLogin -> error :',
+        error,
+      );
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      const googleLoginRes = await GoogleLogin();
+      // console.log('EN EL HANDLE -->', res);
+      const res = await dispatch(googleLogin(googleLoginRes?.data?.idToken));
+      if (res?.success) {
+        navigation.navigate('HomeScreen');
+      }
+    } catch (error) {
+      console.log(
+        'XX -> WelcomeScreen.tsx:45 -> handleGoogleLogin -> error :',
+        error,
+      );
+    }
+  };
 
   return (
     <BGGradient
@@ -33,26 +83,27 @@ const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
         </View>
         <View style={styles.buttonBox}>
           <ButtonWithIcon
-            title={'with your email'}
+            title={'...with your email'}
             Icon={MailIcon}
             iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
             onPress={() => navigation.navigate('LoginScreen')}
           />
           <ButtonWithIcon
-            title={'with Google'}
+            title={'...with Google'}
             Icon={GoogleIcon}
             iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
-            onPress={() => Alert.alert('Enter with Google account')}
+            onPress={handleGoogleLogin}
+            // onPress={() => Alert.alert('Enter with Google account')}
           />
           <ButtonWithIcon
-            title={'with GitHub'}
+            title={'...with GitHub'}
             Icon={GithubIcon}
             iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
             onPress={() => Alert.alert('Enter with GitHub account')}
           />
           {Platform.OS === 'ios' && (
             <ButtonWithIcon
-              title={' with apple'}
+              title={'...with apple'}
               Icon={AppleIcon}
               iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
               onPress={() => Alert.alert('Enter with apple account')}

@@ -1,16 +1,18 @@
 /* types for navigators */
 
+import { NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
-  AuthNavigator: undefined;
+  AuthNavigator: NavigatorScreenParams<AuthStackParamList>;
+  HomeScreen: undefined;
 };
 
 export type AuthStackParamList = {
   WelcomeScreen: undefined;
   LoginScreen: undefined;
   CheckEmailScreen: undefined;
-  SigninScreen: { email: string };
+  NewPasswordScreen: { deepLink: string | null };
 };
 
 /* Types for screens  */
@@ -30,7 +32,12 @@ export type CheckEmailScreenNavigationProps = NativeStackScreenProps<
   'CheckEmailScreen'
 >;
 
-export type SigninScreenNavigationProps = NativeStackScreenProps<
+export type NewPasswordScreenNavigationProps = NativeStackScreenProps<
   AuthStackParamList,
-  'SigninScreen'
+  'NewPasswordScreen'
+>;
+
+export type HomeScreenNavigationProps = NativeStackScreenProps<
+  RootStackParamList,
+  'HomeScreen'
 >;

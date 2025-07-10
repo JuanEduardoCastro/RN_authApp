@@ -3,7 +3,7 @@ import React from 'react';
 import CheckBox from '@react-native-community/checkbox';
 import { Control, useController } from 'react-hook-form';
 import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/screenSize';
+import { SCREEN } from '@constants/sizes';
 import useStyles from '@hooks/useStyles';
 
 type CheckBoxCustomProps = {
@@ -69,6 +69,7 @@ const createStlyes = (colors: TColors) =>
       gap: 8,
     },
     textRemember: {
+      color: colors.text,
       fontSize: 14,
     },
   });

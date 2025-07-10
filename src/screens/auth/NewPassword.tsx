@@ -1,12 +1,14 @@
 import { Alert, StyleSheet, View } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { SigninScreenNavigationProps } from 'src/navigators/types';
 import useStyles from '@hooks/useStyles';
+import { NewPasswordScreenNavigationProps } from 'src/navigators/types';
 import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/screenSize';
+import { SCREEN } from '@constants/sizes';
 import Button from '@components/shared/Button';
 import InputAuthField from '@components/shared/InputAuthField';
+import { jwtDecode } from 'jwt-decode';
+import { createUser, useAppDispatch } from 'src/store/authHook';
 
 interface FormNewDataProps {
   email: string;
@@ -14,21 +16,61 @@ interface FormNewDataProps {
   confirm_password: string;
 }
 
-const SigninScreen = ({ navigation, route }: SigninScreenNavigationProps) => {
+const NewPasswordScreen = ({
+  navigation,
+  route,
+}: NewPasswordScreenNavigationProps) => {
+  // const { deepLink } = route.params;
+  const dispatch = useAppDispatch();
   const method = useForm<FormNewDataProps>();
   const { handleSubmit, control } = method;
   const { colors, styles } = useStyles(createStlyes);
+  const [email, setEmail] = useState(null);
 
-  const onSubmit = (data: FormNewDataProps) => {
+  const deepLink =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1haWwyQGdtYWlsLmNvbSIsImlhdCI6MTc1MjAwMDQ3NiwiZXhwIjoxNzUyMDAxMDc2LCJpc3MiOiJUaGUgaXNzdWVyIGZvZSBlbWFpbCJ9.YoDwV8mUXG-kk4Y5PoU9u3mH2ZDz2cr0bHwyeiPodbo';
+
+  useEffect(() => {
+    /* LO QUE VIENE EN EL TOKEN {"email": "test2@gmail.com", "exp": 1751998540, "iat": 1751997940, "iss": "The issuer foe email"} */
+    try {
+      if (deepLink !== null) {
+        const decode = jwtDecode(deepLink);
+        const userEmail = decode.email;
+        setEmail(userEmail);
+        console.log('LO QUE VIENE EN EL TOKEN', decode);
+        if (decode.exp) {
+          console.log('la fecha de ahora', Date.now() / 1000);
+          if (Date.now() / 1000 > decode.exp) {
+            Alert.alert('esto se paso de tiempo');
+          }
+        }
+      }
+    } catch (error) {
+      console.log('XX -> NewPassword.tsx:46 -> useEffect -> error :', error);
+    }
+
+    console.log('el email--> ', email);
+  }, []);
+
+  const onSubmit = async (data: FormNewDataProps) => {
     if (data.new_password !== data.confirm_password) {
       Alert.alert('The passwords must be the same');
     } else {
       const fullData = {
-        email: route.params.email,
+        email: email,
         password: data.new_password,
       };
+      try {
+        const res = await dispatch(createUser(fullData));
+        console.log('el res -->', res);
+        if (res?.success) {
+          console.log('ENTRO AL IF');
+          navigation.navigate('HomeScreen');
+        }
+      } catch (error) {}
       Alert.alert('User created succesfully');
       console.log('AGREGAR NUEVO USUARIO', fullData);
+      navigation.navigate('HomeScreen');
     }
   };
 
@@ -80,7 +122,7 @@ const SigninScreen = ({ navigation, route }: SigninScreenNavigationProps) => {
   );
 };
 
-export default SigninScreen;
+export default NewPasswordScreen;
 
 const createStlyes = (colors: TColors) =>
   StyleSheet.create({

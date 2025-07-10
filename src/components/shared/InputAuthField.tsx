@@ -11,7 +11,7 @@ import React from 'react';
 import { Control, useController } from 'react-hook-form';
 import { TColors } from '@constants/types';
 import useStyles from '@hooks/useStyles';
-import { SCREEN } from '@constants/screenSize';
+import { SCREEN } from '@constants/sizes';
 
 type InputAuthFieldProps = {
   name: string;
@@ -70,6 +70,7 @@ const createStlyes = (colors: TColors) =>
       marginBottom: 10,
     },
     label: {
+      color: colors.text,
       fontSize: 16,
       marginBottom: 5,
     },
@@ -80,6 +81,8 @@ const createStlyes = (colors: TColors) =>
       borderColor: '#ccc',
       padding: 10,
       borderRadius: 5,
+      fontSize: 16,
+      color: colors.text,
     },
     errorInput: {
       borderColor: 'red',

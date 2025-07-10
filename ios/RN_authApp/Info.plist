@@ -20,6 +20,24 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+  <dict>
+		<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		<key>CFBundleURLName</key>
+			<string>authapp</string>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>authapp</string>
+			<string>com.googleusercontent.apps.130405150648-ucr0ame9d8o4r3sbalpa9to8gn7a6q10</string>
+    </array>
+  </dict>
+	</array>
+	<key>GIDClientID</key>
+	<string>130405150648-ucr0ame9d8o4r3sbalpa9to8gn7a6q10.apps.googleusercontent.com</string>
+	<key>GIDRedirectURI</key>
+	<string>com.googleusercontent.130405150648-ucr0ame9d8o4r3sbalpa9to8gn7a6q10:/oauth2redirect/google</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
