@@ -1,15 +1,18 @@
+import * as Keychain from 'react-native-keychain';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from './store';
 import { Dispatch } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {
-  setCredentials,
+  setUser,
   setError,
   setToken,
   startLoader,
   stopLoader,
+  setIsAuthorized,
 } from './authSlice';
 import { Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HOST =
   Platform.OS === 'ios' ? 'http://localhost:3005' : 'http://10.0.2.2:3005';
@@ -54,7 +57,7 @@ export const createUser = (data: any) => {
     try {
       const response = await axios.post(`${HOST}/users/create`, data);
       if (response.status === 201) {
-        // dispatch(setCredentials(response.data));
+        // dispatch(setUser(response.data));
         dispatch(stopLoader());
         dispatch(setError(null));
         return {
@@ -75,7 +78,6 @@ export const createUser = (data: any) => {
 };
 
 export const loginUser = (data: any) => {
-  console.log('como llega la data --> ', data);
   return async (dispatch: Dispatch) => {
     dispatch(startLoader());
     try {
@@ -84,8 +86,15 @@ export const loginUser = (data: any) => {
         password: data.password,
       });
       if (response.status === 200) {
+        if (data.rememberMe) {
+          const password = response.data.token;
+          await Keychain.setGenericPassword('userToken', password, {
+            service: process.env.KEY_SERVICES,
+            accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
+          });
+        }
         dispatch(setToken(response.data.token));
-        dispatch(setCredentials(response.data.user));
+        dispatch(setUser(response.data.user));
         dispatch(stopLoader());
         return {
           success: true,
@@ -94,7 +103,7 @@ export const loginUser = (data: any) => {
         };
       } else if (response.status === 401) {
         dispatch(setToken(null));
-        dispatch(setCredentials(null));
+        dispatch(setUser(null));
         dispatch(setError('There is something wrong with your password'));
       }
     } catch (error) {
@@ -111,8 +120,10 @@ export const logoutUser = (data: any) => {
     dispatch(startLoader());
     try {
       const response = await axios.post(`${HOST}/users/logout`, data);
-      console.log('EL LOGOUT', response);
       if (response.status === 200) {
+        await Keychain.resetGenericPassword({
+          service: process.env.KEY_SERVICES,
+        });
         dispatch(stopLoader());
         return {
           success: true,
@@ -122,6 +133,50 @@ export const logoutUser = (data: any) => {
       }
     } catch (error) {
       dispatch(setError('Network error. Please, try again.'));
+      dispatch(stopLoader());
+      return { success: false, error: error };
+    }
+  };
+};
+
+/* Validate token to get the use in time */
+
+export const validateToken = (data: any) => {
+  return async (dispatch: Dispatch) => {
+    await Keychain.resetGenericPassword({ service: process.env.KEY_SERVICES });
+    dispatch(startLoader());
+    try {
+      const response = await axios.get(`${HOST}/users/validate-token`, {
+        headers: {
+          Authorization: `Bearer ${data}`,
+        },
+      });
+      if (response.status === 200) {
+        console.log(
+          'The user is authorized',
+          Platform.OS === 'ios' ? 'in iOS' : 'in Android',
+        );
+        const password = response.data.token;
+        await Keychain.setGenericPassword('userToken', password, {
+          service: process.env.KEY_SERVICES,
+          accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
+        });
+        dispatch(setToken(response.data.token));
+        dispatch(setUser(response.data.user));
+        dispatch(setIsAuthorized());
+        dispatch(stopLoader());
+        return {
+          success: true,
+          message: 'User created successfully.',
+          error: null,
+        };
+      } else {
+        dispatch(setError('Something went wrong. Try again, please!'));
+        dispatch(stopLoader());
+      }
+    } catch (error) {
+      console.log('XX -> authHook.ts:172 -> return -> error :', error);
+      dispatch(setError('Network error'));
       dispatch(stopLoader());
       return { success: false, error: error };
     }
@@ -163,7 +218,7 @@ export const googleLogin = (data: any) => {
             });
             if (loginUser.status === 200) {
               dispatch(setToken(loginUser.data.token));
-              dispatch(setCredentials(loginUser.data.user));
+              dispatch(setUser(loginUser.data.user));
               dispatch(stopLoader());
               return {
                 success: true,
@@ -172,7 +227,7 @@ export const googleLogin = (data: any) => {
               };
             } else if (loginUser.status === 401) {
               dispatch(setToken(null));
-              dispatch(setCredentials(null));
+              dispatch(setUser(null));
               dispatch(setError('There is something wrong with your password'));
             }
           }
@@ -184,7 +239,7 @@ export const googleLogin = (data: any) => {
           });
           if (loginUser.status === 200) {
             dispatch(setToken(loginUser.data.token));
-            dispatch(setCredentials(loginUser.data.user));
+            dispatch(setUser(loginUser.data.user));
             dispatch(stopLoader());
             return {
               success: true,
@@ -193,7 +248,7 @@ export const googleLogin = (data: any) => {
             };
           } else if (loginUser.status === 401) {
             dispatch(setToken(null));
-            dispatch(setCredentials(null));
+            dispatch(setUser(null));
             dispatch(setError('There is something wrong with your password'));
           }
         }

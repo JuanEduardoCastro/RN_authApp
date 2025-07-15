@@ -6,7 +6,7 @@ const initialState: AuthState = {
   loader: false,
   token: null,
   user: null,
-  isAuthenticated: false,
+  isAuthorized: false,
   error: null,
 };
 
@@ -23,14 +23,17 @@ const authSlice = createSlice({
     setToken: (state, action) => {
       state.token = action.payload;
     },
-    setCredentials: (state, action) => {
+    setUser: (state, action) => {
       state.user = action.payload;
-      state.isAuthenticated = true;
+      state.isAuthorized = true;
     },
-    resetCredentials: state => {
+    setResetUser: state => {
       state.token = null;
       state.user = null;
-      state.isAuthenticated = false;
+      state.isAuthorized = false;
+    },
+    setIsAuthorized: state => {
+      state.isAuthorized = true;
     },
     setError: (state, action: PayloadAction<string | null | unknown>) => {
       state.error = action.payload;
@@ -46,8 +49,9 @@ export const {
   startLoader,
   stopLoader,
   setToken,
-  setCredentials,
-  resetCredentials,
+  setUser,
+  setResetUser,
+  setIsAuthorized,
   setError,
   resetError,
 } = authSlice.actions;

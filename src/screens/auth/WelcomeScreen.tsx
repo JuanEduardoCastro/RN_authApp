@@ -30,8 +30,6 @@ const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
   const { colors, styles } = useStyles(createStyles);
   const dispatch = useAppDispatch();
 
-  console.log('EL USER ------>', user);
-
   const GoogleLogin = async () => {
     try {
       await GoogleSignin.hasPlayServices();

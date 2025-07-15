@@ -17,11 +17,8 @@ const HomeScreen = ({ navigation, route }: HomeScreenNavigationProps) => {
   const dispatch = useAppDispatch();
 
   const handleLogut = async () => {
-    console.log('LE DIO AL BOTON');
-    console.log('en el user ???????', { email: user?.email });
     try {
       const res = await dispatch(logoutUser({ email: user?.email }));
-      console.log('LA RESPUESTA', res);
       if (res?.success) {
         navigation.navigate('AuthNavigator', { screen: 'WelcomeScreen' });
       }
