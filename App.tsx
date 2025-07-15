@@ -11,6 +11,8 @@ import { useAppSelector } from 'src/store/authHook';
 import { userAuth } from 'src/store/authSlice';
 import Loader from '@components/shared/loader/Loader';
 import RootNavigator from 'src/navigators/RootNavigator';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useCheckToken } from '@hooks/useCheckToken';
 
 const AppWrapper = () => {
   return (
@@ -34,17 +36,18 @@ const linking = {
 };
 
 function App() {
-  const { loader } = useAppSelector(userAuth);
+  const { loader, user, isAuthorized } = useAppSelector(userAuth);
   const [isAppReady, setIsAppReady] = useState(false);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsAppReady(true);
-    }, 900);
-  }, []);
+  const handleAppIsReady = () => {
+    setIsAppReady(true);
+  };
+
+  // console.log('EN EL APP userId -->', userId);
+  // console.log('EN EL APP isExpired -->', isExpired);
 
   return (
-    <SplashScreen isAppReady={isAppReady} checkLocalStorage={false}>
+    <SplashScreen handleAppIsReady={handleAppIsReady} isAppReady={isAppReady}>
       <SafeAreaProvider>
         <ThemeProvider>
           {loader && <Loader />}

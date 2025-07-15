@@ -2,7 +2,7 @@ export interface AuthState {
   loader: boolean;
   token: string | null;
   user: IUser | null;
-  isAuthenticated: boolean;
+  isAuthorized: boolean;
   error: string | null | unknown;
 }
 

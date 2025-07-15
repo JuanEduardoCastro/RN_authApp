@@ -1,41 +1,36 @@
-import {
-  Animated,
-  Dimensions,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import * as Keychain from 'react-native-keychain';
+import { Animated, StyleSheet, Text, View } from 'react-native';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import BGGradient from '@components/shared/BGGradient';
 import { SCREEN } from '@constants/sizes';
+import { useAppDispatch, validateToken } from 'src/store/authHook';
+import { useCheckToken } from '@hooks/useCheckToken';
+import { setIsAuthorized, setResetUser } from 'src/store/authSlice';
 
 type SplashScreenProps = {
   children: ReactNode;
   isAppReady: boolean;
-  checkLocalStorage: boolean;
+  handleAppIsReady: () => void;
 };
 
 type SplashProps = {
   isAppReady: boolean;
-  checkLoaclStorage: boolean;
+  handleAppIsReady: () => void;
 };
 
 export const SplashScreen = ({
   children,
   isAppReady,
-  checkLocalStorage,
+  handleAppIsReady,
 }: SplashScreenProps) => {
   return (
     <>
       {isAppReady && children}
-      <Splash isAppReady={isAppReady} checkLoaclStorage={checkLocalStorage} />
+      <Splash handleAppIsReady={handleAppIsReady} isAppReady={isAppReady} />
     </>
   );
 };
-
-const { width, height } = Dimensions.get('screen');
 
 const IMG_STATE = {
   LOADING_IMAGE: 'Loading image',
@@ -45,24 +40,28 @@ const IMG_STATE = {
   HIDDEN: 'Hidden',
 };
 
-export const Splash = ({ isAppReady, checkLoaclStorage }: SplashProps) => {
+export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
   const containerOpacity = useRef(new Animated.Value(1)).current;
   const imageOpacity = useRef(new Animated.Value(0)).current;
+  const { userId, isExpired, checkCompleted } = useCheckToken();
   const [imageState, setImageState] = useState(IMG_STATE.LOADING_IMAGE);
+  const dispatch = useAppDispatch();
 
-  // console.log(
-  //   'XX -> SplashScreen.tsx:32 -> height :',
-  //   Platform.OS === 'ios' ? 'iOS' : 'Android',
-  //   height,
-  // );
-  // console.log(
-  //   'XX -> SplashScreen.tsx:32 -> width :',
-  //   Platform.OS === 'ios' ? 'iOS' : 'Android',
-  //   width,
-  // );
-
-  const checkUserLogged = () => {
-    // console.log('CHECK FOR USER LOGGED');
+  const checkUserLogged = async () => {
+    if (userId) {
+      if (!isExpired) {
+        // la app esta lista y con el usuario OK
+        dispatch(setIsAuthorized());
+      } else {
+        // la app esta lista y NO hay usuario
+        dispatch(setResetUser());
+      }
+    } else {
+      dispatch(setResetUser());
+    }
+    if (checkCompleted) {
+      handleAppIsReady();
+    }
   };
 
   useEffect(() => {
