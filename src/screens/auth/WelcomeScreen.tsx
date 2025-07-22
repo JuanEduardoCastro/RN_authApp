@@ -1,4 +1,4 @@
-import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
+import { Alert, Linking, Platform, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { WelcomeScreenNavigationProp } from 'src/navigators/types';
 import { TColors } from '@constants/types';
@@ -17,6 +17,7 @@ import {
   useAppSelector,
 } from 'src/store/authHook';
 import { userAuth } from 'src/store/authSlice';
+import axios from 'axios';
 
 GoogleSignin.configure({
   webClientId: WEB_CLIENT_ID,
@@ -35,7 +36,6 @@ const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
       await GoogleSignin.hasPlayServices();
       const googleUser = await GoogleSignin.signIn();
 
-      // console.log('EL RES EN GOOGLE LOGIN', googleUser);
       return googleUser;
     } catch (error) {
       console.log(
@@ -48,10 +48,9 @@ const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
   const handleGoogleLogin = async () => {
     try {
       const googleLoginRes = await GoogleLogin();
-      // console.log('EN EL HANDLE -->', res);
       const res = await dispatch(googleLogin(googleLoginRes?.data?.idToken));
       if (res?.success) {
-        navigation.navigate('HomeScreen');
+        navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       }
     } catch (error) {
       console.log(
@@ -59,6 +58,20 @@ const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
         error,
       );
     }
+  };
+
+  const handleGitHubLogin = async () => {
+    const clientID = process.env.GITHUB_CLIENT_ID;
+    const redirectURI = process.env.GITHUB_REDIRECT_URI;
+    const URL = `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}`;
+    const supported = await Linking.canOpenURL(URL);
+    if (supported) {
+      await Linking.openURL(URL);
+    }
+    // const redirectResponse = await axios.get(
+    //   `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}`,
+    // );
+    console.log('QUE PASA ACA --------------->', supported);
   };
 
   return (
@@ -97,7 +110,7 @@ const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
             title={'...with GitHub'}
             Icon={GithubIcon}
             iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
-            onPress={() => Alert.alert('Enter with GitHub account')}
+            onPress={handleGitHubLogin}
           />
           {Platform.OS === 'ios' && (
             <ButtonWithIcon

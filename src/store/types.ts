@@ -10,7 +10,11 @@ export interface IUser {
   firstName: string;
   email: string;
   lastName: string;
-  phoneNumber: string;
+  phoneNumber: {
+    code: string;
+    dialCode: string;
+    number: string;
+  };
   occupation: string;
   isGoogleLogin: boolean;
   isGitHubLogin: boolean;

@@ -30,7 +30,6 @@ module.exports = {
           '@store': './src/store',
         },
       },
-      'react-native-reanimated/plugin',
     ],
     [
       'module:react-native-dotenv',
@@ -47,5 +46,6 @@ module.exports = {
         },
       },
     ],
+    'react-native-reanimated/plugin',
   ],
 };

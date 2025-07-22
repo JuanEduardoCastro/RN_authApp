@@ -9,6 +9,7 @@ import Button from '@components/shared/Button';
 import InputAuthField from '@components/shared/InputAuthField';
 import { jwtDecode } from 'jwt-decode';
 import { createUser, useAppDispatch } from 'src/store/authHook';
+import { CustomJwtPayload } from '@hooks/types';
 
 interface FormNewDataProps {
   email: string;
@@ -20,26 +21,21 @@ const NewPasswordScreen = ({
   navigation,
   route,
 }: NewPasswordScreenNavigationProps) => {
-  // const { deepLink } = route.params;
+  const { token } = route.params;
   const dispatch = useAppDispatch();
   const method = useForm<FormNewDataProps>();
   const { handleSubmit, control } = method;
   const { colors, styles } = useStyles(createStlyes);
-  const [email, setEmail] = useState(null);
-
-  const deepLink =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1haWwyQGdtYWlsLmNvbSIsImlhdCI6MTc1MjAwMDQ3NiwiZXhwIjoxNzUyMDAxMDc2LCJpc3MiOiJUaGUgaXNzdWVyIGZvZSBlbWFpbCJ9.YoDwV8mUXG-kk4Y5PoU9u3mH2ZDz2cr0bHwyeiPodbo';
+  const [email, setEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    /* LO QUE VIENE EN EL TOKEN {"email": "test2@gmail.com", "exp": 1751998540, "iat": 1751997940, "iss": "The issuer foe email"} */
     try {
-      if (deepLink !== null) {
-        const decode = jwtDecode(deepLink);
+      if (token !== null) {
+        const decode = jwtDecode<CustomJwtPayload>(token);
+        console.log('LO QUE VIENE EN EL TOKEN', decode);
         const userEmail = decode.email;
         setEmail(userEmail);
-        console.log('LO QUE VIENE EN EL TOKEN', decode);
         if (decode.exp) {
-          console.log('la fecha de ahora', Date.now() / 1000);
           if (Date.now() / 1000 > decode.exp) {
             Alert.alert('esto se paso de tiempo');
           }
@@ -48,8 +44,6 @@ const NewPasswordScreen = ({
     } catch (error) {
       console.log('XX -> NewPassword.tsx:46 -> useEffect -> error :', error);
     }
-
-    console.log('el email--> ', email);
   }, []);
 
   const onSubmit = async (data: FormNewDataProps) => {
@@ -65,12 +59,11 @@ const NewPasswordScreen = ({
         console.log('el res -->', res);
         if (res?.success) {
           console.log('ENTRO AL IF');
-          navigation.navigate('HomeScreen');
+          navigation.navigate('LoginScreen');
         }
       } catch (error) {}
       Alert.alert('User created succesfully');
       console.log('AGREGAR NUEVO USUARIO', fullData);
-      navigation.navigate('HomeScreen');
     }
   };
 

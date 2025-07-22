@@ -12,13 +12,16 @@ import {
   setIsAuthorized,
 } from './authSlice';
 import { Platform } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { jwtDecode } from 'jwt-decode';
+import { CustomJwtPayload } from '@hooks/types';
 
 const HOST =
   Platform.OS === 'ios' ? 'http://localhost:3005' : 'http://10.0.2.2:3005';
 
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppSelector = useSelector.withTypes<RootState>();
+
+/* Validate user email */
 
 export const checkEmail = (data: any) => {
   return async (dispatch: Dispatch) => {
@@ -28,6 +31,10 @@ export const checkEmail = (data: any) => {
       if (response.status === 200) {
         dispatch(stopLoader());
         dispatch(setError(null));
+        console.log('--> --> --> --> --> --> --> --> --> --> ');
+        console.log('--> --> EL TOKEN PARA EL MAIL ');
+        console.log(response.data.data);
+        console.log('--> --> --> --> --> --> --> --> --> --> ');
         return {
           success: true,
           message: 'This email is NOT in use',
@@ -50,6 +57,8 @@ export const checkEmail = (data: any) => {
     }
   };
 };
+
+/* Create user */
 
 export const createUser = (data: any) => {
   return async (dispatch: Dispatch) => {
@@ -76,6 +85,8 @@ export const createUser = (data: any) => {
     }
   };
 };
+
+/* Login user */
 
 export const loginUser = (data: any) => {
   return async (dispatch: Dispatch) => {
@@ -114,6 +125,36 @@ export const loginUser = (data: any) => {
     }
   };
 };
+
+/* Edit user info */
+
+export const editUser = (data: any, token: any) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(startLoader());
+    const decodeToken = jwtDecode<CustomJwtPayload>(token);
+    try {
+      const response = await axios.put(
+        `${HOST}/users/edit/${decodeToken._id}`,
+        data,
+      );
+      if (response.status === 201) {
+        dispatch(setUser(response.data.user));
+        dispatch(stopLoader());
+        return {
+          success: true,
+          message: 'User updated successfully.',
+          error: null,
+        };
+      }
+    } catch (error) {
+      dispatch(setError('Network error'));
+      dispatch(stopLoader());
+      return { success: false, error: error };
+    }
+  };
+};
+
+/* Logout user */
 
 export const logoutUser = (data: any) => {
   return async (dispatch: Dispatch) => {
@@ -195,11 +236,13 @@ export const googleLogin = (data: any) => {
       if (googleResponse.status === 200) {
         const { sub, email, given_name, family_name, picture } =
           googleResponse.data;
+
         /* check if email exists in DB */
         const checkEmail = await axios.post(`${HOST}/users/checkemail`, {
           email: email,
           isGoogleLogin: true,
         });
+
         /* create a new user if the email is not in the DB */
         if (checkEmail.status === 200) {
           const createUser = await axios.post(`${HOST}/users/create`, {
@@ -210,6 +253,7 @@ export const googleLogin = (data: any) => {
             lastName: family_name,
             avatarURL: picture,
           });
+
           /* if the user was created, then login user session */
           if (createUser.status === 201) {
             const loginUser = await axios.post(`${HOST}/users/login`, {
@@ -217,6 +261,15 @@ export const googleLogin = (data: any) => {
               password: sub,
             });
             if (loginUser.status === 200) {
+              // guardar el localstorage
+              await Keychain.setGenericPassword(
+                'userToken',
+                loginUser.data.token,
+                {
+                  service: process.env.KEY_SERVICES,
+                  accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
+                },
+              );
               dispatch(setToken(loginUser.data.token));
               dispatch(setUser(loginUser.data.user));
               dispatch(stopLoader());
@@ -238,6 +291,15 @@ export const googleLogin = (data: any) => {
             password: sub,
           });
           if (loginUser.status === 200) {
+            // guardar el localstorage
+            await Keychain.setGenericPassword(
+              'userToken',
+              loginUser.data.token,
+              {
+                service: process.env.KEY_SERVICES,
+                accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
+              },
+            );
             dispatch(setToken(loginUser.data.token));
             dispatch(setUser(loginUser.data.user));
             dispatch(stopLoader());

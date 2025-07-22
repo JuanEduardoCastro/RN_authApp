@@ -2,17 +2,22 @@
 
 export const lightMode = {
   background: '#f5f5f5',
+  tabBackground: '#f5f5f5a6',
   text: '#0f172a',
   textNgt: '#f5f5f5',
   second: '#9e60a3',
+  transparent: '#00000000',
 };
 
 export const darkMode = {
   background: '#171717',
+  tabBackground: '#171717a6',
+
   // background: '#0f172a',
   text: '#f5f5f5',
   textNgt: '#0f172a',
   second: '#DBA1FF',
+  transparent: '#00000000',
 };
 
 export const sharedColors = {

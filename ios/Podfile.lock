@@ -1680,6 +1680,64 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
     - SocketRocket
+  - react-native-blur (4.4.1):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
+  - react-native-mmkv (3.3.0):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - react-native-safe-area-context (5.5.0):
     - boost
     - DoubleConversion
@@ -2278,6 +2336,64 @@ PODS:
   - RNCCheckbox (0.5.20):
     - BEMCheckBox (~> 1.4)
     - React-Core
+  - RNCMaskedView (0.3.2):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
+  - RNGestureHandler (2.27.1):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - RNGoogleSignin (15.0.0):
     - boost
     - DoubleConversion
@@ -2308,7 +2424,99 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
+  - RNImageCropPicker (0.50.1):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-RCTImage
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - RNImageCropPicker/QBImagePickerController (= 0.50.1)
+    - SocketRocket
+    - TOCropViewController (~> 2.7.4)
+    - Yoga
+  - RNImageCropPicker/QBImagePickerController (0.50.1):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-RCTImage
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - TOCropViewController (~> 2.7.4)
+    - Yoga
   - RNKeychain (10.0.0):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
+  - RNLocalize (3.5.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -2607,6 +2815,7 @@ PODS:
     - SocketRocket
     - Yoga
   - SocketRocket (0.7.1)
+  - TOCropViewController (2.7.4)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -2652,6 +2861,8 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
+  - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
+  - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-oscompat (from `../node_modules/react-native/ReactCommon/oscompat`)
@@ -2687,8 +2898,12 @@ DEPENDENCIES:
   - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
+  - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
+  - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
+  - RNLocalize (from `../node_modules/react-native-localize`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -2706,6 +2921,7 @@ SPEC REPOS:
     - GTMSessionFetcher
     - PromisesObjC
     - SocketRocket
+    - TOCropViewController
 
 EXTERNAL SOURCES:
   boost:
@@ -2791,6 +3007,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   React-microtasksnativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
+  react-native-blur:
+    :path: "../node_modules/@react-native-community/blur"
+  react-native-mmkv:
+    :path: "../node_modules/react-native-mmkv"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   React-NativeModulesApple:
@@ -2861,10 +3081,18 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCCheckbox:
     :path: "../node_modules/@react-native-community/checkbox"
+  RNCMaskedView:
+    :path: "../node_modules/@react-native-masked-view/masked-view"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
+  RNImageCropPicker:
+    :path: "../node_modules/react-native-image-crop-picker"
   RNKeychain:
     :path: "../node_modules/react-native-keychain"
+  RNLocalize:
+    :path: "../node_modules/react-native-localize"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -2924,6 +3152,8 @@ SPEC CHECKSUMS:
   React-logger: b69e65dc60f768e5509ac0cc27a360124bf70478
   React-Mapbuffer: b48f9f3311fd0ec0f7a5dc39d707eff521fb5f38
   React-microtasksnativemodule: d8568d0485a350c720c061ae835e09fc88c28715
+  react-native-blur: 736888dd75460ec75605254214caded098066cfc
+  react-native-mmkv: a975a5ef60a8ef763bff82ffbca7d9292ea052ac
   react-native-safe-area-context: 31fa8b0bb05496c4005aa5560283f5015e809b91
   React-NativeModulesApple: f10596688a03af66804cfbe61792be24a7888da8
   React-oscompat: 7c0a341cc31e350da71ddf2e46de0a845d1d1626
@@ -2959,12 +3189,17 @@ SPEC CHECKSUMS:
   RNAppleAuthentication: b2d8b5ccba86b5b1e55a1a2e858f7ac6d8a21816
   RNCAsyncStorage: 767abb068db6ad28b5f59a129fbc9fab18b377e2
   RNCCheckbox: 471ebdc33884c084f362615c1ef3507496cc07f1
+  RNCMaskedView: aac38cf7e947ff80e483996d1acd43c5ad4ab610
+  RNGestureHandler: c202f13fa95347076d8aca4ccb61739b067396cb
   RNGoogleSignin: 9b9be54a206798826ec410b17c69fe1abe9e2af7
+  RNImageCropPicker: 36d402fc475d75e1208f8b81ba294c84ac7f09eb
   RNKeychain: f9022b0a123bb459ba2e6045f79203a7c7e54956
+  RNLocalize: 04178cdebf7d24821d25bc894343c6d2dd98374e
   RNReanimated: 2010262133feb53009f16faaa404042eed7da018
   RNScreens: 45a4564413205e2a1695d40bbc0297f6eefc9b74
   RNSVG: c73af7848d94ca3e8136a5191d055e3c1d6fedab
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
+  TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
   Yoga: 395b5d614cd7cbbfd76b05d01bd67230a6ad004e
 
 PODFILE CHECKSUM: 9555dd7cf264d5aa2ce04d9759c067ea40cd7937

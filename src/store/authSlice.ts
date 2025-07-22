@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AuthState, IUser } from './types';
+import { AuthState } from './types';
 import { RootState } from './store';
 
 const initialState: AuthState = {

@@ -1,4 +1,5 @@
 import {
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -7,11 +8,14 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { Control, useController } from 'react-hook-form';
 import { TColors } from '@constants/types';
 import useStyles from '@hooks/useStyles';
 import { SCREEN } from '@constants/sizes';
+import { useAppSelector } from 'src/store/authHook';
+import { userAuth } from 'src/store/authSlice';
+import { ClosedLockIcon, OpenLockIcon, PencilIcon } from '@assets/svg/icons';
 
 type InputAuthFieldProps = {
   name: string;
@@ -32,30 +36,65 @@ const InputAuthField = ({
   ...props
 }: InputAuthFieldProps) => {
   const { field, fieldState } = useController({ name, control, rules });
+  const { error } = useAppSelector(userAuth);
   const { colors, styles } = useStyles(createStlyes);
+  const [toggleSecureEntry, setToggleSecureEntry] = useState(true);
+
+  const handleSecureEntry = () => {
+    setToggleSecureEntry(!toggleSecureEntry);
+  };
 
   return (
     <View style={styles.container}>
       {label && <Text style={[styles.label, labelStyles]}>{label}</Text>}
-      <TextInput
+      <View
         style={[
-          styles.input,
+          styles.inputBox,
           inputStyles,
           fieldState.error && styles.errorInput,
-        ]}
-        value={field.value}
-        onChangeText={
-          name === 'email'
-            ? text => field.onChange(text.toLowerCase())
-            : field.onChange
-        }
-        onBlur={field.onBlur}
-        placeholderTextColor="gray"
-        {...props}
-      />
+          !props.editable && styles.completeInput,
+        ]}>
+        <TextInput
+          style={[
+            styles.input,
+            props.editable === false && {
+              color: colors.gray,
+            },
+          ]}
+          value={field.value}
+          onChangeText={
+            name === 'email'
+              ? text => field.onChange(text.toLowerCase())
+              : field.onChange
+          }
+          onBlur={field.onBlur}
+          placeholderTextColor="gray"
+          secureTextEntry={props.secureTextEntry && toggleSecureEntry}
+          keyboardType={name === 'phoneNumber' ? 'phone-pad' : 'default'}
+          {...props}
+        />
+        {name !== 'email' && props.editable && (
+          <Pressable style={styles.iconArea}>
+            <PencilIcon width={18} height={18} color={colors.second} />
+          </Pressable>
+        )}
+        {name === 'password' &&
+          (toggleSecureEntry ? (
+            <Pressable style={styles.iconArea} onPress={handleSecureEntry}>
+              <ClosedLockIcon width={20} height={20} color={colors.second} />
+            </Pressable>
+          ) : (
+            <Pressable style={styles.iconArea} onPress={handleSecureEntry}>
+              <OpenLockIcon width={20} height={20} color={colors.second} />
+            </Pressable>
+          ))}
+      </View>
       <View style={styles.errorBox}>
         {fieldState.error && (
           <Text style={styles.errorText}>{fieldState.error.message}</Text>
+        )}
+        {error !== null && (
+          <Text style={styles.errorText}>{error as string}</Text>
         )}
       </View>
     </View>
@@ -74,25 +113,38 @@ const createStlyes = (colors: TColors) =>
       fontSize: 16,
       marginBottom: 5,
     },
-    input: {
-      height: SCREEN.heightFixed * 40,
-      width: 'auto',
+    inputBox: {
+      flexDirection: 'row',
+      alignItems: 'center',
       borderWidth: 1,
       borderColor: '#ccc',
-      padding: 10,
+      paddingHorizontal: 10,
       borderRadius: 5,
+    },
+    input: {
+      height: SCREEN.heightFixed * 40,
+      flexGrow: 1,
+      width: 'auto',
+      paddingVertical: 10,
+      paddingHorizontal: 8,
       fontSize: 16,
       color: colors.text,
     },
+    iconArea: {
+      padding: 8,
+    },
     errorInput: {
       borderColor: 'red',
+    },
+    completeInput: {
+      borderColor: colors.gray,
     },
     errorBox: {
       height: SCREEN.heightFixed * 16,
     },
     errorText: {
       color: 'red',
-      fontSize: 12,
+      fontSize: 14,
       marginTop: 2,
     },
   });

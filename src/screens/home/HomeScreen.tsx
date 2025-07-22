@@ -1,6 +1,5 @@
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { useMode } from '@context/ThemeContext';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import Separator from '@components/shared/Separator';
@@ -12,7 +11,6 @@ import { userAuth } from 'src/store/authSlice';
 
 const HomeScreen = ({ navigation, route }: HomeScreenNavigationProps) => {
   const { user } = useAppSelector(userAuth);
-  const { mode, toggleMode } = useMode();
   const { colors, styles } = useStyles(createStyles);
   const dispatch = useAppDispatch();
 
