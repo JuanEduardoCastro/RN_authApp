@@ -27,7 +27,7 @@ const LoginScreen = ({ navigation, route }: LoginScreenNavigationProp) => {
     try {
       const res = await dispatch(loginUser(data));
       if (res?.success) {
-        navigation.navigate('HomeScreen');
+        navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       } else {
         dispatch(setError(res?.message));
       }

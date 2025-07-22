@@ -4,7 +4,7 @@ import WelcomeScreen from '@screens/auth/WelcomeScreen';
 import LoginScreen from '@screens/auth/LoginScreen';
 import CheckEmailScreen from '@screens/auth/CheckEmailScreen';
 import { AuthStackParamList } from './types';
-import NewPasswordScreen from '@screens/auth/NewPassword';
+import NewPasswordScreen from '@screens/auth/NewPasswordScreen';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
@@ -22,7 +22,7 @@ const AuthNavigator = () => {
       <Stack.Screen
         name={'NewPasswordScreen'}
         component={NewPasswordScreen}
-        initialParams={{ deepLink: null }}
+        initialParams={{ token: null }}
       />
     </Stack.Navigator>
   );

@@ -1,19 +1,8 @@
 import * as Keychain from 'react-native-keychain';
 import { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { jwtDecode, JwtPayload } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { useAppDispatch, validateToken } from 'src/store/authHook';
-
-interface UseCheckTokenReturn {
-  userId: string | null;
-  isExpired: boolean;
-  checkCompleted: boolean;
-}
-
-interface CustomJwtPayload extends JwtPayload {
-  _id: string;
-  email: string;
-}
+import { CustomJwtPayload, UseCheckTokenReturn } from './types';
 
 export const useCheckToken = (): UseCheckTokenReturn => {
   const [userId, setUserId] = useState<string | null>(null);

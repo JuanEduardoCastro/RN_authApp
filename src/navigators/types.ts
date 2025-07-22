@@ -1,18 +1,27 @@
 /* types for navigators */
 
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
   AuthNavigator: NavigatorScreenParams<AuthStackParamList>;
-  HomeScreen: undefined;
+  HomeNavigator: NavigatorScreenParams<HomeTabParamList>;
 };
 
 export type AuthStackParamList = {
   WelcomeScreen: undefined;
   LoginScreen: undefined;
   CheckEmailScreen: undefined;
-  NewPasswordScreen: { deepLink: string | null };
+  NewPasswordScreen: { token: string | null };
+  HomeNavigator: undefined;
+};
+
+export type HomeTabParamList = {
+  HomeScreen: undefined;
+  ProfileScreen: undefined;
+  SettingsScreen: undefined;
+  AuthNavigator: undefined;
 };
 
 /* Types for screens  */
@@ -37,7 +46,17 @@ export type NewPasswordScreenNavigationProps = NativeStackScreenProps<
   'NewPasswordScreen'
 >;
 
-export type HomeScreenNavigationProps = NativeStackScreenProps<
-  RootStackParamList,
+export type HomeScreenNavigationProps = BottomTabScreenProps<
+  HomeTabParamList,
   'HomeScreen'
+>;
+
+export type ProfileScreenNavigationProps = BottomTabScreenProps<
+  HomeTabParamList,
+  'ProfileScreen'
+>;
+
+export type SettingsScreenNavigationProps = BottomTabScreenProps<
+  HomeTabParamList,
+  'SettingsScreen'
 >;

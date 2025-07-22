@@ -1,0 +1,261 @@
+import {
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputProps,
+  TextStyle,
+  View,
+  ViewStyle,
+} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Control, useController } from 'react-hook-form';
+import { useSharedValue } from 'react-native-reanimated';
+import { useAppSelector } from 'src/store/authHook';
+import { userAuth } from 'src/store/authSlice';
+import useStyles from '@hooks/useStyles';
+import useUserData from '@hooks/useUserData';
+import BottomSheet from '../bottomSheet/BottomSheet';
+import PhoneListContainer from './PhoneListContainer';
+import { TColors } from '@constants/types';
+import { SCREEN } from '@constants/sizes';
+import { ChevronIcon } from '@assets/svg/icons';
+import { countriesList } from '@constants/countriesList';
+
+type PhoneNumberPickerProps = {
+  name: string;
+  control: Control<any>;
+  rules?: any;
+  setValue?: any;
+  label?: string;
+  labelStyles?: ViewStyle;
+  inputStyles?: TextStyle;
+} & TextInputProps;
+
+const PhoneNumberPicker = ({
+  name,
+  control,
+  rules,
+  setValue,
+  label,
+  labelStyles,
+  inputStyles,
+  ...props
+}: PhoneNumberPickerProps) => {
+  const {
+    phoneData,
+    setPhoneData,
+    codeIndex,
+    setCodeIndex,
+    defaultCountryCode,
+    defaultDialCode,
+  } = useUserData();
+  const { field, fieldState } = useController({ name, control, rules });
+  const { error } = useAppSelector(userAuth);
+  const { colors, styles } = useStyles(createStlyes);
+  const isOpen = useSharedValue(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  // console.log(
+  //   Platform.OS == 'ios' ? 'IN iOS @@ ' : 'IN Android @@ ',
+  //   'FROM THE HOOK :',
+  //   '@phoneCode ->',
+  //   typeof phoneData,
+  //   phoneData,
+  //   '@index ->',
+  //   codeIndex,
+  //   '@default',
+  //   defaultCountryCode,
+  //   defaultDialCode,
+  // );
+
+  const handlePhoneNumberToSubmit = () => {
+    field.onChange({
+      code: phoneData?.code,
+      dialCode: phoneData?.dialCode,
+      number: phoneData?.number,
+    });
+  };
+
+  const handleUpdateNumber = (text: string) => {
+    setPhoneData({
+      code: phoneData?.code ?? '',
+      dialCode: phoneData?.dialCode ?? '',
+      number: text,
+    });
+    handlePhoneNumberToSubmit();
+  };
+
+  const toggleSheet = () => {
+    isOpen.value = !isOpen.value;
+    setIsVisible(!isVisible);
+  };
+
+  return (
+    <>
+      <View style={styles.container}>
+        {label && <Text style={[styles.label, labelStyles]}>{label}</Text>}
+        <View
+          style={[
+            styles.inputBox,
+            inputStyles,
+            fieldState.error && styles.errorInput,
+            !props.editable && styles.completeInput,
+          ]}>
+          <View style={styles.pickerCodeBox}>
+            <Pressable
+              disabled={!props.editable}
+              style={styles.pickerCodeFlag}
+              onPress={toggleSheet}>
+              {!phoneData
+                ? countriesList.map(
+                    (item, index) =>
+                      defaultCountryCode === item.code && (
+                        <Text key={index + 1} style={styles.pickerFlag}>
+                          {item.flag}
+                        </Text>
+                      ),
+                  )
+                : countriesList.map(
+                    (item, index) =>
+                      item.code === phoneData.code &&
+                      item.dialCode === phoneData.dialCode && (
+                        <Text key={index + 1} style={styles.pickerFlag}>
+                          {item.flag}
+                        </Text>
+                      ),
+                  )}
+              <ChevronIcon width={14} height={14} color={colors.text} />
+            </Pressable>
+            <View style={styles.pickerCodeView}>
+              <View style={styles.vertSeparator} />
+              <TextInput
+                style={styles.pickerCode}
+                editable={false}
+                value={phoneData?.dialCode ?? defaultDialCode}
+              />
+              <View style={styles.vertSeparator} />
+            </View>
+          </View>
+          <TextInput
+            style={[
+              styles.input,
+              props.editable === false && {
+                color: colors.gray,
+              },
+            ]}
+            value={phoneData?.number ?? ''}
+            onChangeText={text => handleUpdateNumber(text)}
+            // onChangeText={text => setNewPhoneNumber(text)}
+            // onBlur={field.onBlur}
+            placeholderTextColor="gray"
+            textContentType={
+              name === 'phoneNumber' ? 'telephoneNumber' : 'none'
+            }
+            keyboardType={name === 'phoneNumber' ? 'phone-pad' : 'default'}
+            {...props}
+          />
+        </View>
+        <View style={styles.errorBox}>
+          {fieldState.error && (
+            <Text style={styles.errorText}>{fieldState.error.message}</Text>
+          )}
+          {error !== null && (
+            <Text style={styles.errorText}>{error as string}</Text>
+          )}
+        </View>
+      </View>
+      <BottomSheet isOpen={isOpen} toggleSheet={toggleSheet}>
+        <View></View>
+        <PhoneListContainer
+          toggleSheet={toggleSheet}
+          phoneData={phoneData}
+          codeIndex={codeIndex}
+          setCodeIndex={setCodeIndex}
+          handlePhoneNumberToSubmit={handlePhoneNumberToSubmit}
+        />
+      </BottomSheet>
+    </>
+  );
+};
+
+export default PhoneNumberPicker;
+
+const createStlyes = (colors: TColors) =>
+  StyleSheet.create({
+    container: {
+      marginBottom: 10,
+    },
+    label: {
+      color: colors.text,
+      fontSize: 16,
+      marginBottom: 5,
+    },
+    inputBox: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: '#ccc',
+      paddingHorizontal: 10,
+      borderRadius: 5,
+    },
+    pickerCodeBox: {
+      width: 'auto',
+      height: SCREEN.heightFixed * 40,
+      flexDirection: 'row',
+    },
+    pickerCodeFlag: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingLeft: 6,
+      paddingRight: 12,
+      gap: 6,
+    },
+    pickerFlag: {
+      fontSize: Platform.OS === 'ios' ? 24 : 18,
+    },
+    pickerCodeView: {
+      width: 60,
+      height: '100%',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    pickerCode: {
+      color: colors.gray,
+    },
+    input: {
+      height: SCREEN.heightFixed * 40,
+      flexGrow: 1,
+      width: 'auto',
+      paddingVertical: 10,
+      paddingHorizontal: 8,
+      fontSize: 16,
+      color: colors.text,
+    },
+    errorInput: {
+      borderColor: 'red',
+    },
+    completeInput: {
+      borderColor: colors.gray,
+    },
+    errorBox: {
+      height: SCREEN.heightFixed * 16,
+    },
+    errorText: {
+      color: 'red',
+      fontSize: 14,
+      marginTop: 2,
+    },
+
+    vertSeparator: {
+      height: '60%',
+      borderLeftWidth: 1,
+      borderColor: colors.gray,
+    },
+
+    text: {
+      color: colors.text,
+    },
+  });
