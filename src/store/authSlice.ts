@@ -7,7 +7,8 @@ const initialState: AuthState = {
   token: null,
   user: null,
   isAuthorized: false,
-  error: null,
+  messageType: null,
+  notificationMessage: null,
 };
 
 const authSlice = createSlice({
@@ -35,11 +36,14 @@ const authSlice = createSlice({
     setIsAuthorized: state => {
       state.isAuthorized = true;
     },
-    setError: (state, action: PayloadAction<string | null | unknown>) => {
-      state.error = action.payload;
+    setNotificationMessage: (
+      state,
+      action: PayloadAction<string | null | unknown>,
+    ) => {
+      state.notificationMessage = action.payload;
     },
-    resetError: state => {
-      state.error = null;
+    setMessageType: (state, action) => {
+      state.messageType = action.payload;
     },
   },
 });
@@ -52,7 +56,7 @@ export const {
   setUser,
   setResetUser,
   setIsAuthorized,
-  setError,
-  resetError,
+  setMessageType,
+  setNotificationMessage,
 } = authSlice.actions;
 export const userAuth = (state: RootState) => state.auth;

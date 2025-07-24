@@ -1,5 +1,5 @@
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import CheckBox from '@react-native-community/checkbox';
 import { Control, useController } from 'react-hook-form';
 import { TColors } from '@constants/types';
@@ -23,9 +23,17 @@ const CheckBoxCustom = ({
 }: CheckBoxCustomProps) => {
   const { field, fieldState } = useController({ name, control, rules });
   const { colors, styles } = useStyles(createStlyes);
+  const [toggleCheckBox, setToggleCheckBox] = useState<boolean>(false);
+
+  const handleToggleCheckBox = () => {
+    setToggleCheckBox(!toggleCheckBox);
+    field.onChange(!toggleCheckBox);
+  };
 
   return (
-    <Pressable style={{ alignSelf: 'flex-start' }}>
+    <Pressable
+      style={{ alignSelf: 'flex-start' }}
+      onPress={handleToggleCheckBox}>
       <View style={styles.container}>
         <CheckBox
           style={[
@@ -39,8 +47,9 @@ const CheckBoxCustom = ({
                 },
           ]}
           disabled={disabled}
-          value={field.value}
-          onValueChange={val => field.onChange(val)}
+          value={toggleCheckBox}
+          // value={field.value}
+          // onValueChange={val => field.onChange(val)}
           boxType="square"
           tintColor={colors.base}
           onCheckColor={colors.light}

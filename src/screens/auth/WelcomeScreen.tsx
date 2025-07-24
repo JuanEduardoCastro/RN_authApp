@@ -128,7 +128,11 @@ const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
           <Button
             title={'Register with your email'}
             textStyles={{ fontWeight: 600 }}
-            onPress={() => navigation.navigate('CheckEmailScreen')}
+            onPress={() =>
+              navigation.navigate('CheckEmailScreen', {
+                checkMode: 'new_password',
+              })
+            }
           />
         </View>
       </View>

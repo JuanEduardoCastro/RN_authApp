@@ -8,6 +8,7 @@ import { HomeScreenNavigationProps } from 'src/navigators/types';
 import Button from '@components/shared/Button';
 import { logoutUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
 import { userAuth } from 'src/store/authSlice';
+import { newNotificationMessage } from '@utils/newNotificationMessage';
 
 const HomeScreen = ({ navigation, route }: HomeScreenNavigationProps) => {
   const { user } = useAppSelector(userAuth);
@@ -25,9 +26,18 @@ const HomeScreen = ({ navigation, route }: HomeScreenNavigationProps) => {
     }
   };
 
+  const createErrorMesage = () => {
+    newNotificationMessage(dispatch, {
+      messageType: 'error',
+      notificationMessage: 'This is a new error!! ',
+    });
+  };
+
   return (
     <View style={styles.container}>
       <Button title="Logout session" onPress={handleLogut} />
+      <Separator border={false} />
+      <Button title="Create new error" onPress={createErrorMesage} />
       <Separator border={false} />
       <Text style={styles.text}>HomeScreen</Text>
       <Separator border={false} />

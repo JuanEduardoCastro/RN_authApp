@@ -13,8 +13,6 @@ import { Control, useController } from 'react-hook-form';
 import { TColors } from '@constants/types';
 import useStyles from '@hooks/useStyles';
 import { SCREEN } from '@constants/sizes';
-import { useAppSelector } from 'src/store/authHook';
-import { userAuth } from 'src/store/authSlice';
 import { ClosedLockIcon, OpenLockIcon, PencilIcon } from '@assets/svg/icons';
 
 type InputAuthFieldProps = {
@@ -36,7 +34,6 @@ const InputAuthField = ({
   ...props
 }: InputAuthFieldProps) => {
   const { field, fieldState } = useController({ name, control, rules });
-  const { error } = useAppSelector(userAuth);
   const { colors, styles } = useStyles(createStlyes);
   const [toggleSecureEntry, setToggleSecureEntry] = useState(true);
 
@@ -69,7 +66,9 @@ const InputAuthField = ({
           }
           onBlur={field.onBlur}
           placeholderTextColor="gray"
-          secureTextEntry={props.secureTextEntry && toggleSecureEntry}
+          secureTextEntry={
+            name.includes('password') ? toggleSecureEntry : false
+          }
           keyboardType={name === 'phoneNumber' ? 'phone-pad' : 'default'}
           {...props}
         />
@@ -78,7 +77,7 @@ const InputAuthField = ({
             <PencilIcon width={18} height={18} color={colors.second} />
           </Pressable>
         )}
-        {name === 'password' &&
+        {name.includes('password') &&
           (toggleSecureEntry ? (
             <Pressable style={styles.iconArea} onPress={handleSecureEntry}>
               <ClosedLockIcon width={20} height={20} color={colors.second} />
@@ -93,9 +92,9 @@ const InputAuthField = ({
         {fieldState.error && (
           <Text style={styles.errorText}>{fieldState.error.message}</Text>
         )}
-        {error !== null && (
+        {/* {error !== null && (
           <Text style={styles.errorText}>{error as string}</Text>
-        )}
+        )} */}
       </View>
     </View>
   );
