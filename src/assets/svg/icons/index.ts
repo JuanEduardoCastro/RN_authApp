@@ -11,3 +11,7 @@ export { default as OpenLockIcon } from './openLockIcon.svg';
 export { default as GlassIcon } from './glassIcon.svg';
 export { default as ArrowIcon } from './arrowIcon.svg';
 export { default as ChevronIcon } from './chevronIcon.svg';
+export { default as SuccessIcon } from './successIcon.svg';
+export { default as ErrorIcon } from './errorIcon.svg';
+export { default as InfoIcon } from './infoIcon.svg';
+export { default as WarningIcon } from './warningIcon.svg';

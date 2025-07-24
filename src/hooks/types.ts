@@ -16,4 +16,5 @@ export interface UseCheckTokenReturn {
 export interface CustomJwtPayload extends JwtPayload {
   _id: string;
   email: string;
+  isNew?: boolean;
 }

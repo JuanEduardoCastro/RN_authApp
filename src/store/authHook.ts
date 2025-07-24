@@ -5,11 +5,12 @@ import { Dispatch } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {
   setUser,
-  setError,
   setToken,
   startLoader,
   stopLoader,
   setIsAuthorized,
+  setMessageType,
+  setNotificationMessage,
 } from './authSlice';
 import { Platform } from 'react-native';
 import { jwtDecode } from 'jwt-decode';
@@ -30,28 +31,28 @@ export const checkEmail = (data: any) => {
       const response = await axios.post(`${HOST}/users/checkemail`, data);
       if (response.status === 200) {
         dispatch(stopLoader());
-        dispatch(setError(null));
+        dispatch(setMessageType(null));
         console.log('--> --> --> --> --> --> --> --> --> --> ');
         console.log('--> --> EL TOKEN PARA EL MAIL ');
         console.log(response.data.data);
         console.log('--> --> --> --> --> --> --> --> --> --> ');
         return {
           success: true,
-          message: 'This email is NOT in use',
+          message: 'This email is available to use.',
           error: null,
         };
       } else if (response.status === 204) {
         dispatch(stopLoader());
-        dispatch(setError('This email is already in use'));
         return {
           success: false,
-          message: 'This email is already in use',
+          message: 'This email is already in use. Please try another.',
           error: null,
         };
       }
     } catch (error) {
       console.log('XX -> authHook.ts:34 -> return -> error :', error);
-      dispatch(setError('Network error'));
+      dispatch(setMessageType('error'));
+      dispatch(setNotificationMessage('Network error'));
       dispatch(stopLoader());
       return { success: false, error: error };
     }
@@ -66,20 +67,26 @@ export const createUser = (data: any) => {
     try {
       const response = await axios.post(`${HOST}/users/create`, data);
       if (response.status === 201) {
-        // dispatch(setUser(response.data));
         dispatch(stopLoader());
-        dispatch(setError(null));
+        dispatch(setMessageType(null));
         return {
           success: true,
+          message:
+            'The user was created successfully. Please, enter with your user credentials.',
           error: null,
         };
       } else {
-        dispatch(setError('Something went wrong. Try again, please!'));
         dispatch(stopLoader());
+        return {
+          success: false,
+          message: 'Something went wrong. Try again, please!',
+          error: null,
+        };
       }
     } catch (error) {
       console.log('XX -> authHook.ts:58 -> return -> error :', error);
-      dispatch(setError('Network error'));
+      dispatch(setMessageType('error'));
+      dispatch(setNotificationMessage('Network error'));
       dispatch(stopLoader());
       return { success: false, error: error };
     }
@@ -109,17 +116,89 @@ export const loginUser = (data: any) => {
         dispatch(stopLoader());
         return {
           success: true,
-          message: 'User created successfully.',
+          message: `Welcome ${response.data.user.firstName}`,
           error: null,
         };
       } else if (response.status === 401) {
         dispatch(setToken(null));
         dispatch(setUser(null));
-        dispatch(setError('There is something wrong with your password'));
+        return {
+          success: false,
+          message: 'There is something wrong with your password',
+          error: null,
+        };
       }
     } catch (error) {
       console.log('XX -> authHook.ts:98 -> return -> error :', error);
-      dispatch(setError('Network error'));
+      dispatch(setMessageType('error'));
+      dispatch(setNotificationMessage('Network error'));
+      dispatch(stopLoader());
+      return { success: false, error: error };
+    }
+  };
+};
+
+/* Reset password */
+
+export const resetPassword = (data: any) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(startLoader());
+    try {
+      const response = await axios.post(`${HOST}/users/resetpassword`, data);
+      if (response.status === 200) {
+        dispatch(stopLoader());
+        dispatch(setMessageType(null));
+        console.log('--> --> --> --> --> --> --> --> --> --> ');
+        console.log('--> --> EL TOKEN PARA LA CONTRASEÑA ');
+        console.log(response.data.data);
+        console.log('--> --> --> --> --> --> --> --> --> --> ');
+        return {
+          success: true,
+          message: 'The email is OK to reset password.',
+          error: null,
+        };
+      } else if (response.status === 204) {
+        dispatch(stopLoader());
+        return {
+          success: false,
+          message: 'There is no email to reset password.',
+          error: null,
+        };
+      }
+    } catch (error) {
+      console.log('XX -> authHook.ts:34 -> return -> error :', error);
+      dispatch(setMessageType('error'));
+      dispatch(setNotificationMessage('Network error'));
+      dispatch(stopLoader());
+      return { success: false, error: error };
+    }
+  };
+};
+
+/* Update new password */
+
+export const updatePassword = (data: any, token: any) => {
+  return async (dispatch: Dispatch) => {
+    console.log('que hay en data', data);
+    dispatch(startLoader());
+    const decodeToken = jwtDecode<CustomJwtPayload>(token);
+    try {
+      const response = await axios.put(
+        `${HOST}/users/updatepuser/${decodeToken._id}`,
+        data,
+      );
+      if (response.status === 201) {
+        dispatch(setUser(response.data.user));
+        dispatch(stopLoader());
+        return {
+          success: true,
+          message: 'User updated successfully.',
+          error: null,
+        };
+      }
+    } catch (error) {
+      dispatch(setMessageType('error'));
+      dispatch(setNotificationMessage('Network error'));
       dispatch(stopLoader());
       return { success: false, error: error };
     }
@@ -147,7 +226,8 @@ export const editUser = (data: any, token: any) => {
         };
       }
     } catch (error) {
-      dispatch(setError('Network error'));
+      dispatch(setMessageType('error'));
+      dispatch(setNotificationMessage('Network error'));
       dispatch(stopLoader());
       return { success: false, error: error };
     }
@@ -173,7 +253,8 @@ export const logoutUser = (data: any) => {
         };
       }
     } catch (error) {
-      dispatch(setError('Network error. Please, try again.'));
+      dispatch(setMessageType('error'));
+      dispatch(setNotificationMessage('Network error. Please, try again.'));
       dispatch(stopLoader());
       return { success: false, error: error };
     }
@@ -208,16 +289,22 @@ export const validateToken = (data: any) => {
         dispatch(stopLoader());
         return {
           success: true,
-          message: 'User created successfully.',
+          message: `Welcome back ${response.data.user.firstName}`,
           error: null,
         };
       } else {
-        dispatch(setError('Something went wrong. Try again, please!'));
-        dispatch(stopLoader());
+        dispatch(setToken(null));
+        dispatch(setUser(null));
+        return {
+          success: false,
+          message: 'Something went wrong. Please, try to login again.',
+          error: null,
+        };
       }
     } catch (error) {
       console.log('XX -> authHook.ts:172 -> return -> error :', error);
-      dispatch(setError('Network error'));
+      dispatch(setMessageType('error'));
+      dispatch(setNotificationMessage('Network error'));
       dispatch(stopLoader());
       return { success: false, error: error };
     }
@@ -237,13 +324,11 @@ export const googleLogin = (data: any) => {
         const { sub, email, given_name, family_name, picture } =
           googleResponse.data;
 
-        /* check if email exists in DB */
         const checkEmail = await axios.post(`${HOST}/users/checkemail`, {
           email: email,
           isGoogleLogin: true,
         });
 
-        /* create a new user if the email is not in the DB */
         if (checkEmail.status === 200) {
           const createUser = await axios.post(`${HOST}/users/create`, {
             email: email,
@@ -254,14 +339,13 @@ export const googleLogin = (data: any) => {
             avatarURL: picture,
           });
 
-          /* if the user was created, then login user session */
           if (createUser.status === 201) {
             const loginUser = await axios.post(`${HOST}/users/login`, {
               email: email,
               password: sub,
             });
+
             if (loginUser.status === 200) {
-              // guardar el localstorage
               await Keychain.setGenericPassword(
                 'userToken',
                 loginUser.data.token,
@@ -275,13 +359,17 @@ export const googleLogin = (data: any) => {
               dispatch(stopLoader());
               return {
                 success: true,
-                message: 'User created successfully.',
+                message: `Welcome ${loginUser.data.user.firstName}`,
                 error: null,
               };
             } else if (loginUser.status === 401) {
               dispatch(setToken(null));
               dispatch(setUser(null));
-              dispatch(setError('There is something wrong with your password'));
+              return {
+                success: false,
+                message: 'Somthing went wrong. Please, try again.',
+                error: null,
+              };
             }
           }
           /* create new credentials */
@@ -305,19 +393,24 @@ export const googleLogin = (data: any) => {
             dispatch(stopLoader());
             return {
               success: true,
-              message: 'User logged in succssesfully.',
+              message: `Welcome back ${loginUser.data.user.firstName}`,
               error: null,
             };
           } else if (loginUser.status === 401) {
             dispatch(setToken(null));
             dispatch(setUser(null));
-            dispatch(setError('There is something wrong with your password'));
+            return {
+              success: false,
+              message: 'Somthing went wrong. Please, try again.',
+              error: null,
+            };
           }
         }
       }
     } catch (error) {
       console.log('XX -> authHook.ts:55 -> return -> error :', error);
-      dispatch(setError('Network error'));
+      dispatch(setMessageType('error'));
+      dispatch(setNotificationMessage('Network error'));
       dispatch(stopLoader());
       return { success: false, error: error };
     }

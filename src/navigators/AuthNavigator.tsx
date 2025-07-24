@@ -13,6 +13,7 @@ const AuthNavigator = () => {
     <Stack.Navigator
       // initialRouteName="Login screen"
       screenOptions={{
+        gestureEnabled: false,
         headerShown: false,
       }}>
       <Stack.Screen name={'WelcomeScreen'} component={WelcomeScreen} />

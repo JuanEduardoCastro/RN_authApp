@@ -6,18 +6,15 @@ export const lightMode = {
   text: '#0f172a',
   textNgt: '#f5f5f5',
   second: '#9e60a3',
-  transparent: '#00000000',
 };
 
 export const darkMode = {
   background: '#171717',
   tabBackground: '#171717a6',
-
   // background: '#0f172a',
   text: '#f5f5f5',
   textNgt: '#0f172a',
   second: '#DBA1FF',
-  transparent: '#00000000',
 };
 
 export const sharedColors = {
@@ -26,6 +23,8 @@ export const sharedColors = {
   primary: '#007AFF',
   accept: '#008000',
   cancel: '#FF2C2C',
+  transparent: '#00000000',
+  notifications: '#7646c960',
   // black n white colors
   almostBlack: '#0000000d',
   dark: '#1B1B1E',

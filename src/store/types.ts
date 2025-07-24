@@ -1,9 +1,12 @@
+import { Dispatch } from '@reduxjs/toolkit';
+
 export interface AuthState {
   loader: boolean;
   token: string | null;
   user: IUser | null;
   isAuthorized: boolean;
-  error: string | null | unknown;
+  messageType: 'error' | 'success' | 'warning' | 'information' | null;
+  notificationMessage: string | null | unknown;
 }
 
 export interface IUser {
@@ -23,6 +26,11 @@ export interface IUser {
   avatarBuffer: string;
   createdAt: any;
   updatedAt: any;
+}
+
+export interface INotificationMessage {
+  messageType: 'error' | 'success' | 'warning' | 'information' | null;
+  notificationMessage: string | null | unknown;
 }
 
 // export interface userCredentials {

@@ -12,7 +12,7 @@ export type RootStackParamList = {
 export type AuthStackParamList = {
   WelcomeScreen: undefined;
   LoginScreen: undefined;
-  CheckEmailScreen: undefined;
+  CheckEmailScreen: { checkMode: 'new_password' | 'reset_password' };
   NewPasswordScreen: { token: string | null };
   HomeNavigator: undefined;
 };

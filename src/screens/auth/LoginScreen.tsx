@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { LoginScreenNavigationProp } from 'src/navigators/types';
@@ -9,7 +9,8 @@ import InputAuthField from '@components/shared/InputAuthField';
 import CheckBoxCustom from '@components/shared/CheckBoxCustom';
 import Button from '@components/shared/Button';
 import { loginUser, useAppDispatch } from 'src/store/authHook';
-import { setError } from 'src/store/authSlice';
+import Separator from '@components/shared/Separator';
+import { newNotificationMessage } from '@utils/newNotificationMessage';
 
 interface FormDataProps {
   email: string;
@@ -27,9 +28,13 @@ const LoginScreen = ({ navigation, route }: LoginScreenNavigationProp) => {
     try {
       const res = await dispatch(loginUser(data));
       if (res?.success) {
+        newNotificationMessage(dispatch, {
+          messageType: 'success',
+          notificationMessage: 'Welcome back!\nEnjoy this app!!',
+        });
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       } else {
-        dispatch(setError(res?.message));
+        // dispatch(setError(res?.message));
       }
     } catch (error) {
       console.log('XX -> LoginScreen.tsx:36 -> onSubmit -> error :', error);
@@ -38,7 +43,13 @@ const LoginScreen = ({ navigation, route }: LoginScreenNavigationProp) => {
   return (
     <FormProvider {...methods}>
       <View style={styles.container}>
+        <View style={styles.titleBox}>
+          <Text style={styles.subTitle}>
+            {'Enter your account with your email'}
+          </Text>
+        </View>
         <View style={styles.inputBox}>
+          <Separator borderWidth={0} />
           <InputAuthField
             inputStyles={styles.textinput}
             name="email"
@@ -67,7 +78,6 @@ const LoginScreen = ({ navigation, route }: LoginScreenNavigationProp) => {
               },
             }}
             placeholder="Enter your password"
-            secureTextEntry
           />
           <CheckBoxCustom
             name="rememberMe"
@@ -75,12 +85,31 @@ const LoginScreen = ({ navigation, route }: LoginScreenNavigationProp) => {
             control={control}
           />
         </View>
+        <Separator borderWidth={0} height={16} />
         <View style={styles.buttonBox}>
           <Button
             onPress={handleSubmit(onSubmit)}
             buttonStyles={{ backgroundColor: colors.second }}
             textStyles={{ color: colors.textNgt, fontWeight: 600 }}
           />
+        </View>
+        <View style={styles.gobackBox}>
+          <Pressable
+            style={{ padding: 8 }}
+            onPress={() => navigation.popToTop()}>
+            <Text style={styles.gobackText}>
+              Go back to select other option!
+            </Text>
+          </Pressable>
+          <Pressable
+            style={{ padding: 8 }}
+            onPress={() =>
+              navigation.navigate('CheckEmailScreen', {
+                checkMode: 'reset_password',
+              })
+            }>
+            <Text style={styles.gobackText}>Reset your password</Text>
+          </Pressable>
         </View>
       </View>
     </FormProvider>
@@ -98,6 +127,18 @@ const createStlyes = (colors: TColors) =>
       alignItems: 'center',
       padding: 20,
     },
+    titleBox: {
+      // backgroundColor: "pink",
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: 12,
+    },
+    subTitle: {
+      textAlign: 'center',
+      color: colors.light,
+      fontWeight: 500,
+      fontSize: 18,
+    },
     title: {
       fontSize: 24,
       marginBottom: 20,
@@ -113,5 +154,11 @@ const createStlyes = (colors: TColors) =>
     buttonBox: {
       width: SCREEN.widthFixed * 240,
       paddingVertical: 12,
+    },
+    gobackBox: {
+      alignItems: 'center',
+    },
+    gobackText: {
+      color: colors.second,
     },
   });

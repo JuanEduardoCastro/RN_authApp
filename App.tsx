@@ -12,6 +12,7 @@ import { userAuth } from 'src/store/authSlice';
 import Loader from '@components/shared/loader/Loader';
 import RootNavigator from 'src/navigators/RootNavigator';
 import { RootStackParamList } from 'src/navigators/types';
+import NotificationBanner from '@components/shared/notifications/NotificationBanner';
 
 const AppWrapper = () => {
   return (
@@ -47,6 +48,7 @@ function App() {
       <SafeAreaProvider>
         <ThemeProvider>
           {loader && <Loader />}
+          <NotificationBanner />
           <NavigationContainer linking={linking}>
             <RootNavigator />
             {/* <AuthNavigator /> */}
