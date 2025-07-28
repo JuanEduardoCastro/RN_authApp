@@ -34,6 +34,10 @@ const BottomSheet = ({
     isOpen.value ? setIsVisible(true) : setIsVisible(false);
   }, [isOpen.value]);
 
+  const handleCloseModal = () => {
+    setIsVisible(false);
+  };
+
   const progress = useDerivedValue(() =>
     withTiming(isOpen.value ? 0 : 1, { duration }),
   );
@@ -50,7 +54,10 @@ const BottomSheet = ({
   }));
 
   return (
-    <Modal transparent={true} visible={isVisible}>
+    <Modal
+      transparent={true}
+      visible={isVisible}
+      onRequestClose={handleCloseModal}>
       <Animated.View style={[styles.backdrop, backdropStyle]}>
         <Pressable style={styles.closeButton} onPress={toggleSheet} />
       </Animated.View>

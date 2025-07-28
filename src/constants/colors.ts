@@ -24,7 +24,7 @@ export const sharedColors = {
   accept: '#008000',
   cancel: '#FF2C2C',
   transparent: '#00000000',
-  notifications: '#7646c960',
+  notifications: '#7646c970',
   // black n white colors
   almostBlack: '#0000000d',
   dark: '#1B1B1E',

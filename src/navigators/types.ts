@@ -13,7 +13,7 @@ export type AuthStackParamList = {
   WelcomeScreen: undefined;
   LoginScreen: undefined;
   CheckEmailScreen: { checkMode: 'new_password' | 'reset_password' };
-  NewPasswordScreen: { token: string | null };
+  NewPasswordScreen: { emailToken: string | null };
   HomeNavigator: undefined;
 };
 

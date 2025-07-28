@@ -28,7 +28,7 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       AuthNavigator: {
         screens: {
-          NewPasswordScreen: 'new-password/:token',
+          NewPasswordScreen: 'new-password/:emailToken',
         },
       },
     },

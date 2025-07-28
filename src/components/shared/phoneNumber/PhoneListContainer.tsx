@@ -23,6 +23,7 @@ type PhoneListContainerProps = {
     number: string | null;
   } | null;
   codeIndex: number | null;
+  indexToScroll: number | null;
   setCodeIndex: (val: number | null) => void;
   handlePhoneNumberToSubmit: () => void;
 } & ViewProps;
@@ -31,6 +32,7 @@ const PhoneListContainer = ({
   toggleSheet,
   phoneData,
   codeIndex,
+  indexToScroll,
   setCodeIndex,
   handlePhoneNumberToSubmit,
 }: PhoneListContainerProps) => {
@@ -39,22 +41,18 @@ const PhoneListContainer = ({
 
   useEffect(() => {
     const waitForScrollToIndex = new Promise(resolve =>
-      setTimeout(resolve, 300),
+      setTimeout(resolve, 100),
     );
     waitForScrollToIndex.then(() => {
-      if (flatListRef.current && !codeIndex) {
-        countriesList.map((item, index) => {
-          if (item.dialCode === phoneData?.dialCode) {
-            flatListRef.current.scrollToIndex({
-              index: index,
-              animated: true,
-              viewPosition: 0.5,
-            });
-          }
+      if (flatListRef.current) {
+        flatListRef.current.scrollToIndex({
+          index: indexToScroll,
+          animated: true,
+          viewPosition: 0.5,
         });
       }
     });
-  }, []);
+  }, [indexToScroll]);
 
   const scrollToIndex = (index: number) => {
     flatListRef.current?.scrollToIndex({
@@ -70,15 +68,16 @@ const PhoneListContainer = ({
   };
 
   const handleCancelButton = () => {
-    console.log('CANCEL PICKER');
     setCodeIndex(null);
     toggleSheet();
   };
 
   const handleDoneButton = () => {
-    console.log('SAVE PICKER');
     toggleSheet();
-    codeIndex && handlePhoneNumberToSubmit();
+    // setCodeIndex(codeIndex);
+    if (codeIndex) {
+      handlePhoneNumberToSubmit();
+    }
   };
 
   return (
@@ -99,6 +98,11 @@ const PhoneListContainer = ({
           data={countriesList}
           showsVerticalScrollIndicator={false}
           extraData={phoneData?.dialCode}
+          getItemLayout={(data, index) => ({
+            length: SCREEN.heightFixed * 35,
+            offset: SCREEN.heightFixed * 35 * index + 70,
+            index: index,
+          })}
           renderItem={({ item, index }) => (
             <Pressable
               key={index + 1}

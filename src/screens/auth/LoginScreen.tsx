@@ -1,4 +1,4 @@
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { LoginScreenNavigationProp } from 'src/navigators/types';
@@ -11,6 +11,7 @@ import Button from '@components/shared/Button';
 import { loginUser, useAppDispatch } from 'src/store/authHook';
 import Separator from '@components/shared/Separator';
 import { newNotificationMessage } from '@utils/newNotificationMessage';
+import AuthNavigator from 'src/navigators/AuthNavigator';
 
 interface FormDataProps {
   email: string;
@@ -30,14 +31,18 @@ const LoginScreen = ({ navigation, route }: LoginScreenNavigationProp) => {
       if (res?.success) {
         newNotificationMessage(dispatch, {
           messageType: 'success',
-          notificationMessage: 'Welcome back!\nEnjoy this app!!',
+          notificationMessage: 'Welcome!\nEnjoy this app!!',
         });
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       } else {
-        // dispatch(setError(res?.message));
+        newNotificationMessage(dispatch, {
+          messageType: 'error',
+          notificationMessage: 'Wrong credentials. Please, try again!',
+        });
       }
     } catch (error) {
       console.log('XX -> LoginScreen.tsx:36 -> onSubmit -> error :', error);
+      navigation.popToTop();
     }
   };
   return (

@@ -8,7 +8,7 @@ export interface Styles<T extends StyleSheet.NamedStyles<T>> {
 }
 
 export interface UseCheckTokenReturn {
-  userId: string | null;
+  tokenSaved: boolean;
   isExpired: boolean;
   checkCompleted: boolean;
 }

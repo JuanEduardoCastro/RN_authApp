@@ -9,7 +9,6 @@ import Button from '@components/shared/Button';
 import InputAuthField from '@components/shared/InputAuthField';
 import { jwtDecode } from 'jwt-decode';
 import {
-  checkEmail,
   createUser,
   updatePassword,
   useAppDispatch,
@@ -30,7 +29,7 @@ const NewPasswordScreen = ({
   navigation,
   route,
 }: NewPasswordScreenNavigationProps) => {
-  const { token } = route.params;
+  const { emailToken } = route.params;
   const { messageType } = useAppSelector(userAuth);
   const dispatch = useAppDispatch();
   const method = useForm<FormNewDataProps>();
@@ -41,12 +40,11 @@ const NewPasswordScreen = ({
 
   useEffect(() => {
     try {
-      if (token !== null) {
-        const decode = jwtDecode<CustomJwtPayload>(token);
-        // console.log('el decode', decode);
+      // console.log('el token que llega', emailToken);
+      if (emailToken !== null) {
+        const decode = jwtDecode<CustomJwtPayload>(emailToken);
         const userEmail = decode.email;
         decode.isNew !== undefined && setNewUser(decode.isNew);
-        // checkUserAccount(userEmail);
 
         setEmail(userEmail);
         if (decode.exp) {
@@ -67,33 +65,21 @@ const NewPasswordScreen = ({
           }
         }
       } else {
-        // navigation.navigate('CheckEmailScreen');
-        // newNotificationMessage(dispatch, {
-        //   messageType: 'warning',
-        //   notificationMessage: 'There is no email checked. Please, try again!',
-        // });
+        navigation.popToTop();
+        newNotificationMessage(dispatch, {
+          messageType: 'warning',
+          notificationMessage: 'There is no email checked. Please, try again!',
+        });
       }
     } catch (error) {
       console.log('XX -> NewPassword.tsx:46 -> useEffect -> error :', error);
+      navigation.popToTop();
     }
   }, []);
 
-  // console.log('el state newUSer', newUser);
-
-  const checkUserAccount = async (userEmail: string) => {
-    // console.log('EN EL CHECKUSERACCOUNT', userEmail);
-    try {
-      const res = await dispatch(checkEmail(userEmail));
-      if (res?.success) {
-        setNewUser(true);
-      } else {
-        setNewUser(false);
-      }
-    } catch (error) {}
-  };
-
   const onSubmit = async (data: FormNewDataProps) => {
     if (data.new_password !== data.confirm_password) {
+      /* Colocar esa alerta en el error de los fields */
       Alert.alert('The passwords must be the same');
     } else {
       const fullData = {
@@ -102,7 +88,7 @@ const NewPasswordScreen = ({
       };
       if (newUser) {
         try {
-          const res = await dispatch(createUser(fullData));
+          const res = await dispatch(createUser(fullData, emailToken));
           if (res?.success) {
             newNotificationMessage(dispatch, {
               messageType: 'success',
@@ -120,11 +106,11 @@ const NewPasswordScreen = ({
       } else {
         try {
           console.log('en el full data', fullData.password);
-          const res = await dispatch(updatePassword(fullData, token));
+          const res = await dispatch(updatePassword(fullData, emailToken));
           if (res?.success) {
             newNotificationMessage(dispatch, {
               messageType: 'success',
-              notificationMessage: 'User created successfully. ',
+              notificationMessage: 'New password saved.',
             });
 
             navigation.navigate('LoginScreen');

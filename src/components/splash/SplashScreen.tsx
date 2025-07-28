@@ -4,7 +4,7 @@ import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import BGGradient from '@components/shared/BGGradient';
 import { SCREEN } from '@constants/sizes';
-import { useAppDispatch, validateToken } from 'src/store/authHook';
+import { useAppDispatch } from 'src/store/authHook';
 import { useCheckToken } from '@hooks/useCheckToken';
 import { setIsAuthorized, setResetUser } from 'src/store/authSlice';
 
@@ -43,12 +43,12 @@ const IMG_STATE = {
 export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
   const containerOpacity = useRef(new Animated.Value(1)).current;
   const imageOpacity = useRef(new Animated.Value(0)).current;
-  const { userId, isExpired, checkCompleted } = useCheckToken();
+  const { tokenSaved, isExpired, checkCompleted } = useCheckToken();
   const [imageState, setImageState] = useState(IMG_STATE.LOADING_IMAGE);
   const dispatch = useAppDispatch();
 
   const checkUserLogged = async () => {
-    if (userId) {
+    if (tokenSaved) {
       if (!isExpired) {
         // la app esta lista y con el usuario OK
         dispatch(setIsAuthorized());
