@@ -18,6 +18,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import { BlurView } from '@react-native-community/blur';
 
 const NotificationBanner = () => {
   const { notificationMessage, messageType } = useAppSelector(userAuth);
@@ -35,18 +36,16 @@ const NotificationBanner = () => {
 
   const starAnimation = (val: number) => {
     translateY.value = withTiming(val, {
-      duration: 300,
+      duration: 400,
       easing: Easing.out(Easing.ease),
     });
   };
 
   useEffect(() => {
     if (!messageType) {
-      console.log('EL ERROR ES NULL O UNKNOWN', messageType);
       setOpenBanner(false);
     }
     if (messageType) {
-      console.log('DEBERIA ABRIR EL BANNER', messageType);
       setOpenBanner(true);
       starAnimation(0);
 
@@ -115,6 +114,11 @@ const NotificationBanner = () => {
                 })()}
               </View>
             </View>
+            <BlurView
+              style={styles.blurView}
+              blurType={'dark'}
+              blurAmount={7}
+            />
           </Pressable>
         </Animated.View>
       )}
@@ -145,15 +149,25 @@ const createStyles = (colors: TColors) =>
       borderRadius: 12,
       paddingHorizontal: 16,
       paddingVertical: 8,
+      zIndex: 9,
     },
     bannerTextBox: {
       flexShrink: 1,
     },
     bannerText: {
-      color: colors.text,
+      color: colors.almostWhite,
+      // color: colors.text,
       fontSize: 16,
     },
     bannerIconBox: {
       width: 44,
+    },
+    blurView: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      borderRadius: 12,
     },
   });

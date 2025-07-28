@@ -15,6 +15,7 @@ import {
 import { Platform } from 'react-native';
 import { jwtDecode } from 'jwt-decode';
 import { CustomJwtPayload } from '@hooks/types';
+import { newNotificationMessage } from '@utils/newNotificationMessage';
 
 const HOST =
   Platform.OS === 'ios' ? 'http://localhost:3005' : 'http://10.0.2.2:3005';
@@ -23,6 +24,7 @@ export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppSelector = useSelector.withTypes<RootState>();
 
 /* Validate user email */
+/* OK checked */
 
 export const checkEmail = (data: any) => {
   return async (dispatch: Dispatch) => {
@@ -60,12 +62,17 @@ export const checkEmail = (data: any) => {
 };
 
 /* Create user */
+/* OK checked */
 
-export const createUser = (data: any) => {
+export const createUser = (data: any, emailToken: any) => {
   return async (dispatch: Dispatch) => {
     dispatch(startLoader());
     try {
-      const response = await axios.post(`${HOST}/users/create`, data);
+      const response = await axios.post(`${HOST}/users/create`, data, {
+        headers: {
+          Authorization: `Bearer ${emailToken}`,
+        },
+      });
       if (response.status === 201) {
         dispatch(stopLoader());
         dispatch(setMessageType(null));
@@ -94,29 +101,42 @@ export const createUser = (data: any) => {
 };
 
 /* Login user */
+/* OK checked */
 
 export const loginUser = (data: any) => {
   return async (dispatch: Dispatch) => {
     dispatch(startLoader());
+    /* This is to reset Keychain storage */
+    // await Keychain.resetGenericPassword();
+
     try {
       const response = await axios.post(`${HOST}/users/login`, {
         email: data.email,
         password: data.password,
       });
       if (response.status === 200) {
+        // console.log('lo qeu regresa del DB', response.data);
+        const refreshToken = response.data.refreshToken;
+        await Keychain.setGenericPassword('refreshToken', refreshToken, {
+          service: 'secret token',
+          accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
+        });
         if (data.rememberMe) {
-          const password = response.data.token;
-          await Keychain.setGenericPassword('userToken', password, {
-            service: process.env.KEY_SERVICES,
+          const rememberMeFlag = 'true';
+          await Keychain.setGenericPassword('remember', rememberMeFlag, {
+            service: 'secret remeber me',
             accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
           });
         }
-        dispatch(setToken(response.data.token));
+        dispatch(setToken(response.data.accessToken));
         dispatch(setUser(response.data.user));
         dispatch(stopLoader());
+
         return {
           success: true,
-          message: `Welcome ${response.data.user.firstName}`,
+          message: `Welcome ${
+            response.data.user.firstName || response.data.user.email
+          }`,
           error: null,
         };
       } else if (response.status === 401) {
@@ -139,6 +159,7 @@ export const loginUser = (data: any) => {
 };
 
 /* Reset password */
+/* OK checked */
 
 export const resetPassword = (data: any) => {
   return async (dispatch: Dispatch) => {
@@ -176,16 +197,21 @@ export const resetPassword = (data: any) => {
 };
 
 /* Update new password */
+/* OK checked */
 
-export const updatePassword = (data: any, token: any) => {
+export const updatePassword = (data: any, emailToken: any) => {
   return async (dispatch: Dispatch) => {
-    console.log('que hay en data', data);
     dispatch(startLoader());
-    const decodeToken = jwtDecode<CustomJwtPayload>(token);
+    const decodeToken = jwtDecode<CustomJwtPayload>(emailToken);
     try {
       const response = await axios.put(
         `${HOST}/users/updatepuser/${decodeToken._id}`,
         data,
+        {
+          headers: {
+            Authorization: `Bearer ${emailToken}`,
+          },
+        },
       );
       if (response.status === 201) {
         dispatch(setUser(response.data.user));
@@ -215,6 +241,11 @@ export const editUser = (data: any, token: any) => {
       const response = await axios.put(
         `${HOST}/users/edit/${decodeToken._id}`,
         data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       if (response.status === 201) {
         dispatch(setUser(response.data.user));
@@ -224,6 +255,9 @@ export const editUser = (data: any, token: any) => {
           message: 'User updated successfully.',
           error: null,
         };
+      } else if (response.status === 401) {
+        // pegarle al refresh API y mandar el refresh
+        // si esta OK, mandar de vuelta un access valido para volver a repetir este hjook
       }
     } catch (error) {
       dispatch(setMessageType('error'));
@@ -235,22 +269,36 @@ export const editUser = (data: any, token: any) => {
 };
 
 /* Logout user */
+/* OK checked */
 
 export const logoutUser = (data: any) => {
   return async (dispatch: Dispatch) => {
     dispatch(startLoader());
     try {
-      const response = await axios.post(`${HOST}/users/logout`, data);
-      if (response.status === 200) {
-        await Keychain.resetGenericPassword({
-          service: process.env.KEY_SERVICES,
+      const refreshToken = await Keychain.getGenericPassword({
+        service: 'secret token',
+      });
+      if (refreshToken) {
+        const response = await axios.post(`${HOST}/users/logout`, data, {
+          headers: {
+            Authorization: `Bearer ${refreshToken.password}`,
+          },
         });
-        dispatch(stopLoader());
-        return {
-          success: true,
-          message: 'User logged out succssesfully.',
-          error: null,
-        };
+
+        if (response.status === 200) {
+          await Keychain.resetGenericPassword();
+          dispatch(stopLoader());
+          newNotificationMessage(dispatch, {
+            messageType: 'success',
+            notificationMessage:
+              'You log out your session!\nSee you next time!',
+          });
+          return {
+            success: true,
+            message: 'User logged out succssesfully.',
+            error: null,
+          };
+        }
       }
     } catch (error) {
       dispatch(setMessageType('error'));
@@ -261,14 +309,58 @@ export const logoutUser = (data: any) => {
   };
 };
 
-/* Validate token to get the use in time */
+/* Validate access token when expires with refresh token  */
+
+export const validateRefreshToken = () => {
+  return async (dispatch: Dispatch) => {
+    dispatch(startLoader());
+    try {
+      const refreshToken = await Keychain.getGenericPassword({
+        service: 'secret token',
+      });
+      if (refreshToken) {
+        const response = await axios.get(`${HOST}/users/validatetoken`, {
+          headers: { Authorization: `Bearer ${refreshToken}` },
+        });
+        if (response.status === 200) {
+          dispatch(setToken(response.data.accessToken));
+          dispatch(setUser(response.data.user));
+          return {
+            success: true,
+            message: `Welcome ${
+              response.data.user.firstName || response.data.user.email
+            }`,
+            error: null,
+          };
+        } else if (response.status === 401) {
+          dispatch(setToken(null));
+          dispatch(setUser(null));
+          await Keychain.resetGenericPassword();
+          return {
+            success: false,
+            message: 'Your session expired. Please, log in again.',
+            error: null,
+          };
+        }
+      }
+    } catch (error) {
+      dispatch(setMessageType('error'));
+      dispatch(setNotificationMessage('Network error'));
+      dispatch(stopLoader());
+      return { success: false, error: error };
+    }
+  };
+};
+
+/* Validate token to get the useer in time */
 
 export const validateToken = (data: any) => {
   return async (dispatch: Dispatch) => {
-    await Keychain.resetGenericPassword({ service: process.env.KEY_SERVICES });
+    // await Keychain.resetGenericPassword({ service: process.env.KEY_SERVICES });
+
     dispatch(startLoader());
     try {
-      const response = await axios.get(`${HOST}/users/validate-token`, {
+      const response = await axios.get(`${HOST}/users/validatetoken`, {
         headers: {
           Authorization: `Bearer ${data}`,
         },
@@ -278,26 +370,21 @@ export const validateToken = (data: any) => {
           'The user is authorized',
           Platform.OS === 'ios' ? 'in iOS' : 'in Android',
         );
-        const password = response.data.token;
-        await Keychain.setGenericPassword('userToken', password, {
-          service: process.env.KEY_SERVICES,
-          accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
-        });
         dispatch(setToken(response.data.token));
         dispatch(setUser(response.data.user));
-        dispatch(setIsAuthorized());
         dispatch(stopLoader());
         return {
           success: true,
-          message: `Welcome back ${response.data.user.firstName}`,
+
           error: null,
         };
       } else {
         dispatch(setToken(null));
         dispatch(setUser(null));
+        await Keychain.resetGenericPassword();
         return {
           success: false,
-          message: 'Something went wrong. Please, try to login again.',
+          message: 'Your session expired. Please, log in again.',
           error: null,
         };
       }
@@ -323,6 +410,7 @@ export const googleLogin = (data: any) => {
       if (googleResponse.status === 200) {
         const { sub, email, given_name, family_name, picture } =
           googleResponse.data;
+        console.log('lo que viene de google', googleResponse.data);
 
         const checkEmail = await axios.post(`${HOST}/users/checkemail`, {
           email: email,

@@ -5,38 +5,40 @@ import { useAppDispatch, validateToken } from 'src/store/authHook';
 import { CustomJwtPayload, UseCheckTokenReturn } from './types';
 
 export const useCheckToken = (): UseCheckTokenReturn => {
-  const [userId, setUserId] = useState<string | null>(null);
-  const [checkCompleted, setCheckCompleted] = useState(false);
-  const [isExpired, setIsExpired] = useState(true);
+  const [tokenSaved, setTokenSaved] = useState<boolean>(false);
+  const [checkCompleted, setCheckCompleted] = useState<boolean>(false);
+  const [isExpired, setIsExpired] = useState<boolean>(true);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const checkLocalStorage = async () => {
       try {
         // const storagedToken = await AsyncStorage.getItem('token');
-        const storagedToken = await Keychain.getGenericPassword({
-          service: process.env.KEY_SERVICES,
+        const refreshToken = await Keychain.getGenericPassword({
+          service: 'secret token',
         });
-        if (storagedToken) {
+        if (refreshToken) {
+          setTokenSaved(true);
           const decodedToken = jwtDecode<CustomJwtPayload>(
-            storagedToken.password,
+            refreshToken.password,
           );
+          // console.log('decoded token', decodedToken);
           const currentTime = Math.floor(Date.now() / 1000);
           if (decodedToken.exp !== undefined) {
             if (currentTime > decodedToken.exp) {
-              setUserId(null);
+              setTokenSaved(false);
               setIsExpired(true);
             } else if (currentTime <= decodedToken.exp) {
-              dispatch(validateToken(storagedToken.password));
-              setUserId(decodedToken._id);
+              dispatch(validateToken(refreshToken.password));
+              setTokenSaved(true);
               setIsExpired(false);
             }
           } else {
-            setUserId(null);
+            setTokenSaved(false);
             setIsExpired(true);
           }
         } else {
-          setUserId(null);
+          setTokenSaved(false);
           setIsExpired(true);
         }
       } catch (error) {
@@ -44,7 +46,7 @@ export const useCheckToken = (): UseCheckTokenReturn => {
           'XX -> useCheckToken.tsx:54 -> checkLocalStorage -> error :',
           error,
         );
-        setUserId(null);
+        setTokenSaved(false);
         setIsExpired(true);
       } finally {
         setCheckCompleted(true);
@@ -53,5 +55,5 @@ export const useCheckToken = (): UseCheckTokenReturn => {
     checkLocalStorage();
   }, []);
 
-  return { userId, isExpired, checkCompleted };
+  return { tokenSaved, isExpired, checkCompleted };
 };

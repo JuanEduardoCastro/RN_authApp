@@ -16,7 +16,24 @@ const useUserData = () => {
     number: string | null;
   } | null>(null);
   const [codeIndex, setCodeIndex] = useState<number | null>(null);
+  const [indexToScroll, setIndexToScroll] = useState<number | null>(null);
   const [phoneLenght, setPhoneLenght] = useState<number | null>(null);
+
+  const getIndexToScroll = () => {
+    if (phoneData) {
+      countriesList.map((item, index) => {
+        if (item.dialCode === phoneData.dialCode) {
+          setIndexToScroll(index);
+        }
+      });
+    } else {
+      setIndexToScroll(0);
+    }
+  };
+
+  useEffect(() => {
+    getIndexToScroll();
+  }, [phoneData, codeIndex]);
 
   useEffect(() => {
     if (user) {
@@ -38,6 +55,7 @@ const useUserData = () => {
   }, []);
 
   useEffect(() => {
+    getIndexToScroll();
     if (!codeIndex) {
       if (user) {
         if (!user.phoneNumber.number) {
@@ -48,6 +66,7 @@ const useUserData = () => {
           });
           setDefaultCountryCode(getLocalsCodes[0].countryCode);
         } else if (user.phoneNumber.number) {
+          getIndexToScroll();
           setPhoneData({
             dialCode: user.phoneNumber.dialCode,
             code: user.phoneNumber.code,
@@ -56,6 +75,7 @@ const useUserData = () => {
         }
       }
     } else if (codeIndex) {
+      getIndexToScroll();
       if (user) {
         countriesList.map((item, index) => {
           index === codeIndex &&
@@ -74,6 +94,7 @@ const useUserData = () => {
     setPhoneData,
     codeIndex,
     setCodeIndex,
+    indexToScroll,
     defaultCountryCode,
     defaultDialCode,
   };

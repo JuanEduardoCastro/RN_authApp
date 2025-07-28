@@ -12,6 +12,7 @@ import { SCREEN } from '@constants/sizes';
 import AvatarView from '@components/shared/AvatarView';
 import PhoneNumberPicker from '@components/shared/phoneNumber/PhoneNumberPicker';
 import useUserData from '@hooks/useUserData';
+import { newNotificationMessage } from '@utils/newNotificationMessage';
 
 interface ProfileDataProps {
   firstName: string;
@@ -60,6 +61,17 @@ const ProfileScreen = () => {
 
     try {
       const res = await dispatch(editUser(fullData, token));
+      if (res?.success) {
+        newNotificationMessage(dispatch, {
+          messageType: 'success',
+          notificationMessage: 'Profile updated successfully!',
+        });
+      } else {
+        newNotificationMessage(dispatch, {
+          messageType: 'error',
+          notificationMessage: 'Something went wrong.\nPlease, try again.',
+        });
+      }
     } catch (error) {}
     setEditEnable(false);
   };

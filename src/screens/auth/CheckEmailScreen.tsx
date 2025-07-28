@@ -29,23 +29,7 @@ const CheckEmailScreen = ({
 
   const onSubmit = async (data: CheckEmailProps) => {
     try {
-      if (checkMode) {
-        const res = await dispatch(resetPassword(data));
-        if (res?.success) {
-          newNotificationMessage(dispatch, {
-            messageType: 'success',
-            notificationMessage: 'The email was sent.',
-          });
-          setShowMessage(true);
-        } else {
-          newNotificationMessage(dispatch, {
-            messageType: 'warning',
-            notificationMessage:
-              'There is no email to reset password.\nPlease try another one.',
-          });
-          setShowMessage(false);
-        }
-      } else {
+      if (checkMode.includes('new')) {
         const res = await dispatch(checkEmail(data));
         if (res?.success) {
           newNotificationMessage(dispatch, {
@@ -58,6 +42,22 @@ const CheckEmailScreen = ({
             messageType: 'warning',
             notificationMessage:
               'This email is already in use.\nPlease try another one.',
+          });
+          setShowMessage(false);
+        }
+      } else {
+        const res = await dispatch(resetPassword(data));
+        if (res?.success) {
+          newNotificationMessage(dispatch, {
+            messageType: 'success',
+            notificationMessage: 'The email was sent.',
+          });
+          setShowMessage(true);
+        } else {
+          newNotificationMessage(dispatch, {
+            messageType: 'warning',
+            notificationMessage:
+              'There is no email to reset password.\nPlease try another one.',
           });
           setShowMessage(false);
         }
@@ -76,14 +76,16 @@ const CheckEmailScreen = ({
       <View style={styles.container}>
         <View style={styles.titleBox}>
           <Text style={styles.subTitle}>
-            {!checkMode
+            {checkMode.includes('new')
               ? 'Please check your email to create\n a new account'
               : 'Please insert your email to\n reset your password'}
           </Text>
           <Text style={styles.subTitle2}>
             {showMessage &&
               `Check your inbox to validate the email\n and ${
-                !checkMode ? 'create your account.' : 'reset your password.'
+                checkMode.includes('new')
+                  ? 'create your account.'
+                  : 'reset your password.'
               }`}
           </Text>
         </View>
@@ -124,13 +126,13 @@ const CheckEmailScreen = ({
               Go back to select other option!
             </Text>
           </Pressable>
-          <Pressable
+          {/* <Pressable
             style={{ padding: 8 }}
             onPress={() =>
               navigation.navigate('NewPasswordScreen', { token: null })
             }>
             <Text style={styles.gobackText}>new password</Text>
-          </Pressable>
+          </Pressable> */}
         </View>
       </View>
     </FormProvider>

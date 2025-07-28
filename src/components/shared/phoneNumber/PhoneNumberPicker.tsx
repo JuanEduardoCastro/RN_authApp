@@ -9,11 +9,9 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Control, useController } from 'react-hook-form';
 import { useSharedValue } from 'react-native-reanimated';
-import { useAppSelector } from 'src/store/authHook';
-import { userAuth } from 'src/store/authSlice';
 import useStyles from '@hooks/useStyles';
 import useUserData from '@hooks/useUserData';
 import BottomSheet from '../bottomSheet/BottomSheet';
@@ -48,27 +46,14 @@ const PhoneNumberPicker = ({
     setPhoneData,
     codeIndex,
     setCodeIndex,
+    indexToScroll,
     defaultCountryCode,
     defaultDialCode,
   } = useUserData();
   const { field, fieldState } = useController({ name, control, rules });
-  const { error } = useAppSelector(userAuth);
   const { colors, styles } = useStyles(createStlyes);
   const isOpen = useSharedValue(false);
   const [isVisible, setIsVisible] = useState(false);
-
-  // console.log(
-  //   Platform.OS == 'ios' ? 'IN iOS @@ ' : 'IN Android @@ ',
-  //   'FROM THE HOOK :',
-  //   '@phoneCode ->',
-  //   typeof phoneData,
-  //   phoneData,
-  //   '@index ->',
-  //   codeIndex,
-  //   '@default',
-  //   defaultCountryCode,
-  //   defaultDialCode,
-  // );
 
   const handlePhoneNumberToSubmit = () => {
     field.onChange({
@@ -76,6 +61,7 @@ const PhoneNumberPicker = ({
       dialCode: phoneData?.dialCode,
       number: phoneData?.number,
     });
+    setCodeIndex(indexToScroll);
   };
 
   const handleUpdateNumber = (text: string) => {
@@ -161,20 +147,19 @@ const PhoneNumberPicker = ({
           {fieldState.error && (
             <Text style={styles.errorText}>{fieldState.error.message}</Text>
           )}
-          {error !== null && (
-            <Text style={styles.errorText}>{error as string}</Text>
-          )}
         </View>
       </View>
       <BottomSheet isOpen={isOpen} toggleSheet={toggleSheet}>
-        <View></View>
-        <PhoneListContainer
-          toggleSheet={toggleSheet}
-          phoneData={phoneData}
-          codeIndex={codeIndex}
-          setCodeIndex={setCodeIndex}
-          handlePhoneNumberToSubmit={handlePhoneNumberToSubmit}
-        />
+        {isVisible && (
+          <PhoneListContainer
+            toggleSheet={toggleSheet}
+            phoneData={phoneData}
+            codeIndex={codeIndex}
+            indexToScroll={indexToScroll}
+            setCodeIndex={setCodeIndex}
+            handlePhoneNumberToSubmit={handlePhoneNumberToSubmit}
+          />
+        )}
       </BottomSheet>
     </>
   );

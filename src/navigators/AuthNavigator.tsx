@@ -23,7 +23,7 @@ const AuthNavigator = () => {
       <Stack.Screen
         name={'NewPasswordScreen'}
         component={NewPasswordScreen}
-        initialParams={{ token: null }}
+        initialParams={{ emailToken: null }}
       />
     </Stack.Navigator>
   );

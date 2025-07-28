@@ -17,7 +17,7 @@ import {
   useAppSelector,
 } from 'src/store/authHook';
 import { userAuth } from 'src/store/authSlice';
-import axios from 'axios';
+import { newNotificationMessage } from '@utils/newNotificationMessage';
 
 GoogleSignin.configure({
   webClientId: WEB_CLIENT_ID,
@@ -50,12 +50,17 @@ const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
       const googleLoginRes = await GoogleLogin();
       const res = await dispatch(googleLogin(googleLoginRes?.data?.idToken));
       if (res?.success) {
+        newNotificationMessage(dispatch, {
+          messageType: 'success',
+          notificationMessage: 'Welcome back!\nEnjoy this app!!',
+        });
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       }
     } catch (error) {
       console.log(
         'XX -> WelcomeScreen.tsx:45 -> handleGoogleLogin -> error :',
         error,
+        navigation.popToTop(),
       );
     }
   };
