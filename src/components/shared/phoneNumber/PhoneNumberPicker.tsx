@@ -119,7 +119,7 @@ const PhoneNumberPicker = ({
               <TextInput
                 style={styles.pickerCode}
                 editable={false}
-                value={phoneData?.dialCode ?? defaultDialCode}
+                value={phoneData?.dialCode! ?? defaultDialCode}
               />
               <View style={styles.vertSeparator} />
             </View>
@@ -131,6 +131,7 @@ const PhoneNumberPicker = ({
                 color: colors.gray,
               },
             ]}
+            maxLength={12}
             value={phoneData?.number ?? ''}
             onChangeText={text => handleUpdateNumber(text)}
             // onChangeText={text => setNewPhoneNumber(text)}

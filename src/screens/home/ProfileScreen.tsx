@@ -13,6 +13,7 @@ import AvatarView from '@components/shared/AvatarView';
 import PhoneNumberPicker from '@components/shared/phoneNumber/PhoneNumberPicker';
 import useUserData from '@hooks/useUserData';
 import { newNotificationMessage } from '@utils/newNotificationMessage';
+import { ProfileScreenNavigationProps } from 'src/navigators/types';
 
 interface ProfileDataProps {
   firstName: string;
@@ -23,7 +24,7 @@ interface ProfileDataProps {
   avatarURL: string | undefined;
 }
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation, route }: ProfileScreenNavigationProps) => {
   const { user, token } = useAppSelector(userAuth);
   const method = useForm<ProfileDataProps>({
     defaultValues: {
@@ -72,7 +73,9 @@ const ProfileScreen = () => {
           notificationMessage: 'Something went wrong.\nPlease, try again.',
         });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log('XX -> ProfileScreen.tsx:76 -> onSubmit -> error :', error);
+    }
     setEditEnable(false);
   };
 

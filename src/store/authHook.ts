@@ -247,6 +247,7 @@ export const editUser = (data: any, token: any) => {
           },
         },
       );
+      console.log('entro acá ? ? ? ?');
       if (response.status === 201) {
         dispatch(setUser(response.data.user));
         dispatch(stopLoader());
@@ -256,6 +257,7 @@ export const editUser = (data: any, token: any) => {
           error: null,
         };
       } else if (response.status === 401) {
+        console.log('hay prbolemas acá');
         // pegarle al refresh API y mandar el refresh
         // si esta OK, mandar de vuelta un access valido para volver a repetir este hjook
       }
@@ -370,7 +372,7 @@ export const validateToken = (data: any) => {
           'The user is authorized',
           Platform.OS === 'ios' ? 'in iOS' : 'in Android',
         );
-        dispatch(setToken(response.data.token));
+        dispatch(setToken(response.data.accessToken));
         dispatch(setUser(response.data.user));
         dispatch(stopLoader());
         return {
