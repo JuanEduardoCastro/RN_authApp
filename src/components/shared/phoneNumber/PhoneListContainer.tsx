@@ -168,12 +168,12 @@ const createStlyes = (colors: TColors) =>
       borderColor: colors.second,
     },
     countryCard: {
-      width: SCREEN.widthFixed * 300,
+      // width: SCREEN.widthFixed * 300,
+      width: 'auto',
       height: SCREEN.heightFixed * 35,
       flexDirection: 'row',
       justifyContent: 'flex-start',
       alignItems: 'center',
-      // gap: 12,
     },
     textFlag: {
       width: 50,

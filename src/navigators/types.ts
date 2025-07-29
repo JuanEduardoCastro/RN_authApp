@@ -4,6 +4,12 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
+declare global {
+  namespace RootNavigation {
+    interface RootParamList extends RootStackParamList {}
+  }
+}
+
 export type RootStackParamList = {
   AuthNavigator: NavigatorScreenParams<AuthStackParamList>;
   HomeNavigator: NavigatorScreenParams<HomeTabParamList>;

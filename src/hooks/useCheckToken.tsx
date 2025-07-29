@@ -22,12 +22,12 @@ export const useCheckToken = (): UseCheckTokenReturn => {
           const decodedToken = jwtDecode<CustomJwtPayload>(
             refreshToken.password,
           );
-          // console.log('decoded token', decodedToken);
           const currentTime = Math.floor(Date.now() / 1000);
           if (decodedToken.exp !== undefined) {
             if (currentTime > decodedToken.exp) {
               setTokenSaved(false);
               setIsExpired(true);
+              await Keychain.resetGenericPassword();
             } else if (currentTime <= decodedToken.exp) {
               dispatch(validateToken(refreshToken.password));
               setTokenSaved(true);
@@ -36,10 +36,12 @@ export const useCheckToken = (): UseCheckTokenReturn => {
           } else {
             setTokenSaved(false);
             setIsExpired(true);
+            await Keychain.resetGenericPassword();
           }
         } else {
           setTokenSaved(false);
           setIsExpired(true);
+          await Keychain.resetGenericPassword();
         }
       } catch (error) {
         console.log(
@@ -48,6 +50,7 @@ export const useCheckToken = (): UseCheckTokenReturn => {
         );
         setTokenSaved(false);
         setIsExpired(true);
+        await Keychain.resetGenericPassword();
       } finally {
         setCheckCompleted(true);
       }
