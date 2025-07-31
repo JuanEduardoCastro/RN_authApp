@@ -74,7 +74,8 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenNavigationProps) => {
         });
       }
     } catch (error) {
-      console.log('XX -> ProfileScreen.tsx:76 -> onSubmit -> error :', error);
+      __DEV__ &&
+        console.log('XX -> ProfileScreen.tsx:76 -> onSubmit -> error :', error);
     }
     setEditEnable(false);
   };

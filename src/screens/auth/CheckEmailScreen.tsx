@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { CheckEmailScreenNavigationProps } from 'src/navigators/types';
 import useStyles from '@hooks/useStyles';
@@ -11,6 +11,8 @@ import { checkEmail, resetPassword, useAppDispatch } from 'src/store/authHook';
 import Separator from '@components/shared/Separator';
 import { sharedColors } from '@constants/colors';
 import { newNotificationMessage } from '@utils/newNotificationMessage';
+import CountDownTimer from 'react-native-countdown-timer-hooks';
+import { showSeed } from 'babel.config';
 
 interface CheckEmailProps {
   email: string;
@@ -20,15 +22,21 @@ const CheckEmailScreen = ({
   navigation,
   route,
 }: CheckEmailScreenNavigationProps) => {
+  const timerRef = useRef<any>(null);
   const { checkMode } = route.params;
   const method = useForm<CheckEmailProps>();
   const { handleSubmit, control } = method;
   const { colors, styles } = useStyles(createStlyes);
   const dispatch = useAppDispatch();
   const [showMessage, setShowMessage] = useState<boolean>(false);
+  const [showFocusTimer, setShowFocusTimer] = useState<boolean>(false);
 
   const onSubmit = async (data: CheckEmailProps) => {
     try {
+      if (showFocusTimer) {
+        setShowFocusTimer(false);
+        timerRef.current.resetTimer();
+      }
       if (checkMode.includes('new')) {
         const res = await dispatch(checkEmail(data));
         if (res?.success) {
@@ -63,12 +71,29 @@ const CheckEmailScreen = ({
         }
       }
     } catch (error) {
-      console.log(
-        'XX -> CheckEmailScreen.tsx:39 -> onSubmit -> error :',
-        error,
-      );
+      __DEV__ &&
+        console.log(
+          'XX -> CheckEmailScreen.tsx:39 -> onSubmit -> error :',
+          error,
+        );
       navigation.popToTop();
     }
+  };
+
+  const handleTimerProgress = (val: any) => {
+    if (val === 0) {
+      setShowFocusTimer(true);
+    }
+  };
+
+  const handleTimerFinish = () => {
+    // timerRef.current.resetTimer();
+    // setShowFocusTimer(true);
+  };
+
+  const handleResendEmail = () => {
+    setShowFocusTimer(false);
+    timerRef.current.resetTimer();
   };
 
   return (
@@ -89,6 +114,7 @@ const CheckEmailScreen = ({
               }`}
           </Text>
         </View>
+
         <View style={styles.inputBox}>
           <Separator borderWidth={0} />
           <InputAuthField
@@ -117,7 +143,42 @@ const CheckEmailScreen = ({
             textStyles={{ color: colors.textNgt, fontWeight: 600 }}
           />
         </View>
-        <Separator borderWidth={0} />
+        <Separator height={12} borderWidth={0} />
+
+        <View style={{ height: 40 }}>
+          {showMessage && (
+            <Pressable
+              disabled={!showFocusTimer}
+              style={[
+                { flexDirection: 'row' },
+                styles.resendBox,
+                showFocusTimer && styles.resetBoxOnFocus,
+              ]}
+              onPress={handleSubmit(onSubmit)}>
+              <Text style={styles.resendText}>
+                You can resend the email in:{' '}
+              </Text>
+              <CountDownTimer
+                ref={timerRef}
+                timestamp={20}
+                timerOnProgress={(val: any) => handleTimerProgress(val)}
+                timerCallback={() => handleTimerFinish()}
+                containerStyle={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  // backgroundColor: colors.second,
+                  display: showFocusTimer && 'none',
+                }}
+                textStyle={{
+                  // fontSize: 14,
+                  color: colors.lightgray,
+                  letterSpacing: 1,
+                }}
+              />
+              {showFocusTimer && <Text style={[styles.resendText]}>00:00</Text>}
+            </Pressable>
+          )}
+        </View>
         <View style={styles.gobackBox}>
           <Pressable
             style={{ padding: 8 }}
@@ -155,6 +216,7 @@ const createStlyes = (colors: TColors) =>
       justifyContent: 'center',
       alignItems: 'center',
       gap: 12,
+      marginBottom: -10,
     },
     subTitle: {
       textAlign: 'center',
@@ -173,6 +235,28 @@ const createStlyes = (colors: TColors) =>
       fontSize: 24,
       marginBottom: 20,
       textAlign: 'center',
+    },
+    resendBox: {
+      width: SCREEN.widthFixed * 280,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+    },
+    resetBoxOnFocus: {
+      width: SCREEN.widthFixed * 280,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      borderWidth: 1,
+      borderColor: colors.second,
+      borderRadius: 12,
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+    },
+    resendText: {
+      color: colors.lightgray,
     },
     inputBox: {
       width: SCREEN.width100,

@@ -18,3 +18,8 @@ export interface CustomJwtPayload extends JwtPayload {
   email: string;
   isNew?: boolean;
 }
+
+export interface UseTimeExpiredReturn {
+  accessTokenTimer: any | null;
+  refreshTokenTimer: any | null;
+}

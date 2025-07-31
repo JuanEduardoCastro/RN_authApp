@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "130405150648",
+    "project_id": "authorization-demo-app",
+    "storage_bucket": "authorization-demo-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:130405150648:android:fa154cafa381a26336e94d",
+        "android_client_info": {
+          "package_name": "com.rn_authapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "130405150648-6orvta3m0tr581c5teh05euhu7d8v6u8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rn_authapp",
+            "certificate_hash": "7fd55c542ac38925acfe1b51c650bbb937c01511"
+          }
+        },
+        {
+          "client_id": "130405150648-f747r0sr5t8793bforvmc00l06nmgkf7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDu9ljfJHF4ocOC-qjmZ8zXYtw_AP_x-nU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "130405150648-f747r0sr5t8793bforvmc00l06nmgkf7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "130405150648-ucr0ame9d8o4r3sbalpa9to8gn7a6q10.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.RN-authApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -29,10 +29,6 @@ export const ThemeProvider = ({ children }: Props) => {
   useEffect(() => {
     const checkLocalStorage = async () => {
       const isInMode = await AsyncStorage.getItem('mode');
-      // console.log(
-      //   'XX -> ThemeContext.tsx:32 -> checkLocalStorage -> isInMode :',
-      //   isInMode,
-      // );
       if (isInMode) {
         if (isInMode === 'light') {
           setMode('light');
@@ -45,14 +41,7 @@ export const ThemeProvider = ({ children }: Props) => {
     };
 
     checkLocalStorage();
-    // Check if Mode is in local storage to persist in time
   }, []);
-
-  // useEffect(() => {
-  //   // To update Mode if the system mode change
-  //   setMode(systemColorScheme || 'light');
-
-  // }, [systemColorScheme]);
 
   const toggleMode = () => {
     setMode(prevMode => (prevMode === 'light' ? 'dark' : 'light'));
@@ -63,7 +52,6 @@ export const ThemeProvider = ({ children }: Props) => {
     } else {
       AsyncStorage.removeItem('mode');
     }
-    // Save new mode in local storage
   };
 
   const colors =

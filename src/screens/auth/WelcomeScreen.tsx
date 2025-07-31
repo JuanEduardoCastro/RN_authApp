@@ -10,7 +10,7 @@ import Button from '@components/shared/Button';
 import ButtonWithIcon from '@components/shared/ButtonWithIcon';
 import { AppleIcon, GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
+import { ANDROID_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
 import {
   googleLogin,
   useAppDispatch,
@@ -35,13 +35,14 @@ const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
     try {
       await GoogleSignin.hasPlayServices();
       const googleUser = await GoogleSignin.signIn();
-
+      console.log('que viene aca', googleUser);
       return googleUser;
     } catch (error) {
-      console.log(
-        'XX -> WelcomeScreen.tsx:35 -> GoogleLogin -> error :',
-        error,
-      );
+      __DEV__ &&
+        console.log(
+          'XX -> WelcomeScreen.tsx:35 -> GoogleLogin -> error :',
+          error,
+        );
     }
   };
 
@@ -57,11 +58,12 @@ const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       }
     } catch (error) {
-      console.log(
-        'XX -> WelcomeScreen.tsx:45 -> handleGoogleLogin -> error :',
-        error,
-        navigation.popToTop(),
-      );
+      __DEV__ &&
+        console.log(
+          'XX -> WelcomeScreen.tsx:45 -> handleGoogleLogin -> error :',
+          error,
+          navigation.popToTop(),
+        );
     }
   };
 
@@ -76,7 +78,7 @@ const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
     // const redirectResponse = await axios.get(
     //   `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}`,
     // );
-    console.log('QUE PASA ACA --------------->', supported);
+    __DEV__ && console.log('QUE PASA ACA --------------->', supported);
   };
 
   return (
@@ -111,20 +113,20 @@ const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
             onPress={handleGoogleLogin}
             // onPress={() => Alert.alert('Enter with Google account')}
           />
-          <ButtonWithIcon
+          {/* <ButtonWithIcon
             title={'...with GitHub'}
             Icon={GithubIcon}
             iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
             onPress={handleGitHubLogin}
-          />
-          {Platform.OS === 'ios' && (
+          /> */}
+          {/* {Platform.OS === 'ios' && (
             <ButtonWithIcon
               title={'...with apple'}
               Icon={AppleIcon}
               iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
               onPress={() => Alert.alert('Enter with apple account')}
             />
-          )}
+          )} */}
         </View>
         <View style={styles.titleBox}>
           <Text style={styles.subTitle}>or</Text>

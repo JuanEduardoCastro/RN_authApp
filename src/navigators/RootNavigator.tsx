@@ -11,7 +11,6 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootNavigator = () => {
   const { isAuthorized, user } = useAppSelector(userAuth);
 
-  console.log('que llega al isAuth', isAuthorized, 'AL USER', user);
   return (
     <Stack.Navigator
       initialRouteName={

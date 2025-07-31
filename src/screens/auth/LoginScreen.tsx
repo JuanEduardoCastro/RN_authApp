@@ -11,7 +11,6 @@ import Button from '@components/shared/Button';
 import { loginUser, useAppDispatch } from 'src/store/authHook';
 import Separator from '@components/shared/Separator';
 import { newNotificationMessage } from '@utils/newNotificationMessage';
-import AuthNavigator from 'src/navigators/AuthNavigator';
 
 interface FormDataProps {
   email: string;
@@ -31,7 +30,7 @@ const LoginScreen = ({ navigation, route }: LoginScreenNavigationProp) => {
       if (res?.success) {
         newNotificationMessage(dispatch, {
           messageType: 'success',
-          notificationMessage: 'Welcome!\nEnjoy this app!!',
+          notificationMessage: 'Welcome!\nEnjoy the app!!',
         });
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       } else {
@@ -41,7 +40,8 @@ const LoginScreen = ({ navigation, route }: LoginScreenNavigationProp) => {
         });
       }
     } catch (error) {
-      console.log('XX -> LoginScreen.tsx:36 -> onSubmit -> error :', error);
+      __DEV__ &&
+        console.log('XX -> LoginScreen.tsx:36 -> onSubmit -> error :', error);
       navigation.popToTop();
     }
   };
