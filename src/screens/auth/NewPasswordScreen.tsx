@@ -40,18 +40,17 @@ const NewPasswordScreen = ({
 
   useEffect(() => {
     try {
-      // console.log('el token que llega', emailToken);
       if (emailToken !== null) {
         const decode = jwtDecode<CustomJwtPayload>(emailToken);
         const userEmail = decode.email;
         decode.isNew !== undefined && setNewUser(decode.isNew);
-
         setEmail(userEmail);
+
         if (decode.exp) {
           if (Date.now() / 1000 > decode.exp) {
             newNotificationMessage(dispatch, {
               messageType: 'warning',
-              notificationMessage: 'Check email expired. Please, try again!',
+              notificationMessage: 'Email expired. Please, try again!',
             });
             !messageType &&
               navigation.navigate('CheckEmailScreen', {
@@ -72,7 +71,8 @@ const NewPasswordScreen = ({
         });
       }
     } catch (error) {
-      console.log('XX -> NewPassword.tsx:46 -> useEffect -> error :', error);
+      __DEV__ &&
+        console.log('XX -> NewPassword.tsx:46 -> useEffect -> error :', error);
       navigation.popToTop();
     }
   }, []);
@@ -102,10 +102,12 @@ const NewPasswordScreen = ({
               notificationMessage: 'An error occurred. Please, try again!',
             });
           }
-        } catch (error) {}
+        } catch (error) {
+          __DEV__ &&
+            console.log('XX -> NewPasswordScreen.tsx:106 -> error :', error);
+        }
       } else {
         try {
-          console.log('en el full data', fullData.password);
           const res = await dispatch(updatePassword(fullData, emailToken));
           if (res?.success) {
             newNotificationMessage(dispatch, {
@@ -121,6 +123,8 @@ const NewPasswordScreen = ({
             });
           }
         } catch (error) {
+          __DEV__ &&
+            console.log('XX -> NewPasswordScreen.tsx:126 -> error :', error);
           navigation.popToTop();
         }
       }

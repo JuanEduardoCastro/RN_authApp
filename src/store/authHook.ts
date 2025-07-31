@@ -8,36 +8,38 @@ import {
   setToken,
   startLoader,
   stopLoader,
-  setIsAuthorized,
   setMessageType,
   setNotificationMessage,
+  setResetUser,
 } from './authSlice';
 import { Platform } from 'react-native';
 import { jwtDecode } from 'jwt-decode';
 import { CustomJwtPayload } from '@hooks/types';
 import { newNotificationMessage } from '@utils/newNotificationMessage';
 
-const HOST =
-  Platform.OS === 'ios' ? 'http://localhost:3005' : 'http://10.0.2.2:3005';
+// const HOST =
+//   Platform.OS === 'ios' ? 'http://localhost:3005' : 'http://10.0.2.2:3005';
+const HOST = 'https://auth-app-fo8j.onrender.com';
 
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppSelector = useSelector.withTypes<RootState>();
 
 /* Validate user email */
-/* OK checked */
 
 export const checkEmail = (data: any) => {
   return async (dispatch: Dispatch) => {
     dispatch(startLoader());
     try {
+      /* CHECK MAIL end point */
       const response = await axios.post(`${HOST}/users/checkemail`, data);
+
       if (response.status === 200) {
         dispatch(stopLoader());
-        dispatch(setMessageType(null));
-        console.log('--> --> --> --> --> --> --> --> --> --> ');
-        console.log('--> --> EL TOKEN PARA EL MAIL ');
-        console.log(response.data.data);
-        console.log('--> --> --> --> --> --> --> --> --> --> ');
+        __DEV__ &&
+          (console.log('--> --> --> --> --> --> --> --> --> --> '),
+          console.log('--> --> EL TOKEN PARA EL MAIL '),
+          console.log(response.data.data),
+          console.log('--> --> --> --> --> --> --> --> --> --> '));
         return {
           success: true,
           message: 'This email is available to use.',
@@ -52,7 +54,8 @@ export const checkEmail = (data: any) => {
         };
       }
     } catch (error) {
-      console.log('XX -> authHook.ts:34 -> return -> error :', error);
+      __DEV__ &&
+        console.log('XX -> authHook.ts:34 -> return -> error :', error);
       dispatch(setMessageType('error'));
       dispatch(setNotificationMessage('Network error'));
       dispatch(stopLoader());
@@ -62,7 +65,6 @@ export const checkEmail = (data: any) => {
 };
 
 /* Create user */
-/* OK checked */
 
 export const createUser = (data: any, emailToken: any) => {
   return async (dispatch: Dispatch) => {
@@ -91,7 +93,8 @@ export const createUser = (data: any, emailToken: any) => {
         };
       }
     } catch (error) {
-      console.log('XX -> authHook.ts:58 -> return -> error :', error);
+      __DEV__ &&
+        console.log('XX -> authHook.ts:58 -> return -> error :', error);
       dispatch(setMessageType('error'));
       dispatch(setNotificationMessage('Network error'));
       dispatch(stopLoader());
@@ -101,7 +104,6 @@ export const createUser = (data: any, emailToken: any) => {
 };
 
 /* Login user */
-/* OK checked */
 
 export const loginUser = (data: any) => {
   return async (dispatch: Dispatch) => {
@@ -115,7 +117,6 @@ export const loginUser = (data: any) => {
         password: data.password,
       });
       if (response.status === 200) {
-        // console.log('lo qeu regresa del DB', response.data);
         const refreshToken = response.data.refreshToken;
         await Keychain.setGenericPassword('refreshToken', refreshToken, {
           service: 'secret token',
@@ -140,8 +141,7 @@ export const loginUser = (data: any) => {
           error: null,
         };
       } else if (response.status === 401) {
-        dispatch(setToken(null));
-        dispatch(setUser(null));
+        dispatch(setResetUser());
         return {
           success: false,
           message: 'There is something wrong with your password',
@@ -149,17 +149,18 @@ export const loginUser = (data: any) => {
         };
       }
     } catch (error) {
-      console.log('XX -> authHook.ts:98 -> return -> error :', error);
+      __DEV__ &&
+        console.log('XX -> authHook.ts:98 -> return -> error :', error);
       dispatch(setMessageType('error'));
       dispatch(setNotificationMessage('Network error'));
       dispatch(stopLoader());
+      dispatch(setResetUser());
       return { success: false, error: error };
     }
   };
 };
 
 /* Reset password */
-/* OK checked */
 
 export const resetPassword = (data: any) => {
   return async (dispatch: Dispatch) => {
@@ -169,10 +170,11 @@ export const resetPassword = (data: any) => {
       if (response.status === 200) {
         dispatch(stopLoader());
         dispatch(setMessageType(null));
-        console.log('--> --> --> --> --> --> --> --> --> --> ');
-        console.log('--> --> EL TOKEN PARA LA CONTRASEÑA ');
-        console.log(response.data.data);
-        console.log('--> --> --> --> --> --> --> --> --> --> ');
+        __DEV__ &&
+          (console.log('--> --> --> --> --> --> --> --> --> --> '),
+          console.log('--> --> EL TOKEN PARA LA CONTRASEÑA '),
+          console.log(response.data.data),
+          console.log('--> --> --> --> --> --> --> --> --> --> '));
         return {
           success: true,
           message: 'The email is OK to reset password.',
@@ -187,7 +189,8 @@ export const resetPassword = (data: any) => {
         };
       }
     } catch (error) {
-      console.log('XX -> authHook.ts:34 -> return -> error :', error);
+      __DEV__ &&
+        console.log('XX -> authHook.ts:34 -> return -> error :', error);
       dispatch(setMessageType('error'));
       dispatch(setNotificationMessage('Network error'));
       dispatch(stopLoader());
@@ -197,7 +200,6 @@ export const resetPassword = (data: any) => {
 };
 
 /* Update new password */
-/* OK checked */
 
 export const updatePassword = (data: any, emailToken: any) => {
   return async (dispatch: Dispatch) => {
@@ -223,6 +225,7 @@ export const updatePassword = (data: any, emailToken: any) => {
         };
       }
     } catch (error) {
+      __DEV__ && console.log('XX -> authHook.ts:204 -> error :', error);
       dispatch(setMessageType('error'));
       dispatch(setNotificationMessage('Network error'));
       dispatch(stopLoader());
@@ -238,7 +241,7 @@ export const editUser = (data: any, token: any) => {
     dispatch(startLoader());
     const decodeToken = jwtDecode<CustomJwtPayload>(token);
     try {
-      const response = await axios.put(
+      const editResponse = await axios.put(
         `${HOST}/users/edit/${decodeToken._id}`,
         data,
         {
@@ -247,21 +250,77 @@ export const editUser = (data: any, token: any) => {
           },
         },
       );
-      console.log('entro acá ? ? ? ?');
-      if (response.status === 201) {
-        dispatch(setUser(response.data.user));
+      if (editResponse.status === 201) {
+        dispatch(setUser(editResponse.data.user));
+        dispatch(setToken(editResponse.data.accessToken));
         dispatch(stopLoader());
         return {
           success: true,
           message: 'User updated successfully.',
           error: null,
         };
-      } else if (response.status === 401) {
-        console.log('hay prbolemas acá');
+      } else if (editResponse.status === 205) {
+        const refreshToken = await Keychain.getGenericPassword({
+          service: 'secret token',
+        });
+        if (!refreshToken) {
+          dispatch(stopLoader());
+          dispatch(setResetUser());
+          newNotificationMessage(dispatch, {
+            messageType: 'error',
+            notificationMessage: 'Session expired. Please log in again.',
+          });
+        } else if (refreshToken) {
+          const refreshTokenResponse = await axios.get(
+            `${HOST}/users/validatetoken`,
+            {
+              headers: {
+                Authorization: `Bearer ${refreshToken.password}`,
+              },
+            },
+          );
+          if (refreshTokenResponse.status === 200) {
+            const editAgainResponse = await axios.put(
+              `${HOST}/users/edit/${decodeToken._id}`,
+              data,
+              {
+                headers: {
+                  Authorization: `Bearer ${refreshTokenResponse.data.accessToken}`,
+                },
+              },
+            );
+            if (editAgainResponse.status === 201) {
+              dispatch(setUser(editAgainResponse.data.user));
+              dispatch(setToken(editAgainResponse.data.accessToken));
+              dispatch(stopLoader());
+              return {
+                success: true,
+                message: 'User updated successfully.',
+                error: null,
+              };
+            } else {
+              dispatch(stopLoader());
+              dispatch(setResetUser());
+              newNotificationMessage(dispatch, {
+                messageType: 'error',
+                notificationMessage: 'Session expired. Please log in again.',
+              });
+            }
+          } else {
+            dispatch(stopLoader());
+            dispatch(setResetUser());
+            newNotificationMessage(dispatch, {
+              messageType: 'error',
+              notificationMessage: 'Session expired. Please log in again.',
+            });
+          }
+        }
         // pegarle al refresh API y mandar el refresh
         // si esta OK, mandar de vuelta un access valido para volver a repetir este hjook
       }
     } catch (error) {
+      __DEV__ && console.log('XX -> authHook.ts:238 -> error :', error);
+
       dispatch(setMessageType('error'));
       dispatch(setNotificationMessage('Network error'));
       dispatch(stopLoader());
@@ -290,6 +349,7 @@ export const logoutUser = (data: any) => {
         if (response.status === 200) {
           await Keychain.resetGenericPassword();
           dispatch(stopLoader());
+          dispatch(setResetUser());
           newNotificationMessage(dispatch, {
             messageType: 'success',
             notificationMessage:
@@ -300,11 +360,21 @@ export const logoutUser = (data: any) => {
             message: 'User logged out succssesfully.',
             error: null,
           };
+        } else {
+          await Keychain.resetGenericPassword();
+          dispatch(stopLoader());
+          dispatch(setResetUser());
+          newNotificationMessage(dispatch, {
+            messageType: 'success',
+            notificationMessage:
+              'You log out your session!\nSee you next time!',
+          });
         }
       }
     } catch (error) {
       dispatch(setMessageType('error'));
       dispatch(setNotificationMessage('Network error. Please, try again.'));
+      dispatch(setResetUser());
       dispatch(stopLoader());
       return { success: false, error: error };
     }
@@ -368,10 +438,11 @@ export const validateToken = (data: any) => {
         },
       });
       if (response.status === 200) {
-        console.log(
-          'The user is authorized',
-          Platform.OS === 'ios' ? 'in iOS' : 'in Android',
-        );
+        __DEV__ &&
+          console.log(
+            'The user is authorized',
+            Platform.OS === 'ios' ? 'in iOS' : 'in Android',
+          );
         dispatch(setToken(response.data.accessToken));
         dispatch(setUser(response.data.user));
         dispatch(stopLoader());
@@ -381,8 +452,7 @@ export const validateToken = (data: any) => {
           error: null,
         };
       } else {
-        dispatch(setToken(null));
-        dispatch(setUser(null));
+        dispatch(setResetUser());
         await Keychain.resetGenericPassword();
         return {
           success: false,
@@ -391,9 +461,11 @@ export const validateToken = (data: any) => {
         };
       }
     } catch (error) {
-      console.log('XX -> authHook.ts:172 -> return -> error :', error);
+      __DEV__ &&
+        console.log('XX -> authHook.ts:172 -> return -> error :', error);
       dispatch(setMessageType('error'));
       dispatch(setNotificationMessage('Network error'));
+      dispatch(setResetUser());
       dispatch(stopLoader());
       return { success: false, error: error };
     }
@@ -406,45 +478,59 @@ export const googleLogin = (data: any) => {
   return async (dispatch: Dispatch) => {
     dispatch(startLoader());
     try {
+      console.log('entro aca ? ? ?');
       const googleResponse = await axios.get(
         `https://oauth2.googleapis.com/tokeninfo?id_token=${data}`,
       );
+      console.log('googleresponse', googleResponse);
       if (googleResponse.status === 200) {
         const { sub, email, given_name, family_name, picture } =
           googleResponse.data;
-        console.log('lo que viene de google', googleResponse.data);
+        // console.log('lo que viene de google', googleResponse.data);
 
         const checkEmail = await axios.post(`${HOST}/users/checkemail`, {
           email: email,
           isGoogleLogin: true,
         });
 
+        // console.log('checkEmail', checkEmail.data.emailToken);
         if (checkEmail.status === 200) {
-          const createUser = await axios.post(`${HOST}/users/create`, {
+          const userData = {
             email: email,
             password: sub,
             isGoogleLogin: true,
             firstName: given_name,
             lastName: family_name,
             avatarURL: picture,
-          });
-
+          };
+          const createUser = await axios.post(
+            `${HOST}/users/create`,
+            userData,
+            {
+              headers: {
+                Authorization: `Bearer ${checkEmail.data.emailToken}`,
+              },
+            },
+          );
+          console.log('create user', createUser.status);
           if (createUser.status === 201) {
             const loginUser = await axios.post(`${HOST}/users/login`, {
               email: email,
               password: sub,
             });
 
+            console.log('login', loginUser.status);
             if (loginUser.status === 200) {
               await Keychain.setGenericPassword(
-                'userToken',
-                loginUser.data.token,
+                'refreshToken',
+                loginUser.data.refreshToken,
                 {
-                  service: process.env.KEY_SERVICES,
+                  service: 'secret token',
                   accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
                 },
               );
-              dispatch(setToken(loginUser.data.token));
+
+              dispatch(setToken(loginUser.data.accesToken));
               dispatch(setUser(loginUser.data.user));
               dispatch(stopLoader());
               return {
@@ -471,14 +557,15 @@ export const googleLogin = (data: any) => {
           if (loginUser.status === 200) {
             // guardar el localstorage
             await Keychain.setGenericPassword(
-              'userToken',
-              loginUser.data.token,
+              'refreshToken',
+              loginUser.data.refreshToken,
               {
-                service: process.env.KEY_SERVICES,
+                service: 'secret token',
                 accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
               },
             );
-            dispatch(setToken(loginUser.data.token));
+
+            dispatch(setToken(loginUser.data.accessToken));
             dispatch(setUser(loginUser.data.user));
             dispatch(stopLoader());
             return {
@@ -498,7 +585,8 @@ export const googleLogin = (data: any) => {
         }
       }
     } catch (error) {
-      console.log('XX -> authHook.ts:55 -> return -> error :', error);
+      __DEV__ &&
+        console.log('XX -> authHook.ts:55 -> return -> error :', error);
       dispatch(setMessageType('error'));
       dispatch(setNotificationMessage('Network error'));
       dispatch(stopLoader());

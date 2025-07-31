@@ -118,10 +118,10 @@ const createStlyes = (colors: TColors) =>
       borderWidth: 1,
       borderColor: '#ccc',
       paddingHorizontal: 10,
-      borderRadius: 5,
+      borderRadius: 12,
     },
     input: {
-      height: SCREEN.heightFixed * 40,
+      height: SCREEN.heightFixed * 46,
       flexGrow: 1,
       width: 'auto',
       paddingVertical: 10,

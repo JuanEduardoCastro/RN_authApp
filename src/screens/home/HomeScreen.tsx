@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useRef } from 'react';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import Separator from '@components/shared/Separator';
@@ -9,9 +9,15 @@ import Button from '@components/shared/Button';
 import { logoutUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
 import { userAuth } from 'src/store/authSlice';
 import { newNotificationMessage } from '@utils/newNotificationMessage';
+import useTimeExpired from '@hooks/useTimeExpired';
+import CountDownTimer from 'react-native-countdown-timer-hooks';
+import { SCREEN } from '@constants/sizes';
+import { withDecay } from 'react-native-reanimated';
 
 const HomeScreen = ({ navigation, route }: HomeScreenNavigationProps) => {
+  const timerRef = useRef<any>(null);
   const { user } = useAppSelector(userAuth);
+  const { accessTokenTimer, refreshTokenTimer } = useTimeExpired();
   const { colors, styles } = useStyles(createStyles);
   const dispatch = useAppDispatch();
 
@@ -22,7 +28,8 @@ const HomeScreen = ({ navigation, route }: HomeScreenNavigationProps) => {
         navigation.navigate('AuthNavigator', { screen: 'WelcomeScreen' });
       }
     } catch (error) {
-      console.log('XX -> HomeScreen.tsx:26 -> handleLogut -> error :', error);
+      __DEV__ &&
+        console.log('XX -> HomeScreen.tsx:26 -> handleLogut -> error :', error);
     }
   };
 
@@ -33,6 +40,8 @@ const HomeScreen = ({ navigation, route }: HomeScreenNavigationProps) => {
     });
   };
 
+  const handleTimerProgress = (val: any) => {};
+
   return (
     <View style={styles.container}>
       <Button title="Logout session" onPress={handleLogut} />
@@ -42,6 +51,29 @@ const HomeScreen = ({ navigation, route }: HomeScreenNavigationProps) => {
       <Text style={styles.text}>HomeScreen</Text>
       <Separator border={false} />
       <ModeSwitchButton />
+      <Separator border={false} />
+      {/* <View style={styles.timerBox}>
+        <Text style={styles.timerText}>
+          This is the time you have left until your session is renewed:
+        </Text>
+        <CountDownTimer
+          ref={timerRef}
+          timestamp={300}
+          timerOnProgress={(val: any) => handleTimerProgress(val)}
+          timerCallback={() => console.log('termino=?????')}
+          containerStyle={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            // backgroundColor: colors.second,
+            // display: showFocusTimer && 'none',
+          }}
+          textStyle={{
+            // fontSize: 14,
+            color: colors.text,
+            letterSpacing: 1,
+          }}
+        />
+      </View> */}
     </View>
   );
 };
@@ -59,5 +91,14 @@ const createStyles = (colors: TColors) =>
     text: {
       color: colors.text,
       fontSize: 20,
+    },
+    timerBox: {
+      width: SCREEN.width75,
+      // flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    timerText: {
+      color: colors.text,
     },
   });

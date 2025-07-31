@@ -1,4 +1,7 @@
-import './reanimatedConfig';
+import {
+  configureReanimatedLogger,
+  ReanimatedLogLevel,
+} from 'react-native-reanimated';
 import { SplashScreen } from '@components/splash/SplashScreen';
 import { ThemeProvider } from '@context/ThemeContext';
 import { useState } from 'react';
@@ -13,6 +16,11 @@ import Loader from '@components/shared/loader/Loader';
 import RootNavigator from 'src/navigators/RootNavigator';
 import { RootStackParamList } from 'src/navigators/types';
 import NotificationBanner from '@components/shared/notifications/NotificationBanner';
+
+configureReanimatedLogger({
+  level: ReanimatedLogLevel.warn,
+  strict: false,
+});
 
 const AppWrapper = () => {
   return (

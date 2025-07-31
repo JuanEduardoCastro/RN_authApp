@@ -4,9 +4,9 @@ import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import BGGradient from '@components/shared/BGGradient';
 import { SCREEN } from '@constants/sizes';
-import { useAppDispatch, useAppSelector } from 'src/store/authHook';
+import { useAppDispatch } from 'src/store/authHook';
 import { useCheckToken } from '@hooks/useCheckToken';
-import { setIsAuthorized, setResetUser, userAuth } from 'src/store/authSlice';
+import { setIsAuthorized, setResetUser } from 'src/store/authSlice';
 
 type SplashScreenProps = {
   children: ReactNode;

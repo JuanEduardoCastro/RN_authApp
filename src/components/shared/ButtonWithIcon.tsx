@@ -52,7 +52,7 @@ const createStyles = (colors: TColors) =>
   StyleSheet.create({
     button: {
       maxWidth: SCREEN.width100,
-      height: SCREEN.heightFixed * 40,
+      height: SCREEN.heightFixed * 46,
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: 'white',

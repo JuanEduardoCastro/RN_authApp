@@ -44,10 +44,11 @@ export const useCheckToken = (): UseCheckTokenReturn => {
           await Keychain.resetGenericPassword();
         }
       } catch (error) {
-        console.log(
-          'XX -> useCheckToken.tsx:54 -> checkLocalStorage -> error :',
-          error,
-        );
+        __DEV__ &&
+          console.log(
+            'XX -> useCheckToken.tsx:54 -> checkLocalStorage -> error :',
+            error,
+          );
         setTokenSaved(false);
         setIsExpired(true);
         await Keychain.resetGenericPassword();
