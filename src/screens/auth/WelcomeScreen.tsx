@@ -10,7 +10,7 @@ import Button from '@components/shared/Button';
 import ButtonWithIcon from '@components/shared/ButtonWithIcon';
 import { AppleIcon, GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { ANDROID_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
+import { IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
 import {
   googleLogin,
   useAppDispatch,
@@ -22,7 +22,7 @@ import { newNotificationMessage } from '@utils/newNotificationMessage';
 GoogleSignin.configure({
   webClientId: WEB_CLIENT_ID,
   iosClientId: IOS_CLIENT_ID,
-  // offlineAccess: true,
+  offlineAccess: true,
   scopes: ['profile', 'email'],
 });
 
@@ -35,7 +35,6 @@ const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
     try {
       await GoogleSignin.hasPlayServices();
       const googleUser = await GoogleSignin.signIn();
-      console.log('que viene aca', googleUser);
       return googleUser;
     } catch (error) {
       __DEV__ &&
@@ -49,6 +48,10 @@ const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
   const handleGoogleLogin = async () => {
     try {
       const googleLoginRes = await GoogleLogin();
+      // console.log(
+      //   'que viene en el googleLoginRes',
+      //   googleLoginRes?.data?.idToken,
+      // );
       const res = await dispatch(googleLogin(googleLoginRes?.data?.idToken));
       if (res?.success) {
         newNotificationMessage(dispatch, {

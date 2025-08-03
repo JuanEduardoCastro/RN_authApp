@@ -26,8 +26,6 @@ const NotificationBanner = () => {
   const { colors, styles } = useStyles(createStyles);
   const insets = useSafeAreaInsets();
   const [openBanner, setOpenBanner] = useState<boolean>(false);
-  const [message, setMessage] = useState<string | null>(null);
-  const [icon, setIcon] = useState<ReactNode | null>(null);
   const translateY = useSharedValue(-100);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -118,6 +116,7 @@ const NotificationBanner = () => {
               style={styles.blurView}
               blurType={'dark'}
               blurAmount={7}
+              overlayColor={colors.transparent}
             />
           </Pressable>
         </Animated.View>
@@ -132,9 +131,7 @@ const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
       ...StyleSheet.absoluteFillObject,
-      // position: 'absolute',
       flex: 1,
-      // width: SCREEN.widthFixed,
       height: 150,
       backgroundColor: colors.transparent,
       zIndex: 100,
@@ -156,13 +153,13 @@ const createStyles = (colors: TColors) =>
     },
     bannerText: {
       color: colors.almostWhite,
-      // color: colors.text,
       fontSize: 16,
     },
     bannerIconBox: {
       width: 44,
     },
     blurView: {
+      height: 60,
       position: 'absolute',
       top: 0,
       right: 0,

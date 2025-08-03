@@ -16,10 +16,18 @@ import { Platform } from 'react-native';
 import { jwtDecode } from 'jwt-decode';
 import { CustomJwtPayload } from '@hooks/types';
 import { newNotificationMessage } from '@utils/newNotificationMessage';
+import {
+  GoogleSignin,
+  isErrorWithCode,
+} from '@react-native-google-signin/google-signin';
 
-// const HOST =
-//   Platform.OS === 'ios' ? 'http://localhost:3005' : 'http://10.0.2.2:3005';
-const HOST = 'https://auth-app-fo8j.onrender.com';
+const HOST = __DEV__
+  ? Platform.OS === 'ios'
+    ? 'http://localhost:3005'
+    : 'http://10.0.2.2:3005'
+  : 'https://auth-app-fo8j.onrender.com';
+
+// const HOST = 'https://auth-app-fo8j.onrender.com';
 
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppSelector = useSelector.withTypes<RootState>();
@@ -125,7 +133,7 @@ export const loginUser = (data: any) => {
         if (data.rememberMe) {
           const rememberMeFlag = 'true';
           await Keychain.setGenericPassword('remember', rememberMeFlag, {
-            service: 'secret remeber me',
+            service: 'secret remember me',
             accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
           });
         }
@@ -336,6 +344,10 @@ export const logoutUser = (data: any) => {
   return async (dispatch: Dispatch) => {
     dispatch(startLoader());
     try {
+      const isGoogleSignin = await GoogleSignin.hasPreviousSignIn();
+      if (isGoogleSignin) {
+        await GoogleSignin.signOut();
+      }
       const refreshToken = await Keychain.getGenericPassword({
         service: 'secret token',
       });
@@ -347,7 +359,10 @@ export const logoutUser = (data: any) => {
         });
 
         if (response.status === 200) {
-          await Keychain.resetGenericPassword();
+          await Keychain.resetGenericPassword({ service: 'secret token' });
+          await Keychain.resetGenericPassword({
+            service: 'secret remember me',
+          });
           dispatch(stopLoader());
           dispatch(setResetUser());
           newNotificationMessage(dispatch, {
@@ -361,7 +376,10 @@ export const logoutUser = (data: any) => {
             error: null,
           };
         } else {
-          await Keychain.resetGenericPassword();
+          await Keychain.resetGenericPassword({ service: 'secret token' });
+          await Keychain.resetGenericPassword({
+            service: 'secret remember me',
+          });
           dispatch(stopLoader());
           dispatch(setResetUser());
           newNotificationMessage(dispatch, {
@@ -374,6 +392,8 @@ export const logoutUser = (data: any) => {
     } catch (error) {
       dispatch(setMessageType('error'));
       dispatch(setNotificationMessage('Network error. Please, try again.'));
+      await Keychain.resetGenericPassword({ service: 'secret token' });
+      await Keychain.resetGenericPassword({ service: 'secret remember me' });
       dispatch(setResetUser());
       dispatch(stopLoader());
       return { success: false, error: error };
@@ -478,22 +498,18 @@ export const googleLogin = (data: any) => {
   return async (dispatch: Dispatch) => {
     dispatch(startLoader());
     try {
-      console.log('entro aca ? ? ?');
       const googleResponse = await axios.get(
         `https://oauth2.googleapis.com/tokeninfo?id_token=${data}`,
       );
-      console.log('googleresponse', googleResponse);
       if (googleResponse.status === 200) {
         const { sub, email, given_name, family_name, picture } =
           googleResponse.data;
-        // console.log('lo que viene de google', googleResponse.data);
 
         const checkEmail = await axios.post(`${HOST}/users/checkemail`, {
           email: email,
           isGoogleLogin: true,
         });
 
-        // console.log('checkEmail', checkEmail.data.emailToken);
         if (checkEmail.status === 200) {
           const userData = {
             email: email,
@@ -585,8 +601,60 @@ export const googleLogin = (data: any) => {
         }
       }
     } catch (error) {
-      __DEV__ &&
-        console.log('XX -> authHook.ts:55 -> return -> error :', error);
+      // __DEV__ &&
+      if (isErrorWithCode(error)) {
+        console.log('XX -> authHook.ts:55 -> return -> error :', error.code);
+      }
+      dispatch(setMessageType('error'));
+      dispatch(setNotificationMessage('Network error'));
+      dispatch(stopLoader());
+      return { success: false, error: error };
+    }
+  };
+};
+
+/* Persist google login in - NOT IN USE */
+
+export const persistGoogleLogin = (data: any) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(startLoader());
+    try {
+      // const googleSigninAgain = await GoogleSignin.signInSilently();
+      const checkEmail = await axios.post(`${HOST}/users/checkemail`, {
+        email: data.email,
+        isGoogleLogin: true,
+      });
+      if (checkEmail.status === 204) {
+        const loginUser = await axios.post(`${HOST}/users/login`, {
+          email: data.email,
+          password: data.sub,
+        });
+        if (loginUser.status === 200) {
+          await Keychain.setGenericPassword(
+            'refreshToken',
+            loginUser.data.refreshToken,
+            {
+              service: 'secret token',
+              accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
+            },
+          );
+
+          dispatch(setToken(loginUser.data.accesToken));
+          dispatch(setUser(loginUser.data.user));
+          dispatch(stopLoader());
+          return {
+            success: true,
+            message: `Welcome again ${loginUser.data.user.firstName}`,
+            error: null,
+          };
+        }
+      }
+      return {
+        success: false,
+        message: 'Not google login',
+        error: null,
+      };
+    } catch (error) {
       dispatch(setMessageType('error'));
       dispatch(setNotificationMessage('Network error'));
       dispatch(stopLoader());
