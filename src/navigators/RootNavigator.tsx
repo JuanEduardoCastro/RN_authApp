@@ -18,9 +18,18 @@ const RootNavigator = () => {
       }
       screenOptions={{
         headerShown: false,
+        gestureEnabled: false,
       }}>
-      <Stack.Screen name="AuthNavigator" component={AuthNavigator} />
-      <Stack.Screen name="HomeNavigator" component={HomeNavigator} />
+      <Stack.Screen
+        name="AuthNavigator"
+        component={AuthNavigator}
+        options={{ gestureEnabled: false }}
+      />
+      <Stack.Screen
+        name="HomeNavigator"
+        component={HomeNavigator}
+        options={{ gestureEnabled: false }}
+      />
     </Stack.Navigator>
   );
 };

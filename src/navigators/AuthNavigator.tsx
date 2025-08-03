@@ -15,9 +15,21 @@ const AuthNavigator = () => {
         gestureEnabled: false,
         headerShown: false,
       }}>
-      <Stack.Screen name={'WelcomeScreen'} component={WelcomeScreen} />
-      <Stack.Screen name={'LoginScreen'} component={LoginScreen} />
-      <Stack.Screen name={'CheckEmailScreen'} component={CheckEmailScreen} />
+      <Stack.Screen
+        name={'WelcomeScreen'}
+        component={WelcomeScreen}
+        options={{ gestureEnabled: false }}
+      />
+      <Stack.Screen
+        name={'LoginScreen'}
+        component={LoginScreen}
+        options={{ gestureEnabled: false }}
+      />
+      <Stack.Screen
+        name={'CheckEmailScreen'}
+        component={CheckEmailScreen}
+        options={{ gestureEnabled: false }}
+      />
 
       <Stack.Screen
         name={'NewPasswordScreen'}
