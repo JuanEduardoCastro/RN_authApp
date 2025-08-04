@@ -18,6 +18,7 @@ import {
 } from 'src/store/authHook';
 import { userAuth } from 'src/store/authSlice';
 import { newNotificationMessage } from '@utils/newNotificationMessage';
+import useBackHandler from '@hooks/useBackHandler';
 
 GoogleSignin.configure({
   webClientId: WEB_CLIENT_ID,
@@ -27,6 +28,7 @@ GoogleSignin.configure({
 });
 
 const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
+  useBackHandler();
   const { user } = useAppSelector(userAuth);
   const { colors, styles } = useStyles(createStyles);
   const dispatch = useAppDispatch();

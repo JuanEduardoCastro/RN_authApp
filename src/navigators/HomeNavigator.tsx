@@ -8,11 +8,13 @@ import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import ProfileScreen from '@screens/home/ProfileScreen';
 import SettingsScreen from '@screens/home/SettingsScreen';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
 
 const HomeNavigator = () => {
   const { colors, styles } = useStyles(createStyles);
+  const inset = useSafeAreaInsets();
 
   return (
     <Tab.Navigator
@@ -31,6 +33,7 @@ const HomeNavigator = () => {
           shadowOpacity: 0.19,
           shadowRadius: 10,
           position: 'absolute',
+          bottom: Platform.OS === 'ios' ? 0 : inset.bottom,
         },
 
         tabBarIcon: ({ size, focused, color }) => {

@@ -10,11 +10,11 @@ import { logoutUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
 import { userAuth } from 'src/store/authSlice';
 import { newNotificationMessage } from '@utils/newNotificationMessage';
 import useTimeExpired from '@hooks/useTimeExpired';
-import CountDownTimer from 'react-native-countdown-timer-hooks';
 import { SCREEN } from '@constants/sizes';
-import { withDecay } from 'react-native-reanimated';
+import useBackHandler from '@hooks/useBackHandler';
 
 const HomeScreen = ({ navigation, route }: HomeScreenNavigationProps) => {
+  useBackHandler();
   const timerRef = useRef<any>(null);
   const { user } = useAppSelector(userAuth);
   const { accessTokenTimer, refreshTokenTimer } = useTimeExpired();
