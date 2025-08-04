@@ -60,7 +60,7 @@ const InputAuthField = ({
           ]}
           value={field.value}
           onChangeText={
-            name === 'email'
+            name === 'email' || 'password'
               ? text => field.onChange(text.toLowerCase())
               : field.onChange
           }

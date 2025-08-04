@@ -137,6 +137,7 @@ const styles = StyleSheet.create({
   versionContainer: {
     width: SCREEN.width100,
     alignItems: 'center',
+    paddingBottom: 8,
   },
   versionText: {
     fontSize: 14,
