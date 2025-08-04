@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import Separator from '@components/shared/Separator';
 import { editUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
@@ -14,6 +14,7 @@ import PhoneNumberPicker from '@components/shared/phoneNumber/PhoneNumberPicker'
 import useUserData from '@hooks/useUserData';
 import { newNotificationMessage } from '@utils/newNotificationMessage';
 import { ProfileScreenNavigationProps } from 'src/navigators/types';
+import KeyboardScrollView from '@components/shared/KeyboardScrollView';
 
 interface ProfileDataProps {
   firstName: string;
@@ -82,73 +83,79 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenNavigationProps) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.titleBox}>
-        <Separator border={false} />
-        <Text style={styles.title}>This is your profile screen</Text>
-        <Separator border={false} height={12} />
-        <Text style={styles.subTitle}>
-          Please, complete your personal information
-        </Text>
-      </View>
-      <Separator border={false} height={32} />
-      <View style={styles.buttonBox}>
-        <AvatarView name="avatarURL" control={control} disabled={!editEnable} />
-        <View style={styles.editButton}>
-          <Pressable
-            onPress={editEnable ? handleSubmit(onSubmit) : handleEditInfo}>
-            <Text style={styles.editButtonText}>
-              {editEnable ? 'Save' : 'Edit'}
-            </Text>
-          </Pressable>
-          {editEnable && (
-            <Pressable onPress={handleCancelEditInfo}>
-              <Text style={styles.cancelButtonText}>Cancel</Text>
-            </Pressable>
-          )}
+      <KeyboardScrollView extraScroll={Platform.OS === 'ios' ? 4 : 0}>
+        <View style={styles.titleBox}>
+          <Separator border={false} />
+          <Text style={styles.title}>This is your profile screen</Text>
+          <Separator border={false} height={12} />
+          <Text style={styles.subTitle}>
+            Please, complete your personal information
+          </Text>
         </View>
-      </View>
-      <Separator border={false} height={24} />
-      <View style={styles.inputBox}>
-        <InputAuthField
-          editable={false}
-          inputStyles={styles.textinput}
-          name="email"
-          label="Email"
-          control={control}
-        />
-        <InputAuthField
-          editable={editEnable}
-          inputStyles={styles.textinput}
-          name="firstName"
-          label="First name"
-          control={control}
-          placeholder="Firs name"
-        />
-        <InputAuthField
-          editable={editEnable}
-          inputStyles={styles.textinput}
-          name="lastName"
-          label="Family name"
-          control={control}
-          placeholder="Family name"
-        />
-        <PhoneNumberPicker
-          editable={editEnable}
-          inputStyles={styles.textinput}
-          name="phoneNumber"
-          label="Phone number"
-          control={control}
-          placeholder="Phone number"
-        />
-        <InputAuthField
-          editable={editEnable}
-          inputStyles={styles.textinput}
-          name="occupation"
-          label="Occupation"
-          control={control}
-          placeholder="Occupation"
-        />
-      </View>
+        <Separator border={false} height={32} />
+        <View style={styles.buttonBox}>
+          <AvatarView
+            name="avatarURL"
+            control={control}
+            disabled={!editEnable}
+          />
+          <View style={styles.editButton}>
+            <Pressable
+              onPress={editEnable ? handleSubmit(onSubmit) : handleEditInfo}>
+              <Text style={styles.editButtonText}>
+                {editEnable ? 'Save' : 'Edit'}
+              </Text>
+            </Pressable>
+            {editEnable && (
+              <Pressable onPress={handleCancelEditInfo}>
+                <Text style={styles.cancelButtonText}>Cancel</Text>
+              </Pressable>
+            )}
+          </View>
+        </View>
+        <Separator border={false} height={24} />
+        <View style={styles.inputBox}>
+          <InputAuthField
+            editable={false}
+            inputStyles={styles.textinput}
+            name="email"
+            label="Email"
+            control={control}
+          />
+          <InputAuthField
+            editable={editEnable}
+            inputStyles={styles.textinput}
+            name="firstName"
+            label="First name"
+            control={control}
+            placeholder="Firs name"
+          />
+          <InputAuthField
+            editable={editEnable}
+            inputStyles={styles.textinput}
+            name="lastName"
+            label="Family name"
+            control={control}
+            placeholder="Family name"
+          />
+          <PhoneNumberPicker
+            editable={editEnable}
+            inputStyles={styles.textinput}
+            name="phoneNumber"
+            label="Phone number"
+            control={control}
+            placeholder="Phone number"
+          />
+          <InputAuthField
+            editable={editEnable}
+            inputStyles={styles.textinput}
+            name="occupation"
+            label="Occupation"
+            control={control}
+            placeholder="Occupation"
+          />
+        </View>
+      </KeyboardScrollView>
     </SafeAreaView>
   );
 };

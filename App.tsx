@@ -16,6 +16,7 @@ import Loader from '@components/shared/loader/Loader';
 import RootNavigator from 'src/navigators/RootNavigator';
 import { RootStackParamList } from 'src/navigators/types';
 import NotificationBanner from '@components/shared/notifications/NotificationBanner';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 configureReanimatedLogger({
   level: ReanimatedLogLevel.warn,
@@ -52,19 +53,21 @@ function App() {
   };
 
   return (
-    <SplashScreen handleAppIsReady={handleAppIsReady} isAppReady={isAppReady}>
-      <SafeAreaProvider>
-        <ThemeProvider>
-          {loader && <Loader />}
-          <NotificationBanner />
-          <NavigationContainer linking={linking}>
-            <RootNavigator />
-            {/* <AuthNavigator /> */}
-            {/* <WelcomeScreen /> */}
-          </NavigationContainer>
-        </ThemeProvider>
-      </SafeAreaProvider>
-    </SplashScreen>
+    <KeyboardProvider>
+      <SplashScreen handleAppIsReady={handleAppIsReady} isAppReady={isAppReady}>
+        <SafeAreaProvider>
+          <ThemeProvider>
+            {loader && <Loader />}
+            <NotificationBanner />
+            <NavigationContainer linking={linking}>
+              <RootNavigator />
+              {/* <AuthNavigator /> */}
+              {/* <WelcomeScreen /> */}
+            </NavigationContainer>
+          </ThemeProvider>
+        </SafeAreaProvider>
+      </SplashScreen>
+    </KeyboardProvider>
   );
 }
 
