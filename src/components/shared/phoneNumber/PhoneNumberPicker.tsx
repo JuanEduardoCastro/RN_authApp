@@ -183,12 +183,12 @@ const createStlyes = (colors: TColors) =>
       alignItems: 'center',
       borderWidth: 1,
       borderColor: '#ccc',
-      paddingHorizontal: 10,
+      paddingHorizontal: 8,
       borderRadius: 5,
     },
     pickerCodeBox: {
       width: 'auto',
-      height: SCREEN.heightFixed * 40,
+      height: SCREEN.heightFixed * 46,
       flexDirection: 'row',
     },
     pickerCodeFlag: {
