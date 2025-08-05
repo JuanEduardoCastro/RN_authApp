@@ -6,9 +6,10 @@ import { HomeTabParamList } from './types';
 import { HomeIcon, ProfileIcon, SettingsIcon } from '@assets/svg/icons';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
-import ProfileScreen from '@screens/home/ProfileScreen';
-import SettingsScreen from '@screens/home/SettingsScreen';
+import ProfileScreen from '@screens/settings/ProfileScreen';
+import SettingsScreen from '@screens/settings/SettingsScreen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import SettingsNavigator from './SettingsNavigator';
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
 
@@ -47,15 +48,15 @@ const HomeNavigator = () => {
                 />
               );
 
-            case 'ProfileScreen':
-              return (
-                <ProfileIcon
-                  width={28}
-                  height={28}
-                  color={focused ? colors.second : colors.text}
-                />
-              );
-            case 'SettingsScreen':
+            // case 'ProfileScreen':
+            //   return (
+            //     <ProfileIcon
+            //       width={28}
+            //       height={28}
+            //       color={focused ? colors.second : colors.text}
+            //     />
+            //   );
+            case 'SettingsNavigator':
               return (
                 <SettingsIcon
                   width={28}
@@ -69,8 +70,8 @@ const HomeNavigator = () => {
         },
       })}>
       <Tab.Screen name="HomeScreen" component={HomeScreen} />
-      <Tab.Screen name="ProfileScreen" component={ProfileScreen} />
-      <Tab.Screen name="SettingsScreen" component={SettingsScreen} />
+      {/* <Tab.Screen name="ProfileScreen" component={ProfileScreen} /> */}
+      <Tab.Screen name="SettingsNavigator" component={SettingsNavigator} />
     </Tab.Navigator>
   );
 };

@@ -15,3 +15,5 @@ export { default as SuccessIcon } from './successIcon.svg';
 export { default as ErrorIcon } from './errorIcon.svg';
 export { default as InfoIcon } from './infoIcon.svg';
 export { default as WarningIcon } from './warningIcon.svg';
+export { default as CheckIcon } from './checkIcon.svg';
+export { default as PowerIcon } from './powerIcon.svg';

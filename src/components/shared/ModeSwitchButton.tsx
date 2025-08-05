@@ -11,8 +11,8 @@ type ModeSwitchButtonProps = {
 };
 
 const ModeSwitchButton = ({
-  width = SCREEN.widthFixed * 45,
-  height = SCREEN.heightFixed * 25,
+  width = SCREEN.widthFixed * 38,
+  height = SCREEN.heightFixed * 22,
 }: ModeSwitchButtonProps) => {
   const { mode, toggleMode } = useMode();
   const { colors, styles } = useStyles(createStlyes);

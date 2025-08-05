@@ -18,7 +18,8 @@ const KeyboardScrollView = ({
       showsVerticalScrollIndicator={false}
       bottomOffset={20 + extraScroll}
       disableScrollOnKeyboardHide={true}
-      extraKeyboardSpace={10}>
+      extraKeyboardSpace={10}
+      keyboardShouldPersistTaps={'always'}>
       {children}
     </KeyboardAwareScrollView>
   );

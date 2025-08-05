@@ -1,6 +1,5 @@
 import { Alert, Linking, Platform, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { WelcomeScreenNavigationProp } from 'src/navigators/types';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
 import useStyles from '@hooks/useStyles';
@@ -11,14 +10,12 @@ import ButtonWithIcon from '@components/shared/ButtonWithIcon';
 import { AppleIcon, GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
-import {
-  googleLogin,
-  useAppDispatch,
-  useAppSelector,
-} from 'src/store/authHook';
+import { useAppDispatch, useAppSelector } from 'src/store/authHook';
 import { userAuth } from 'src/store/authSlice';
 import { newNotificationMessage } from '@utils/newNotificationMessage';
 import useBackHandler from '@hooks/useBackHandler';
+import { googleLogin } from 'src/store/otherAuthHooks';
+import { AuthStackScreenProps } from 'src/navigators/types';
 
 GoogleSignin.configure({
   webClientId: WEB_CLIENT_ID,
@@ -27,7 +24,10 @@ GoogleSignin.configure({
   scopes: ['profile', 'email'],
 });
 
-const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
+const WelcomeScreen = ({
+  navigation,
+  route,
+}: AuthStackScreenProps<'WelcomeScreen'>) => {
   useBackHandler();
   const { user } = useAppSelector(userAuth);
   const { colors, styles } = useStyles(createStyles);
@@ -67,7 +67,7 @@ const WelcomeScreen = ({ navigation, route }: WelcomeScreenNavigationProp) => {
         console.log(
           'XX -> WelcomeScreen.tsx:45 -> handleGoogleLogin -> error :',
           error,
-          navigation.popToTop(),
+          // navigation.popToTop(),
         );
     }
   };
