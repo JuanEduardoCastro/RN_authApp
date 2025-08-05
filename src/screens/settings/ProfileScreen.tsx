@@ -13,8 +13,9 @@ import AvatarView from '@components/shared/AvatarView';
 import PhoneNumberPicker from '@components/shared/phoneNumber/PhoneNumberPicker';
 import useUserData from '@hooks/useUserData';
 import { newNotificationMessage } from '@utils/newNotificationMessage';
-import { ProfileScreenNavigationProps } from 'src/navigators/types';
 import KeyboardScrollView from '@components/shared/KeyboardScrollView';
+import HeaderGoBack from '@components/shared/HeaderGoBack';
+import { SettingsStackScreenProps } from 'src/navigators/types';
 
 interface ProfileDataProps {
   firstName: string;
@@ -25,7 +26,10 @@ interface ProfileDataProps {
   avatarURL: string | undefined;
 }
 
-const ProfileScreen = ({ navigation, route }: ProfileScreenNavigationProps) => {
+const ProfileScreen = ({
+  navigation,
+  route,
+}: SettingsStackScreenProps<'ProfileScreen'>) => {
   const { user, token } = useAppSelector(userAuth);
   const method = useForm<ProfileDataProps>({
     defaultValues: {
@@ -83,9 +87,9 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenNavigationProps) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <HeaderGoBack onPress={() => navigation.goBack()} />
       <KeyboardScrollView extraScroll={Platform.OS === 'ios' ? 4 : 0}>
         <View style={styles.titleBox}>
-          <Separator border={false} />
           <Text style={styles.title}>This is your profile screen</Text>
           <Separator border={false} height={12} />
           <Text style={styles.subTitle}>
@@ -155,6 +159,7 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenNavigationProps) => {
             placeholder="Occupation"
           />
         </View>
+        <Separator border={false} height={Platform.OS === 'ios' ? 60 : 80} />
       </KeyboardScrollView>
     </SafeAreaView>
   );
@@ -207,8 +212,14 @@ const createStyles = (colors: TColors) =>
       color: colors.cancel,
     },
     inputBox: {
-      width: SCREEN.width100,
+      flex: 1,
+      // width: SCREEN.width100,
       paddingHorizontal: 16,
+    },
+    listScroll: {
+      width: SCREEN.width90,
+      height: SCREEN.heightFixed * 200,
+      // gap: 8,
     },
     textinput: {
       borderColor: colors.second,

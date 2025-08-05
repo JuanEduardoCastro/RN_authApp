@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { LoginScreenNavigationProp } from 'src/navigators/types';
+import { AuthStackScreenProps } from 'src/navigators/types';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
 import useStyles from '@hooks/useStyles';
@@ -18,7 +18,10 @@ interface FormDataProps {
   rememberMe: boolean;
 }
 
-const LoginScreen = ({ navigation, route }: LoginScreenNavigationProp) => {
+const LoginScreen = ({
+  navigation,
+  route,
+}: AuthStackScreenProps<'LoginScreen'>) => {
   const methods = useForm<FormDataProps>();
   const { handleSubmit, control } = methods;
   const { colors, styles } = useStyles(createStlyes);

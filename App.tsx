@@ -45,7 +45,7 @@ const linking: LinkingOptions<RootStackParamList> = {
 };
 
 function App() {
-  const { loader, user, isAuthorized } = useAppSelector(userAuth);
+  const { loader } = useAppSelector(userAuth);
   const [isAppReady, setIsAppReady] = useState(false);
 
   const handleAppIsReady = () => {

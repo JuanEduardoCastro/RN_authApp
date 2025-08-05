@@ -5,6 +5,10 @@ const { width, height } = Dimensions.get('window');
 export const SCREEN = {
   width100: width,
   height100: height,
+  width90: width * 0.9,
+  height90: height * 0.9,
+  width80: width * 0.8,
+  height80: height * 0.8,
   width75: width * 0.75,
   height75: height * 0.75,
   width50: width * 0.5,

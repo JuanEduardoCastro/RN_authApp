@@ -3,8 +3,7 @@ import React, { useRef } from 'react';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import Separator from '@components/shared/Separator';
-import ModeSwitchButton from '@components/shared/ModeSwitchButton';
-import { HomeScreenNavigationProps } from 'src/navigators/types';
+import { HomeTabScreenProps } from 'src/navigators/types';
 import Button from '@components/shared/Button';
 import { logoutUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
 import { userAuth } from 'src/store/authSlice';
@@ -13,7 +12,10 @@ import useTimeExpired from '@hooks/useTimeExpired';
 import { SCREEN } from '@constants/sizes';
 import useBackHandler from '@hooks/useBackHandler';
 
-const HomeScreen = ({ navigation, route }: HomeScreenNavigationProps) => {
+const HomeScreen = ({
+  navigation,
+  route,
+}: HomeTabScreenProps<'HomeScreen'>) => {
   useBackHandler();
   const timerRef = useRef<any>(null);
   const { user } = useAppSelector(userAuth);
@@ -21,17 +23,17 @@ const HomeScreen = ({ navigation, route }: HomeScreenNavigationProps) => {
   const { colors, styles } = useStyles(createStyles);
   const dispatch = useAppDispatch();
 
-  const handleLogut = async () => {
-    try {
-      const res = await dispatch(logoutUser({ email: user?.email }));
-      if (res?.success) {
-        navigation.navigate('AuthNavigator', { screen: 'WelcomeScreen' });
-      }
-    } catch (error) {
-      __DEV__ &&
-        console.log('XX -> HomeScreen.tsx:26 -> handleLogut -> error :', error);
-    }
-  };
+  // const handleLogut = async () => {
+  //   try {
+  //     const res = await dispatch(logoutUser({ email: user?.email }));
+  //     if (res?.success) {
+  //       navigation.navigate('AuthNavigator', { screen: 'WelcomeScreen' });
+  //     }
+  //   } catch (error) {
+  //     __DEV__ &&
+  //       console.log('XX -> HomeScreen.tsx:26 -> handleLogut -> error :', error);
+  //   }
+  // };
 
   const createErrorMesage = () => {
     newNotificationMessage(dispatch, {
@@ -44,14 +46,14 @@ const HomeScreen = ({ navigation, route }: HomeScreenNavigationProps) => {
 
   return (
     <View style={styles.container}>
-      <Button title="Logout session" onPress={handleLogut} />
-      <Separator border={false} />
+      {/* <Button title="Logout session" onPress={handleLogut} />
+      <Separator border={false} /> */}
       <Button title="Create new error" onPress={createErrorMesage} />
       <Separator border={false} />
       <Text style={styles.text}>HomeScreen</Text>
       <Separator border={false} />
-      <ModeSwitchButton />
-      <Separator border={false} />
+      {/* <ModeSwitchButton />
+      <Separator border={false} /> */}
       {/* <View style={styles.timerBox}>
         <Text style={styles.timerText}>
           This is the time you have left until your session is renewed:

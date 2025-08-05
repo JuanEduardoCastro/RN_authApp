@@ -2,7 +2,7 @@ import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import useStyles from '@hooks/useStyles';
-import { NewPasswordScreenNavigationProps } from 'src/navigators/types';
+import { AuthStackScreenProps } from 'src/navigators/types';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
 import Button from '@components/shared/Button';
@@ -28,7 +28,7 @@ interface FormNewDataProps {
 const NewPasswordScreen = ({
   navigation,
   route,
-}: NewPasswordScreenNavigationProps) => {
+}: AuthStackScreenProps<'NewPasswordScreen'>) => {
   const { emailToken } = route.params;
   const { messageType } = useAppSelector(userAuth);
   const dispatch = useAppDispatch();

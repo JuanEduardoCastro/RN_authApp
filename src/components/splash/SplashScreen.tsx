@@ -1,12 +1,12 @@
 import * as Keychain from 'react-native-keychain';
-import { Animated, StyleSheet, Text, View } from 'react-native';
+import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import BGGradient from '@components/shared/BGGradient';
 import { SCREEN } from '@constants/sizes';
-import { useAppDispatch } from 'src/store/authHook';
+import { useAppDispatch, useAppSelector } from 'src/store/authHook';
 import { useCheckToken } from '@hooks/useCheckToken';
-import { setIsAuthorized, setResetUser } from 'src/store/authSlice';
+import { setIsAuthorized, setResetUser, userAuth } from 'src/store/authSlice';
 
 type SplashScreenProps = {
   children: ReactNode;
@@ -41,17 +41,20 @@ const IMG_STATE = {
 };
 
 export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
+  const { user } = useAppSelector(userAuth)
+  const { tokenSaved, isExpired, checkCompleted } = useCheckToken();
   const containerOpacity = useRef(new Animated.Value(1)).current;
   const imageOpacity = useRef(new Animated.Value(0)).current;
-  const { tokenSaved, isExpired, checkCompleted } = useCheckToken();
   const [imageState, setImageState] = useState(IMG_STATE.LOADING_IMAGE);
   const dispatch = useAppDispatch();
 
   const checkUserLogged = async () => {
     if (tokenSaved) {
+      // console.log(Platform.OS === 'ios' ? 'iOS' : 'Android', "EN SPLASH -> el token esta salvado")
       if (!isExpired) {
+        // console.log(Platform.OS === 'ios' ? 'iOS' : 'Android', "EN SPLASH -> el token no expiro")
         // la app esta lista y con el usuario OK
-        dispatch(setIsAuthorized());
+        // dispatch(setIsAuthorized());
       } else {
         // la app esta lista y NO hay usuario
         dispatch(setResetUser());
@@ -60,7 +63,17 @@ export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
       dispatch(setResetUser());
     }
     if (checkCompleted) {
-      handleAppIsReady();
+      // console.log(Platform.OS === 'ios' ? 'iOS' : 'Android', "---> TERMINA DE REVISAR <---")
+
+      if (tokenSaved && !isExpired) {
+        if (user) {
+          handleAppIsReady();
+        }
+
+      } else {
+        handleAppIsReady()
+      }
+
     }
   };
 

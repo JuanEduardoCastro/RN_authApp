@@ -1,7 +1,7 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { CheckEmailScreenNavigationProps } from 'src/navigators/types';
+import { AuthStackScreenProps } from 'src/navigators/types';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
@@ -12,7 +12,6 @@ import Separator from '@components/shared/Separator';
 import { sharedColors } from '@constants/colors';
 import { newNotificationMessage } from '@utils/newNotificationMessage';
 import CountDownTimer from 'react-native-countdown-timer-hooks';
-import { showSeed } from 'babel.config';
 
 interface CheckEmailProps {
   email: string;
@@ -21,7 +20,7 @@ interface CheckEmailProps {
 const CheckEmailScreen = ({
   navigation,
   route,
-}: CheckEmailScreenNavigationProps) => {
+}: AuthStackScreenProps<'CheckEmailScreen'>) => {
   const timerRef = useRef<any>(null);
   const { checkMode } = route.params;
   const method = useForm<CheckEmailProps>();
@@ -114,7 +113,6 @@ const CheckEmailScreen = ({
               }`}
           </Text>
         </View>
-
         <View style={styles.inputBox}>
           <Separator borderWidth={0} />
           <InputAuthField
@@ -144,7 +142,6 @@ const CheckEmailScreen = ({
           />
         </View>
         <Separator height={12} borderWidth={0} />
-
         <View style={{ height: 40 }}>
           {showMessage && (
             <Pressable
