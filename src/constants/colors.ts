@@ -1,30 +1,110 @@
 /* Colors themes objects or enums  */
 
-export const lightMode = {
-  background: '#f5f5f5',
-  tabBackground: '#f5f5f5a6',
-  text: '#0f172a',
-  textNgt: '#f5f5f5',
-  second: '#9e60a3',
+export const luxury = {
+  lightMode: {
+    background: '#f5f5f5',
+    tabBackground: '#f5f5f5a6',
+    text: '#0f172a',
+    textNgt: '#f5f5f5',
+    second: '#9e60a3',
+    base: '#7646c9',
+    darkBase: '#5a3c8f',
+    notifications: '#7646c960',
+  },
+  darkMode: {
+    background: '#171717',
+    tabBackground: '#171717a6',
+    // background: '#0f172a',
+    text: '#f5f5f5',
+    textNgt: '#0f172a',
+    second: '#DBA1FF',
+    base: '#7646c9',
+    darkBase: '#5a3c8f',
+    notifications: '#7646c960',
+  },
 };
 
-export const darkMode = {
-  background: '#171717',
-  tabBackground: '#171717a6',
-  // background: '#0f172a',
-  text: '#f5f5f5',
-  textNgt: '#0f172a',
-  second: '#DBA1FF',
+export const calm = {
+  lightMode: {
+    background: '#f1f9f7',
+    tabBackground: '#f5f5f5a6',
+    text: '#0f172a',
+    textNgt: '#f5f5f5',
+    second: '#46a4a4ff',
+    base: '#41737c',
+    darkBase: '#356267',
+    notifications: '#33847070',
+  },
+  darkMode: {
+    background: '#171717',
+    tabBackground: '#171717a6',
+    // background: '#0f172a',
+    text: '#f5f5f5',
+    textNgt: '#0f172a',
+    second: '#98dcdcff',
+    base: '#41737c',
+    darkBase: '#356267',
+    notifications: '#33847070',
+  },
+};
+
+export const gold = {
+  lightMode: {
+    background: '#fdfaf7',
+    // background: '#effefb',
+    tabBackground: '#fdfaf7a6',
+    text: '#0f172a',
+    textNgt: '#f5f5f5',
+    second: '#fcd34d',
+    base: '#FFC337',
+    darkBase: '#CC9700',
+    notifications: '#CC970070',
+  },
+  darkMode: {
+    background: '#171717',
+    tabBackground: '#171717a6',
+    // background: '#0f172a',
+    text: '#f5f5f5',
+    textNgt: '#0f172a',
+    second: '#ffe17c',
+    base: '#FFC337',
+    darkBase: '#CC9700',
+    notifications: '#CC970070',
+  },
+};
+
+export const passion = {
+  lightMode: {
+    background: '#fcf8fb',
+    // background: '#effefb',
+    tabBackground: '#fcf8fba6',
+    text: '#0f172a',
+    textNgt: '#f5f5f5',
+    second: '#F08DB4',
+    base: '#CD6D94',
+    darkBase: '#AF5279',
+    notifications: '#AF527970',
+  },
+  darkMode: {
+    background: '#171717',
+    tabBackground: '#171717a6',
+    // background: '#0f172a',
+    text: '#f5f5f5',
+    textNgt: '#0f172a',
+    second: '#fda8cdff',
+    base: '#CD6D94',
+    darkBase: '#AF5279',
+    notifications: '#AF527970',
+  },
 };
 
 export const sharedColors = {
-  base: '#7646c9',
-  darkBase: '#3C1392',
   primary: '#007AFF',
   accept: '#008000',
-  cancel: '#FF2C2C',
+  danger: '#cc1616',
+  // danger: ' #9b0303ff',
+  warning: '#fb923c',
   transparent: '#00000000',
-  notifications: '#7646c970',
   // black n white colors
   almostBlack: '#0000000d',
   dark: '#1B1B1E',

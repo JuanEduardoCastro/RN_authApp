@@ -1,21 +1,30 @@
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import React, { useState } from 'react';
 import Separator from '@components/shared/Separator';
 import { editUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
 import { userAuth } from 'src/store/authSlice';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import InputAuthField from '@components/shared/InputAuthField';
 import { useForm } from 'react-hook-form';
-import { SCREEN } from '@constants/sizes';
 import AvatarView from '@components/shared/AvatarView';
 import PhoneNumberPicker from '@components/shared/phoneNumber/PhoneNumberPicker';
 import useUserData from '@hooks/useUserData';
-import { newNotificationMessage } from '@utils/newNotificationMessage';
 import KeyboardScrollView from '@components/shared/KeyboardScrollView';
 import HeaderGoBack from '@components/shared/HeaderGoBack';
 import { SettingsStackScreenProps } from 'src/navigators/types';
+import { SCREEN } from '@constants/sizes';
 
 interface ProfileDataProps {
   firstName: string;
@@ -25,6 +34,9 @@ interface ProfileDataProps {
   occupation: string;
   avatarURL: string | undefined;
 }
+
+const tabbarHeight =
+  Platform.OS === 'ios' ? SCREEN.heightFixed * 80 : SCREEN.heightFixed * 60;
 
 const ProfileScreen = ({
   navigation,
@@ -45,6 +57,7 @@ const ProfileScreen = ({
   const { handleSubmit, control, reset, setValue, getValues } = method;
   const { colors, styles } = useStyles(createStyles);
   const [editEnable, setEditEnable] = useState(false);
+  const [scrollEnabled, setScrollEnabled] = useState(false);
   const dispatch = useAppDispatch();
 
   const handleEditInfo = () => {
@@ -67,16 +80,8 @@ const ProfileScreen = ({
 
     try {
       const res = await dispatch(editUser(fullData, token));
-      if (res?.success) {
-        newNotificationMessage(dispatch, {
-          messageType: 'success',
-          notificationMessage: 'Profile updated successfully!',
-        });
-      } else {
-        newNotificationMessage(dispatch, {
-          messageType: 'error',
-          notificationMessage: 'Something went wrong.\nPlease, try again.',
-        });
+      if (!res?.success) {
+        navigation.navigate('AuthNavigator', { screen: 'LoginScreen' });
       }
     } catch (error) {
       __DEV__ &&
@@ -85,40 +90,47 @@ const ProfileScreen = ({
     setEditEnable(false);
   };
 
+  const onLayoutHandle = (event: any) => {
+    console.log('en el view layout', event.nativeEvent.layout.height);
+    const { height } = event.nativeEvent.layout;
+    if (Math.floor(height) <= SCREEN.heightFixed * 491) {
+      setScrollEnabled(false);
+    } else {
+      setScrollEnabled(true);
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <HeaderGoBack onPress={() => navigation.goBack()} />
-      <KeyboardScrollView extraScroll={Platform.OS === 'ios' ? 4 : 0}>
-        <View style={styles.titleBox}>
-          <Text style={styles.title}>This is your profile screen</Text>
-          <Separator border={false} height={12} />
-          <Text style={styles.subTitle}>
-            Please, complete your personal information
-          </Text>
-        </View>
-        <Separator border={false} height={32} />
-        <View style={styles.buttonBox}>
-          <AvatarView
-            name="avatarURL"
-            control={control}
-            disabled={!editEnable}
-          />
-          <View style={styles.editButton}>
-            <Pressable
-              onPress={editEnable ? handleSubmit(onSubmit) : handleEditInfo}>
-              <Text style={styles.editButtonText}>
-                {editEnable ? 'Save' : 'Edit'}
-              </Text>
+      <View style={styles.titleBox}>
+        <Text style={styles.title}>This is your profile screen</Text>
+        <Separator border={false} height={12} />
+        <Text style={styles.subTitle}>
+          Please, complete your personal information
+        </Text>
+      </View>
+      <Separator border={false} height={32} />
+      <View style={styles.buttonBox}>
+        <AvatarView name="avatarURL" control={control} disabled={!editEnable} />
+        <View style={styles.editButton}>
+          <Pressable
+            onPress={editEnable ? handleSubmit(onSubmit) : handleEditInfo}>
+            <Text style={styles.editButtonText}>
+              {editEnable ? 'Save' : 'Edit'}
+            </Text>
+          </Pressable>
+          {editEnable && (
+            <Pressable onPress={handleCancelEditInfo}>
+              <Text style={styles.cancelButtonText}>Cancel</Text>
             </Pressable>
-            {editEnable && (
-              <Pressable onPress={handleCancelEditInfo}>
-                <Text style={styles.cancelButtonText}>Cancel</Text>
-              </Pressable>
-            )}
-          </View>
+          )}
         </View>
-        <Separator border={false} height={24} />
-        <View style={styles.inputBox}>
+      </View>
+      <Separator border={false} height={24} />
+      <KeyboardScrollView
+        extraScroll={Platform.OS === 'ios' ? 4 : 0}
+        scrollEnabled={scrollEnabled}>
+        <View style={styles.inputBox} onLayout={onLayoutHandle}>
           <InputAuthField
             editable={false}
             inputStyles={styles.textinput}
@@ -195,7 +207,6 @@ const createStyles = (colors: TColors) =>
       alignItems: 'flex-end',
       justifyContent: 'space-between',
       paddingHorizontal: 32,
-      // backgroundColor: 'green',
     },
     editButton: {
       flexDirection: 'row',
@@ -216,11 +227,7 @@ const createStyles = (colors: TColors) =>
       // width: SCREEN.width100,
       paddingHorizontal: 16,
     },
-    listScroll: {
-      width: SCREEN.width90,
-      height: SCREEN.heightFixed * 200,
-      // gap: 8,
-    },
+
     textinput: {
       borderColor: colors.second,
     },

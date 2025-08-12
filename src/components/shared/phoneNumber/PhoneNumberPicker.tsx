@@ -184,7 +184,7 @@ const createStlyes = (colors: TColors) =>
       borderWidth: 1,
       borderColor: '#ccc',
       paddingHorizontal: 8,
-      borderRadius: 5,
+      borderRadius: 12,
     },
     pickerCodeBox: {
       width: 'auto',

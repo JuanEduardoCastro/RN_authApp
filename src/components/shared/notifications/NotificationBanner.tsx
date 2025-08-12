@@ -1,9 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SCREEN } from '@constants/sizes';
 import {
   ErrorIcon,
   InfoIcon,
@@ -11,7 +10,7 @@ import {
   WarningIcon,
 } from '@assets/svg/icons';
 import { useAppDispatch, useAppSelector } from 'src/store/authHook';
-import { setMessageType, userAuth } from 'src/store/authSlice';
+import { setNotificationMessage, userAuth } from 'src/store/authSlice';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -49,14 +48,21 @@ const NotificationBanner = () => {
 
       setTimeout(() => {
         starAnimation(-100);
-        dispatch(setMessageType(null));
+        dispatch(
+          setNotificationMessage({
+            messageType: null,
+            notificationMessage: null,
+          }),
+        );
       }, 4000);
     }
   }, [messageType]);
 
   const handleCloseBanner = () => {
     starAnimation(-100);
-    dispatch(setMessageType(null));
+    dispatch(
+      setNotificationMessage({ messageType: null, notificationMessage: null }),
+    );
   };
 
   return (
@@ -77,33 +83,33 @@ const NotificationBanner = () => {
                     case 'error':
                       return (
                         <ErrorIcon
-                          width={42}
-                          height={42}
-                          color={colors.cancel}
+                          width={32}
+                          height={32}
+                          color={colors.danger}
                         />
                       );
                     case 'success':
                       return (
                         <SuccessIcon
-                          width={42}
-                          height={42}
+                          width={32}
+                          height={32}
                           color={colors.accept}
                         />
                       );
                     case 'information':
                       return (
                         <InfoIcon
-                          width={42}
-                          height={42}
+                          width={32}
+                          height={32}
                           color={colors.primary}
                         />
                       );
                     case 'warning':
                       return (
                         <WarningIcon
-                          width={42}
-                          height={42}
-                          color={colors.cancel}
+                          width={32}
+                          height={32}
+                          color={colors.warning}
                         />
                       );
                     default:
@@ -112,12 +118,12 @@ const NotificationBanner = () => {
                 })()}
               </View>
             </View>
-            <BlurView
+            {/* <BlurView
               style={styles.blurView}
               blurType={'dark'}
               blurAmount={7}
               overlayColor={colors.transparent}
-            />
+            /> */}
           </Pressable>
         </Animated.View>
       )}
@@ -135,15 +141,17 @@ const createStyles = (colors: TColors) =>
       height: 150,
       backgroundColor: colors.transparent,
       zIndex: 100,
+      marginTop: 12,
       paddingHorizontal: 16,
     },
     bannerBox: {
       backgroundColor: colors.notifications,
+      opacity: 0.86,
       height: 60,
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      borderRadius: 12,
+      borderRadius: 24,
       paddingHorizontal: 16,
       paddingVertical: 8,
       zIndex: 9,
@@ -152,11 +160,11 @@ const createStyles = (colors: TColors) =>
       flexShrink: 1,
     },
     bannerText: {
-      color: colors.almostWhite,
+      color: colors.text,
       fontSize: 16,
     },
     bannerIconBox: {
-      width: 44,
+      width: 32,
     },
     blurView: {
       height: 60,
@@ -165,6 +173,6 @@ const createStyles = (colors: TColors) =>
       right: 0,
       bottom: 0,
       left: 0,
-      borderRadius: 12,
+      borderRadius: 24,
     },
   });

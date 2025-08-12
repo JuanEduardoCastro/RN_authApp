@@ -1,19 +1,25 @@
-import { Keyboard, ScrollView, StyleSheet } from 'react-native';
-import React, { ReactNode, useEffect, useRef } from 'react';
-
+import { ScrollView, StyleSheet } from 'react-native';
+import React, { ReactNode } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import useKeyboardEvents from '@hooks/useKeyboardEvents';
 
 type KeyboardScrollViewProps = {
   children: ReactNode;
   extraScroll?: number;
+  scrollEnabled?: boolean;
 };
 
 const KeyboardScrollView = ({
   children,
   extraScroll = 100,
+  scrollEnabled = true,
 }: KeyboardScrollViewProps) => {
+  const { isKeyboardOpen } = useKeyboardEvents();
+
   return (
     <KeyboardAwareScrollView
+      ScrollViewComponent={ScrollView}
+      // scrollEnabled={isKeyboardOpen ? true : scrollEnabled}
       style={styles.container}
       showsVerticalScrollIndicator={false}
       bottomOffset={20 + extraScroll}

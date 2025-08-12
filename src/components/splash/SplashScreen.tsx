@@ -6,7 +6,7 @@ import BGGradient from '@components/shared/BGGradient';
 import { SCREEN } from '@constants/sizes';
 import { useAppDispatch, useAppSelector } from 'src/store/authHook';
 import { useCheckToken } from '@hooks/useCheckToken';
-import { setIsAuthorized, setResetUser, userAuth } from 'src/store/authSlice';
+import { userAuth } from 'src/store/authSlice';
 
 type SplashScreenProps = {
   children: ReactNode;
@@ -41,39 +41,24 @@ const IMG_STATE = {
 };
 
 export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
-  const { user } = useAppSelector(userAuth)
-  const { tokenSaved, isExpired, checkCompleted } = useCheckToken();
+  const { user } = useAppSelector(userAuth);
+  const { refreshTokenSaved, isExpired, checkCompleted } = useCheckToken();
   const containerOpacity = useRef(new Animated.Value(1)).current;
   const imageOpacity = useRef(new Animated.Value(0)).current;
   const [imageState, setImageState] = useState(IMG_STATE.LOADING_IMAGE);
   const dispatch = useAppDispatch();
 
   const checkUserLogged = async () => {
-    if (tokenSaved) {
-      // console.log(Platform.OS === 'ios' ? 'iOS' : 'Android', "EN SPLASH -> el token esta salvado")
-      if (!isExpired) {
-        // console.log(Platform.OS === 'ios' ? 'iOS' : 'Android', "EN SPLASH -> el token no expiro")
-        // la app esta lista y con el usuario OK
-        // dispatch(setIsAuthorized());
-      } else {
-        // la app esta lista y NO hay usuario
-        dispatch(setResetUser());
-      }
-    } else {
-      dispatch(setResetUser());
-    }
     if (checkCompleted) {
-      // console.log(Platform.OS === 'ios' ? 'iOS' : 'Android', "---> TERMINA DE REVISAR <---")
-
-      if (tokenSaved && !isExpired) {
+      if (refreshTokenSaved && !isExpired) {
         if (user) {
+          console.log('-----------> entro cuando se lleno el user');
           handleAppIsReady();
         }
-
       } else {
-        handleAppIsReady()
+        console.log('-----------> entro cuando el user es null');
+        handleAppIsReady();
       }
-
     }
   };
 

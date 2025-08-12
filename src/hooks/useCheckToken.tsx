@@ -1,23 +1,25 @@
 import * as Keychain from 'react-native-keychain';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import { useAppDispatch, validateToken } from 'src/store/authHook';
+import { useAppDispatch, validateRefreshToken } from 'src/store/authHook';
 import { CustomJwtPayload, UseCheckTokenReturn } from './types';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { Platform } from 'react-native';
 
 export const useCheckToken = (): UseCheckTokenReturn => {
-  const [tokenSaved, setTokenSaved] = useState<boolean>(false);
+  const [refreshTokenSaved, setRefreshTokenSaved] = useState<boolean>(false);
   const [checkCompleted, setCheckCompleted] = useState<boolean>(false);
   const [isExpired, setIsExpired] = useState<boolean>(true);
   const dispatch = useAppDispatch();
 
   const resetAutoLogin = async () => {
-    __DEV__ && console.log(Platform.OS === 'ios' ? 'iOS' : 'Android', 'ENTRO AL RESET USER');
-    setTokenSaved(false);
+    __DEV__ &&
+      console.log(Platform.OS === 'ios' ? 'iOS' : 'Android', 'RESET USER');
+    setRefreshTokenSaved(false);
     setIsExpired(true);
     await Keychain.resetGenericPassword({ service: 'secret token' });
     await Keychain.resetGenericPassword({ service: 'secret remember me' });
+    await GoogleSignin.signOut();
   };
 
   useEffect(() => {
@@ -25,36 +27,29 @@ export const useCheckToken = (): UseCheckTokenReturn => {
       try {
         const isGoogleSignin = await GoogleSignin.hasPreviousSignIn();
 
-        // console.log('XX -> useCheckToken.tsx:28 -> isGoogleSignin :', Platform.OS === 'ios' ? 'iOS' : 'Android', isGoogleSignin)
-
         const rememberMeFlag = await Keychain.getGenericPassword({
           service: 'secret remember me',
         });
 
-        // console.log('XX -> useCheckToken.tsx:33 -> rememberMeFlag :', Platform.OS === 'ios' ? 'iOS' : 'Android', rememberMeFlag)
-
         const rememberToken =
           rememberMeFlag && JSON.parse(rememberMeFlag.password);
 
-        if (isGoogleSignin || rememberToken) {
-          // console.log("O ES GOOGLE SIGNIN O ES REMEMBER TOKEN")
-
+        console.log('remember ???????', rememberMeFlag);
+        if (rememberToken) {
           const refreshToken = await Keychain.getGenericPassword({
             service: 'secret token',
           });
           if (refreshToken) {
-            // console.log("---> ENTRO CON EL REFRESH TOKEN ? ? ?")
-            setTokenSaved(true);
+            setRefreshTokenSaved(true);
             const decodedToken = jwtDecode<CustomJwtPayload>(
               refreshToken.password,
             );
             const currentTime = Math.floor(Date.now() / 1000);
             if (decodedToken.exp !== undefined) {
               if (currentTime <= decodedToken.exp) {
-                // console.log("EL TOKEN ES VALIDO") 
-                dispatch(validateToken(refreshToken.password));
+                dispatch(validateRefreshToken(refreshToken.password));
                 isGoogleSignin && (await GoogleSignin.signInSilently());
-                setTokenSaved(true);
+                setRefreshTokenSaved(true);
                 setIsExpired(false);
                 return;
               }
@@ -65,19 +60,18 @@ export const useCheckToken = (): UseCheckTokenReturn => {
       } catch (error) {
         __DEV__ &&
           console.log(
-            'XX -> useCheckToken.tsx:54 -> checkLocalStorage -> error :',
+            'XX -> useCheckToken.tsx:59 -> checkLocalStorage -> error :',
             error,
           );
         resetAutoLogin();
       } finally {
-        __DEV__ && console.log(Platform.OS === 'ios' ? 'iOS' : 'Android', 'Finalizo');
+        __DEV__ &&
+          console.log(Platform.OS === 'ios' ? 'iOS' : 'Android', 'Finalizo');
         setCheckCompleted(true);
       }
     };
     checkLocalStorage();
   }, []);
 
-  // console.log(Platform.OS === 'ios' ? 'iOS' : 'Android', "tokenSaved :", tokenSaved, "isExpired :", isExpired, "checkCompleted :", checkCompleted)
-
-  return { tokenSaved, isExpired, checkCompleted };
+  return { refreshTokenSaved, isExpired, checkCompleted };
 };

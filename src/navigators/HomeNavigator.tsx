@@ -10,6 +10,7 @@ import ProfileScreen from '@screens/settings/ProfileScreen';
 import SettingsScreen from '@screens/settings/SettingsScreen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import SettingsNavigator from './SettingsNavigator';
+import { SCREEN } from '@constants/sizes';
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
 
@@ -27,7 +28,10 @@ const HomeNavigator = () => {
         tabBarStyle: {
           elevation: 0,
           paddingTop: 8,
-          height: Platform.OS === 'ios' ? 80 : 60,
+          height:
+            Platform.OS === 'ios'
+              ? SCREEN.heightFixed * 80
+              : SCREEN.heightFixed * 60,
           backgroundColor: colors.tabBackground,
           shadowColor: '#101014',
           shadowOffset: { width: 0, height: 5 },

@@ -3,7 +3,7 @@ import {
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
 import { SplashScreen } from '@components/splash/SplashScreen';
-import { ThemeProvider } from '@context/ThemeContext';
+import { ModeProvider } from '@context/ModeContext';
 import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -56,7 +56,7 @@ function App() {
     <KeyboardProvider>
       <SplashScreen handleAppIsReady={handleAppIsReady} isAppReady={isAppReady}>
         <SafeAreaProvider>
-          <ThemeProvider>
+          <ModeProvider>
             {loader && <Loader />}
             <NotificationBanner />
             <NavigationContainer linking={linking}>
@@ -64,7 +64,7 @@ function App() {
               {/* <AuthNavigator /> */}
               {/* <WelcomeScreen /> */}
             </NavigationContainer>
-          </ThemeProvider>
+          </ModeProvider>
         </SafeAreaProvider>
       </SplashScreen>
     </KeyboardProvider>

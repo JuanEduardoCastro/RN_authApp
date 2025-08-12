@@ -13,7 +13,13 @@ import { Control, useController } from 'react-hook-form';
 import { TColors } from '@constants/types';
 import useStyles from '@hooks/useStyles';
 import { SCREEN } from '@constants/sizes';
-import { ClosedLockIcon, OpenLockIcon, PencilIcon } from '@assets/svg/icons';
+import {
+  ClosedLockIcon,
+  EyeCloseIcon,
+  EyeOpenIcon,
+  OpenLockIcon,
+  PencilIcon,
+} from '@assets/svg/icons';
 
 type InputAuthFieldProps = {
   name: string;
@@ -80,11 +86,11 @@ const InputAuthField = ({
         {name.includes('password') &&
           (toggleSecureEntry ? (
             <Pressable style={styles.iconArea} onPress={handleSecureEntry}>
-              <ClosedLockIcon width={20} height={20} color={colors.second} />
+              <EyeCloseIcon width={20} height={20} color={colors.second} />
             </Pressable>
           ) : (
             <Pressable style={styles.iconArea} onPress={handleSecureEntry}>
-              <OpenLockIcon width={20} height={20} color={colors.second} />
+              <EyeOpenIcon width={20} height={20} color={colors.second} />
             </Pressable>
           ))}
       </View>

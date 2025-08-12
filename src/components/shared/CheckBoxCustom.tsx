@@ -75,7 +75,7 @@ const createStlyes = (colors: TColors) =>
       flexDirection: 'row',
       justifyContent: 'flex-start',
       alignItems: 'center',
-      gap: 8,
+      gap: Platform.OS === 'ios' ? 8 : 14,
     },
     textRemember: {
       color: colors.text,

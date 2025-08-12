@@ -11,6 +11,7 @@ import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
 import { Control, useController } from 'react-hook-form';
 import ImagePicker from 'react-native-image-crop-picker';
+import { CameraIcon } from '@assets/svg/icons';
 
 type AvatarViewProps = {
   name: string;
@@ -63,6 +64,11 @@ const AvatarView = ({ name, control, rules, ...props }: AvatarViewProps) => {
           }
           style={[styles.avatarView, !props.disabled && styles.editMode]}
         />
+        <View style={styles.iconBox}>
+          {!props.disabled && (
+            <CameraIcon width={22} height={22} color={colors.second} />
+          )}
+        </View>
       </Pressable>
     </View>
   );
@@ -84,5 +90,10 @@ const createStyles = (colors: TColors) =>
     editMode: {
       borderWidth: 2,
       borderColor: colors.second,
+    },
+    iconBox: {
+      position: 'absolute',
+      right: -5,
+      bottom: 0,
     },
   });

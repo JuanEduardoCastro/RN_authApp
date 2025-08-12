@@ -55,10 +55,10 @@ const createStyles = (colors: TColors) =>
       height: SCREEN.heightFixed * 46,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: 'white',
+      backgroundColor: colors.second,
       paddingHorizontal: 24,
       paddingVertical: 8,
-      borderRadius: 12,
+      borderRadius: 50,
     },
     iconBox: {
       // justifyContent: 'center',

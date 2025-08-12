@@ -1,5 +1,5 @@
 import { TColors } from '@constants/types';
-import { useMode } from '@context/ThemeContext';
+import { useMode } from '@context/ModeContext';
 import { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { Styles } from './types';
