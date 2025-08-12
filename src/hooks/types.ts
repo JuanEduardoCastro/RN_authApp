@@ -8,7 +8,7 @@ export interface Styles<T extends StyleSheet.NamedStyles<T>> {
 }
 
 export interface UseCheckTokenReturn {
-  tokenSaved: boolean;
+  refreshTokenSaved: boolean;
   isExpired: boolean;
   checkCompleted: boolean;
 }
@@ -22,4 +22,8 @@ export interface CustomJwtPayload extends JwtPayload {
 export interface UseTimeExpiredReturn {
   accessTokenTimer: any | null;
   refreshTokenTimer: any | null;
+}
+
+export interface UseWhenToScroll {
+  leyoutHeight: number;
 }

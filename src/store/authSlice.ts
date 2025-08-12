@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AuthState } from './types';
+import {
+  AuthState,
+  INotificationMessagePayload,
+  UserCredentialsPayload,
+} from './types';
 import { RootState } from './store';
 
 const initialState: AuthState = {
@@ -21,30 +25,32 @@ const authSlice = createSlice({
     stopLoader: state => {
       state.loader = false;
     },
-    setToken: (state, action) => {
-      state.token = action.payload;
-    },
-    setUser: (state, action) => {
-      state.user = action.payload;
+    setCredentials: (state, action: PayloadAction<UserCredentialsPayload>) => {
+      state.token = action.payload.token;
+      state.user = action.payload.user;
       state.isAuthorized = true;
+      state.loader = false;
     },
-    setResetUser: state => {
+    setResetCredentials: state => {
       state.token = null;
       state.user = null;
       state.isAuthorized = false;
+      state.loader = false;
     },
     setIsAuthorized: state => {
       state.isAuthorized = true;
     },
     setNotificationMessage: (
       state,
-      action: PayloadAction<string | null | unknown>,
+      action: PayloadAction<INotificationMessagePayload>,
     ) => {
-      state.notificationMessage = action.payload;
+      state.notificationMessage = action.payload.notificationMessage;
+      state.messageType = action.payload.messageType;
+      state.loader = false;
     },
-    setMessageType: (state, action) => {
-      state.messageType = action.payload;
-    },
+    // setMessageType: (state, action) => {
+    //   state.messageType = action.payload;
+    // },
   },
 });
 
@@ -52,11 +58,13 @@ export default authSlice.reducer;
 export const {
   startLoader,
   stopLoader,
-  setToken,
-  setUser,
-  setResetUser,
+  // setToken,
+  // setUser,
+  // setResetUser,
   setIsAuthorized,
-  setMessageType,
+  setCredentials,
+  setResetCredentials,
+  // setMessageType,
   setNotificationMessage,
 } = authSlice.actions;
 export const userAuth = (state: RootState) => state.auth;

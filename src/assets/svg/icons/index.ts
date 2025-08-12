@@ -17,3 +17,7 @@ export { default as InfoIcon } from './infoIcon.svg';
 export { default as WarningIcon } from './warningIcon.svg';
 export { default as CheckIcon } from './checkIcon.svg';
 export { default as PowerIcon } from './powerIcon.svg';
+export { default as CameraIcon } from './cameraIcon.svg';
+export { default as EyeOpenIcon } from './eyeOpenIcon.svg';
+export { default as EyeCloseIcon } from './eyeCloseIcon.svg';
+export { default as CircleFullIcon } from './circleFullIcon.svg';

@@ -12,7 +12,6 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
 import { useAppDispatch, useAppSelector } from 'src/store/authHook';
 import { userAuth } from 'src/store/authSlice';
-import { newNotificationMessage } from '@utils/newNotificationMessage';
 import useBackHandler from '@hooks/useBackHandler';
 import { googleLogin } from 'src/store/otherAuthHooks';
 import { AuthStackScreenProps } from 'src/navigators/types';
@@ -56,10 +55,6 @@ const WelcomeScreen = ({
       // );
       const res = await dispatch(googleLogin(googleLoginRes?.data?.idToken));
       if (res?.success) {
-        newNotificationMessage(dispatch, {
-          messageType: 'success',
-          notificationMessage: 'Welcome back!\nEnjoy this app!!',
-        });
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       }
     } catch (error) {
@@ -88,10 +83,12 @@ const WelcomeScreen = ({
 
   return (
     <BGGradient
-      colorInit={colors.base}
+      colorInit={'#6b21a8'}
       colorEnd={colors.dark}
+      // colorInit={colors.base}
+      // colorEnd={colors.dark}
       angle={160}
-      angleCenter={{ x: 0.6, y: 0.9 }}>
+      angleCenter={{ x: 0.8, y: 1 }}>
       <View style={styles.container}>
         <View style={styles.titleBox}>
           <Text style={styles.title}>WELCOME TO AUTH APP</Text>
@@ -106,12 +103,14 @@ const WelcomeScreen = ({
         </View>
         <View style={styles.buttonBox}>
           <ButtonWithIcon
+            buttonStyles={{ backgroundColor: colors.light }}
             title={'...with your email'}
             Icon={MailIcon}
             iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
             onPress={() => navigation.navigate('LoginScreen')}
           />
           <ButtonWithIcon
+            buttonStyles={{ backgroundColor: colors.light }}
             title={'...with Google'}
             Icon={GoogleIcon}
             iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
@@ -138,6 +137,7 @@ const WelcomeScreen = ({
         </View>
         <View style={styles.buttonBox}>
           <Button
+            buttonStyles={{ backgroundColor: colors.light }}
             title={'Register with your email'}
             textStyles={{ fontWeight: 600 }}
             onPress={() =>

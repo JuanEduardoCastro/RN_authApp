@@ -1,12 +1,15 @@
-
-
 import * as Keychain from 'react-native-keychain';
-import axios from "axios";
-import { setMessageType, setNotificationMessage, setToken, setUser, startLoader, stopLoader } from "./authSlice";
-import { Dispatch } from "@reduxjs/toolkit";
-import { HOST } from "./authHook";
+import axios from 'axios';
+import {
+  setCredentials,
+  setNotificationMessage,
+  setResetCredentials,
+  startLoader,
+  stopLoader,
+} from './authSlice';
+import { Dispatch } from '@reduxjs/toolkit';
+import { HOST } from './authHook';
 import { isErrorWithCode } from '@react-native-google-signin/google-signin';
-
 
 /* Creat and loging with other methods */
 
@@ -14,13 +17,9 @@ export const googleLogin = (data: any) => {
   return async (dispatch: Dispatch) => {
     dispatch(startLoader());
     try {
-
-      /* --> To signin new user, create new user in DB and login that user */
-
       const googleResponse = await axios.get(
         `https://oauth2.googleapis.com/tokeninfo?id_token=${data}`,
       );
-      /* google sigin and data */
       if (googleResponse.status === 200) {
         const { sub, email, given_name, family_name, picture } =
           googleResponse.data;
@@ -39,8 +38,6 @@ export const googleLogin = (data: any) => {
             lastName: family_name,
             avatarURL: picture,
           };
-
-          /* Create new user in DB */
           const createUser = await axios.post(
             `${HOST}/users/create`,
             userData,
@@ -51,7 +48,6 @@ export const googleLogin = (data: any) => {
             },
           );
 
-          /* Login that user and recieve tokens */
           if (createUser.status === 201) {
             const loginUser = await axios.post(`${HOST}/users/login`, {
               email: email,
@@ -59,6 +55,10 @@ export const googleLogin = (data: any) => {
             });
 
             if (loginUser.status === 200) {
+              await Keychain.setGenericPassword('remember', 'true', {
+                service: 'secret remember me',
+                accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
+              });
               await Keychain.setGenericPassword(
                 'refreshToken',
                 loginUser.data.refreshToken,
@@ -67,33 +67,47 @@ export const googleLogin = (data: any) => {
                   accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
                 },
               );
-
-              dispatch(setToken(loginUser.data.accesToken));
-              dispatch(setUser(loginUser.data.user));
-              dispatch(stopLoader());
+              dispatch(
+                setCredentials({
+                  user: loginUser.data.user,
+                  token: loginUser.data.accessToken,
+                }),
+              );
+              dispatch(
+                setNotificationMessage({
+                  messageType: 'success',
+                  notificationMessage: `Welcome ${loginUser.data.user.firstName}`,
+                }),
+              );
               return {
                 success: true,
-                message: `Welcome ${loginUser.data.user.firstName}`,
                 error: null,
               };
             } else if (loginUser.status === 401) {
-              dispatch(setToken(null));
-              dispatch(setUser(null));
+              dispatch(setResetCredentials());
+              dispatch(
+                setNotificationMessage({
+                  messageType: 'warning',
+                  notificationMessage:
+                    'Somthing went wrong. Please, try again.',
+                }),
+              );
               return {
                 success: false,
-                message: 'Somthing went wrong. Please, try again.',
                 error: null,
               };
             }
           }
-          /* create new credentials */
         } else if (checkEmail.status === 204) {
           const loginUser = await axios.post(`${HOST}/users/login`, {
             email: email,
             password: sub,
           });
           if (loginUser.status === 200) {
-            // guardar el localstorage
+            await Keychain.setGenericPassword('remember', 'true', {
+              service: 'secret remember me',
+              accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
+            });
             await Keychain.setGenericPassword(
               'refreshToken',
               loginUser.data.refreshToken,
@@ -102,18 +116,30 @@ export const googleLogin = (data: any) => {
                 accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
               },
             );
-
-            dispatch(setToken(loginUser.data.accessToken));
-            dispatch(setUser(loginUser.data.user));
-            dispatch(stopLoader());
+            dispatch(
+              setCredentials({
+                user: loginUser.data.user,
+                token: loginUser.data.accessToken,
+              }),
+            );
+            dispatch(
+              setNotificationMessage({
+                messageType: 'success',
+                notificationMessage: `Welcome back ${loginUser.data.user.firstName}`,
+              }),
+            );
             return {
               success: true,
-              message: `Welcome back ${loginUser.data.user.firstName}`,
               error: null,
             };
           } else if (loginUser.status === 401) {
-            dispatch(setToken(null));
-            dispatch(setUser(null));
+            dispatch(setResetCredentials());
+            dispatch(
+              setNotificationMessage({
+                messageType: 'warning',
+                notificationMessage: 'Somthing went wrong. Please, try again.',
+              }),
+            );
             return {
               success: false,
               message: 'Somthing went wrong. Please, try again.',
@@ -125,11 +151,18 @@ export const googleLogin = (data: any) => {
     } catch (error) {
       // __DEV__ &&
       if (isErrorWithCode(error)) {
-        console.log('XX -> authHook.ts:55 -> return -> error :', error.code);
+        console.log(
+          'XX -> otherAuthHooks.ts:146 -> return -> error :',
+          error.code,
+        );
       }
-      dispatch(setMessageType('error'));
-      dispatch(setNotificationMessage('Network error'));
-      dispatch(stopLoader());
+      dispatch(setResetCredentials());
+      dispatch(
+        setNotificationMessage({
+          messageType: 'error',
+          notificationMessage: 'Network error',
+        }),
+      );
       return { success: false, error: error };
     }
   };
@@ -141,7 +174,6 @@ export const persistGoogleLogin = (data: any) => {
   return async (dispatch: Dispatch) => {
     dispatch(startLoader());
     try {
-      // const googleSigninAgain = await GoogleSignin.signInSilently();
       const checkEmail = await axios.post(`${HOST}/users/checkemail`, {
         email: data.email,
         isGoogleLogin: true,
@@ -160,13 +192,20 @@ export const persistGoogleLogin = (data: any) => {
               accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
             },
           );
-
-          dispatch(setToken(loginUser.data.accesToken));
-          dispatch(setUser(loginUser.data.user));
-          dispatch(stopLoader());
+          dispatch(
+            setCredentials({
+              user: loginUser.data.user,
+              token: loginUser.data.accessToken,
+            }),
+          );
+          dispatch(
+            setNotificationMessage({
+              messageType: 'success',
+              notificationMessage: `Welcome again ${loginUser.data.user.firstName}`,
+            }),
+          );
           return {
             success: true,
-            message: `Welcome again ${loginUser.data.user.firstName}`,
             error: null,
           };
         }
@@ -177,9 +216,14 @@ export const persistGoogleLogin = (data: any) => {
         error: null,
       };
     } catch (error) {
-      dispatch(setMessageType('error'));
-      dispatch(setNotificationMessage('Network error'));
-      dispatch(stopLoader());
+      __DEV__ && console.log('XX -> otherAuthHooks.ts:208 -> error :', error);
+      dispatch(setResetCredentials());
+      dispatch(
+        setNotificationMessage({
+          messageType: 'error',
+          notificationMessage: 'Network error',
+        }),
+      );
       return { success: false, error: error };
     }
   };

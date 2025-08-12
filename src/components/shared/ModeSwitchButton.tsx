@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import React from 'react';
-import { useMode } from '@context/ThemeContext';
+import { useMode } from '@context/ModeContext';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
 import useStyles from '@hooks/useStyles';
@@ -8,19 +8,26 @@ import useStyles from '@hooks/useStyles';
 type ModeSwitchButtonProps = {
   width?: number;
   height?: number;
+  onPress?: () => void;
 };
 
 const ModeSwitchButton = ({
-  width = SCREEN.widthFixed * 38,
-  height = SCREEN.heightFixed * 22,
+  width = SCREEN.widthFixed * 30,
+  height = SCREEN.heightFixed * 18,
+  onPress = () => {},
 }: ModeSwitchButtonProps) => {
   const { mode, toggleMode } = useMode();
   const { colors, styles } = useStyles(createStlyes);
 
+  const handleToggleMode = () => {
+    onPress();
+    toggleMode();
+  };
+
   return (
     <Pressable
       style={[styles.container, { width, height }]}
-      onPress={() => toggleMode()}>
+      onPress={handleToggleMode}>
       <View
         style={[
           styles.button,

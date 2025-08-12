@@ -6,8 +6,7 @@ import Separator from '@components/shared/Separator';
 import { HomeTabScreenProps } from 'src/navigators/types';
 import Button from '@components/shared/Button';
 import { logoutUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
-import { userAuth } from 'src/store/authSlice';
-import { newNotificationMessage } from '@utils/newNotificationMessage';
+import { setNotificationMessage, userAuth } from 'src/store/authSlice';
 import useTimeExpired from '@hooks/useTimeExpired';
 import { SCREEN } from '@constants/sizes';
 import useBackHandler from '@hooks/useBackHandler';
@@ -36,10 +35,12 @@ const HomeScreen = ({
   // };
 
   const createErrorMesage = () => {
-    newNotificationMessage(dispatch, {
-      messageType: 'error',
-      notificationMessage: 'This is a new error!! ',
-    });
+    dispatch(
+      setNotificationMessage({
+        messageType: 'error',
+        notificationMessage: 'This is notificacion test! ',
+      }),
+    );
   };
 
   const handleTimerProgress = (val: any) => {};

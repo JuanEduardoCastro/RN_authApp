@@ -10,7 +10,6 @@ import Button from '@components/shared/Button';
 import { checkEmail, resetPassword, useAppDispatch } from 'src/store/authHook';
 import Separator from '@components/shared/Separator';
 import { sharedColors } from '@constants/colors';
-import { newNotificationMessage } from '@utils/newNotificationMessage';
 import CountDownTimer from 'react-native-countdown-timer-hooks';
 
 interface CheckEmailProps {
@@ -39,42 +38,20 @@ const CheckEmailScreen = ({
       if (checkMode.includes('new')) {
         const res = await dispatch(checkEmail(data));
         if (res?.success) {
-          newNotificationMessage(dispatch, {
-            messageType: 'success',
-            notificationMessage: 'The email was sent.',
-          });
           setShowMessage(true);
         } else {
-          newNotificationMessage(dispatch, {
-            messageType: 'warning',
-            notificationMessage:
-              'This email is already in use.\nPlease try another one.',
-          });
           setShowMessage(false);
         }
       } else {
         const res = await dispatch(resetPassword(data));
         if (res?.success) {
-          newNotificationMessage(dispatch, {
-            messageType: 'success',
-            notificationMessage: 'The email was sent.',
-          });
           setShowMessage(true);
         } else {
-          newNotificationMessage(dispatch, {
-            messageType: 'warning',
-            notificationMessage:
-              'There is no email to reset password.\nPlease try another one.',
-          });
           setShowMessage(false);
         }
       }
     } catch (error) {
-      __DEV__ &&
-        console.log(
-          'XX -> CheckEmailScreen.tsx:39 -> onSubmit -> error :',
-          error,
-        );
+      __DEV__ && console.log('XX -> CheckEmailScreen.tsx:56 -> error :', error);
       navigation.popToTop();
     }
   };

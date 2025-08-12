@@ -10,7 +10,6 @@ import CheckBoxCustom from '@components/shared/CheckBoxCustom';
 import Button from '@components/shared/Button';
 import { loginUser, useAppDispatch } from 'src/store/authHook';
 import Separator from '@components/shared/Separator';
-import { newNotificationMessage } from '@utils/newNotificationMessage';
 
 interface FormDataProps {
   email: string;
@@ -31,20 +30,11 @@ const LoginScreen = ({
     try {
       const res = await dispatch(loginUser(data));
       if (res?.success) {
-        newNotificationMessage(dispatch, {
-          messageType: 'success',
-          notificationMessage: 'Welcome!\nEnjoy the app!!',
-        });
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
-      } else {
-        newNotificationMessage(dispatch, {
-          messageType: 'error',
-          notificationMessage: 'Wrong credentials. Please, try again!',
-        });
       }
     } catch (error) {
       __DEV__ &&
-        console.log('XX -> LoginScreen.tsx:36 -> onSubmit -> error :', error);
+        console.log('XX -> LoginScreen.tsx:42 -> onSubmit -> error :', error);
       navigation.popToTop();
     }
   };
@@ -143,7 +133,7 @@ const createStlyes = (colors: TColors) =>
     },
     subTitle: {
       textAlign: 'center',
-      color: colors.light,
+      color: colors.text,
       fontWeight: 500,
       fontSize: 18,
     },

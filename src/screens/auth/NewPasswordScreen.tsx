@@ -15,8 +15,7 @@ import {
   useAppSelector,
 } from 'src/store/authHook';
 import { CustomJwtPayload } from '@hooks/types';
-import { userAuth } from 'src/store/authSlice';
-import { newNotificationMessage } from '@utils/newNotificationMessage';
+import { setNotificationMessage, userAuth } from 'src/store/authSlice';
 import Separator from '@components/shared/Separator';
 
 interface FormNewDataProps {
@@ -48,10 +47,12 @@ const NewPasswordScreen = ({
 
         if (decode.exp) {
           if (Date.now() / 1000 > decode.exp) {
-            newNotificationMessage(dispatch, {
-              messageType: 'warning',
-              notificationMessage: 'Email expired. Please, try again!',
-            });
+            dispatch(
+              setNotificationMessage({
+                messageType: 'warning',
+                notificationMessage: 'Code expired. Please, try again!',
+              }),
+            );
             !messageType &&
               navigation.navigate('CheckEmailScreen', {
                 checkMode: 'new_password',
@@ -65,10 +66,13 @@ const NewPasswordScreen = ({
         }
       } else {
         navigation.popToTop();
-        newNotificationMessage(dispatch, {
-          messageType: 'warning',
-          notificationMessage: 'There is no email checked. Please, try again!',
-        });
+        dispatch(
+          setNotificationMessage({
+            messageType: 'warning',
+            notificationMessage:
+              'There is no email checked. Please, try again!',
+          }),
+        );
       }
     } catch (error) {
       __DEV__ &&
@@ -90,41 +94,21 @@ const NewPasswordScreen = ({
         try {
           const res = await dispatch(createUser(fullData, emailToken));
           if (res?.success) {
-            newNotificationMessage(dispatch, {
-              messageType: 'success',
-              notificationMessage: 'User created successfully. ',
-            });
-
             navigation.navigate('LoginScreen');
-          } else {
-            newNotificationMessage(dispatch, {
-              messageType: 'error',
-              notificationMessage: 'An error occurred. Please, try again!',
-            });
           }
         } catch (error) {
           __DEV__ &&
-            console.log('XX -> NewPasswordScreen.tsx:106 -> error :', error);
+            console.log('XX -> NewPasswordScreen.tsx:97 -> error :', error);
         }
       } else {
         try {
           const res = await dispatch(updatePassword(fullData, emailToken));
           if (res?.success) {
-            newNotificationMessage(dispatch, {
-              messageType: 'success',
-              notificationMessage: 'New password saved.',
-            });
-
             navigation.navigate('LoginScreen');
-          } else {
-            newNotificationMessage(dispatch, {
-              messageType: 'error',
-              notificationMessage: 'An error occurred. Please, try again!',
-            });
           }
         } catch (error) {
           __DEV__ &&
-            console.log('XX -> NewPasswordScreen.tsx:126 -> error :', error);
+            console.log('XX -> NewPasswordScreen.tsx:107 -> error :', error);
           navigation.popToTop();
         }
       }
