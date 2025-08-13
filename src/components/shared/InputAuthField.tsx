@@ -20,7 +20,12 @@ import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
 /* Assets */
-import { EyeCloseIcon, EyeOpenIcon, PencilIcon } from '@assets/svg/icons';
+import {
+  EditIcon,
+  EyeCloseIcon,
+  EyeOpenIcon,
+  PencilIcon,
+} from '@assets/svg/icons';
 
 type InputAuthFieldProps = {
   name: string;
@@ -81,7 +86,7 @@ const InputAuthField = ({
         />
         {name !== 'email' && props.editable && (
           <Pressable style={styles.iconArea}>
-            <PencilIcon width={18} height={18} color={colors.second} />
+            <EditIcon width={18} height={18} color={colors.second} />
           </Pressable>
         )}
         {name.includes('password') &&

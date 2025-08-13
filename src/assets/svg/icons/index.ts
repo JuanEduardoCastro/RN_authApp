@@ -21,3 +21,4 @@ export { default as CameraIcon } from './cameraIcon.svg';
 export { default as EyeOpenIcon } from './eyeOpenIcon.svg';
 export { default as EyeCloseIcon } from './eyeCloseIcon.svg';
 export { default as CircleFullIcon } from './circleFullIcon.svg';
+export { default as EditIcon } from './editIcon.svg';

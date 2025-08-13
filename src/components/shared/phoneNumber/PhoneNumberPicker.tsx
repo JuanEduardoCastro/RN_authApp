@@ -26,7 +26,7 @@ import { SCREEN } from '@constants/sizes';
 import { countriesList } from '@constants/countriesList';
 import { textVar } from '@constants/textVar';
 /* Assets */
-import { ChevronIcon } from '@assets/svg/icons';
+import { ChevronIcon, EditIcon } from '@assets/svg/icons';
 
 type PhoneNumberPickerProps = {
   name: string;
@@ -150,6 +150,11 @@ const PhoneNumberPicker = ({
             keyboardType={name === 'phoneNumber' ? 'phone-pad' : 'default'}
             {...props}
           />
+          {name !== 'email' && props.editable && (
+            <Pressable style={styles.iconArea}>
+              <EditIcon width={18} height={18} color={colors.second} />
+            </Pressable>
+          )}
         </View>
         <View style={styles.errorBox}>
           {fieldState.error && (
@@ -227,6 +232,9 @@ const createStlyes = (colors: TColors) =>
       paddingHorizontal: 8,
       fontSize: 16,
       color: colors.text,
+    },
+    iconArea: {
+      padding: 8,
     },
     errorInput: {
       borderColor: colors.danger,
