@@ -1,20 +1,33 @@
-import { Alert, Linking, Platform, StyleSheet, Text, View } from 'react-native';
+/* Core libs & third parties libs */
+import { Linking, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/sizes';
-import useStyles from '@hooks/useStyles';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
+/* Custom components */
 import Separator from '@components/shared/Separator';
 import BGGradient from '@components/shared/BGGradient';
 import Button from '@components/shared/Button';
 import ButtonWithIcon from '@components/shared/ButtonWithIcon';
-import { AppleIcon, GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
-import { useAppDispatch, useAppSelector } from 'src/store/authHook';
-import { userAuth } from 'src/store/authSlice';
+/* Custom hooks */
+import useStyles from '@hooks/useStyles';
 import useBackHandler from '@hooks/useBackHandler';
+import { useAppDispatch } from 'src/store/authHook';
 import { googleLogin } from 'src/store/otherAuthHooks';
+/* Types */
+import { TColors } from '@constants/types';
 import { AuthStackScreenProps } from 'src/navigators/types';
+/* Utilities & constants */
+import { SCREEN } from '@constants/sizes';
+import { textVar } from '@constants/textVar';
+/* Assets */
+import { AppleIcon, GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
+
+/* Core libs & third parties libs */
+/* Custom components */
+/* Custom hooks */
+/* Types */
+/* Utilities & constants */
+/* Assets */
 
 GoogleSignin.configure({
   webClientId: WEB_CLIENT_ID,
@@ -28,7 +41,6 @@ const WelcomeScreen = ({
   route,
 }: AuthStackScreenProps<'WelcomeScreen'>) => {
   useBackHandler();
-  const { user } = useAppSelector(userAuth);
   const { colors, styles } = useStyles(createStyles);
   const dispatch = useAppDispatch();
 
@@ -49,10 +61,6 @@ const WelcomeScreen = ({
   const handleGoogleLogin = async () => {
     try {
       const googleLoginRes = await GoogleLogin();
-      // console.log(
-      //   'que viene en el googleLoginRes',
-      //   googleLoginRes?.data?.idToken,
-      // );
       const res = await dispatch(googleLogin(googleLoginRes?.data?.idToken));
       if (res?.success) {
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
@@ -62,7 +70,6 @@ const WelcomeScreen = ({
         console.log(
           'XX -> WelcomeScreen.tsx:45 -> handleGoogleLogin -> error :',
           error,
-          // navigation.popToTop(),
         );
     }
   };
@@ -85,16 +92,12 @@ const WelcomeScreen = ({
     <BGGradient
       colorInit={'#6b21a8'}
       colorEnd={colors.dark}
-      // colorInit={colors.base}
-      // colorEnd={colors.dark}
       angle={160}
       angleCenter={{ x: 0.8, y: 1 }}>
       <View style={styles.container}>
         <View style={styles.titleBox}>
           <Text style={styles.title}>WELCOME TO AUTH APP</Text>
-          <Text style={styles.subTitle}>
-            USER CREDENTIAL AUTHORIZATION DEMO
-          </Text>
+          <Text style={styles.subTitle}>USER AUTHORIZATION DEMO</Text>
           <Separator border={false} height={60} />
         </View>
         <View style={styles.titleBox}>
@@ -106,16 +109,21 @@ const WelcomeScreen = ({
             buttonStyles={{ backgroundColor: colors.light }}
             title={'...with your email'}
             Icon={MailIcon}
-            iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
+            iconProps={{
+              width: SCREEN.widthFixed * 20,
+              height: SCREEN.heightFixed * 20,
+            }}
             onPress={() => navigation.navigate('LoginScreen')}
           />
           <ButtonWithIcon
             buttonStyles={{ backgroundColor: colors.light }}
             title={'...with Google'}
             Icon={GoogleIcon}
-            iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
+            iconProps={{
+              width: SCREEN.widthFixed * 20,
+              height: SCREEN.heightFixed * 20,
+            }}
             onPress={handleGoogleLogin}
-            // onPress={() => Alert.alert('Enter with Google account')}
           />
           {/* <ButtonWithIcon
             title={'...with GitHub'}
@@ -133,13 +141,12 @@ const WelcomeScreen = ({
           )} */}
         </View>
         <View style={styles.titleBox}>
-          <Text style={styles.subTitle}>or</Text>
+          <Text style={styles.subTitle}>- or -</Text>
         </View>
         <View style={styles.buttonBox}>
           <Button
             buttonStyles={{ backgroundColor: colors.light }}
             title={'Register with your email'}
-            textStyles={{ fontWeight: 600 }}
             onPress={() =>
               navigation.navigate('CheckEmailScreen', {
                 checkMode: 'new_password',
@@ -162,19 +169,16 @@ const createStyles = (colors: TColors) =>
       alignItems: 'center',
     },
     titleBox: {
-      // backgroundColor: "pink",
       justifyContent: 'center',
       alignItems: 'center',
     },
     title: {
+      ...textVar.titleBold,
       color: colors.light,
-      fontWeight: 700,
-      fontSize: 20,
     },
     subTitle: {
+      ...textVar.large,
       color: colors.light,
-      fontWeight: 500,
-      fontSize: 18,
     },
     buttonBox: {
       width: SCREEN.widthFixed * 320,

@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import React, { ReactNode } from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SCREEN } from '@constants/sizes';
 
 type BGGradienteProps = {

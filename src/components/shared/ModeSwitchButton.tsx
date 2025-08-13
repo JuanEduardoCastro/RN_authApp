@@ -1,9 +1,9 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import React from 'react';
-import { useMode } from '@context/ModeContext';
+import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
-import useStyles from '@hooks/useStyles';
+import { useMode } from '@context/ModeContext';
 
 type ModeSwitchButtonProps = {
   width?: number;

@@ -1,3 +1,4 @@
+/* Core libs & third parties libs */
 import {
   View,
   Pressable,
@@ -8,9 +9,15 @@ import {
   ViewStyle,
 } from 'react-native';
 import React, { ElementType } from 'react';
-import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/sizes';
+/* Custom components */
+/* Custom hooks */
 import useStyles from '@hooks/useStyles';
+/* Types */
+import { TColors } from '@constants/types';
+/* Utilities & constants */
+import { SCREEN } from '@constants/sizes';
+import { textVar } from '@constants/textVar';
+/* Assets */
 
 type ButtonWithIconProps = {
   title?: string;
@@ -68,9 +75,9 @@ const createStyles = (colors: TColors) =>
       // height: 24,
     },
     text: {
+      ...textVar.base,
       flex: 1,
       justifyContent: 'center',
       textAlign: 'center',
-      fontSize: 16,
     },
   });

@@ -1,15 +1,23 @@
+/* Core libs & third parties libs */
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { AuthStackScreenProps } from 'src/navigators/types';
-import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/sizes';
-import useStyles from '@hooks/useStyles';
+/* Custom components */
 import InputAuthField from '@components/shared/InputAuthField';
 import CheckBoxCustom from '@components/shared/CheckBoxCustom';
 import Button from '@components/shared/Button';
-import { loginUser, useAppDispatch } from 'src/store/authHook';
 import Separator from '@components/shared/Separator';
+import ButtonNoBorder from '@components/shared/ButtonNoBorder';
+/* Custom hooks */
+import useStyles from '@hooks/useStyles';
+import { loginUser, useAppDispatch } from 'src/store/authHook';
+/* Types */
+import { AuthStackScreenProps } from 'src/navigators/types';
+/* Utilities & constants */
+import { TColors } from '@constants/types';
+import { SCREEN } from '@constants/sizes';
+import { textVar } from '@constants/textVar';
+/* Assets */
 
 interface FormDataProps {
   email: string;
@@ -92,22 +100,18 @@ const LoginScreen = ({
           />
         </View>
         <View style={styles.gobackBox}>
-          <Pressable
-            style={{ padding: 8 }}
-            onPress={() => navigation.popToTop()}>
-            <Text style={styles.gobackText}>
-              Go back to select other option!
-            </Text>
-          </Pressable>
-          <Pressable
-            style={{ padding: 8 }}
+          <ButtonNoBorder
+            title={'Go back to select other option!'}
+            onPress={() => navigation.popToTop()}
+          />
+          <ButtonNoBorder
+            title={'Reset your password'}
             onPress={() =>
               navigation.navigate('CheckEmailScreen', {
                 checkMode: 'reset_password',
               })
-            }>
-            <Text style={styles.gobackText}>Reset your password</Text>
-          </Pressable>
+            }
+          />
         </View>
       </View>
     </FormProvider>
@@ -126,21 +130,14 @@ const createStlyes = (colors: TColors) =>
       padding: 20,
     },
     titleBox: {
-      // backgroundColor: "pink",
       justifyContent: 'center',
       alignItems: 'center',
       gap: 12,
     },
     subTitle: {
+      ...textVar.largeBold,
       textAlign: 'center',
       color: colors.text,
-      fontWeight: 500,
-      fontSize: 18,
-    },
-    title: {
-      fontSize: 24,
-      marginBottom: 20,
-      textAlign: 'center',
     },
     inputBox: {
       width: SCREEN.width100,
@@ -157,6 +154,7 @@ const createStlyes = (colors: TColors) =>
       alignItems: 'center',
     },
     gobackText: {
+      ...textVar.medium,
       color: colors.second,
     },
   });

@@ -1,30 +1,27 @@
-import {
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+/* Core libs & third parties libs */
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
-import Separator from '@components/shared/Separator';
-import { editUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
-import { userAuth } from 'src/store/authSlice';
-import useStyles from '@hooks/useStyles';
-import { TColors } from '@constants/types';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
-import InputAuthField from '@components/shared/InputAuthField';
 import { useForm } from 'react-hook-form';
+import { SafeAreaView } from 'react-native-safe-area-context';
+/* Custom components */
+import Separator from '@components/shared/Separator';
+import InputAuthField from '@components/shared/InputAuthField';
 import AvatarView from '@components/shared/AvatarView';
 import PhoneNumberPicker from '@components/shared/phoneNumber/PhoneNumberPicker';
-import useUserData from '@hooks/useUserData';
 import KeyboardScrollView from '@components/shared/KeyboardScrollView';
 import HeaderGoBack from '@components/shared/HeaderGoBack';
+/* Custom hooks */
+import useStyles from '@hooks/useStyles';
+import { editUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
+import useUserData from '@hooks/useUserData';
+/* Types */
+import { TColors } from '@constants/types';
 import { SettingsStackScreenProps } from 'src/navigators/types';
+/* Utilities & constants */
+import { userAuth } from 'src/store/authSlice';
 import { SCREEN } from '@constants/sizes';
+import { textVar } from '@constants/textVar';
+/* Assets */
 
 interface ProfileDataProps {
   firstName: string;
@@ -91,7 +88,6 @@ const ProfileScreen = ({
   };
 
   const onLayoutHandle = (event: any) => {
-    console.log('en el view layout', event.nativeEvent.layout.height);
     const { height } = event.nativeEvent.layout;
     if (Math.floor(height) <= SCREEN.heightFixed * 491) {
       setScrollEnabled(false);
@@ -192,14 +188,12 @@ const createStyles = (colors: TColors) =>
       alignItems: 'center',
     },
     title: {
+      ...textVar.xlargeBold,
       color: colors.text,
-      fontWeight: 700,
-      fontSize: 20,
     },
     subTitle: {
+      ...textVar.large,
       color: colors.text,
-      fontWeight: 500,
-      fontSize: 18,
     },
     buttonBox: {
       width: '100%',
@@ -213,21 +207,17 @@ const createStyles = (colors: TColors) =>
       gap: 16,
     },
     editButtonText: {
-      fontSize: 16,
-      fontWeight: '600',
+      ...textVar.baseBold,
       color: colors.second,
     },
     cancelButtonText: {
-      fontSize: 16,
-      fontWeight: '600',
-      color: colors.cancel,
+      ...textVar.baseBold,
+      color: colors.danger,
     },
     inputBox: {
       flex: 1,
-      // width: SCREEN.width100,
       paddingHorizontal: 16,
     },
-
     textinput: {
       borderColor: colors.second,
     },

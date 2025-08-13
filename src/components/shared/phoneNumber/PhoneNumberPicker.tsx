@@ -1,3 +1,4 @@
+/* Core libs & third parties libs */
 import {
   Platform,
   Pressable,
@@ -12,14 +13,20 @@ import {
 import React, { useState } from 'react';
 import { Control, useController } from 'react-hook-form';
 import { useSharedValue } from 'react-native-reanimated';
-import useStyles from '@hooks/useStyles';
-import useUserData from '@hooks/useUserData';
+/* Custom components */
 import BottomSheet from '../bottomSheet/BottomSheet';
 import PhoneListContainer from './PhoneListContainer';
+/* Custom hooks */
+import useStyles from '@hooks/useStyles';
+import useUserData from '@hooks/useUserData';
+/* Types */
 import { TColors } from '@constants/types';
+/* Utilities & constants */
 import { SCREEN } from '@constants/sizes';
-import { ChevronIcon } from '@assets/svg/icons';
 import { countriesList } from '@constants/countriesList';
+import { textVar } from '@constants/textVar';
+/* Assets */
+import { ChevronIcon } from '@assets/svg/icons';
 
 type PhoneNumberPickerProps = {
   name: string;
@@ -174,8 +181,8 @@ const createStlyes = (colors: TColors) =>
       marginBottom: 10,
     },
     label: {
+      ...textVar.base,
       color: colors.text,
-      fontSize: 16,
       marginBottom: 5,
     },
     inputBox: {
@@ -202,13 +209,14 @@ const createStlyes = (colors: TColors) =>
       fontSize: Platform.OS === 'ios' ? 24 : 18,
     },
     pickerCodeView: {
-      width: 60,
+      width: 62,
       height: '100%',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
     },
     pickerCode: {
+      ...textVar.medium,
       color: colors.gray,
     },
     input: {
@@ -221,7 +229,7 @@ const createStlyes = (colors: TColors) =>
       color: colors.text,
     },
     errorInput: {
-      borderColor: 'red',
+      borderColor: colors.danger,
     },
     completeInput: {
       borderColor: colors.gray,
@@ -230,18 +238,14 @@ const createStlyes = (colors: TColors) =>
       height: SCREEN.heightFixed * 16,
     },
     errorText: {
-      color: 'red',
-      fontSize: 14,
+      ...textVar.mediumBold,
+      color: colors.danger,
       marginTop: 2,
+      letterSpacing: 0.6,
     },
-
     vertSeparator: {
       height: '60%',
       borderLeftWidth: 1,
       borderColor: colors.gray,
-    },
-
-    text: {
-      color: colors.text,
     },
   });

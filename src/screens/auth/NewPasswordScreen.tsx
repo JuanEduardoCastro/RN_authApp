@@ -1,22 +1,30 @@
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+/* Core libs & third parties libs */
+import { StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import useStyles from '@hooks/useStyles';
-import { AuthStackScreenProps } from 'src/navigators/types';
-import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/sizes';
+import { jwtDecode } from 'jwt-decode';
+/* Custom components */
 import Button from '@components/shared/Button';
 import InputAuthField from '@components/shared/InputAuthField';
-import { jwtDecode } from 'jwt-decode';
+import Separator from '@components/shared/Separator';
+import ButtonNoBorder from '@components/shared/ButtonNoBorder';
+/* Custom hooks */
+import useStyles from '@hooks/useStyles';
 import {
   createUser,
   updatePassword,
   useAppDispatch,
   useAppSelector,
 } from 'src/store/authHook';
+/* Types */
 import { CustomJwtPayload } from '@hooks/types';
+import { AuthStackScreenProps } from 'src/navigators/types';
+import { TColors } from '@constants/types';
+/* Utilities & constants */
+import { SCREEN } from '@constants/sizes';
 import { setNotificationMessage, userAuth } from 'src/store/authSlice';
-import Separator from '@components/shared/Separator';
+import { textVar } from '@constants/textVar';
+/* Assets */
 
 interface FormNewDataProps {
   email: string;
@@ -83,8 +91,12 @@ const NewPasswordScreen = ({
 
   const onSubmit = async (data: FormNewDataProps) => {
     if (data.new_password !== data.confirm_password) {
-      /* Colocar esa alerta en el error de los fields */
-      Alert.alert('The passwords must be the same');
+      dispatch(
+        setNotificationMessage({
+          messageType: 'warning',
+          notificationMessage: 'The two passwords must be the same.',
+        }),
+      );
     } else {
       const fullData = {
         email: email,
@@ -163,11 +175,10 @@ const NewPasswordScreen = ({
           />
         </View>
         <View style={styles.gobackBox}>
-          <Pressable style={{ padding: 8 }} onPress={() => navigation.goBack()}>
-            <Text style={styles.gobackText}>
-              Go back to select other option!
-            </Text>
-          </Pressable>
+          <ButtonNoBorder
+            title={'Go back to select other option!'}
+            onPress={() => navigation.popToTop()}
+          />
         </View>
       </View>
     </FormProvider>
@@ -192,15 +203,9 @@ const createStlyes = (colors: TColors) =>
       gap: 12,
     },
     subTitle: {
+      ...textVar.largeBold,
       textAlign: 'center',
-      color: colors.light,
-      fontWeight: 500,
-      fontSize: 18,
-    },
-    title: {
-      fontSize: 24,
-      marginBottom: 20,
-      textAlign: 'center',
+      color: colors.text,
     },
     inputBox: {
       width: SCREEN.width100,
@@ -215,6 +220,7 @@ const createStlyes = (colors: TColors) =>
     },
     gobackBox: {},
     gobackText: {
+      ...textVar.medium,
       color: colors.second,
     },
   });

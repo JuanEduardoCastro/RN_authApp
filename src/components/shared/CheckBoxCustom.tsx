@@ -5,6 +5,7 @@ import { Control, useController } from 'react-hook-form';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
 import useStyles from '@hooks/useStyles';
+import { textVar } from '@constants/textVar';
 
 type CheckBoxCustomProps = {
   name: string;
@@ -78,7 +79,7 @@ const createStlyes = (colors: TColors) =>
       gap: Platform.OS === 'ios' ? 8 : 14,
     },
     textRemember: {
+      ...textVar.medium,
       color: colors.text,
-      fontSize: 14,
     },
   });

@@ -25,7 +25,7 @@ export const useCheckToken = (): UseCheckTokenReturn => {
   useEffect(() => {
     const checkLocalStorage = async () => {
       try {
-        const isGoogleSignin = await GoogleSignin.hasPreviousSignIn();
+        const isGoogleSignin = GoogleSignin.hasPreviousSignIn();
 
         const rememberMeFlag = await Keychain.getGenericPassword({
           service: 'secret remember me',
@@ -34,7 +34,6 @@ export const useCheckToken = (): UseCheckTokenReturn => {
         const rememberToken =
           rememberMeFlag && JSON.parse(rememberMeFlag.password);
 
-        console.log('remember ???????', rememberMeFlag);
         if (rememberToken) {
           const refreshToken = await Keychain.getGenericPassword({
             service: 'secret token',

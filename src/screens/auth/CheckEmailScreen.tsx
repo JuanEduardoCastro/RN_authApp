@@ -1,16 +1,23 @@
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+/* Core libs & third parties libs */
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { AuthStackScreenProps } from 'src/navigators/types';
+import CountDownTimer from 'react-native-countdown-timer-hooks';
+/* Custom components */
+import InputAuthField from '@components/shared/InputAuthField';
+import Separator from '@components/shared/Separator';
+import Button from '@components/shared/Button';
+import ButtonNoBorder from '@components/shared/ButtonNoBorder';
+/* Custom hooks */
 import useStyles from '@hooks/useStyles';
+import { checkEmail, resetPassword, useAppDispatch } from 'src/store/authHook';
+/* Types */
+import { AuthStackScreenProps } from 'src/navigators/types';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
-import InputAuthField from '@components/shared/InputAuthField';
-import Button from '@components/shared/Button';
-import { checkEmail, resetPassword, useAppDispatch } from 'src/store/authHook';
-import Separator from '@components/shared/Separator';
-import { sharedColors } from '@constants/colors';
-import CountDownTimer from 'react-native-countdown-timer-hooks';
+/* Utilities & constants */
+import { textVar } from '@constants/textVar';
+/* Assets */
 
 interface CheckEmailProps {
   email: string;
@@ -154,13 +161,10 @@ const CheckEmailScreen = ({
           )}
         </View>
         <View style={styles.gobackBox}>
-          <Pressable
-            style={{ padding: 8 }}
-            onPress={() => navigation.popToTop()}>
-            <Text style={styles.gobackText}>
-              Go back to select other option!
-            </Text>
-          </Pressable>
+          <ButtonNoBorder
+            title={'Go back to select other option!'}
+            onPress={() => navigation.popToTop()}
+          />
           {/* <Pressable
             style={{ padding: 8 }}
             onPress={() =>
@@ -186,36 +190,29 @@ const createStlyes = (colors: TColors) =>
       padding: 20,
     },
     titleBox: {
-      // backgroundColor: "pink",
       justifyContent: 'center',
       alignItems: 'center',
       gap: 12,
       marginBottom: -10,
     },
     subTitle: {
+      ...textVar.largeBold,
       textAlign: 'center',
-      color: colors.light,
-      fontWeight: 500,
-      fontSize: 18,
+      color: colors.text,
     },
     subTitle2: {
+      ...textVar.base,
       height: 65,
       textAlign: 'center',
-      color: colors.lightgray,
-      fontWeight: 300,
-      fontSize: 16,
-    },
-    title: {
-      fontSize: 24,
-      marginBottom: 20,
-      textAlign: 'center',
+      color: colors.text,
+      opacity: 0.8,
     },
     resendBox: {
       width: SCREEN.widthFixed * 280,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingVertical: 12,
+      paddingVertical: 8,
       paddingHorizontal: 16,
     },
     resetBoxOnFocus: {
@@ -226,20 +223,17 @@ const createStlyes = (colors: TColors) =>
       borderWidth: 1,
       borderColor: colors.second,
       borderRadius: 12,
-      paddingVertical: 12,
+      paddingVertical: 8,
       paddingHorizontal: 16,
     },
     resendText: {
-      color: colors.lightgray,
+      ...textVar.mediumBold,
+      color: colors.text,
+      opacity: 0.8,
     },
     inputBox: {
       width: SCREEN.width100,
       paddingHorizontal: 16,
-    },
-    errorEmail: {
-      color: sharedColors.cancel,
-      fontSize: 14,
-      fontWeight: 500,
     },
     textinput: {
       borderColor: colors.second,
@@ -250,6 +244,7 @@ const createStlyes = (colors: TColors) =>
     },
     gobackBox: {},
     gobackText: {
+      ...textVar.medium,
       color: colors.second,
     },
   });

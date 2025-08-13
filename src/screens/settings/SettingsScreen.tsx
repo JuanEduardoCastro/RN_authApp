@@ -1,3 +1,4 @@
+/* Core libs & third parties libs */
 import {
   Platform,
   Pressable,
@@ -7,28 +8,31 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import { TColors } from '@constants/types';
-import useStyles from '@hooks/useStyles';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
-import { SCREEN } from '@constants/sizes';
+import { SafeAreaView } from 'react-native-safe-area-context';
+/* Custom components */
 import Separator from '@components/shared/Separator';
+import ListCard from '@components/shared/ListCard';
+import ModeSwitchButton from '@components/shared/ModeSwitchButton';
+import MailContactBox from '@components/shared/MailContactBox';
+/* Custom hooks */
+import useStyles from '@hooks/useStyles';
+import useThemeStorage from '@hooks/useThemeStorage';
+import { logoutUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
+/* Types */
+import { TColors } from '@constants/types';
+import { SettingsStackScreenProps } from 'src/navigators/types';
+/* Utilities & constants */
+import { SCREEN } from '@constants/sizes';
+import { setNotificationMessage, userAuth } from 'src/store/authSlice';
+import { useMode } from '@context/ModeContext';
+import { textVar } from '@constants/textVar';
+/* Assets */
 import {
   CheckIcon,
   CircleFullIcon,
   PowerIcon,
   ProfileIcon,
 } from '@assets/svg/icons';
-import ListCard from '@components/shared/ListCard';
-import ModeSwitchButton from '@components/shared/ModeSwitchButton';
-import { SettingsStackScreenProps } from 'src/navigators/types';
-import MailContactBox from '@components/shared/MailContactBox';
-import { logoutUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
-import { userAuth } from 'src/store/authSlice';
-import { useMode } from '@context/ModeContext';
-import useThemeStorage from '@hooks/useThemeStorage';
 
 const SettingsScreen = ({
   route,
@@ -39,7 +43,6 @@ const SettingsScreen = ({
   const { setColorTheme } = useMode();
   const { colors, styles } = useStyles(createStyles);
   const dispatch = useAppDispatch();
-  const inset = useSafeAreaInsets();
 
   const handleLogut = async () => {
     try {
@@ -79,8 +82,15 @@ const SettingsScreen = ({
             icon={<ProfileIcon width={24} height={24} color={colors.text} />}
           />
           <ListCard
-            title="Otro"
-            onPress={() => console.log('hizo click')}
+            title="Another item"
+            onPress={() =>
+              dispatch(
+                setNotificationMessage({
+                  messageType: 'information',
+                  notificationMessage: 'Re direct to another screen!',
+                }),
+              )
+            }
             icon={<CheckIcon width={20} height={20} color={colors.text} />}
           />
           <Separator height={40} />
@@ -135,9 +145,8 @@ const createStyles = (colors: TColors) =>
       justifyContent: 'center',
     },
     titleText: {
+      ...textVar.xlargeBold,
       color: colors.text,
-      fontWeight: 700,
-      fontSize: 20,
     },
     listBox: {
       flex: 1,
@@ -156,10 +165,7 @@ const createStyles = (colors: TColors) =>
       paddingHorizontal: 8,
     },
     modeText: {
+      ...textVar.base,
       color: colors.text,
-      fontSize: 16,
     },
   });
-function dispatch(arg0: any) {
-  throw new Error('Function not implemented.');
-}

@@ -22,17 +22,17 @@
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
 	<array>
-  <dict>
-		<key>CFBundleTypeRole</key>
+		<dict>
+			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-		<key>CFBundleURLName</key>
+			<key>CFBundleURLName</key>
 			<string>authapp</string>
-    <key>CFBundleURLSchemes</key>
-    <array>
-      <string>authapp</string>
-			<string>com.googleusercontent.apps.851060951342-uhu25rpaq0brova5bjn44hcs7pmrie1e</string>
-    </array>
-  </dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>authapp</string>
+				<string>com.googleusercontent.apps.851060951342-uhu25rpaq0brova5bjn44hcs7pmrie1e</string>
+			</array>
+		</dict>
 	</array>
 	<key>GIDClientID</key>
 	<string>851060951342-uhu25rpaq0brova5bjn44hcs7pmrie1e.apps.googleusercontent.com</string>
@@ -50,7 +50,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>This app requires access to your location</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -73,7 +73,16 @@
 	<string>The app requires access to the camera</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>The app requires access to the microphone</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app requires access to your location</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Luckiest Guy Regular.ttf</string>
+		<string>Manrope-Bold.ttf</string>
+		<string>Manrope-ExtraBold.ttf</string>
+		<string>Manrope-ExtraLight.ttf</string>
+		<string>Manrope-Light.ttf</string>
+		<string>Manrope-Medium.ttf</string>
+		<string>Manrope-Regular.ttf</string>
+		<string>Manrope-SemiBold.ttf</string>
+	</array>
 </dict>
 </plist>

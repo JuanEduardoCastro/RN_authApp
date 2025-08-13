@@ -149,12 +149,12 @@ export const googleLogin = (data: any) => {
         }
       }
     } catch (error) {
-      // __DEV__ &&
       if (isErrorWithCode(error)) {
-        console.log(
-          'XX -> otherAuthHooks.ts:146 -> return -> error :',
-          error.code,
-        );
+        __DEV__ &&
+          console.log(
+            'XX -> otherAuthHooks.ts:146 -> return -> error :',
+            error.code,
+          );
       }
       dispatch(setResetCredentials());
       dispatch(

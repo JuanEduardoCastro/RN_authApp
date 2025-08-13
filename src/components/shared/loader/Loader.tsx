@@ -1,7 +1,6 @@
 import { Animated, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect } from 'react';
 import { Easing } from 'react-native-reanimated';
-import { COLOR, sharedColors } from '@constants/colors';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 
