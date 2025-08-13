@@ -1,8 +1,15 @@
+/* Core libs & third parties libs */
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { ReactNode } from 'react';
-import { TColors } from '@constants/types';
+/* Custom components */
+/* Custom hooks */
 import useStyles from '@hooks/useStyles';
+/* Types */
+import { TColors } from '@constants/types';
+/* Utilities & constants */
 import { SCREEN } from '@constants/sizes';
+import { textVar } from '@constants/textVar';
+/* Assets */
 import { CheckIcon } from '@assets/svg/icons';
 
 type ListCardProps = {
@@ -61,8 +68,8 @@ const createStyles = (colors: TColors) =>
       alignItems: 'center',
     },
     text: {
+      ...textVar.base,
       color: colors.text,
-      fontSize: 16,
     },
     checkBox: {},
   });

@@ -4,6 +4,7 @@ import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
 import { ChevronIcon } from '@assets/svg/icons';
+import { textVar } from '@constants/textVar';
 
 type HeaderGoBackProps = {
   title?: string;
@@ -43,6 +44,7 @@ const createStyles = (colors: TColors) =>
       justifyContent: 'center',
     },
     text: {
+      ...textVar.base,
       color: colors.text,
     },
   });

@@ -1,18 +1,15 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AuthNavigator from './AuthNavigator';
-import { RootStackParamList } from './types';
-import { useAppSelector } from 'src/store/authHook';
-import { userAuth } from 'src/store/authSlice';
 import HomeNavigator from './HomeNavigator';
-import { Platform } from 'react-native';
+import { useAppSelector } from 'src/store/authHook';
+import { RootStackParamList } from './types';
+import { userAuth } from 'src/store/authSlice';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootNavigator = () => {
   const { isAuthorized, user } = useAppSelector(userAuth);
-
-  // console.log(Platform.OS === 'ios' ? 'iOS' : 'Android', "Esta autorizado ???????????????", isAuthorized, "datos del user ????????????????????", user)
 
   return (
     <Stack.Navigator

@@ -1,3 +1,4 @@
+/* Core libs & third parties libs */
 import {
   Pressable,
   PressableProps,
@@ -7,9 +8,15 @@ import {
   ViewStyle,
 } from 'react-native';
 import React from 'react';
-import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/sizes';
+/* Custom components */
+/* Custom hooks */
 import useStyles from '@hooks/useStyles';
+/* Types */
+import { TColors } from '@constants/types';
+/* Utilities & constants */
+import { SCREEN } from '@constants/sizes';
+import { textVar } from '@constants/textVar';
+/* Assets */
 
 type BottonProps = {
   title?: string;
@@ -27,7 +34,7 @@ const Button = ({
 
   return (
     <Pressable style={[styles.button, buttonStyles]} {...props}>
-      <Text style={[textStyles, { fontSize: 16 }]}>{title}</Text>
+      <Text style={[textStyles, { ...textVar.base }]}>{title}</Text>
     </Pressable>
   );
 };

@@ -14,7 +14,6 @@ const useBackHandler = () => {
     useCallback(() => {
       const onBackPress = () => {
         countRef.current++;
-        console.log(countRef);
         countRef.current === 3 && BackHandler.exitApp();
         return true;
       };

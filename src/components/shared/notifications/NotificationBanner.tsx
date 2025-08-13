@@ -1,23 +1,30 @@
+/* Core libs & third parties libs */
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import useStyles from '@hooks/useStyles';
-import { TColors } from '@constants/types';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import {
-  ErrorIcon,
-  InfoIcon,
-  SuccessIcon,
-  WarningIcon,
-} from '@assets/svg/icons';
-import { useAppDispatch, useAppSelector } from 'src/store/authHook';
-import { setNotificationMessage, userAuth } from 'src/store/authSlice';
 import Animated, {
   Easing,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BlurView } from '@react-native-community/blur';
+/* Custom components */
+/* Custom hooks */
+import useStyles from '@hooks/useStyles';
+import { useAppDispatch, useAppSelector } from 'src/store/authHook';
+/* Types */
+import { TColors } from '@constants/types';
+/* Utilities & constants */
+import { setNotificationMessage, userAuth } from 'src/store/authSlice';
+import { textVar } from '@constants/textVar';
+/* Assets */
+import {
+  ErrorIcon,
+  InfoIcon,
+  SuccessIcon,
+  WarningIcon,
+} from '@assets/svg/icons';
 
 const NotificationBanner = () => {
   const { notificationMessage, messageType } = useAppSelector(userAuth);
@@ -118,12 +125,12 @@ const NotificationBanner = () => {
                 })()}
               </View>
             </View>
-            {/* <BlurView
+            <BlurView
               style={styles.blurView}
               blurType={'dark'}
-              blurAmount={7}
+              blurAmount={4}
               overlayColor={colors.transparent}
-            /> */}
+            />
           </Pressable>
         </Animated.View>
       )}
@@ -147,7 +154,7 @@ const createStyles = (colors: TColors) =>
     bannerBox: {
       backgroundColor: colors.notifications,
       opacity: 0.86,
-      height: 60,
+      height: 70,
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -160,8 +167,8 @@ const createStyles = (colors: TColors) =>
       flexShrink: 1,
     },
     bannerText: {
+      ...textVar.baseBold,
       color: colors.text,
-      fontSize: 16,
     },
     bannerIconBox: {
       width: 32,

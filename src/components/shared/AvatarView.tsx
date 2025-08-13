@@ -6,11 +6,11 @@ import {
   View,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { Control, useController } from 'react-hook-form';
+import ImagePicker from 'react-native-image-crop-picker';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
-import { Control, useController } from 'react-hook-form';
-import ImagePicker from 'react-native-image-crop-picker';
 import { CameraIcon } from '@assets/svg/icons';
 
 type AvatarViewProps = {

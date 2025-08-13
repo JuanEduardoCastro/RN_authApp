@@ -7,6 +7,7 @@ import { SCREEN } from '@constants/sizes';
 import { useAppDispatch, useAppSelector } from 'src/store/authHook';
 import { useCheckToken } from '@hooks/useCheckToken';
 import { userAuth } from 'src/store/authSlice';
+import { textVar } from '@constants/textVar';
 
 type SplashScreenProps = {
   children: ReactNode;
@@ -52,11 +53,9 @@ export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
     if (checkCompleted) {
       if (refreshTokenSaved && !isExpired) {
         if (user) {
-          console.log('-----------> entro cuando se lleno el user');
           handleAppIsReady();
         }
       } else {
-        console.log('-----------> entro cuando el user es null');
         handleAppIsReady();
       }
     }
@@ -104,7 +103,7 @@ export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
           <Animated.Image
             style={[styles.image, { opacity: imageOpacity }]}
             resizeMode={'contain'}
-            source={require('@assets/images/Frame_125_gary.png')}
+            source={require('@assets/images/Logo_Frame.png')}
             fadeDuration={0}
             onLoad={() => setImageState(IMG_STATE.FADE_IN_IMAGE)}
           />
@@ -135,10 +134,10 @@ const styles = StyleSheet.create({
   versionContainer: {
     width: SCREEN.width100,
     alignItems: 'center',
-    paddingBottom: 8,
+    paddingBottom: Platform.OS === 'ios' ? 8 : 68,
   },
   versionText: {
-    fontSize: 14,
+    ...textVar.smallBold,
     color: '#E1E2E6',
   },
 });

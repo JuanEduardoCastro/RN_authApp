@@ -1,3 +1,4 @@
+/* Core libs & third parties libs */
 import {
   FlatList,
   Platform,
@@ -8,12 +9,18 @@ import {
   ViewProps,
 } from 'react-native';
 import React, { useEffect, useRef } from 'react';
-import { TColors } from '@constants/types';
+import MaskedView from '@react-native-masked-view/masked-view';
+/* Custom components */
+import BorderMaskGradient from '../borderMaskGradient/BorderMaskGradient';
+/* Custom hooks */
 import useStyles from '@hooks/useStyles';
+/* Types */
+import { TColors } from '@constants/types';
+/* Utilities & constants */
 import { countriesList } from '@constants/countriesList';
 import { SCREEN } from '@constants/sizes';
-import MaskedView from '@react-native-masked-view/masked-view';
-import BorderMaskGradient from '../borderMaskGradient/BorderMaskGradient';
+import { textVar } from '@constants/textVar';
+/* Assets */
 
 type PhoneListContainerProps = {
   toggleSheet: () => void;
@@ -153,9 +160,8 @@ const createStlyes = (colors: TColors) =>
       paddingVertical: 8,
     },
     commandsText: {
-      fontSize: 16,
+      ...textVar.baseBold,
       color: colors.text,
-      fontWeight: 600,
     },
     countriesList: {
       width: SCREEN.width75,
@@ -182,14 +188,16 @@ const createStlyes = (colors: TColors) =>
       textAlign: 'center',
     },
     textCode: {
+      ...textVar.base,
       width: 50,
-      fontSize: 16,
+      // fontSize: 16,
       color: colors.text,
       textAlign: 'right',
     },
     textName: {
+      ...textVar.large,
       width: 'auto',
-      fontSize: 20,
+      // fontSize: 20,
       paddingLeft: 8,
       color: colors.text,
       overflow: 'hidden',

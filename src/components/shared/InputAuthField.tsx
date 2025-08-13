@@ -1,3 +1,4 @@
+/* Core libs & third parties libs */
 import {
   Pressable,
   StyleSheet,
@@ -10,16 +11,16 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import { Control, useController } from 'react-hook-form';
-import { TColors } from '@constants/types';
+/* Custom components */
+/* Custom hooks */
 import useStyles from '@hooks/useStyles';
+/* Types */
+import { TColors } from '@constants/types';
+/* Utilities & constants */
 import { SCREEN } from '@constants/sizes';
-import {
-  ClosedLockIcon,
-  EyeCloseIcon,
-  EyeOpenIcon,
-  OpenLockIcon,
-  PencilIcon,
-} from '@assets/svg/icons';
+import { textVar } from '@constants/textVar';
+/* Assets */
+import { EyeCloseIcon, EyeOpenIcon, PencilIcon } from '@assets/svg/icons';
 
 type InputAuthFieldProps = {
   name: string;
@@ -114,8 +115,8 @@ const createStlyes = (colors: TColors) =>
       marginBottom: 10,
     },
     label: {
+      ...textVar.base,
       color: colors.text,
-      fontSize: 16,
       marginBottom: 5,
     },
     inputBox: {
@@ -127,29 +128,30 @@ const createStlyes = (colors: TColors) =>
       borderRadius: 12,
     },
     input: {
+      ...textVar.base,
       height: SCREEN.heightFixed * 46,
       flexGrow: 1,
       width: 'auto',
       paddingVertical: 10,
       paddingHorizontal: 8,
-      fontSize: 16,
       color: colors.text,
     },
     iconArea: {
       padding: 8,
     },
     errorInput: {
-      borderColor: 'red',
+      borderColor: colors.danger,
     },
     completeInput: {
       borderColor: colors.gray,
     },
     errorBox: {
-      height: SCREEN.heightFixed * 16,
+      height: SCREEN.heightFixed * 19,
     },
     errorText: {
-      color: 'red',
-      fontSize: 14,
+      ...textVar.mediumBold,
+      color: colors.danger,
       marginTop: 2,
+      letterSpacing: 0.6,
     },
   });

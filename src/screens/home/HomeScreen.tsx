@@ -1,15 +1,22 @@
+/* Core libs & third parties libs */
 import { StyleSheet, Text, View } from 'react-native';
 import React, { useRef } from 'react';
-import useStyles from '@hooks/useStyles';
-import { TColors } from '@constants/types';
+/* Custom components */
 import Separator from '@components/shared/Separator';
-import { HomeTabScreenProps } from 'src/navigators/types';
 import Button from '@components/shared/Button';
-import { logoutUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
-import { setNotificationMessage, userAuth } from 'src/store/authSlice';
+/* Custom hooks */
+import useStyles from '@hooks/useStyles';
+import { useAppDispatch, useAppSelector } from 'src/store/authHook';
 import useTimeExpired from '@hooks/useTimeExpired';
-import { SCREEN } from '@constants/sizes';
 import useBackHandler from '@hooks/useBackHandler';
+/* Types */
+import { TColors } from '@constants/types';
+import { HomeTabScreenProps } from 'src/navigators/types';
+/* Utilities & constants */
+import { setNotificationMessage, userAuth } from 'src/store/authSlice';
+import { SCREEN } from '@constants/sizes';
+import { textVar } from '@constants/textVar';
+/* Assets */
 
 const HomeScreen = ({
   navigation,
@@ -21,18 +28,6 @@ const HomeScreen = ({
   const { accessTokenTimer, refreshTokenTimer } = useTimeExpired();
   const { colors, styles } = useStyles(createStyles);
   const dispatch = useAppDispatch();
-
-  // const handleLogut = async () => {
-  //   try {
-  //     const res = await dispatch(logoutUser({ email: user?.email }));
-  //     if (res?.success) {
-  //       navigation.navigate('AuthNavigator', { screen: 'WelcomeScreen' });
-  //     }
-  //   } catch (error) {
-  //     __DEV__ &&
-  //       console.log('XX -> HomeScreen.tsx:26 -> handleLogut -> error :', error);
-  //   }
-  // };
 
   const createErrorMesage = () => {
     dispatch(
@@ -47,14 +42,10 @@ const HomeScreen = ({
 
   return (
     <View style={styles.container}>
-      {/* <Button title="Logout session" onPress={handleLogut} />
-      <Separator border={false} /> */}
       <Button title="Create new error" onPress={createErrorMesage} />
       <Separator border={false} />
-      <Text style={styles.text}>HomeScreen</Text>
+      <Text style={styles.text}>Home Screen</Text>
       <Separator border={false} />
-      {/* <ModeSwitchButton />
-      <Separator border={false} /> */}
       {/* <View style={styles.timerBox}>
         <Text style={styles.timerText}>
           This is the time you have left until your session is renewed:
@@ -92,16 +83,16 @@ const createStyles = (colors: TColors) =>
       alignItems: 'center',
     },
     text: {
+      ...textVar.xlargeBold,
       color: colors.text,
-      fontSize: 20,
     },
     timerBox: {
       width: SCREEN.width75,
-      // flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
     },
     timerText: {
+      ...textVar.base,
       color: colors.text,
     },
   });

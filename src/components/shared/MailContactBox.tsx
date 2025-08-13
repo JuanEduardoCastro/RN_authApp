@@ -3,6 +3,14 @@ import React from 'react';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
+import { textVar } from '@constants/textVar';
+
+/* Core libs & third parties libs */
+/* Custom components */
+/* Custom hooks */
+/* Types */
+/* Utilities & constants */
+/* Assets */
 
 type MailContactBoxProps = {
   title?: string;
@@ -18,17 +26,16 @@ const MailContactBox = ({ title }: MailContactBoxProps) => {
   )}&body=${encodeURIComponent(body)}`;
 
   const handleOpenMailApp = async () => {
-    console.log('ABRIO LA APP DE MAIL ?');
     try {
       await Linking.openURL(mailURL);
     } catch (error) {
-      console.log('XX -> MailContactBox.tsx:26 -> error :', error);
+      __DEV__ && console.log('XX -> MailContactBox.tsx:26 -> error :', error);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>Contact:</Text>
+      <Text style={styles.titleText}>Contact ...</Text>
       <Pressable onPress={handleOpenMailApp} style={styles.mailBox}>
         <Text style={styles.mailText}>{title} </Text>
       </Pressable>
@@ -47,14 +54,14 @@ const createStyles = (colors: TColors) =>
       gap: 4,
     },
     titleText: {
+      ...textVar.mediumBold,
       color: colors.text,
-      fontSize: 15,
     },
     mailBox: {},
     mailText: {
+      ...textVar.smallBold,
       color: colors.text,
-      fontSize: 13,
-      fontWeight: 500,
       opacity: 0.7,
+      letterSpacing: 0.4,
     },
   });

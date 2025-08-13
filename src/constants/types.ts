@@ -29,21 +29,3 @@ export type ThemeProps = {
   base: string;
   darkBase: string;
 };
-
-// export type SharedColorsProps = {
-//   primary: string;
-//   accept: string;
-//   cancel: string;
-//   transparent: string;
-//   almostBlack: string;
-//   dark: string;
-//   darkCard: string;
-//   veryDarkGray: string;
-//   darkGray: string;
-//   gray: string;
-//   lightgray: string;
-//   veryLightGray: string;
-//   lightCard: string;
-//   light: string;
-//   almostWhite: string;
-// };

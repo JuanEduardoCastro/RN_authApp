@@ -242,7 +242,6 @@ export const editUser = (data: any, token: any) => {
         };
         if (error.response.status === 401 || !error.config._retry) {
           if (isRefreshing) {
-            console.log(' >>>>>>>>>>>> ENTRO ACA');
             return new Promise(resolve => {
               failedRequestsQueue.push(token => {
                 error.config.headers.Authorization = `Bearer ${token}`;
