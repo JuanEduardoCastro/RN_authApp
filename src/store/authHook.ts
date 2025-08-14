@@ -13,10 +13,7 @@ import {
 import { Platform } from 'react-native';
 import { jwtDecode } from 'jwt-decode';
 import { CustomJwtPayload } from '@hooks/types';
-import {
-  GoogleSignin,
-  isErrorWithCode,
-} from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export const HOST = __DEV__
   ? Platform.OS === 'ios'
@@ -62,33 +59,83 @@ export const validateRefreshToken = (data: any) => {
           success: true,
           error: null,
         };
-      } else {
-        dispatch(setResetCredentials());
-        await Keychain.resetGenericPassword({ service: 'secret token' });
-        await Keychain.resetGenericPassword({ service: 'secret remember me' });
+      }
+    } catch (error: any) {
+      if (error.response) {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setResetCredentials());
+          dispatch(
+            setNotificationMessage({
+              messageType: 'warning',
+              notificationMessage: 'Expired credentials!',
+            }),
+          );
+          return {
+            success: false,
+            error: error,
+          };
+        } else if (error.response.status === 404) {
+          dispatch(setResetCredentials());
+          dispatch(
+            setNotificationMessage({
+              messageType: 'error',
+              notificationMessage: 'User not found!',
+            }),
+          );
+          return {
+            success: false,
+            error: error,
+          };
+        } else {
+          /* STATUS CODES 5XX ?? */
+
+          // dispatch(setResetCredentials());
+          dispatch(stopLoader());
+          dispatch(
+            setNotificationMessage({
+              messageType: 'error',
+              notificationMessage: 'Network error! Try again.',
+            }),
+          );
+          return {
+            success: false,
+            error: error,
+          };
+        }
+      } else if (error.request) {
+        /* REQUEST MADE. NOT RESPONSE */
+
+        // dispatch(setResetCredentials());
+        __DEV__ &&
+          console.log(
+            'XX -> authHook.ts:107 -> error.response :',
+            error.message,
+          );
+        dispatch(stopLoader());
         dispatch(
           setNotificationMessage({
-            messageType: 'warning',
-            notificationMessage: 'Your session expired. Please, log in again.',
+            messageType: 'error',
+            notificationMessage: 'Server error! Try again',
           }),
         );
-        return {
-          success: false,
-          error: null,
-        };
-      }
-    } catch (error) {
-      __DEV__ &&
-        console.log('XX -> authHook.ts:82 -> return -> error :', error);
-      dispatch(setResetCredentials());
-      dispatch(
-        setNotificationMessage({
-          messageType: 'error',
-          notificationMessage: 'Network error',
-        }),
-      );
+        return { success: false, error: error };
+      } else {
+        /* REQUEST ERROR */
 
-      return { success: false, error: error };
+        __DEV__ &&
+          console.log(
+            'XX -> authHook.ts:123 -> return -> error :',
+            error.message,
+          );
+        dispatch(stopLoader());
+        dispatch(
+          setNotificationMessage({
+            messageType: 'error',
+            notificationMessage: 'Internal error!',
+          }),
+        );
+        return { success: false, error: error };
+      }
     }
   };
 };
@@ -132,91 +179,212 @@ export const loginUser = (data: any) => {
           success: true,
           error: null,
         };
-      } else if (response.status === 401) {
-        dispatch(setResetCredentials());
+      }
+    } catch (error: any) {
+      if (error.response) {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setResetCredentials());
+          dispatch(
+            setNotificationMessage({
+              messageType: 'warning',
+              notificationMessage: 'Wrong credentials!',
+            }),
+          );
+          return {
+            success: false,
+            error: error,
+          };
+        } else if (error.response.status === 404) {
+          dispatch(setResetCredentials());
+          dispatch(
+            setNotificationMessage({
+              messageType: 'warning',
+              notificationMessage: 'User not found!',
+            }),
+          );
+          return {
+            success: false,
+            error: error,
+          };
+        } else {
+          /* STATUS CODES 5XX ?? */
+
+          // dispatch(setResetCredentials());
+          dispatch(stopLoader());
+          dispatch(
+            setNotificationMessage({
+              messageType: 'error',
+              notificationMessage: 'Network error! Try again.',
+            }),
+          );
+          return {
+            success: false,
+            error: error,
+          };
+        }
+      } else if (error.request) {
+        /* REQUEST MADE. NOT RESPONSE */
+
+        __DEV__ &&
+          console.log(
+            'XX -> authHook.ts:232 -> error.response :',
+            error.message,
+          );
+        dispatch(stopLoader());
         dispatch(
           setNotificationMessage({
-            messageType: 'warning',
-            notificationMessage: 'There is something wrong with your password',
+            messageType: 'error',
+            notificationMessage: 'Server error! Try again',
           }),
         );
-        return {
-          success: false,
-          error: null,
-        };
+        return { success: false, error: error };
+      } else {
+        /* REQUEST ERROR */
+
+        __DEV__ &&
+          console.log(
+            'XX -> authHook.ts:247 -> return -> error.request :',
+            error.message,
+          );
+        dispatch(stopLoader());
+        dispatch(
+          setNotificationMessage({
+            messageType: 'error',
+            notificationMessage: 'Internal error!',
+          }),
+        );
+        return { success: false, error: error };
       }
-    } catch (error) {
-      __DEV__ &&
-        console.log('XX -> authHook.ts:150 -> return -> error :', error);
-      dispatch(setResetCredentials());
-      dispatch(
-        setNotificationMessage({
-          messageType: 'error',
-          notificationMessage: 'Network error',
-        }),
-      );
-      return { success: false, error: error };
     }
   };
 };
 
 /* Validate access token when expires with refresh token  */
 
-export const validateAccessToken = () => {
-  return async (dispatch: Dispatch) => {
-    dispatch(startLoader());
-    try {
-      const refreshToken = await Keychain.getGenericPassword({
-        service: 'secret token',
-      });
-      if (refreshToken) {
-        const response = await axios.get(`${HOST}/users/validatetoken`, {
-          headers: { Authorization: `Bearer ${refreshToken}` },
-        });
-        if (response.status === 200) {
-          dispatch(
-            setCredentials({
-              user: response.data.user,
-              token: response.data.accessToken,
-            }),
-          );
-          return {
-            success: true,
-            error: null,
-          };
-        } else if (response.status === 401) {
-          await Keychain.resetGenericPassword({ service: 'secret token' });
-          await Keychain.resetGenericPassword({
-            service: 'secret remember me',
-          });
-          dispatch(
-            setNotificationMessage({
-              messageType: 'warning',
-              notificationMessage:
-                'Your session expired. Please, log in again.',
-            }),
-          );
-          dispatch(setResetCredentials());
-          return {
-            success: false,
-            error: null,
-          };
-        }
-      }
-    } catch (error) {
-      __DEV__ &&
-        console.log('XX -> authHook.ts:205 -> return -> error :', error);
-      dispatch(setResetCredentials());
-      dispatch(
-        setNotificationMessage({
-          messageType: 'error',
-          notificationMessage: 'Network error',
-        }),
-      );
-      return { success: false, error: error };
-    }
-  };
-};
+/* NOT IN USE */
+// export const validateAccessToken = () => {
+//   return async (dispatch: Dispatch) => {
+//     dispatch(startLoader());
+//     try {
+//       const refreshToken = await Keychain.getGenericPassword({
+//         service: 'secret token',
+//       });
+//       if (refreshToken) {
+//         const response = await axios.get(`${HOST}/users/validatetoken`, {
+//           headers: { Authorization: `Bearer ${refreshToken}` },
+//         });
+//         if (response.status === 200) {
+//           dispatch(
+//             setCredentials({
+//               user: response.data.user,
+//               token: response.data.accessToken,
+//             }),
+//           );
+//           return {
+//             success: true,
+//             error: null,
+//           };
+//         } else if (response.status === 401) {
+//           await Keychain.resetGenericPassword({ service: 'secret token' });
+//           await Keychain.resetGenericPassword({
+//             service: 'secret remember me',
+//           });
+//           dispatch(setResetCredentials());
+//           dispatch(
+//             setNotificationMessage({
+//               messageType: 'warning',
+//               notificationMessage:
+//                 'Your session expired. Please, log in again.',
+//             }),
+//           );
+//           return {
+//             success: false,
+//             error: null,
+//           };
+//         }
+//       }
+//     } catch (error: any) {
+//       // if (error.response) {
+//       //   if (error.response.status === 401 || error.response.status === 403) {
+//       //     dispatch(setResetCredentials());
+//       //     dispatch(
+//       //       setNotificationMessage({
+//       //         messageType: 'warning',
+//       //         notificationMessage: 'Expired credentials!',
+//       //       }),
+//       //     );
+//       //     return {
+//       //       success: true,
+//       //       error: error,
+//       //     };
+//       //   } else if (error.response.status === 404) {
+//       //     dispatch(setResetCredentials());
+//       //     dispatch(
+//       //       setNotificationMessage({
+//       //         messageType: 'error',
+//       //         notificationMessage: 'User not found!',
+//       //       }),
+//       //     );
+//       //     return {
+//       //       success: true,
+//       //       error: error,
+//       //     };
+//       //   } else {
+//       //     /* STATUS CODES 5XX ?? */
+
+//       //     // dispatch(setResetCredentials());
+//       //     dispatch(
+//       //       setNotificationMessage({
+//       //         messageType: 'error',
+//       //         notificationMessage: 'Network error! Try again.',
+//       //       }),
+//       //     );
+//       //     return {
+//       //       success: false,
+//       //       error: error,
+//       //     };
+//       //   }
+//       // } else if (error.request) {
+//       //   /* REQUEST MADE. NOT RESPONSE */
+
+//       //   // dispatch(setResetCredentials());
+//       //   __DEV__ && console.log('Request error', error.request);
+//       //   dispatch(
+//       //     setNotificationMessage({
+//       //       messageType: 'error',
+//       //       notificationMessage: 'Server error! Try again',
+//       //     }),
+//       //   );
+//       //   return { success: false, error: error };
+//       // } else {
+//       //   /* REQUEST ERROR */
+
+//       //   __DEV__ &&
+//       //     console.log(
+//       //       'XX -> authHook.ts:116 -> return -> error :',
+//       //       error.message,
+//       //     );
+//       //   dispatch(
+//       //     setNotificationMessage({
+//       //       messageType: 'error',
+//       //       notificationMessage: 'Internal error!',
+//       //     }),
+//       //   );
+//       //   return { success: false, error: error };
+//       // }
+//       __DEV__ &&
+//         console.log('XX -> authHook.ts:205 -> return -> error :', error);
+//       dispatch(setResetCredentials());
+//       dispatch(
+//         setNotificationMessage({
+//           messageType: 'error',
+//           notificationMessage: 'Network error',
+//         }),
+//       );
+//       return { success: false, error: error };
+//     }
+//   };
+// };
 
 /* Edit user info */
 
@@ -224,6 +392,8 @@ export const editUser = (data: any, token: any) => {
   return async (dispatch: Dispatch) => {
     dispatch(startLoader());
     const decodeToken = jwtDecode<CustomJwtPayload>(token);
+
+    /* create of axios instance and interceptor */
     const editUserInstance = axios.create({
       baseURL: HOST,
       timeout: 10000, // in miliseconds
@@ -340,27 +510,82 @@ export const editUser = (data: any, token: any) => {
           error: null,
         };
       }
-      dispatch(
-        setNotificationMessage({
-          messageType: 'warning',
-          notificationMessage: 'Session expired.\nPlease log in again.',
-        }),
-      );
-      return {
-        success: false,
-        error: null,
-      };
-    } catch (error) {
-      __DEV__ &&
-        console.log('XX -> authHook.ts:351 -> return -> error :', error);
-      dispatch(setResetCredentials());
-      dispatch(
-        setNotificationMessage({
-          messageType: 'error',
-          notificationMessage: 'Network error',
-        }),
-      );
-      return { success: false, error: error };
+    } catch (error: any) {
+      if (error.response) {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setResetCredentials());
+          dispatch(
+            setNotificationMessage({
+              messageType: 'warning',
+              notificationMessage: 'Expired credentials!',
+            }),
+          );
+          return {
+            success: false,
+            error: error,
+          };
+        } else if (error.response.status === 404) {
+          dispatch(setResetCredentials());
+          dispatch(
+            setNotificationMessage({
+              messageType: 'error',
+              notificationMessage: 'User not found!',
+            }),
+          );
+          return {
+            success: false,
+            error: error,
+          };
+        } else {
+          /* STATUS CODES 5XX ?? */
+
+          // dispatch(setResetCredentials());
+          dispatch(stopLoader());
+          dispatch(
+            setNotificationMessage({
+              messageType: 'error',
+              notificationMessage: 'Network error! Try again.',
+            }),
+          );
+          return {
+            success: false,
+            error: error,
+          };
+        }
+      } else if (error.request) {
+        /* REQUEST MADE. NOT RESPONSE */
+
+        // dispatch(setResetCredentials());
+        __DEV__ &&
+          console.log(
+            'XX -> authHook.ts:107 -> error.response :',
+            error.message,
+          );
+        dispatch(stopLoader());
+        dispatch(
+          setNotificationMessage({
+            messageType: 'error',
+            notificationMessage: 'Server error! Try again',
+          }),
+        );
+        return { success: false, error: error };
+      } else {
+        /* REQUEST ERROR */
+
+        __DEV__ &&
+          console.log(
+            'XX -> authHook.ts:123 -> return -> error :',
+            error.message,
+          );
+        dispatch(stopLoader());
+        dispatch(
+          setNotificationMessage({
+            messageType: 'error',
+            notificationMessage: 'Internal error!',
+          }),
+        );
+        return { success: false, error: error };
+      }
     }
   };
 };
@@ -375,62 +600,44 @@ export const logoutUser = (data: any) => {
       if (isGoogleSignin) {
         await GoogleSignin.signOut();
       }
-      const refreshToken = await Keychain.getGenericPassword({
-        service: 'secret token',
-      });
-      if (refreshToken) {
-        const response = await axios.post(`${HOST}/users/logout`, data, {
-          headers: {
-            Authorization: `Bearer ${refreshToken.password}`,
-          },
+
+      const response = await axios.post(`${HOST}/users/logout`, data);
+      if (response.status === 200) {
+        await Keychain.resetGenericPassword({ service: 'secret token' });
+        await Keychain.resetGenericPassword({
+          service: 'secret remember me',
         });
-        if (response.status === 200) {
-          await Keychain.resetGenericPassword({ service: 'secret token' });
-          await Keychain.resetGenericPassword({
-            service: 'secret remember me',
-          });
-          dispatch(setResetCredentials());
-          dispatch(
-            setNotificationMessage({
-              messageType: 'success',
-              notificationMessage: 'Log out your session!\nSee you next time!',
-            }),
-          );
-          return {
-            success: true,
-            error: null,
-          };
-        } else {
-          await Keychain.resetGenericPassword({ service: 'secret token' });
-          await Keychain.resetGenericPassword({
-            service: 'secret remember me',
-          });
-          dispatch(setResetCredentials());
-          dispatch(
-            setNotificationMessage({
-              messageType: 'success',
-              notificationMessage: 'Log out your session!\nSee you next time!',
-            }),
-          );
-          return {
-            success: true,
-            error: null,
-          };
-        }
+        dispatch(setResetCredentials());
+        dispatch(
+          setNotificationMessage({
+            messageType: 'success',
+            notificationMessage: 'Log out successfully!\nSee you next time!',
+          }),
+        );
+        return {
+          success: true,
+          error: null,
+        };
       }
-    } catch (error) {
+    } catch (error: any) {
       __DEV__ &&
         console.log('XX -> authHook.ts:417 -> return -> error :', error);
       await Keychain.resetGenericPassword({ service: 'secret token' });
-      await Keychain.resetGenericPassword({ service: 'secret remember me' });
+      await Keychain.resetGenericPassword({
+        service: 'secret remember me',
+      });
       dispatch(setResetCredentials());
       dispatch(
         setNotificationMessage({
-          messageType: 'error',
-          notificationMessage: 'Network error',
+          messageType: 'success',
+          notificationMessage:
+            '** Log out successfully! **\nSee you next time!',
         }),
       );
-      return { success: false, error: error };
+      return {
+        success: false,
+        error: error,
+      };
     }
   };
 };
@@ -475,17 +682,55 @@ export const checkEmail = (data: any) => {
           error: null,
         };
       }
-    } catch (error) {
-      __DEV__ &&
-        console.log('XX -> authHook.ts:482 -> return -> error :', error);
-      dispatch(setResetCredentials());
-      dispatch(
-        setNotificationMessage({
-          messageType: 'error',
-          notificationMessage: 'Network error',
-        }),
-      );
-      return { success: false, error: error };
+    } catch (error: any) {
+      if (error.response) {
+        if (error.response.status >= 400 && error.response.status < 600) {
+          dispatch(setResetCredentials());
+          dispatch(
+            setNotificationMessage({
+              messageType: 'warning',
+              notificationMessage: 'Network error! Try again.',
+            }),
+          );
+          return {
+            success: false,
+            error: error,
+          };
+        }
+      } else if (error.request) {
+        /* REQUEST MADE. NOT RESPONSE */
+
+        // dispatch(setResetCredentials());
+        __DEV__ &&
+          console.log(
+            'XX -> authHook.ts:107 -> error.response :',
+            error.message,
+          );
+        dispatch(stopLoader());
+        dispatch(
+          setNotificationMessage({
+            messageType: 'error',
+            notificationMessage: 'Server error! Try again.',
+          }),
+        );
+        return { success: false, error: error };
+      } else {
+        /* REQUEST ERROR */
+
+        __DEV__ &&
+          console.log(
+            'XX -> authHook.ts:123 -> return -> error :',
+            error.message,
+          );
+        dispatch(stopLoader());
+        dispatch(
+          setNotificationMessage({
+            messageType: 'error',
+            notificationMessage: 'Internal error!',
+          }),
+        );
+        return { success: false, error: error };
+      }
     }
   };
 };
@@ -514,30 +759,71 @@ export const createUser = (data: any, emailToken: any) => {
           success: true,
           error: null,
         };
-      } else {
+      }
+    } catch (error: any) {
+      if (error.response) {
+        if (error.response.status >= 400 && error.response.status < 500) {
+          dispatch(setResetCredentials());
+          dispatch(
+            setNotificationMessage({
+              messageType: 'warning',
+              notificationMessage: 'Expired token! Try again.',
+            }),
+          );
+          return {
+            success: false,
+            error: error,
+          };
+        } else {
+          /* STATUS CODES 5XX ?? */
+
+          // dispatch(setResetCredentials());
+          dispatch(stopLoader());
+          dispatch(
+            setNotificationMessage({
+              messageType: 'error',
+              notificationMessage: 'Network error! Try again.',
+            }),
+          );
+          return {
+            success: false,
+            error: error,
+          };
+        }
+      } else if (error.request) {
+        /* REQUEST MADE. NOT RESPONSE */
+
+        // dispatch(setResetCredentials());
+        __DEV__ &&
+          console.log(
+            'XX -> authHook.ts:107 -> error.response :',
+            error.message,
+          );
         dispatch(stopLoader());
         dispatch(
           setNotificationMessage({
             messageType: 'error',
-            notificationMessage: 'Something went wrong. Try again, please!',
+            notificationMessage: 'Server error! Try again',
           }),
         );
-        return {
-          success: false,
-          error: null,
-        };
+        return { success: false, error: error };
+      } else {
+        /* REQUEST ERROR */
+
+        __DEV__ &&
+          console.log(
+            'XX -> authHook.ts:123 -> return -> error :',
+            error.message,
+          );
+        dispatch(stopLoader());
+        dispatch(
+          setNotificationMessage({
+            messageType: 'error',
+            notificationMessage: 'Internal error!',
+          }),
+        );
+        return { success: false, error: error };
       }
-    } catch (error) {
-      __DEV__ &&
-        console.log('XX -> authHook.ts:534 -> return -> error :', error);
-      dispatch(setResetCredentials());
-      dispatch(
-        setNotificationMessage({
-          messageType: 'error',
-          notificationMessage: 'Network error',
-        }),
-      );
-      return { success: false, error: error };
     }
   };
 };
@@ -581,17 +867,55 @@ export const resetPassword = (data: any) => {
           error: null,
         };
       }
-    } catch (error) {
-      __DEV__ &&
-        console.log('XX -> authHook.ts:588 -> return -> error :', error);
-      dispatch(setResetCredentials());
-      dispatch(
-        setNotificationMessage({
-          messageType: 'error',
-          notificationMessage: 'Network error',
-        }),
-      );
-      return { success: false, error: error };
+    } catch (error: any) {
+      if (error.response) {
+        if (error.response.status >= 400 && error.response.status < 600) {
+          dispatch(setResetCredentials());
+          dispatch(
+            setNotificationMessage({
+              messageType: 'warning',
+              notificationMessage: 'Network error! Try again.',
+            }),
+          );
+          return {
+            success: false,
+            error: error,
+          };
+        }
+      } else if (error.request) {
+        /* REQUEST MADE. NOT RESPONSE */
+
+        // dispatch(setResetCredentials());
+        __DEV__ &&
+          console.log(
+            'XX -> authHook.ts:107 -> error.response :',
+            error.message,
+          );
+        dispatch(stopLoader());
+        dispatch(
+          setNotificationMessage({
+            messageType: 'error',
+            notificationMessage: 'Server error! Try again.',
+          }),
+        );
+        return { success: false, error: error };
+      } else {
+        /* REQUEST ERROR */
+
+        __DEV__ &&
+          console.log(
+            'XX -> authHook.ts:123 -> return -> error :',
+            error.message,
+          );
+        dispatch(stopLoader());
+        dispatch(
+          setNotificationMessage({
+            messageType: 'error',
+            notificationMessage: 'Internal error! Try again.',
+          }),
+        );
+        return { success: false, error: error };
+      }
     }
   };
 };
@@ -618,36 +942,78 @@ export const updatePassword = (data: any, emailToken: any) => {
           setNotificationMessage({
             messageType: 'success',
             notificationMessage:
-              'Password updated successfully.\nPlease log in with new credentias',
+              'Password updated successfully.\nPlease log in with new credentials',
           }),
         );
         return {
           success: true,
           error: null,
         };
-      } else {
+      }
+    } catch (error: any) {
+      if (error.response) {
+        if (error.response.status >= 400 && error.response.status < 500) {
+          dispatch(setResetCredentials());
+          dispatch(
+            setNotificationMessage({
+              messageType: 'warning',
+              notificationMessage: 'Expired token! Try again.',
+            }),
+          );
+          return {
+            success: false,
+            error: error,
+          };
+        } else {
+          /* STATUS CODES 5XX ?? */
+
+          // dispatch(setResetCredentials());
+          dispatch(stopLoader());
+          dispatch(
+            setNotificationMessage({
+              messageType: 'error',
+              notificationMessage: 'Network error! Try again.',
+            }),
+          );
+          return {
+            success: false,
+            error: error,
+          };
+        }
+      } else if (error.request) {
+        /* REQUEST MADE. NOT RESPONSE */
+
+        // dispatch(setResetCredentials());
+        __DEV__ &&
+          console.log(
+            'XX -> authHook.ts:107 -> error.response :',
+            error.message,
+          );
         dispatch(stopLoader());
         dispatch(
           setNotificationMessage({
             messageType: 'error',
-            notificationMessage: 'Something went wrong. Try again, please!',
+            notificationMessage: 'Server error! Try again',
           }),
         );
-        return {
-          success: false,
-          error: null,
-        };
+        return { success: false, error: error };
+      } else {
+        /* REQUEST ERROR */
+
+        __DEV__ &&
+          console.log(
+            'XX -> authHook.ts:123 -> return -> error :',
+            error.message,
+          );
+        dispatch(stopLoader());
+        dispatch(
+          setNotificationMessage({
+            messageType: 'error',
+            notificationMessage: 'Internal error!',
+          }),
+        );
+        return { success: false, error: error };
       }
-    } catch (error) {
-      __DEV__ && console.log('XX -> authHook.ts:644 -> error :', error);
-      dispatch(setResetCredentials());
-      dispatch(
-        setNotificationMessage({
-          messageType: 'error',
-          notificationMessage: 'Network error',
-        }),
-      );
-      return { success: false, error: error };
     }
   };
 };

@@ -54,8 +54,10 @@ export const useCheckToken = (): UseCheckTokenReturn => {
               }
             }
           }
+        } else {
+          resetAutoLogin();
+          return;
         }
-        resetAutoLogin();
       } catch (error) {
         __DEV__ &&
           console.log(
