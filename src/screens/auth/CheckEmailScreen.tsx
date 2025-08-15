@@ -141,7 +141,7 @@ const CheckEmailScreen = ({
               </Text>
               <CountDownTimer
                 ref={timerRef}
-                timestamp={20}
+                timestamp={180}
                 timerOnProgress={(val: any) => handleTimerProgress(val)}
                 timerCallback={() => handleTimerFinish()}
                 containerStyle={{
@@ -151,9 +151,10 @@ const CheckEmailScreen = ({
                   display: showFocusTimer && 'none',
                 }}
                 textStyle={{
-                  // fontSize: 14,
-                  color: colors.lightgray,
-                  letterSpacing: 1,
+                  ...textVar.mediumBold,
+                  color: colors.text,
+                  opacity: 0.5,
+                  letterSpacing: 0.8,
                 }}
               />
               {showFocusTimer && <Text style={[styles.resendText]}>00:00</Text>}
@@ -223,13 +224,13 @@ const createStlyes = (colors: TColors) =>
       borderWidth: 1,
       borderColor: colors.second,
       borderRadius: 12,
-      paddingVertical: 8,
+      paddingVertical: 10,
       paddingHorizontal: 16,
     },
     resendText: {
       ...textVar.mediumBold,
       color: colors.text,
-      opacity: 0.8,
+      opacity: 0.5,
     },
     inputBox: {
       width: SCREEN.width100,

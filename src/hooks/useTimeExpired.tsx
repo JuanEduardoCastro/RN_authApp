@@ -1,5 +1,4 @@
-import { View, Text } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppSelector } from 'src/store/authHook';
 import { userAuth } from 'src/store/authSlice';
 import { CustomJwtPayload, UseTimeExpiredReturn } from './types';

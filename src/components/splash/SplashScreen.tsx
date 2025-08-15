@@ -52,7 +52,6 @@ export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
   const checkUserLogged = async () => {
     if (checkCompleted) {
       if (refreshTokenSaved && !isExpired) {
-        console.log('no entra acá ?');
         if (user) {
           handleAppIsReady();
         }

@@ -23,6 +23,7 @@ export const useCheckToken = (): UseCheckTokenReturn => {
   };
 
   useEffect(() => {
+    // resetAutoLogin();
     const checkLocalStorage = async () => {
       try {
         const isGoogleSignin = GoogleSignin.hasPreviousSignIn();
@@ -46,7 +47,15 @@ export const useCheckToken = (): UseCheckTokenReturn => {
             const currentTime = Math.floor(Date.now() / 1000);
             if (decodedToken.exp !== undefined) {
               if (currentTime <= decodedToken.exp) {
-                dispatch(validateRefreshToken(refreshToken.password));
+                const res = await dispatch(
+                  validateRefreshToken(refreshToken.password),
+                );
+                if (!res?.success) {
+                  setRefreshTokenSaved(true);
+                  setIsExpired(true);
+                  resetAutoLogin();
+                  return;
+                }
                 isGoogleSignin && (await GoogleSignin.signInSilently());
                 setRefreshTokenSaved(true);
                 setIsExpired(false);
