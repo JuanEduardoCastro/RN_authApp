@@ -1,5 +1,5 @@
 /* Core libs & third parties libs */
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Animated, {
   Easing,
@@ -77,7 +77,15 @@ const NotificationBanner = () => {
       {openBanner && (
         <Animated.View
           style={[styles.container, animatedStyle, { paddingTop: insets.top }]}>
-          <Pressable onPress={handleCloseBanner}>
+          <Pressable
+            onPress={handleCloseBanner}
+            style={
+              Platform.OS === 'android' && {
+                backgroundColor: colors.dark,
+                borderRadius: 24,
+                opacity: 0.96,
+              }
+            }>
             <View style={styles.bannerBox}>
               <View style={styles.bannerTextBox}>
                 <Text style={styles.bannerText}>
@@ -125,12 +133,14 @@ const NotificationBanner = () => {
                 })()}
               </View>
             </View>
-            <BlurView
-              style={styles.blurView}
-              blurType={'dark'}
-              blurAmount={4}
-              overlayColor={colors.transparent}
-            />
+            {Platform.OS === 'ios' && (
+              <BlurView
+                style={styles.blurView}
+                blurType={'dark'}
+                blurAmount={4}
+                overlayColor={colors.transparent}
+              />
+            )}
           </Pressable>
         </Animated.View>
       )}
@@ -145,7 +155,7 @@ const createStyles = (colors: TColors) =>
     container: {
       ...StyleSheet.absoluteFillObject,
       flex: 1,
-      height: 150,
+      height: 100,
       backgroundColor: colors.transparent,
       zIndex: 100,
       marginTop: 12,
@@ -168,13 +178,13 @@ const createStyles = (colors: TColors) =>
     },
     bannerText: {
       ...textVar.baseBold,
-      color: colors.text,
+      color: colors.veryLightGray,
     },
     bannerIconBox: {
       width: 32,
     },
     blurView: {
-      height: 60,
+      height: 70,
       position: 'absolute',
       top: 0,
       right: 0,

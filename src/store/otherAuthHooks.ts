@@ -160,12 +160,12 @@ export const googleLogin = (data: any) => {
 
           // dispatch(setResetCredentials());
           dispatch(stopLoader());
-          dispatch(
-            setNotificationMessage({
-              messageType: 'error',
-              notificationMessage: 'Network error! Try again.',
-            }),
-          );
+          // dispatch(
+          //   setNotificationMessage({
+          //     messageType: 'error',
+          //     notificationMessage: 'THIS Network error! Try again.',
+          //   }),
+          // );
           return {
             success: false,
             error: error,
