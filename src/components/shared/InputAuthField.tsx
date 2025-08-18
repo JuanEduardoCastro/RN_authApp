@@ -53,6 +53,11 @@ const InputAuthField = ({
     setToggleSecureEntry(!toggleSecureEntry);
   };
 
+  const handleOnBlur = () => {
+    field.onBlur();
+    setToggleSecureEntry(true);
+  };
+
   return (
     <View style={styles.container}>
       {label && <Text style={[styles.label, labelStyles]}>{label}</Text>}
@@ -76,7 +81,7 @@ const InputAuthField = ({
               ? text => field.onChange(text.toLowerCase())
               : field.onChange
           }
-          onBlur={field.onBlur}
+          onBlur={handleOnBlur}
           placeholderTextColor="gray"
           secureTextEntry={
             name.includes('password') ? toggleSecureEntry : false
