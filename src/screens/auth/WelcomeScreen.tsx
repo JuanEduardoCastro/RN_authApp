@@ -2,7 +2,6 @@
 import { Linking, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
 /* Custom components */
 import Separator from '@components/shared/Separator';
 import BGGradient from '@components/shared/BGGradient';
@@ -19,6 +18,7 @@ import { AuthStackScreenProps } from 'src/navigators/types';
 /* Utilities & constants */
 import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
+import { IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
 /* Assets */
 import { AppleIcon, GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
 
@@ -61,8 +61,12 @@ const WelcomeScreen = ({
   const handleGoogleLogin = async () => {
     try {
       const googleLoginRes = await GoogleLogin();
-      const res = await dispatch(googleLogin(googleLoginRes?.data?.idToken));
+      const res = await dispatch(
+        googleLogin(googleLoginRes?.data?.idToken),
+      ).unwrap();
+      console.log('res ---> ', typeof res, res);
       if (res?.success) {
+        console.log('ENTRA ACA??????');
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       }
     } catch (error) {

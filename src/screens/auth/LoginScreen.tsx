@@ -36,7 +36,7 @@ const LoginScreen = ({
 
   const onSubmit = async (data: FormDataProps) => {
     try {
-      const res = await dispatch(loginUser(data));
+      const res = await dispatch(loginUser(data)).unwrap();
       if (res?.success) {
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       }

@@ -4,7 +4,7 @@ import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import BGGradient from '@components/shared/BGGradient';
 import { SCREEN } from '@constants/sizes';
-import { useAppDispatch, useAppSelector } from 'src/store/authHook';
+import { useAppSelector } from 'src/store/authHook';
 import { useCheckToken } from '@hooks/useCheckToken';
 import { userAuth } from 'src/store/authSlice';
 import { textVar } from '@constants/textVar';
@@ -47,7 +47,6 @@ export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
   const containerOpacity = useRef(new Animated.Value(1)).current;
   const imageOpacity = useRef(new Animated.Value(0)).current;
   const [imageState, setImageState] = useState(IMG_STATE.LOADING_IMAGE);
-  const dispatch = useAppDispatch();
 
   const checkUserLogged = async () => {
     if (checkCompleted) {

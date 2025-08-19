@@ -90,3 +90,6 @@ env.d.ts
 
 # npm
 .npmrc
+
+# misc
+/graveyard

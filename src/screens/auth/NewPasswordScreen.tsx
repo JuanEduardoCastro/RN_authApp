@@ -104,17 +104,23 @@ const NewPasswordScreen = ({
       };
       if (newUser) {
         try {
-          const res = await dispatch(createUser(fullData, emailToken));
+          const res = await dispatch(
+            createUser({ data: fullData, emailToken: emailToken }),
+          ).unwrap();
+
           if (res?.success) {
             navigation.navigate('LoginScreen');
           }
         } catch (error) {
           __DEV__ &&
             console.log('XX -> NewPasswordScreen.tsx:97 -> error :', error);
+          navigation.popToTop();
         }
       } else {
         try {
-          const res = await dispatch(updatePassword(fullData, emailToken));
+          const res = await dispatch(
+            updatePassword({ data: fullData, emailToken: emailToken }),
+          ).unwrap();
           if (res?.success) {
             navigation.navigate('LoginScreen');
           }

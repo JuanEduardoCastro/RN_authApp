@@ -46,7 +46,7 @@ const SettingsScreen = ({
 
   const handleLogut = async () => {
     try {
-      const res = await dispatch(logoutUser({ email: user?.email }));
+      const res = await dispatch(logoutUser({ email: user?.email })).unwrap();
       if (res?.success) {
         navigation.navigate('AuthNavigator', { screen: 'WelcomeScreen' });
       }
