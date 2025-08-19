@@ -76,7 +76,7 @@ const ProfileScreen = ({
     });
 
     try {
-      const res = await dispatch(editUser(fullData, token));
+      const res = await dispatch(editUser(fullData, token)).unwrap();
       if (!res?.success) {
         navigation.navigate('AuthNavigator', { screen: 'LoginScreen' });
       }

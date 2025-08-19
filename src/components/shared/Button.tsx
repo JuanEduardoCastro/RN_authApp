@@ -33,7 +33,7 @@ const Button = ({
   const { colors, styles } = useStyles(createStyles);
 
   return (
-    <Pressable style={[styles.button, buttonStyles]} {...props}>
+    <Pressable testID="button" style={[styles.button, buttonStyles]} {...props}>
       <Text style={[textStyles, { ...textVar.base }]}>{title}</Text>
     </Pressable>
   );

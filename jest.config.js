@@ -1,28 +1,20 @@
-const { defaults: tsjPreset } = require('ts-jest/presets');
 const { pathsToModuleNameMapper } = require('ts-jest');
 const { compilerOptions } = require('./tsconfig.json');
 
 module.exports = {
-  ...tsjPreset,
   preset: 'react-native',
   setupFilesAfterEnv: ['./jest.setup.ts'],
   setupFiles: [
     './node_modules/@react-native-google-signin/google-signin/jest/build/jest/setup.js',
   ],
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        tsconfig: 'tsconfig.jest.json',
-      },
-    ],
-  },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-    prefix: '<rootDir>/',
-  }),
+  moduleNameMapper: {
+    '\\.svg': '<rootDir>/__mocks__/svgMock.js',
+    ...pathsToModuleNameMapper(compilerOptions.paths, {
+      prefix: '<rootDir>/',
+    }),
+  },
   transformIgnorePatterns: [
-    '/node_modules/(?!react-native-linear-gradient|@react-native-async-storage/async-storage|@react-native-google-signin/google-signin|react-native-image-crop-picker)/',
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|@react-navigation|react-native-linear-gradient|@react-native-async-storage/async-storage|@react-native-google-signin/google-signin|@react-native-masked-view/masked-view|react-native-image-crop-picker|react-native-reanimated|react-native-gesture-handler|react-native-screens|react-redux|@reduxjs/toolkit|react-native-countdown-timer-hooks|react-native-keyboard-controller)/)',
   ],
 };

@@ -5,6 +5,14 @@ import {
   UserCredentialsPayload,
 } from './types';
 import { RootState } from './store';
+import {
+  createUser,
+  editUser,
+  loginUser,
+  logoutUser,
+  validateRefreshToken,
+} from './authHook';
+import { googleLogin } from './otherAuthHooks';
 
 const initialState: AuthState = {
   loader: false,
@@ -19,11 +27,8 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    startLoader: state => {
-      state.loader = true;
-    },
-    stopLoader: state => {
-      state.loader = false;
+    setLoader: (state, action: PayloadAction<boolean>) => {
+      state.loader = action.payload;
     },
     setCredentials: (state, action: PayloadAction<UserCredentialsPayload>) => {
       state.token = action.payload.token;
@@ -48,23 +53,173 @@ const authSlice = createSlice({
       state.messageType = action.payload.messageType;
       state.loader = false;
     },
-    // setMessageType: (state, action) => {
-    //   state.messageType = action.payload;
-    // },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(validateRefreshToken.pending, state => {
+        state.loader = true;
+      })
+      .addCase(validateRefreshToken.fulfilled, (state, action) => {
+        state.loader = false;
+        state.isAuthorized = true;
+        state.token = (action.payload as UserCredentialsPayload).token;
+        state.user = (action.payload as UserCredentialsPayload).user;
+        state.messageType = (
+          action.payload as UserCredentialsPayload
+        )?.messageType;
+        state.notificationMessage = (
+          action.payload as UserCredentialsPayload
+        )?.notificationMessage;
+      })
+      .addCase(validateRefreshToken.rejected, (state, action) => {
+        state.loader = false;
+        state.token = null;
+        state.user = null;
+        state.isAuthorized = false;
+        state.messageType = (
+          action.payload as UserCredentialsPayload
+        )?.messageType;
+        state.notificationMessage = (
+          action.payload as UserCredentialsPayload
+        )?.notificationMessage;
+      })
+
+      /* login user */
+      .addCase(loginUser.pending, state => {
+        state.loader = true;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.loader = false;
+        state.token = action.payload?.token;
+        state.user = action.payload?.user;
+        state.isAuthorized = true;
+        state.messageType = (
+          action.payload as UserCredentialsPayload
+        )?.messageType;
+        state.notificationMessage = (
+          action.payload as UserCredentialsPayload
+        )?.notificationMessage;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loader = false;
+        state.token = null;
+        state.user = null;
+        state.isAuthorized = false;
+        state.messageType = (
+          action.payload as UserCredentialsPayload
+        )?.messageType;
+        state.notificationMessage = (
+          action.payload as UserCredentialsPayload
+        ).notificationMessage;
+      })
+
+      /* create user */
+      .addCase(createUser.pending, state => {
+        state.loader = true;
+      })
+      .addCase(createUser.fulfilled, (state, action) => {
+        state.loader = false;
+        state.messageType = (
+          action.payload as UserCredentialsPayload
+        )?.messageType;
+        state.notificationMessage = (
+          action.payload as UserCredentialsPayload
+        )?.notificationMessage;
+      })
+      .addCase(createUser.rejected, (state, action) => {
+        state.loader = false;
+        state.messageType = (
+          action.payload as UserCredentialsPayload
+        )?.messageType;
+        state.notificationMessage = (
+          action.payload as UserCredentialsPayload
+        )?.notificationMessage;
+      })
+
+      /* logout user */
+      .addCase(logoutUser.pending, state => {
+        state.loader = true;
+      })
+      .addCase(logoutUser.fulfilled, (state, action) => {
+        state.loader = false;
+        state.token = null;
+        state.user = null;
+        state.isAuthorized = false;
+        state.messageType = (
+          action.payload as UserCredentialsPayload
+        )?.messageType;
+        state.notificationMessage = (
+          action.payload as UserCredentialsPayload
+        )?.notificationMessage;
+      })
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.loader = false;
+        state.token = null;
+        state.user = null;
+        state.isAuthorized = false;
+        state.messageType = (
+          action.payload as UserCredentialsPayload
+        )?.messageType;
+        state.notificationMessage = (
+          action.payload as UserCredentialsPayload
+        )?.notificationMessage;
+      })
+
+      /* edit user */
+      .addCase(editUser.pending, state => {
+        state.loader = true;
+      })
+      .addCase(editUser.fulfilled, (state, action) => {
+        state.loader = false;
+        state.token =
+          (action.payload as UserCredentialsPayload)?.token || state.token;
+        state.user =
+          (action.payload as UserCredentialsPayload)?.user || state.user;
+        state.messageType = (
+          action.payload as UserCredentialsPayload
+        )?.messageType;
+        state.notificationMessage = (
+          action.payload as UserCredentialsPayload
+        )?.notificationMessage;
+      })
+
+      /* googlesignin user  */
+      .addCase(googleLogin.pending, state => {
+        state.loader = true;
+      })
+      .addCase(googleLogin.fulfilled, (state, action) => {
+        state.loader = false;
+        state.token = action.payload?.token;
+        state.user = action.payload?.user;
+        state.isAuthorized = true;
+        state.messageType = (
+          action.payload as UserCredentialsPayload
+        )?.messageType;
+        state.notificationMessage = (
+          action.payload as UserCredentialsPayload
+        )?.notificationMessage;
+      })
+      .addCase(googleLogin.rejected, (state, action) => {
+        state.loader = false;
+        state.token = null;
+        state.user = null;
+        state.isAuthorized = false;
+        state.messageType = (
+          action.payload as UserCredentialsPayload
+        )?.messageType;
+        state.notificationMessage = (
+          action.payload as UserCredentialsPayload
+        )?.notificationMessage;
+      });
   },
 });
 
 export default authSlice.reducer;
 export const {
-  startLoader,
-  stopLoader,
-  // setToken,
-  // setUser,
-  // setResetUser,
+  setLoader,
   setIsAuthorized,
   setCredentials,
   setResetCredentials,
-  // setMessageType,
   setNotificationMessage,
 } = authSlice.actions;
 export const userAuth = (state: RootState) => state.auth;

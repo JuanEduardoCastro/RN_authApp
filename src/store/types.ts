@@ -7,10 +7,18 @@ export interface AuthState {
   notificationMessage: string | null | unknown;
 }
 
-export interface UserCredentialsPayload {
-  user: IUser | null;
-  token: string;
+export interface UserCredentialsPayload extends AuthState {
+  success: boolean;
+  error: any;
 }
+
+export interface UserCredentials {
+  email: string | null;
+  password: string | null;
+  rememberMe: boolean;
+}
+
+export interface UserCredentialsPayload {}
 
 export interface IUser {
   firstName: string;
@@ -35,8 +43,3 @@ export interface INotificationMessagePayload {
   messageType: 'error' | 'success' | 'warning' | 'information' | null;
   notificationMessage: string | null | unknown;
 }
-
-// export interface userCredentials {
-//   email: string;
-//   password: string;
-// }

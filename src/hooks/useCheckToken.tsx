@@ -50,7 +50,7 @@ export const useCheckToken = (): UseCheckTokenReturn => {
                 const res = await dispatch(
                   validateRefreshToken(refreshToken.password),
                 );
-                if (!res?.success) {
+                if (!(res.payload as { success: boolean })?.success) {
                   setRefreshTokenSaved(true);
                   setIsExpired(true);
                   resetAutoLogin();

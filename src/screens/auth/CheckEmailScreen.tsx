@@ -17,6 +17,7 @@ import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
 /* Utilities & constants */
 import { textVar } from '@constants/textVar';
+import { useDispatch } from 'react-redux';
 /* Assets */
 
 interface CheckEmailProps {
@@ -43,14 +44,16 @@ const CheckEmailScreen = ({
         timerRef.current.resetTimer();
       }
       if (checkMode.includes('new')) {
-        const res = await dispatch(checkEmail(data));
+        console.log('entro en el if de NEW');
+        const res = await dispatch(checkEmail(data)).unwrap();
+        console.log('res', res);
         if (res?.success) {
           setShowMessage(true);
         } else {
           setShowMessage(false);
         }
       } else {
-        const res = await dispatch(resetPassword(data));
+        const res = await dispatch(resetPassword(data)).unwrap();
         if (res?.success) {
           setShowMessage(true);
         } else {
@@ -59,7 +62,7 @@ const CheckEmailScreen = ({
       }
     } catch (error) {
       __DEV__ && console.log('XX -> CheckEmailScreen.tsx:56 -> error :', error);
-      navigation.popToTop();
+      // navigation.popToTop();
     }
   };
 
