@@ -43,3 +43,11 @@ export interface INotificationMessagePayload {
   messageType: 'error' | 'success' | 'warning' | 'information' | null;
   notificationMessage: string | null | unknown;
 }
+
+export interface DataAPI {
+  email?: string | null;
+  password?: string | null;
+  rememberMe?: boolean;
+  token?: string | null;
+  userData?: Record<string, string>;
+}

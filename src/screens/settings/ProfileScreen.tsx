@@ -68,15 +68,20 @@ const ProfileScreen = ({
   };
 
   const onSubmit = async (data: ProfileDataProps) => {
-    const fullData: Record<string, string> = {};
+    const userData: Record<string, string> = {};
     Object.entries(data).forEach(([key, value]) => {
       if (key !== 'email') {
-        fullData[key] = value;
+        userData[key] = value;
       }
     });
 
+    const dataAPI = {
+      userData: userData,
+      token: token,
+    };
+
     try {
-      const res = await dispatch(editUser(fullData, token)).unwrap();
+      const res = await dispatch(editUser(dataAPI)).unwrap();
       if (!res?.success) {
         navigation.navigate('AuthNavigator', { screen: 'LoginScreen' });
       }
