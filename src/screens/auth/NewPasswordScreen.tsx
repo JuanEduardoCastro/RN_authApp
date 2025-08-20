@@ -98,15 +98,14 @@ const NewPasswordScreen = ({
         }),
       );
     } else {
-      const fullData = {
+      const dataAPI = {
         email: email,
         password: data.new_password,
+        token: emailToken,
       };
       if (newUser) {
         try {
-          const res = await dispatch(
-            createUser({ data: fullData, emailToken: emailToken }),
-          ).unwrap();
+          const res = await dispatch(createUser(dataAPI)).unwrap();
 
           if (res?.success) {
             navigation.navigate('LoginScreen');
@@ -118,9 +117,7 @@ const NewPasswordScreen = ({
         }
       } else {
         try {
-          const res = await dispatch(
-            updatePassword({ data: fullData, emailToken: emailToken }),
-          ).unwrap();
+          const res = await dispatch(updatePassword(dataAPI)).unwrap();
           if (res?.success) {
             navigation.navigate('LoginScreen');
           }

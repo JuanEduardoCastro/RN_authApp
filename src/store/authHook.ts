@@ -8,6 +8,7 @@ import { Platform } from 'react-native';
 import { jwtDecode } from 'jwt-decode';
 import { CustomJwtPayload } from '@hooks/types';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { DataAPI } from './types';
 
 export const HOST = __DEV__
   ? Platform.OS === 'ios'
@@ -25,11 +26,11 @@ export const useAppSelector = useSelector.withTypes<RootState>();
 
 export const validateRefreshToken = createAsyncThunk(
   'users/validaterfreshtoken',
-  async (data: any) => {
+  async (data: DataAPI) => {
     try {
       const response = await axios.get(`${HOST}/users/validatetoken`, {
         headers: {
-          Authorization: `Bearer ${data}`,
+          Authorization: `Bearer ${data.token}`,
         },
       });
       if (response.status === 200) {
@@ -100,97 +101,100 @@ export const validateRefreshToken = createAsyncThunk(
  * @param { email, password } data
  */
 
-export const loginUser = createAsyncThunk('users/login', async (data: any) => {
-  try {
-    const response = await axios.post(`${HOST}/users/login`, {
-      email: data.email,
-      password: data.password,
-    });
-    if (response.status === 200) {
-      const refreshToken = response.data.refreshToken;
-      await Keychain.setGenericPassword('refreshToken', refreshToken, {
-        service: 'secret token',
-        accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
+export const loginUser = createAsyncThunk(
+  'users/login',
+  async (data: DataAPI) => {
+    try {
+      const response = await axios.post(`${HOST}/users/login`, {
+        email: data.email,
+        password: data.password,
       });
-      if (data.rememberMe) {
-        const rememberMeFlag = 'true';
-        await Keychain.setGenericPassword('remember', rememberMeFlag, {
-          service: 'secret remember me',
+      if (response.status === 200) {
+        const refreshToken = response.data.refreshToken;
+        await Keychain.setGenericPassword('refreshToken', refreshToken, {
+          service: 'secret token',
           accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
         });
+        if (data.rememberMe) {
+          const rememberMeFlag = 'true';
+          await Keychain.setGenericPassword('remember', rememberMeFlag, {
+            service: 'secret remember me',
+            accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
+          });
+        }
+        return {
+          success: true,
+          error: null,
+          user: response.data.user,
+          token: response.data.accessToken,
+          messageType: 'success',
+          notificationMessage: 'Welcome!!',
+        };
       }
-      return {
-        success: true,
-        error: null,
-        user: response.data.user,
-        token: response.data.accessToken,
-        messageType: 'success',
-        notificationMessage: 'Welcome!!',
-      };
-    }
-  } catch (error: any) {
-    __DEV__ && console.log('XX -> authHook.ts:135 -> error :', error);
-    if (error.response) {
-      switch (error.response.status) {
-        case 401:
-        case 403:
-          return {
-            messageType: 'warnign',
-            notificationMessage: 'Wrong credentials!',
-            success: false,
-            error: error,
-          };
-        case 404:
-          return {
-            messageType: 'error',
-            notificationMessage: 'User not found!',
-            success: false,
-            error: error,
-          };
-        default:
-          if (error.response.status >= 500 && error.response.status < 600) {
+    } catch (error: any) {
+      __DEV__ && console.log('XX -> authHook.ts:135 -> error :', error);
+      if (error.response) {
+        switch (error.response.status) {
+          case 401:
+          case 403:
             return {
-              messageType: 'error',
-              notificationMessage: 'Network error! Try again, please.',
+              messageType: 'warnign',
+              notificationMessage: 'Wrong credentials!',
               success: false,
               error: error,
             };
-          }
-          break;
+          case 404:
+            return {
+              messageType: 'error',
+              notificationMessage: 'User not found!',
+              success: false,
+              error: error,
+            };
+          default:
+            if (error.response.status >= 500 && error.response.status < 600) {
+              return {
+                messageType: 'error',
+                notificationMessage: 'Network error! Try again, please.',
+                success: false,
+                error: error,
+              };
+            }
+            break;
+        }
+      } else if (error.request) {
+        return {
+          messageType: 'error',
+          notificationMessage: 'Server error! Try again, please.',
+          success: false,
+          error: error,
+        };
+      } else {
+        return {
+          messageType: 'error',
+          notificationMessage: 'Internal error! Try again, please.',
+          success: false,
+          error: error,
+        };
       }
-    } else if (error.request) {
-      return {
-        messageType: 'error',
-        notificationMessage: 'Server error! Try again, please.',
-        success: false,
-        error: error,
-      };
-    } else {
-      return {
-        messageType: 'error',
-        notificationMessage: 'Internal error! Try again, please.',
-        success: false,
-        error: error,
-      };
     }
-  }
-});
+  },
+);
 
 /**
  * User edit profile
- * @param { userInfo } data
- * @param { token } token
+ * @param { userData, token } data
  */
 
 export const editUser = createAsyncThunk(
   'users/edituser',
-  async (data: any, token: any) => {
-    const decodeToken = jwtDecode<CustomJwtPayload>(token);
+  async (data: DataAPI) => {
+    const decodeToken = jwtDecode<CustomJwtPayload>(data.token as string);
 
     const editUserInstance = axios.create({
       baseURL: HOST,
       timeout: 8000, // in miliseconds
     });
+
     editUserInstance.interceptors.request.use(
       response => response,
       async error => {
@@ -276,10 +280,10 @@ export const editUser = createAsyncThunk(
     try {
       const editUserResponse = await editUserInstance.put(
         `/users/edituser/${decodeToken._id}`,
-        data,
+        data.userData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${data.token}`,
           },
         },
       );
@@ -346,7 +350,7 @@ export const editUser = createAsyncThunk(
 
 export const checkEmail = createAsyncThunk(
   'users/checkemail',
-  async (data: any, { dispatch }) => {
+  async (data: DataAPI, { dispatch }) => {
     dispatch(setLoader(true));
     try {
       const response = await axios.post(`${HOST}/users/checkemail`, data);
@@ -413,19 +417,25 @@ export const checkEmail = createAsyncThunk(
 
 /**
  * User create
- * @param { email, password } data
- * @param { token } emailToken
+ * @param { email, password, token } data
  */
 
 export const createUser = createAsyncThunk(
   'users/create',
-  async ({ data, emailToken }: { data: any; emailToken: any }) => {
+  async (data: DataAPI) => {
     try {
-      const response = await axios.post(`${HOST}/users/create`, data, {
-        headers: {
-          Authorization: `Bearer ${emailToken}`,
+      const response = await axios.post(
+        `${HOST}/users/create`,
+        {
+          email: data.email,
+          password: data.password,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        },
+      );
       if (response.status === 201) {
         return {
           success: true,
@@ -491,7 +501,7 @@ export const createUser = createAsyncThunk(
 
 export const resetPassword = createAsyncThunk(
   'users/resetpassword',
-  async (data: any, { dispatch }) => {
+  async (data: DataAPI, { dispatch }) => {
     dispatch(setLoader(true));
     try {
       const response = await axios.post(`${HOST}/users/resetpassword`, data);
@@ -560,25 +570,24 @@ export const resetPassword = createAsyncThunk(
 
 /**
  * User update password
- * @param { email, password } data
- * @param { token } emailToken
+ * @param { email, password, token } data
  */
 
 export const updatePassword = createAsyncThunk(
   'users/updatepassword',
-  async (
-    { data, emailToken }: { data: any; emailToken: any },
-    { dispatch },
-  ) => {
+  async (data: DataAPI, { dispatch }) => {
     dispatch(setLoader(true));
-    const decodeToken = jwtDecode<CustomJwtPayload>(emailToken);
+    const decodeToken = jwtDecode<CustomJwtPayload>(data.token as string);
     try {
       const response = await axios.put(
         `${HOST}/users/updatepuser/${decodeToken._id}`,
-        data,
+        {
+          email: data.email,
+          password: data.password,
+        },
         {
           headers: {
-            Authorization: `Bearer ${emailToken}`,
+            Authorization: `Bearer ${data.token}`,
           },
         },
       );
@@ -669,7 +678,7 @@ export const updatePassword = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
   'users/logout',
-  async (data: any) => {
+  async (data: DataAPI) => {
     try {
       const isGoogleSignin = GoogleSignin.hasPreviousSignIn();
       if (isGoogleSignin) {

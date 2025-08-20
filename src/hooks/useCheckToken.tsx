@@ -48,7 +48,7 @@ export const useCheckToken = (): UseCheckTokenReturn => {
             if (decodedToken.exp !== undefined) {
               if (currentTime <= decodedToken.exp) {
                 const res = await dispatch(
-                  validateRefreshToken(refreshToken.password),
+                  validateRefreshToken({ token: refreshToken.password }),
                 );
                 if (!(res.payload as { success: boolean })?.success) {
                   setRefreshTokenSaved(true);

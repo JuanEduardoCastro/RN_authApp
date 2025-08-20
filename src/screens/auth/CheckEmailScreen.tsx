@@ -38,15 +38,14 @@ const CheckEmailScreen = ({
   const [showFocusTimer, setShowFocusTimer] = useState<boolean>(false);
 
   const onSubmit = async (data: CheckEmailProps) => {
+    console.log('como viene la data aca ---> ', data.email);
     try {
       if (showFocusTimer) {
         setShowFocusTimer(false);
         timerRef.current.resetTimer();
       }
       if (checkMode.includes('new')) {
-        console.log('entro en el if de NEW');
         const res = await dispatch(checkEmail(data)).unwrap();
-        console.log('res', res);
         if (res?.success) {
           setShowMessage(true);
         } else {
