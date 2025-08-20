@@ -48,6 +48,14 @@ export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
   const imageOpacity = useRef(new Animated.Value(0)).current;
   const [imageState, setImageState] = useState(IMG_STATE.LOADING_IMAGE);
 
+  __DEV__ &&
+    console.log(
+      'refreshTokenSaved, isExpired, checkCompleted',
+      refreshTokenSaved,
+      isExpired,
+      checkCompleted,
+    );
+
   const checkUserLogged = async () => {
     if (checkCompleted) {
       if (refreshTokenSaved && !isExpired) {
