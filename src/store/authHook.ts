@@ -10,11 +10,13 @@ import { CustomJwtPayload } from '@hooks/types';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { DataAPI } from './types';
 
-export const HOST = __DEV__
-  ? Platform.OS === 'ios'
-    ? 'http://localhost:3005'
-    : 'http://10.0.2.2:3005'
-  : 'https://auth-app-fo8j.onrender.com';
+export const HOST = 'https://auth-app-fo8j.onrender.com';
+
+// __DEV__
+//   ? Platform.OS === 'ios'
+//     ? 'http://localhost:3005'
+//     : 'http://10.0.2.2:3005'
+//   :
 
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppSelector = useSelector.withTypes<RootState>();

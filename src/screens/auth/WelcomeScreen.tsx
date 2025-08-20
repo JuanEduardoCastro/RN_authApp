@@ -64,9 +64,7 @@ const WelcomeScreen = ({
       const res = await dispatch(
         googleLogin(googleLoginRes?.data?.idToken),
       ).unwrap();
-      console.log('res ---> ', typeof res, res);
       if (res?.success) {
-        console.log('ENTRA ACA??????');
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       }
     } catch (error) {
