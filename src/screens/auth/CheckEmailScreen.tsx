@@ -12,7 +12,7 @@ import ButtonNoBorder from '@components/shared/ButtonNoBorder';
 import useStyles from '@hooks/useStyles';
 import { checkEmail, resetPassword, useAppDispatch } from 'src/store/authHook';
 /* Types */
-import { AuthStackScreenProps } from 'src/navigators/types';
+import { AuthStackScreenProps } from 'src/navigation/types';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
 /* Utilities & constants */

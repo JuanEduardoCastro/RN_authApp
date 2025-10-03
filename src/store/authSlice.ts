@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   AuthState,
-  INotificationMessagePayload,
+  NotificationMessagePayload,
   UserCredentialsPayload,
 } from './types';
 import { RootState } from './store';
@@ -30,9 +30,12 @@ const authSlice = createSlice({
     setLoader: (state, action: PayloadAction<boolean>) => {
       state.loader = action.payload;
     },
-    setCredentials: (state, action: PayloadAction<UserCredentialsPayload>) => {
-      state.token = action.payload.token;
-      state.user = action.payload.user;
+    setCredentials: (
+      state,
+      action: PayloadAction<Partial<UserCredentialsPayload>>,
+    ) => {
+      state.token = action.payload.token || null;
+      state.user = action.payload.user || null;
       state.isAuthorized = true;
       state.loader = false;
     },
@@ -47,7 +50,7 @@ const authSlice = createSlice({
     },
     setNotificationMessage: (
       state,
-      action: PayloadAction<INotificationMessagePayload>,
+      action: PayloadAction<NotificationMessagePayload>,
     ) => {
       state.notificationMessage = action.payload.notificationMessage;
       state.messageType = action.payload.messageType;
@@ -56,32 +59,29 @@ const authSlice = createSlice({
   },
   extraReducers(builder) {
     builder
+
+      /* validate refresh token */
       .addCase(validateRefreshToken.pending, state => {
         state.loader = true;
       })
       .addCase(validateRefreshToken.fulfilled, (state, action) => {
         state.loader = false;
-        state.isAuthorized = true;
-        state.token = (action.payload as UserCredentialsPayload).token;
-        state.user = (action.payload as UserCredentialsPayload).user;
-        state.messageType = (
-          action.payload as UserCredentialsPayload
-        )?.messageType;
-        state.notificationMessage = (
-          action.payload as UserCredentialsPayload
-        )?.notificationMessage;
+        state.isAuthorized = action.payload.success;
+        state.token = action.payload.token;
+        state.user = action.payload.user;
+        state.messageType = action.payload
+          .messageType as NotificationMessagePayload['messageType'];
+        state.notificationMessage = action.payload.notificationMessage;
       })
       .addCase(validateRefreshToken.rejected, (state, action) => {
         state.loader = false;
         state.token = null;
         state.user = null;
         state.isAuthorized = false;
-        state.messageType = (
-          action.payload as UserCredentialsPayload
-        )?.messageType;
-        state.notificationMessage = (
-          action.payload as UserCredentialsPayload
-        )?.notificationMessage;
+        const payload = action.payload as Partial<NotificationMessagePayload>;
+        state.messageType = payload.messageType ?? 'error';
+        state.notificationMessage =
+          payload.notificationMessage ?? 'An error occurred';
       })
 
       /* login user */
@@ -90,27 +90,22 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loader = false;
-        state.token = action.payload?.token;
-        state.user = action.payload?.user;
+        state.token = action.payload.token;
+        state.user = action.payload.user;
         state.isAuthorized = true;
-        state.messageType = (
-          action.payload as UserCredentialsPayload
-        )?.messageType;
-        state.notificationMessage = (
-          action.payload as UserCredentialsPayload
-        )?.notificationMessage;
+        state.messageType = action.payload
+          .messageType as NotificationMessagePayload['messageType'];
+        state.notificationMessage = action.payload.notificationMessage;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loader = false;
         state.token = null;
         state.user = null;
         state.isAuthorized = false;
-        state.messageType = (
-          action.payload as UserCredentialsPayload
-        )?.messageType;
-        state.notificationMessage = (
-          action.payload as UserCredentialsPayload
-        ).notificationMessage;
+        const payload = action.payload as Partial<NotificationMessagePayload>;
+        state.messageType = payload.messageType ?? 'error';
+        state.notificationMessage =
+          payload.notificationMessage ?? 'An error occurred';
       })
 
       /* create user */
@@ -119,21 +114,30 @@ const authSlice = createSlice({
       })
       .addCase(createUser.fulfilled, (state, action) => {
         state.loader = false;
-        state.messageType = (
-          action.payload as UserCredentialsPayload
-        )?.messageType;
-        state.notificationMessage = (
-          action.payload as UserCredentialsPayload
-        )?.notificationMessage;
+        state.messageType = action.payload
+          .messageType as NotificationMessagePayload['messageType'];
+        state.notificationMessage = action.payload.notificationMessage;
       })
       .addCase(createUser.rejected, (state, action) => {
         state.loader = false;
-        state.messageType = (
-          action.payload as UserCredentialsPayload
-        )?.messageType;
-        state.notificationMessage = (
-          action.payload as UserCredentialsPayload
-        )?.notificationMessage;
+        const payload = action.payload as Partial<NotificationMessagePayload>;
+        state.messageType = payload.messageType ?? 'error';
+        state.notificationMessage =
+          payload.notificationMessage ?? 'An error occurred';
+      })
+
+      /* edit user */
+      .addCase(editUser.pending, state => {
+        state.loader = true;
+      })
+      .addCase(editUser.fulfilled, (state, action) => {
+        state.loader = false;
+        const payload = action.payload as Partial<UserCredentialsPayload>;
+        state.token = payload.token || state.token;
+        state.user = payload.user || state.user;
+        state.messageType = action.payload
+          .messageType as NotificationMessagePayload['messageType'];
+        state.notificationMessage = action.payload.notificationMessage;
       })
 
       /* logout user */
@@ -145,42 +149,16 @@ const authSlice = createSlice({
         state.token = null;
         state.user = null;
         state.isAuthorized = false;
-        state.messageType = (
-          action.payload as UserCredentialsPayload
-        )?.messageType;
-        state.notificationMessage = (
-          action.payload as UserCredentialsPayload
-        )?.notificationMessage;
+        state.messageType = action.payload
+          .messageType as NotificationMessagePayload['messageType'];
+        state.notificationMessage = action.payload.notificationMessage;
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.loader = false;
-        state.token = null;
-        state.user = null;
-        state.isAuthorized = false;
-        state.messageType = (
-          action.payload as UserCredentialsPayload
-        )?.messageType;
-        state.notificationMessage = (
-          action.payload as UserCredentialsPayload
-        )?.notificationMessage;
-      })
-
-      /* edit user */
-      .addCase(editUser.pending, state => {
-        state.loader = true;
-      })
-      .addCase(editUser.fulfilled, (state, action) => {
-        state.loader = false;
-        state.token =
-          (action.payload as UserCredentialsPayload)?.token || state.token;
-        state.user =
-          (action.payload as UserCredentialsPayload)?.user || state.user;
-        state.messageType = (
-          action.payload as UserCredentialsPayload
-        )?.messageType;
-        state.notificationMessage = (
-          action.payload as UserCredentialsPayload
-        )?.notificationMessage;
+        const payload = action.payload as Partial<NotificationMessagePayload>;
+        state.messageType = payload.messageType ?? 'error';
+        state.notificationMessage =
+          payload.notificationMessage ?? 'Logout failed.';
       })
 
       /* googlesignin user  */
@@ -189,27 +167,22 @@ const authSlice = createSlice({
       })
       .addCase(googleLogin.fulfilled, (state, action) => {
         state.loader = false;
-        state.token = action.payload?.token;
-        state.user = action.payload?.user;
+        state.token = action.payload!.token;
+        state.user = action.payload!.user;
         state.isAuthorized = true;
-        state.messageType = (
-          action.payload as UserCredentialsPayload
-        )?.messageType;
-        state.notificationMessage = (
-          action.payload as UserCredentialsPayload
-        )?.notificationMessage;
+        state.messageType = action.payload!
+          .messageType as NotificationMessagePayload['messageType'];
+        state.notificationMessage = action.payload!.notificationMessage;
       })
       .addCase(googleLogin.rejected, (state, action) => {
         state.loader = false;
         state.token = null;
         state.user = null;
         state.isAuthorized = false;
-        state.messageType = (
-          action.payload as UserCredentialsPayload
-        )?.messageType;
-        state.notificationMessage = (
-          action.payload as UserCredentialsPayload
-        )?.notificationMessage;
+        const payload = action.payload as Partial<NotificationMessagePayload>;
+        state.messageType = payload.messageType ?? 'error';
+        state.notificationMessage =
+          payload.notificationMessage ?? 'An error occurred';
       });
   },
 });

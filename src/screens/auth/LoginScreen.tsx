@@ -12,7 +12,7 @@ import ButtonNoBorder from '@components/shared/ButtonNoBorder';
 import useStyles from '@hooks/useStyles';
 import { loginUser, useAppDispatch } from 'src/store/authHook';
 /* Types */
-import { AuthStackScreenProps } from 'src/navigators/types';
+import { AuthStackScreenProps } from 'src/navigation/types';
 /* Utilities & constants */
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';

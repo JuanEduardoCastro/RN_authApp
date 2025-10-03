@@ -14,7 +14,7 @@ import { useAppDispatch } from 'src/store/authHook';
 import { googleLogin } from 'src/store/otherAuthHooks';
 /* Types */
 import { TColors } from '@constants/types';
-import { AuthStackScreenProps } from 'src/navigators/types';
+import { AuthStackScreenProps } from 'src/navigation/types';
 /* Utilities & constants */
 import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';

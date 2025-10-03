@@ -11,7 +11,7 @@ import useTimeExpired from '@hooks/useTimeExpired';
 import useBackHandler from '@hooks/useBackHandler';
 /* Types */
 import { TColors } from '@constants/types';
-import { HomeTabScreenProps } from 'src/navigators/types';
+import { HomeTabScreenProps } from 'src/navigation/types';
 /* Utilities & constants */
 import { setNotificationMessage, userAuth } from 'src/store/authSlice';
 import { SCREEN } from '@constants/sizes';

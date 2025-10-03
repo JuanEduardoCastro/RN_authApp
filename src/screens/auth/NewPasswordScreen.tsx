@@ -18,7 +18,7 @@ import {
 } from 'src/store/authHook';
 /* Types */
 import { CustomJwtPayload } from '@hooks/types';
-import { AuthStackScreenProps } from 'src/navigators/types';
+import { AuthStackScreenProps } from 'src/navigation/types';
 import { TColors } from '@constants/types';
 /* Utilities & constants */
 import { SCREEN } from '@constants/sizes';

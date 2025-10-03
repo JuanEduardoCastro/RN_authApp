@@ -1,0 +1,105 @@
+import axios, { AxiosError } from 'axios';
+import * as Keychain from 'react-native-keychain';
+import { Platform } from 'react-native';
+import store from '@store/store';
+import { setCredentials, setResetCredentials } from '@store/authSlice';
+
+export const HOST = __DEV__
+  ? Platform.OS === 'ios'
+    ? 'http://localhost:3005'
+    : 'http://10.0.2.2:3005'
+  : 'https://auth-app-fo8j.onrender.com';
+
+const api = axios.create({
+  baseURL: HOST,
+  timeout: 10000,
+});
+
+let isRefreshing = false;
+let failedQueue: {
+  resolve: (value: unknown) => void;
+  reject: (reason?: any) => void;
+}[] = [];
+
+const processQueue = (
+  error: AxiosError | null,
+  token: string | null = null,
+) => {
+  failedQueue.forEach(prom => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+  failedQueue = [];
+};
+
+api.interceptors.response.use(
+  response => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config;
+
+    // Check for 401 Unauthorized and ensure it's not a retry request
+    if (
+      error.response?.status === 401 &&
+      originalRequest &&
+      !(originalRequest as any)._retry
+    ) {
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then(token => {
+            if (originalRequest.headers) {
+              originalRequest.headers.Authorization = `Bearer ${token}`;
+            }
+            return api(originalRequest);
+          })
+          .catch(err => Promise.reject(err));
+      }
+
+      (originalRequest as any)._retry = true;
+      isRefreshing = true;
+
+      try {
+        const credentials = await Keychain.getGenericPassword({
+          service: 'secret token',
+        });
+        if (!credentials || !credentials.password) {
+          store.dispatch(setResetCredentials());
+          return Promise.reject(error);
+        }
+
+        const { data } = await axios.get(`${HOST}/users/validatetoken`, {
+          headers: { Authorization: `Bearer ${credentials.password}` },
+        });
+
+        const { accessToken, user } = data;
+        await Keychain.setGenericPassword('refreshToken', data.refreshToken, {
+          service: 'secret token',
+        });
+
+        store.dispatch(setCredentials({ token: accessToken, user }));
+        if (originalRequest.headers) {
+          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        }
+        processQueue(null, accessToken);
+
+        return api(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError as AxiosError, null);
+        store.dispatch(setResetCredentials());
+        await Keychain.resetGenericPassword({ service: 'secret token' });
+        await Keychain.resetGenericPassword({ service: 'secret remember me' });
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
+    return Promise.reject(error);
+  },
+);
+
+export default api;

@@ -1,27 +1,31 @@
+/* Core libs & third parties libs */
+import { useState } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import {
   configureReanimatedLogger,
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
-import { SplashScreen } from '@components/splash/SplashScreen';
-import { ModeProvider } from '@context/ModeContext';
-import { useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { LinkingOptions, NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
-import store from 'src/store/store';
-import { useAppSelector } from 'src/store/authHook';
-import { userAuth } from 'src/store/authSlice';
+/* Custom components */
+import { SplashScreen } from '@components/splash/SplashScreen';
 import Loader from '@components/shared/loader/Loader';
-import RootNavigator from 'src/navigators/RootNavigator';
-import { RootStackParamList } from 'src/navigators/types';
 import NotificationBanner from '@components/shared/notifications/NotificationBanner';
-import { KeyboardProvider } from 'react-native-keyboard-controller';
+/* Custom hooks */
+/* Types */
+import { RootStackParamList } from '@navigation/types';
+/* Utilities & constants */
+import { ModeProvider } from '@context/ModeContext';
+import store from '@store/store';
+import { useAppSelector } from '@store/authHook';
+import { userAuth } from '@store/authSlice';
+import RootNavigator from '@navigation/RootNavigator';
+/* Assets */
 
-configureReanimatedLogger({
-  level: ReanimatedLogLevel.warn,
-  strict: false,
-});
+if (__DEV__) {
+  configureReanimatedLogger({ level: ReanimatedLogLevel.warn, strict: false });
+}
 
 const AppWrapper = () => {
   return (
@@ -61,8 +65,6 @@ function App() {
             <NotificationBanner />
             <NavigationContainer linking={linking}>
               <RootNavigator />
-              {/* <AuthNavigator /> */}
-              {/* <WelcomeScreen /> */}
             </NavigationContainer>
           </ModeProvider>
         </SafeAreaProvider>
@@ -71,9 +73,4 @@ function App() {
   );
 }
 
-const styles = StyleSheet.create({});
-
 export default AppWrapper;
-function auth(state: unknown): unknown {
-  throw new Error('Function not implemented.');
-}

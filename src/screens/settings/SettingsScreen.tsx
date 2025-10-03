@@ -20,7 +20,7 @@ import useThemeStorage from '@hooks/useThemeStorage';
 import { logoutUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
 /* Types */
 import { TColors } from '@constants/types';
-import { SettingsStackScreenProps } from 'src/navigators/types';
+import { SettingsStackScreenProps } from 'src/navigation/types';
 /* Utilities & constants */
 import { SCREEN } from '@constants/sizes';
 import { setNotificationMessage, userAuth } from 'src/store/authSlice';

@@ -2,6 +2,7 @@
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
     "types": ["react-native", "jest"],
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "@assets/*": ["src/assets/*"],
@@ -9,8 +10,9 @@
       "@constants/*": ["src/constants/*"],
       "@context/*": ["src/context/*"],
       "@hooks/*": ["src/hooks/*"],
-      "@navigatiors/*": ["src/navigatiors/*"],
+      "@navigation/*": ["src/navigation/*"],
       "@screens/*": ["src/screens/*"],
+      "@store/*": ["src/store/*"],
       "@utils/*": ["src/utils/*"]
     }
   }

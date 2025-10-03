@@ -1,7 +1,7 @@
 export interface AuthState {
   loader: boolean;
   token: string | null;
-  user: IUser | null;
+  user: User | null;
   isAuthorized: boolean;
   messageType: 'error' | 'success' | 'warning' | 'information' | null;
   notificationMessage: string | null | unknown;
@@ -18,9 +18,7 @@ export interface UserCredentials {
   rememberMe: boolean;
 }
 
-export interface UserCredentialsPayload {}
-
-export interface IUser {
+export interface User {
   firstName: string;
   email: string;
   lastName: string;
@@ -39,15 +37,15 @@ export interface IUser {
   updatedAt: any;
 }
 
-export interface INotificationMessagePayload {
+export interface NotificationMessagePayload {
   messageType: 'error' | 'success' | 'warning' | 'information' | null;
   notificationMessage: string | null | unknown;
 }
 
 export interface DataAPI {
-  email?: string | null;
-  password?: string | null;
-  rememberMe?: boolean;
-  token?: string | null;
-  userData?: Record<string, string>;
+  email: string | null;
+  password: string | null;
+  rememberMe: boolean;
+  token: string | null;
+  userData: Record<string, string>;
 }
