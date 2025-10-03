@@ -1,4 +1,3 @@
-import * as Keychain from 'react-native-keychain';
 import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -115,7 +114,9 @@ export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
             onLoad={() => setImageState(IMG_STATE.FADE_IN_IMAGE)}
           />
           <View style={styles.versionContainer}>
-            <Text style={styles.versionText}>Version 0.1.0 (01)</Text>
+            <Text style={styles.versionText}>
+              Version 0.1.1 (01) (redux refactor)
+            </Text>
           </View>
         </BGGradient>
       </SafeAreaProvider>

@@ -1,8 +1,7 @@
 import * as Keychain from 'react-native-keychain';
-import axios from 'axios';
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { HOST } from './authHook';
+import { createAsyncThunk, isRejectedWithValue } from '@reduxjs/toolkit';
 import { isErrorWithCode } from '@react-native-google-signin/google-signin';
+import api from './apiService';
 
 /**
  * User login with Google signin and persist in time
@@ -11,17 +10,24 @@ import { isErrorWithCode } from '@react-native-google-signin/google-signin';
 
 export const googleLogin = createAsyncThunk(
   'users/googlelogin',
-  async (data: any) => {
+  async (idToken: string | null, { rejectWithValue }) => {
+    if (!idToken) {
+      return rejectWithValue({
+        messageType: 'error',
+        notificationMessage: 'An unknown error occurred.',
+      });
+    }
+
     try {
-      const googleResponse = await axios.get(
-        `https://oauth2.googleapis.com/tokeninfo?id_token=${data}`,
+      const googleResponse = await api.get(
+        `https://oauth2.googleapis.com/tokeninfo?id_token=${idToken}`,
       );
 
-      if (googleResponse.status === 200) {
-        const { sub, email, given_name, family_name, picture } =
-          googleResponse.data;
+      const { sub, email, given_name, family_name, picture } =
+        googleResponse.data;
 
-        const checkEmail = await axios.post(`${HOST}/users/checkemail`, {
+      if (googleResponse.status === 200) {
+        const checkEmail = await api.post(`/users/checkemail`, {
           email: email,
           isGoogleLogin: true,
         });
@@ -35,46 +41,13 @@ export const googleLogin = createAsyncThunk(
             lastName: family_name,
             avatarURL: picture,
           };
-          const createUSer = await axios.post(
-            `${HOST}/users/create`,
-            userData,
-            {
-              headers: {
-                Authorization: `Bearer ${checkEmail.data.emailToken}`,
-              },
+          await api.post(`/users/create`, userData, {
+            headers: {
+              Authorization: `Bearer ${checkEmail.data.emailToken}`,
             },
-          );
-          if (createUSer.status === 201) {
-            const loginUser = await axios.post(`${HOST}/users/login`, {
-              email: email,
-              password: sub,
-            });
+          });
 
-            if (loginUser.status === 200) {
-              await Keychain.setGenericPassword(
-                'refreshToken',
-                loginUser.data.refreshToken,
-                {
-                  service: 'secret token',
-                  accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
-                },
-              );
-              await Keychain.setGenericPassword('remember', 'true', {
-                service: 'secret remember me',
-                accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
-              });
-              return {
-                success: true,
-                error: null,
-                user: loginUser.data.user,
-                token: loginUser.data.accessToken,
-                messageType: 'success',
-                notificationMessage: `Welcome ${loginUser.data.user.firstName}`,
-              };
-            }
-          }
-        } else if (checkEmail.status === 204) {
-          const loginUser = await axios.post(`${HOST}/users/login`, {
+          const loginUser = await api.post(`/users/login`, {
             email: email,
             password: sub,
           });
@@ -94,15 +67,54 @@ export const googleLogin = createAsyncThunk(
             });
             return {
               success: true,
-              error: null,
               user: loginUser.data.user,
               token: loginUser.data.accessToken,
               messageType: 'success',
-              notificationMessage: `Welcome back ${loginUser.data.user.firstName}`,
+              notificationMessage: `Welcome ${loginUser.data.user.firstName}`,
             };
           }
+
+          // if (loginUser.status === 200) {
+          //   await Keychain.setGenericPassword(
+          //     'refreshToken',
+          //     loginUser.data.refreshToken,
+          //     {
+          //       service: 'secret token',
+          //       accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
+          //     },
+          //   );
+          //   await Keychain.setGenericPassword('remember', 'true', {
+          //     service: 'secret remember me',
+          //     accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
+          //   });
+          //   return {
+          //     success: true,
+          //     error: null,
+          //     user: loginUser.data.user,
+          //     token: loginUser.data.accessToken,
+          //     messageType: 'success',
+          //     notificationMessage: `Welcome back ${loginUser.data.user.firstName}`,
+          //   };
+          // }
+          // if (createUSer.status === 201) {
+
+          // }
+        } else if (checkEmail.status === 204) {
+          //TODO check when the user already exist and login successfully
+          // return {
+          //   success: true,
+          //   error: null,
+          // user: loginUser.data.user,
+          // token: loginUser.data.accessToken,
+          // messageType: 'success',
+          // notificationMessage: `Welcome back ${loginUser.data.user.firstName}`,
+          // };
         }
       }
+      return rejectWithValue({
+        messageType: 'error',
+        notificationMessage: 'An unknown error occurred during login.',
+      });
     } catch (error: any) {
       __DEV__ && console.log('XX -> otherAuthHooks.ts:108 -> error :', error);
       if (isErrorWithCode(error)) {
@@ -111,48 +123,11 @@ export const googleLogin = createAsyncThunk(
             'XX -> isErrorWithCode -> otherAuthHooks.ts:146 -> return -> error :',
             error.code,
           );
-      }
-      if (error.response) {
-        switch (error.response.status) {
-          case 401:
-          case 403:
-            return {
-              success: false,
-              error: error,
-              messageType: 'warning',
-              notificationMessage: 'Somthing went wrong. Try again, please',
-            };
-          case 404:
-            return {
-              success: false,
-              error: error,
-              messageType: 'error',
-              notificationMessage: 'User not found.',
-            };
-          default:
-            if (error.response.status >= 500 && error.response.status < 600) {
-              return {
-                success: false,
-                error: error,
-                messageType: 'error',
-                notificationMessage: 'Somthing went wrong. Try again, please',
-              };
-            }
-        }
-      } else if (error.request) {
-        return {
-          success: false,
-          error: error,
+
+        return rejectWithValue({
           messageType: 'error',
-          notificationMessage: 'Server error! Try again',
-        };
-      } else {
-        return {
-          success: false,
-          error: error,
-          messageType: 'error',
-          notificationMessage: 'Internal error!',
-        };
+          notificationMessage: `Google Signin failed: ${error.code}`,
+        });
       }
     }
   },

@@ -16,7 +16,7 @@ import { editUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
 import useUserData from '@hooks/useUserData';
 /* Types */
 import { TColors } from '@constants/types';
-import { SettingsStackScreenProps } from 'src/navigators/types';
+import { SettingsStackScreenProps } from 'src/navigation/types';
 /* Utilities & constants */
 import { userAuth } from 'src/store/authSlice';
 import { SCREEN } from '@constants/sizes';
