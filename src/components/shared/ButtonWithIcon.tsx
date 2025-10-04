@@ -24,7 +24,7 @@ type ButtonWithIconProps = {
   buttonStyles?: ViewStyle;
   textStyles?: TextStyle;
   Icon?: ElementType | undefined;
-  iconProps?: { width?: number; height?: number };
+  iconProps?: Record<string, any>;
   atPosition?: 'column' | 'row' | 'column-reverse' | 'row-reverse';
 } & PressableProps;
 
@@ -41,7 +41,12 @@ const ButtonWithIcon = ({
 
   return (
     <Pressable
-      style={[styles.button, buttonStyles, { flexDirection: atPosition }]}
+      style={[
+        styles.button,
+        buttonStyles,
+        { flexDirection: atPosition },
+        props.disabled && styles.disabled,
+      ]}
       {...props}>
       {Icon && (
         <View style={styles.iconBox}>
@@ -66,18 +71,15 @@ const createStyles = (colors: TColors) =>
       paddingHorizontal: 24,
       paddingVertical: 8,
       borderRadius: 50,
+      gap: 8,
     },
-    iconBox: {
-      // justifyContent: 'center',
-      // alignItems: 'center',
-      // backgroundColor: 'gray',
-      // width: 24,
-      // height: 24,
-    },
+    iconBox: {},
     text: {
       ...textVar.base,
-      flex: 1,
-      justifyContent: 'center',
       textAlign: 'center',
+      color: colors.text,
+    },
+    disabled: {
+      opacity: 0.5,
     },
   });

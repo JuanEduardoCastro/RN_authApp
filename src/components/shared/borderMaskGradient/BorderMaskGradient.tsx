@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import useStyles from '@hooks/useStyles';
@@ -9,7 +9,7 @@ const BorderMaskGradient = () => {
 
   return (
     <LinearGradient
-      style={{ flex: 1 }}
+      style={styles.gradient}
       colors={[colors.transparent, colors.background, colors.transparent]}
     />
   );
@@ -17,4 +17,9 @@ const BorderMaskGradient = () => {
 
 export default BorderMaskGradient;
 
-const createStlyes = (colors: TColors) => StyleSheet.create({});
+const createStlyes = (colors: TColors) =>
+  StyleSheet.create({
+    gradient: {
+      flex: 1,
+    },
+  });

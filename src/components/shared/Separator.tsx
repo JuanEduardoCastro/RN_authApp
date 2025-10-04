@@ -1,4 +1,4 @@
-import { ColorValue, StyleSheet, Text, View } from 'react-native';
+import { ColorValue, StyleSheet, View } from 'react-native';
 import React from 'react';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
@@ -12,6 +12,7 @@ type SeparatorProps = {
   borderColor?: string;
   borderStyle?: 'solid' | 'dotted' | 'dashed' | undefined;
 };
+
 const Separator = ({
   height = SCREEN.heightFixed * 32,
   background = 'transparent',
@@ -26,19 +27,15 @@ const Separator = ({
     <View
       style={[
         styles.separator,
-        { height: height, backgroundColor: background },
-      ]}>
-      <View
-        style={[
-          styles.line,
-          {
-            borderWidth: border ? borderWidth : 0,
-            borderColor: colors.darkBase ?? borderColor,
-            borderStyle: borderStyle,
-          },
-        ]}
-      />
-    </View>
+        {
+          height,
+          backgroundColor: background,
+          borderBottomWidth: border ? borderWidth : 0,
+          borderBottomColor: borderColor ?? colors.darkBase,
+          borderStyle,
+        },
+      ]}
+    />
   );
 };
 
@@ -50,5 +47,4 @@ const createStyles = (colors: TColors) =>
       width: SCREEN.width100,
       justifyContent: 'center',
     },
-    line: {},
   });

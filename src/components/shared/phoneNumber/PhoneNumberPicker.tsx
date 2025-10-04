@@ -10,7 +10,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Control, useController } from 'react-hook-form';
 import { useSharedValue } from 'react-native-reanimated';
 /* Custom components */
@@ -26,7 +26,7 @@ import { SCREEN } from '@constants/sizes';
 import { countriesList } from '@constants/countriesList';
 import { textVar } from '@constants/textVar';
 /* Assets */
-import { ChevronIcon, EditIcon } from '@assets/svg/icons';
+import { ChevronIcon } from '@assets/svg/icons';
 
 type PhoneNumberPickerProps = {
   name: string;
@@ -62,28 +62,40 @@ const PhoneNumberPicker = ({
   const isOpen = useSharedValue(false);
   const [isVisible, setIsVisible] = useState(false);
 
-  const handlePhoneNumberToSubmit = () => {
-    field.onChange({
-      code: phoneData?.code,
-      dialCode: phoneData?.dialCode,
-      number: phoneData?.number,
-    });
-    setCodeIndex(indexToScroll);
-  };
+  // Let react-hook-form be the single source of truth.
+  const currentFieldValue = field.value || {};
 
-  const handleUpdateNumber = (text: string) => {
-    setPhoneData({
-      code: phoneData?.code ?? '',
-      dialCode: phoneData?.dialCode ?? '',
+  // Update the 'number' part of the form value.
+  const handleNumberChange = (text: string) => {
+    field.onChange({
+      ...currentFieldValue,
       number: text,
     });
-    handlePhoneNumberToSubmit();
+  };
+
+  // Update the country details of the form value.
+  const handleCountryChange = (index: number) => {
+    const selectedCountry = countriesList[index];
+    field.onChange({
+      ...currentFieldValue,
+      code: selectedCountry.code,
+      dialCode: selectedCountry.dialCode,
+    });
   };
 
   const toggleSheet = () => {
     isOpen.value = !isOpen.value;
     setIsVisible(!isVisible);
   };
+
+  // Memoize the flag to prevent re-calculating on every render.
+  const displayFlag = useMemo(() => {
+    const countryCode = currentFieldValue.code || defaultCountryCode;
+    const country = countriesList.find(c => c.code === countryCode);
+    return country ? (
+      <Text style={styles.pickerFlag}>{country.flag}</Text>
+    ) : null;
+  }, [currentFieldValue.code, defaultCountryCode]);
 
   return (
     <>
@@ -101,24 +113,7 @@ const PhoneNumberPicker = ({
               disabled={!props.editable}
               style={styles.pickerCodeFlag}
               onPress={toggleSheet}>
-              {!phoneData
-                ? countriesList.map(
-                    (item, index) =>
-                      defaultCountryCode === item.code && (
-                        <Text key={index + 1} style={styles.pickerFlag}>
-                          {item.flag}
-                        </Text>
-                      ),
-                  )
-                : countriesList.map(
-                    (item, index) =>
-                      item.code === phoneData.code &&
-                      item.dialCode === phoneData.dialCode && (
-                        <Text key={index + 1} style={styles.pickerFlag}>
-                          {item.flag}
-                        </Text>
-                      ),
-                  )}
+              {displayFlag}
               <ChevronIcon width={14} height={14} color={colors.text} />
             </Pressable>
             <View style={styles.pickerCodeView}>
@@ -126,7 +121,7 @@ const PhoneNumberPicker = ({
               <TextInput
                 style={styles.pickerCode}
                 editable={false}
-                value={phoneData?.dialCode! ?? defaultDialCode}
+                value={currentFieldValue.dialCode || defaultDialCode || ''}
               />
               <View style={styles.vertSeparator} />
             </View>
@@ -139,10 +134,9 @@ const PhoneNumberPicker = ({
               },
             ]}
             maxLength={12}
-            value={phoneData?.number ?? ''}
-            onChangeText={text => handleUpdateNumber(text)}
-            // onChangeText={text => setNewPhoneNumber(text)}
-            // onBlur={field.onBlur}
+            value={currentFieldValue.number || ''}
+            onChangeText={handleNumberChange}
+            onBlur={field.onBlur}
             placeholderTextColor="gray"
             textContentType={
               name === 'phoneNumber' ? 'telephoneNumber' : 'none'
@@ -150,11 +144,6 @@ const PhoneNumberPicker = ({
             keyboardType={name === 'phoneNumber' ? 'phone-pad' : 'default'}
             {...props}
           />
-          {name !== 'email' && props.editable && (
-            <Pressable style={styles.iconArea}>
-              <EditIcon width={18} height={18} color={colors.second} />
-            </Pressable>
-          )}
         </View>
         <View style={styles.errorBox}>
           {fieldState.error && (
@@ -166,11 +155,9 @@ const PhoneNumberPicker = ({
         {isVisible && (
           <PhoneListContainer
             toggleSheet={toggleSheet}
-            phoneData={phoneData}
-            codeIndex={codeIndex}
+            selectedValue={currentFieldValue}
             indexToScroll={indexToScroll}
-            setCodeIndex={setCodeIndex}
-            handlePhoneNumberToSubmit={handlePhoneNumberToSubmit}
+            onSelectCountry={handleCountryChange}
           />
         )}
       </BottomSheet>

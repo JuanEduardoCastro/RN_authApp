@@ -1,4 +1,11 @@
-import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  Alert,
+  Linking,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React from 'react';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
@@ -26,18 +33,28 @@ const MailContactBox = ({ title }: MailContactBoxProps) => {
   )}&body=${encodeURIComponent(body)}`;
 
   const handleOpenMailApp = async () => {
-    try {
-      await Linking.openURL(mailURL);
-    } catch (error) {
-      __DEV__ && console.log('XX -> MailContactBox.tsx:26 -> error :', error);
+    const canOpen = await Linking.canOpenURL(mailURL);
+    if (canOpen) {
+      try {
+        await Linking.openURL(mailURL);
+      } catch (error) {
+        __DEV__ && console.log('XX -> MailContactBox.tsx:26 -> error :', error);
+        Alert.alert('Error', 'Could not open mail app.');
+      }
+    } else {
+      Alert.alert('No Mail App', 'Please configure a mail client to continue.');
     }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.titleText}>Contact ...</Text>
-      <Pressable onPress={handleOpenMailApp} style={styles.mailBox}>
-        <Text style={styles.mailText}>{title} </Text>
+      <Pressable
+        onPress={handleOpenMailApp}
+        style={({ pressed }) => [styles.mailBox, pressed && styles.pressed]}
+        accessibilityLabel={`Contact by email: ${title}`}
+        accessibilityRole="button">
+        <Text style={styles.mailText}>{title}</Text>
       </Pressable>
     </View>
   );
@@ -63,5 +80,8 @@ const createStyles = (colors: TColors) =>
       color: colors.text,
       opacity: 0.7,
       letterSpacing: 0.4,
+    },
+    pressed: {
+      opacity: 0.7,
     },
   });

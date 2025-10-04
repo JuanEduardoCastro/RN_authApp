@@ -53,11 +53,6 @@ const InputAuthField = ({
     setToggleSecureEntry(!toggleSecureEntry);
   };
 
-  const handleOnBlur = () => {
-    field.onBlur();
-    setToggleSecureEntry(true);
-  };
-
   return (
     <View style={styles.container}>
       {label && <Text style={[styles.label, labelStyles]}>{label}</Text>}
@@ -81,7 +76,7 @@ const InputAuthField = ({
               ? text => field.onChange(text.toLowerCase())
               : field.onChange
           }
-          onBlur={handleOnBlur}
+          onBlur={field.onBlur}
           placeholderTextColor="gray"
           secureTextEntry={
             name.includes('password') ? toggleSecureEntry : false
@@ -89,29 +84,20 @@ const InputAuthField = ({
           keyboardType={name === 'phoneNumber' ? 'phone-pad' : 'default'}
           {...props}
         />
-        {name !== 'email' && props.editable && (
-          <Pressable style={styles.iconArea}>
-            <EditIcon width={18} height={18} color={colors.second} />
+        {name.includes('password') && (
+          <Pressable style={styles.iconArea} onPress={handleSecureEntry}>
+            {toggleSecureEntry ? (
+              <EyeCloseIcon width={20} height={20} color={colors.second} />
+            ) : (
+              <EyeOpenIcon width={20} height={20} color={colors.second} />
+            )}
           </Pressable>
         )}
-        {name.includes('password') &&
-          (toggleSecureEntry ? (
-            <Pressable style={styles.iconArea} onPress={handleSecureEntry}>
-              <EyeCloseIcon width={20} height={20} color={colors.second} />
-            </Pressable>
-          ) : (
-            <Pressable style={styles.iconArea} onPress={handleSecureEntry}>
-              <EyeOpenIcon width={20} height={20} color={colors.second} />
-            </Pressable>
-          ))}
       </View>
       <View style={styles.errorBox}>
         {fieldState.error && (
           <Text style={styles.errorText}>{fieldState.error.message}</Text>
         )}
-        {/* {error !== null && (
-          <Text style={styles.errorText}>{error as string}</Text>
-        )} */}
       </View>
     </View>
   );
