@@ -15,10 +15,15 @@ const HeaderGoBack = ({ title = '', onPress }: HeaderGoBackProps) => {
   const { colors, styles } = useStyles(createStyles);
   return (
     <View style={styles.container}>
-      <Pressable onPress={onPress} style={styles.backIconBox}>
+      <Pressable
+        onPress={onPress}
+        style={({ pressed }) => [styles.backIconBox, pressed && styles.pressed]}
+        hitSlop={10}
+        accessibilityLabel="Go back"
+        accessibilityRole="button">
         <ChevronIcon width={20} height={20} color={colors.text} />
       </Pressable>
-      <Text style={styles.text}>{title} </Text>
+      <Text style={styles.text}>{title}</Text>
     </View>
   );
 };
@@ -42,6 +47,9 @@ const createStyles = (colors: TColors) =>
       height: SCREEN.heightFixed * 24,
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    pressed: {
+      opacity: 0.5,
     },
     text: {
       ...textVar.base,

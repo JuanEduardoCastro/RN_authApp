@@ -5,7 +5,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Control, useController } from 'react-hook-form';
 import ImagePicker from 'react-native-image-crop-picker';
 import useStyles from '@hooks/useStyles';
@@ -22,13 +22,6 @@ type AvatarViewProps = {
 const AvatarView = ({ name, control, rules, ...props }: AvatarViewProps) => {
   const { field, fieldState } = useController({ name, control, rules });
   const { colors, styles } = useStyles(createStyles);
-  const [avatarURL, setAvatarURL] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    if (field.value !== undefined && field.value.length > 1) {
-      setAvatarURL(field.value);
-    }
-  }, []);
 
   const openImageCropPicker = () => {
     ImagePicker.openPicker({
@@ -43,23 +36,30 @@ const AvatarView = ({ name, control, rules, ...props }: AvatarViewProps) => {
       cropperCircleOverlay: true,
       avoidEmptySpaceAroundImage: true,
       freeStyleCropEnabled: true,
-    }).then(image => {
-      const data = `data:${image.mime};base64,${image.data}`;
-      field.onChange(data);
-      setAvatarURL(data);
-    });
+    })
+      .then(image => {
+        const data = `data:${image.mime};base64,${image.data}`;
+        field.onChange(data);
+      })
+      .catch(error => {
+        if (error.code !== 'E_PICKER_CANCELLED') {
+          console.error('ImagePicker Error: ', error);
+        }
+      });
   };
 
   return (
     <View style={styles.container}>
       <Pressable
+        accessibilityLabel="Change profile picture"
+        accessibilityRole="button"
         style={styles.avatarBox}
         onPress={() => openImageCropPicker()}
         {...props}>
         <Image
           source={
-            avatarURL !== undefined
-              ? { uri: avatarURL }
+            field.value
+              ? { uri: field.value }
               : require('@assets/images/default_user_profile_pic.png')
           }
           style={[styles.avatarView, !props.disabled && styles.editMode]}

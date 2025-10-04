@@ -18,7 +18,7 @@ import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
 /* Assets */
 
-type BottonProps = {
+type ButtonProps = {
   title?: string;
   buttonStyles?: ViewStyle;
   textStyles?: TextStyle;
@@ -29,12 +29,19 @@ const Button = ({
   buttonStyles,
   textStyles,
   ...props
-}: BottonProps) => {
+}: ButtonProps) => {
   const { colors, styles } = useStyles(createStyles);
 
   return (
-    <Pressable testID="button" style={[styles.button, buttonStyles]} {...props}>
-      <Text style={[textStyles, { ...textVar.base }]}>{title}</Text>
+    <Pressable
+      testID="button"
+      style={({ pressed }) => [
+        styles.button,
+        buttonStyles,
+        props.disabled && styles.disabled,
+      ]}
+      {...props}>
+      <Text style={[styles.text, textStyles]}>{title}</Text>
     </Pressable>
   );
 };
@@ -52,5 +59,12 @@ const createStyles = (colors: TColors) =>
       paddingHorizontal: 24,
       paddingVertical: 8,
       borderRadius: 50,
+    },
+    text: {
+      ...textVar.base,
+      color: colors.textNgt,
+    },
+    disabled: {
+      opacity: 0.5,
     },
   });

@@ -26,12 +26,18 @@ import {
   WarningIcon,
 } from '@assets/svg/icons';
 
+const iconMap = {
+  error: { Icon: ErrorIcon, color: 'danger' as keyof TColors },
+  success: { Icon: SuccessIcon, color: 'accept' as keyof TColors },
+  information: { Icon: InfoIcon, color: 'primary' as keyof TColors },
+  warning: { Icon: WarningIcon, color: 'warning' as keyof TColors },
+};
+
 const NotificationBanner = () => {
   const { notificationMessage, messageType } = useAppSelector(userAuth);
   const dispatch = useAppDispatch();
   const { colors, styles } = useStyles(createStyles);
   const insets = useSafeAreaInsets();
-  const [openBanner, setOpenBanner] = useState<boolean>(false);
   const translateY = useSharedValue(-100);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -46,14 +52,12 @@ const NotificationBanner = () => {
   };
 
   useEffect(() => {
-    if (!messageType) {
-      setOpenBanner(false);
-    }
+    let timeoutId: NodeJS.Timeout;
+
     if (messageType) {
-      setOpenBanner(true);
       starAnimation(0);
 
-      setTimeout(() => {
+      timeoutId = setTimeout(() => {
         starAnimation(-100);
         dispatch(
           setNotificationMessage({
@@ -72,10 +76,14 @@ const NotificationBanner = () => {
     );
   };
 
+  const IconComponent = messageType ? iconMap[messageType] : null;
+
   return (
     <>
-      {openBanner && (
+      {messageType && (
         <Animated.View
+          accessibilityRole="alert"
+          accessibilityLabel={`Notification: ${notificationMessage}`}
           style={[styles.container, animatedStyle, { paddingTop: insets.top }]}>
           <Pressable
             onPress={handleCloseBanner}
@@ -93,44 +101,13 @@ const NotificationBanner = () => {
                 </Text>
               </View>
               <View style={styles.bannerIconBox}>
-                {(() => {
-                  switch (messageType) {
-                    case 'error':
-                      return (
-                        <ErrorIcon
-                          width={32}
-                          height={32}
-                          color={colors.danger}
-                        />
-                      );
-                    case 'success':
-                      return (
-                        <SuccessIcon
-                          width={32}
-                          height={32}
-                          color={colors.accept}
-                        />
-                      );
-                    case 'information':
-                      return (
-                        <InfoIcon
-                          width={32}
-                          height={32}
-                          color={colors.primary}
-                        />
-                      );
-                    case 'warning':
-                      return (
-                        <WarningIcon
-                          width={32}
-                          height={32}
-                          color={colors.warning}
-                        />
-                      );
-                    default:
-                      break;
-                  }
-                })()}
+                {IconComponent && (
+                  <IconComponent.Icon
+                    width={32}
+                    height={32}
+                    color={colors[IconComponent.color]}
+                  />
+                )}
               </View>
             </View>
             {Platform.OS === 'ios' && (

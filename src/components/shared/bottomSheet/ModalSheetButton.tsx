@@ -1,5 +1,5 @@
-import { Modal, StyleSheet, Text, View } from 'react-native';
-import React, { ReactNode, useEffect, useState } from 'react';
+import { Modal, StyleSheet } from 'react-native';
+import React, { ReactNode } from 'react';
 
 type ModalSheetButtonProps = {
   children: ReactNode;
@@ -10,14 +10,8 @@ const ModalSheetButton = ({
   children,
   modalIsVisible,
 }: ModalSheetButtonProps) => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    modalIsVisible ? setIsVisible(true) : setIsVisible(false);
-  }, []);
-
   return (
-    <Modal animationType={'none'} transparent={true} visible={isVisible}>
+    <Modal animationType={'none'} transparent={true} visible={modalIsVisible}>
       {children}
     </Modal>
   );

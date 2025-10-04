@@ -27,11 +27,12 @@ const ListCard = ({
 }: ListCardProps) => {
   const { colors, styles } = useStyles(createStyles);
   return (
-    <Pressable onPress={onPress} style={styles.container}>
-      <View style={styles.cardBox}>
-        <View style={styles.iconBox}>{icon && icon}</View>
-        <Text style={styles.text}>{title} </Text>
-      </View>
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [styles.container, pressed && styles.pressed]}
+      accessibilityRole="button">
+      <View style={styles.iconBox}>{icon}</View>
+      <Text style={styles.text}>{title}</Text>
       <View style={styles.checkBox}>
         {checkBox && <CheckIcon width={14} height={14} color={colors.second} />}
       </View>
@@ -45,20 +46,10 @@ const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
-      // height: SCREEN.heightFixed * 46,
+      height: SCREEN.heightFixed * 46,
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingHorizontal: 10,
-      // gap: 12,
-      // marginVertical: 4,
-    },
-    cardBox: {
-      flexDirection: 'row',
-      height: SCREEN.heightFixed * 46,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      // paddingHorizontal: 10,
-      gap: 12,
       marginVertical: 4,
     },
     iconBox: {
@@ -66,10 +57,18 @@ const createStyles = (colors: TColors) =>
       height: SCREEN.heightFixed * 24,
       justifyContent: 'center',
       alignItems: 'center',
+      marginRight: 12,
     },
     text: {
       ...textVar.base,
       color: colors.text,
+      flex: 1,
     },
-    checkBox: {},
+    checkBox: {
+      width: SCREEN.widthFixed * 24,
+      alignItems: 'flex-end',
+    },
+    pressed: {
+      opacity: 0.7,
+    },
   });

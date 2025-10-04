@@ -8,7 +8,7 @@ import {
   View,
   ViewProps,
 } from 'react-native';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import MaskedView from '@react-native-masked-view/masked-view';
 /* Custom components */
 import BorderMaskGradient from '../borderMaskGradient/BorderMaskGradient';
@@ -24,44 +24,40 @@ import { textVar } from '@constants/textVar';
 
 type PhoneListContainerProps = {
   toggleSheet: () => void;
-  phoneData: {
+  selectedValue: {
     code: string | null;
     dialCode: string | null;
     number: string | null;
   } | null;
-  codeIndex: number | null;
   indexToScroll: number | null;
-  setCodeIndex: (val: number | null) => void;
-  handlePhoneNumberToSubmit: () => void;
+  onSelectCountry: (index: number) => void;
 } & ViewProps;
 
 const PhoneListContainer = ({
   toggleSheet,
-  phoneData,
-  codeIndex,
+  selectedValue,
   indexToScroll,
-  setCodeIndex,
-  handlePhoneNumberToSubmit,
+  onSelectCountry,
 }: PhoneListContainerProps) => {
   const flatListRef = useRef<any>(null);
   const { colors, styles } = useStyles(createStlyes);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(
+    indexToScroll,
+  );
 
-  useEffect(() => {
-    const waitForScrollToIndex = new Promise(resolve =>
-      setTimeout(resolve, 100),
-    );
-    waitForScrollToIndex.then(() => {
-      if (flatListRef.current) {
-        flatListRef.current.scrollToIndex({
-          index: indexToScroll,
-          animated: true,
-          viewPosition: 0.5,
-        });
-      }
-    });
-  }, [indexToScroll]);
+  // A robust way to scroll to the initial index once the layout is ready.
+  const handleOnLayout = () => {
+    if (indexToScroll !== null && flatListRef.current) {
+      flatListRef.current.scrollToIndex({
+        index: indexToScroll,
+        animated: false, // No animation on initial load
+        viewPosition: 0.5,
+      });
+    }
+  };
 
-  const scrollToIndex = (index: number) => {
+  const handleSelectCode = (codeSelected: string, index: number) => {
+    setSelectedIndex(index);
     flatListRef.current?.scrollToIndex({
       index: index,
       animated: true,
@@ -69,21 +65,14 @@ const PhoneListContainer = ({
     });
   };
 
-  const handleSelectCode = (codeSelected: string, index: number) => {
-    setCodeIndex(index);
-    scrollToIndex(index);
-  };
-
   const handleCancelButton = () => {
-    setCodeIndex(null);
     toggleSheet();
   };
 
   const handleDoneButton = () => {
     toggleSheet();
-    // setCodeIndex(codeIndex);
-    if (codeIndex) {
-      handlePhoneNumberToSubmit();
+    if (selectedIndex !== null) {
+      onSelectCountry(selectedIndex);
     }
   };
 
@@ -103,8 +92,9 @@ const PhoneListContainer = ({
         <FlatList
           ref={flatListRef}
           data={countriesList}
+          onLayout={handleOnLayout}
           showsVerticalScrollIndicator={false}
-          extraData={phoneData?.dialCode}
+          extraData={selectedIndex}
           getItemLayout={(data, index) => ({
             length: SCREEN.heightFixed * 35,
             offset: SCREEN.heightFixed * 35 * index + 70,
@@ -117,7 +107,7 @@ const PhoneListContainer = ({
               <View
                 style={[
                   styles.countryCard,
-                  phoneData?.dialCode === item.dialCode && styles.selectedItem,
+                  selectedIndex === index && styles.selectedItem,
                   index === 0 && { marginTop: SCREEN.heightFixed * 35 * 2 },
                   index === countriesList.length - 1 && {
                     marginBottom: SCREEN.heightFixed * 35 * 2,
@@ -128,9 +118,8 @@ const PhoneListContainer = ({
                 <Text
                   style={styles.textName}
                   numberOfLines={1}
-                  ellipsizeMode={'tail'}>
-                  {item.name.slice(0, 17)}
-                  {item.name.length > 17 && '...'}
+                  ellipsizeMode="tail">
+                  {item.name}
                 </Text>
               </View>
             </Pressable>
