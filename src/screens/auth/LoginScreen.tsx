@@ -12,7 +12,7 @@ import ButtonNoBorder from '@components/shared/ButtonNoBorder';
 import useStyles from '@hooks/useStyles';
 import { loginUser, useAppDispatch } from 'src/store/authHook';
 /* Types */
-import { AuthStackScreenProps } from 'src/navigation/types';
+import { AuthStackScreenProps } from '@navigation/types';
 /* Utilities & constants */
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
@@ -23,6 +23,8 @@ interface FormDataProps {
   email: string;
   password: string;
   rememberMe: boolean;
+  token: string | null;
+  userData: Record<string, string>;
 }
 
 const LoginScreen = ({
@@ -94,6 +96,7 @@ const LoginScreen = ({
         <Separator borderWidth={0} height={16} />
         <View style={styles.buttonBox}>
           <Button
+            title="Login"
             onPress={handleSubmit(onSubmit)}
             buttonStyles={{ backgroundColor: colors.second }}
             textStyles={{ color: colors.textNgt, fontWeight: 600 }}

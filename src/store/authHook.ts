@@ -152,17 +152,16 @@ export const editUser = createAsyncThunk(
   'users/edituser',
   async (data: DataAPI, { getState, rejectWithValue }) => {
     const { auth } = getState() as RootState;
-    if (!auth.token) {
+    if (!auth.token || !auth.user?._id) {
       return rejectWithValue({
         messageType: 'error',
         notificationMessage: 'Not authenticated.',
       });
     }
-    const decodeToken = jwtDecode<CustomJwtPayload>(data.token as string);
 
     try {
       const editUserResponse = await api.put(
-        `/users/edituser/${decodeToken._id}`,
+        `/users/edituser/${auth.user._id}`,
         data.userData,
         { headers: { Authorization: `Bearer ${auth.token}` } },
       );
@@ -239,67 +238,45 @@ export const logoutUser = createAsyncThunk(
 
 export const checkEmail = createAsyncThunk(
   'users/checkemail',
-  async (data: DataAPI, { dispatch, rejectWithValue }) => {
-    dispatch(setLoader(true));
+  async (data: DataAPI, { rejectWithValue }) => {
     try {
       const response = await api.post('/users/checkemail', data);
+      // Status 200 means the email was sent successfully
       if (response.status === 200) {
         __DEV__ &&
           (console.log('--> --> --> --> --> --> --> --> --> --> '),
           console.log('--> --> EL TOKEN PARA EL MAIL '),
           console.log(response.data.data),
           console.log('--> --> --> --> --> --> --> --> --> --> '));
-        dispatch(setLoader(false));
-        dispatch(
-          setNotificationMessage({
-            messageType: 'success',
-            notificationMessage: 'The email was sent.',
-          }),
-        );
+        // dispatch(setLoader(false));
+        // dispatch(
+        //   setNotificationMessage({
+        //     messageType: 'success',
+        //     notificationMessage: 'The email was sent.',
+        //   }),
+        // );
         return { success: true };
-      } else if (response.status === 204) {
-        dispatch(setLoader(false));
-        dispatch(
-          setNotificationMessage({
-            messageType: 'warning',
-            notificationMessage:
-              'This email is already in use.\nPlease try another one.',
-          }),
-        );
-        return {
-          success: false,
-          error: null,
-        };
       }
+      // Status 204 means the email is already in use
+      if (response.status === 204) {
+        return rejectWithValue({
+          messageType: 'warning',
+          notificationMessage:
+            'This email is already in use.\nPlease try another one.',
+        });
+      }
+      // Fallback for other unexpected success statuses
+      return rejectWithValue({
+        messageType: 'error',
+        notificationMessage: 'An unexpected error occurred.',
+      });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:537 -> error :', error);
-      if (error.response) {
-        if (error.response.status >= 400 && error.response.status < 600) {
-          dispatch(setLoader(false));
-          dispatch(
-            setNotificationMessage({
-              messageType: 'error',
-              notificationMessage: 'Network error! Try again, please.',
-            }),
-          );
-          return {
-            success: false,
-            error: error,
-          };
-        }
-      } else {
-        dispatch(setLoader(false));
-        dispatch(
-          setNotificationMessage({
-            messageType: 'error',
-            notificationMessage: 'Internal error! Try again, please.',
-          }),
-        );
-        return {
-          success: false,
-          error: error,
-        };
-      }
+      const message =
+        error.response?.data?.notificationMessage || 'Email check failed.';
+      return rejectWithValue({
+        messageType: 'error',
+        notificationMessage: message,
+      });
     }
   },
 );
@@ -311,8 +288,7 @@ export const checkEmail = createAsyncThunk(
 
 export const resetPassword = createAsyncThunk(
   'users/resetpassword',
-  async (data: DataAPI, { dispatch }) => {
-    dispatch(setLoader(true));
+  async (data: DataAPI, { rejectWithValue }) => {
     try {
       const response = await api.post('/users/resetpassword', data);
       if (response.status === 200) {
@@ -321,59 +297,34 @@ export const resetPassword = createAsyncThunk(
           console.log('--> --> EL TOKEN PARA LA CONTRASEÑA '),
           console.log(response.data.data),
           console.log('--> --> --> --> --> --> --> --> --> --> '));
-        dispatch(setLoader(false));
-        dispatch(
-          setNotificationMessage({
-            messageType: 'success',
-            notificationMessage: 'The email was sent.',
-          }),
-        );
+        // dispatch(setLoader(false));
+        // dispatch(
+        //   setNotificationMessage({
+        //     messageType: 'success',
+        //     notificationMessage: 'The email was sent.',
+        //   }),
+        // );
         return {
           success: true,
           error: null,
         };
       } else if (response.status === 204) {
-        dispatch(setLoader(false));
-        dispatch(
-          setNotificationMessage({
-            messageType: 'warning',
-            notificationMessage: 'There is no email to reset password.',
-          }),
-        );
-        return {
-          success: false,
-          error: null,
-        };
+        return rejectWithValue({
+          messageType: 'warning',
+          notificationMessage: 'This email is not registered.',
+        });
       }
+      return rejectWithValue({
+        messageType: 'error',
+        notificationMessage: 'An unexpected error occurred.',
+      });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:537 -> error :', error);
-      if (error.response) {
-        if (error.response.status >= 400 && error.response.status < 600) {
-          dispatch(setLoader(false));
-          dispatch(
-            setNotificationMessage({
-              messageType: 'error',
-              notificationMessage: 'Network error! Try again, please.',
-            }),
-          );
-          return {
-            success: false,
-            error: error,
-          };
-        }
-      } else {
-        dispatch(setLoader(false));
-        dispatch(
-          setNotificationMessage({
-            messageType: 'error',
-            notificationMessage: 'Internal error! Try again, please.',
-          }),
-        );
-        return {
-          success: false,
-          error: error,
-        };
-      }
+      const message =
+        error.response?.data?.notificationMessage || 'Password reset failed.';
+      return rejectWithValue({
+        messageType: 'error',
+        notificationMessage: message,
+      });
     }
   },
 );
@@ -385,91 +336,33 @@ export const resetPassword = createAsyncThunk(
 
 export const updatePassword = createAsyncThunk(
   'users/updatepassword',
-  async (data: DataAPI, { dispatch }) => {
-    dispatch(setLoader(true));
-    const decodeToken = jwtDecode<CustomJwtPayload>(data.token as string);
+  async (data: DataAPI, { rejectWithValue }) => {
     try {
+      const decodeToken = jwtDecode<CustomJwtPayload>(data.token as string);
       const response = await api.put(
         `/users/updatepuser/${decodeToken._id}`,
         { email: data.email, password: data.password },
         { headers: { Authorization: `Bearer ${data.token}` } },
       );
       if (response.status === 201) {
-        dispatch(setLoader(false));
-        dispatch(
-          setNotificationMessage({
-            messageType: 'success',
-            notificationMessage:
-              'Password updated successfully.\nPlease log in with new credentials',
-          }),
-        );
         return {
           success: true,
-          error: null,
+          messageType: 'success',
+          notificationMessage:
+            'Password updated successfully.\nPlease log in with new credentials.',
         };
       }
+      return rejectWithValue({
+        messageType: 'error',
+        notificationMessage: 'An unknown error occurred.',
+      });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:606 -> error :', error);
-      if (error.response) {
-        switch (error.response.status) {
-          case 401:
-          case 403:
-            dispatch(setLoader(false));
-            dispatch(
-              setNotificationMessage({
-                messageType: 'warning',
-                notificationMessage: 'Expired token! Try again, please.',
-              }),
-            );
-            return {
-              success: false,
-              error: error,
-            };
-          case 409:
-            dispatch(setLoader(false));
-            setNotificationMessage({
-              messageType: 'error',
-              notificationMessage: 'User not found!',
-            });
-            return {
-              success: false,
-              error: error,
-            };
-          default:
-            if (error.response.status >= 500 && error.response.status < 600) {
-              dispatch(setLoader(false));
-              setNotificationMessage({
-                messageType: 'error',
-                notificationMessage: 'Network error! Try again, please.',
-              });
-              return {
-                success: false,
-                error: error,
-              };
-            }
-            break;
-        }
-      } else if (error.request) {
-        dispatch(setLoader(false));
-        setNotificationMessage({
-          messageType: 'error',
-          notificationMessage: 'Server error! Try again, please.',
-        });
-        return {
-          success: false,
-          error: error,
-        };
-      } else {
-        dispatch(setLoader(false));
-        setNotificationMessage({
-          messageType: 'error',
-          notificationMessage: 'Internal error! Try again, please.',
-        });
-        return {
-          success: false,
-          error: error,
-        };
-      }
+      const message =
+        error.response?.data?.notificationMessage || 'Password update failed.';
+      return rejectWithValue({
+        messageType: 'error',
+        notificationMessage: message,
+      });
     }
   },
 );

@@ -16,7 +16,6 @@ import ModeSwitchButton from '@components/shared/ModeSwitchButton';
 import MailContactBox from '@components/shared/MailContactBox';
 /* Custom hooks */
 import useStyles from '@hooks/useStyles';
-import useThemeStorage from '@hooks/useThemeStorage';
 import { logoutUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
 /* Types */
 import { TColors } from '@constants/types';
@@ -33,20 +32,22 @@ import {
   PowerIcon,
   ProfileIcon,
 } from '@assets/svg/icons';
+import { DataAPI } from '@store/types';
 
 const SettingsScreen = ({
   route,
   navigation,
 }: SettingsStackScreenProps<'SettingsScreen'>) => {
   const { user } = useAppSelector(userAuth);
-  const { theme } = useThemeStorage();
-  const { setColorTheme } = useMode();
+  const { setColorTheme, themeName, toggleMode } = useMode();
   const { colors, styles } = useStyles(createStyles);
   const dispatch = useAppDispatch();
 
   const handleLogut = async () => {
     try {
-      const res = await dispatch(logoutUser({ email: user?.email })).unwrap();
+      const res = await dispatch(
+        logoutUser({ email: user?.email } as DataAPI),
+      ).unwrap();
       if (res?.success) {
         navigation.navigate('AuthNavigator', { screen: 'WelcomeScreen' });
       }
@@ -55,8 +56,6 @@ const SettingsScreen = ({
         console.log('XX -> HomeScreen.tsx:26 -> handleLogut -> error :', error);
     }
   };
-
-  const handleModeSwitch = () => {};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -94,33 +93,33 @@ const SettingsScreen = ({
             icon={<CheckIcon width={20} height={20} color={colors.text} />}
           />
           <Separator height={40} />
-          <Pressable onPress={handleModeSwitch} style={styles.modeBox}>
-            <ModeSwitchButton onPress={handleModeSwitch} />
+          <Pressable onPress={toggleMode} style={styles.modeBox}>
+            <ModeSwitchButton onPress={toggleMode} />
             <Text style={styles.modeText}>Mode switch</Text>
           </Pressable>
           <ListCard
             title="Luxury theme"
             onPress={() => setColorTheme('luxury')}
             icon={<CircleFullIcon width={14} height={14} color={'#7646c9'} />}
-            checkBox={theme === 'luxury' ? true : false}
+            checkBox={themeName === 'luxury'}
           />
           <ListCard
             title="Calm theme"
             onPress={() => setColorTheme('calm')}
             icon={<CircleFullIcon width={14} height={14} color={'#41737c'} />}
-            checkBox={theme === 'calm' ? true : false}
+            checkBox={themeName === 'calm'}
           />
           <ListCard
             title="Gold theme"
             onPress={() => setColorTheme('gold')}
             icon={<CircleFullIcon width={14} height={14} color={'#FFC337'} />}
-            checkBox={theme === 'gold' ? true : false}
+            checkBox={themeName === 'gold'}
           />
           <ListCard
             title="Passion theme"
             onPress={() => setColorTheme('passion')}
             icon={<CircleFullIcon width={14} height={14} color={'#CD6D94'} />}
-            checkBox={theme === 'passion' ? true : false}
+            checkBox={themeName === 'passion'}
           />
         </ScrollView>
         <MailContactBox title="authorization.demo.app@gmail.com" />

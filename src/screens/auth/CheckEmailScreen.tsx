@@ -10,14 +10,14 @@ import Button from '@components/shared/Button';
 import ButtonNoBorder from '@components/shared/ButtonNoBorder';
 /* Custom hooks */
 import useStyles from '@hooks/useStyles';
-import { checkEmail, resetPassword, useAppDispatch } from 'src/store/authHook';
+import { checkEmail, resetPassword, useAppDispatch } from '@store/authHook';
 /* Types */
-import { AuthStackScreenProps } from 'src/navigation/types';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
-/* Utilities & constants */
 import { textVar } from '@constants/textVar';
-import { useDispatch } from 'react-redux';
+import { AuthStackScreenProps } from '@navigation/types';
+import { setNotificationMessage } from '@store/authSlice';
+import { DataAPI } from '@store/types';
 /* Assets */
 
 interface CheckEmailProps {
@@ -34,52 +34,53 @@ const CheckEmailScreen = ({
   const { handleSubmit, control } = method;
   const { colors, styles } = useStyles(createStlyes);
   const dispatch = useAppDispatch();
-  const [showMessage, setShowMessage] = useState<boolean>(false);
-  const [showFocusTimer, setShowFocusTimer] = useState<boolean>(false);
+  const [isEmailSent, setIsEmailSent] = useState<boolean>(false);
+  const [canResend, setCanResend] = useState<boolean>(false);
 
   const onSubmit = async (data: CheckEmailProps) => {
-    console.log('como viene la data aca ---> ', data.email);
     try {
-      if (showFocusTimer) {
-        setShowFocusTimer(false);
+      if (canResend) {
+        setCanResend(false);
         timerRef.current.resetTimer();
       }
-      if (checkMode.includes('new')) {
-        const res = await dispatch(checkEmail(data)).unwrap();
-        if (res?.success) {
-          setShowMessage(true);
-        } else {
-          setShowMessage(false);
-        }
-      } else {
-        const res = await dispatch(resetPassword(data)).unwrap();
-        if (res?.success) {
-          setShowMessage(true);
-        } else {
-          setShowMessage(false);
-        }
+
+      const actionToDispatch = checkMode.includes('new')
+        ? checkEmail(data as DataAPI)
+        : resetPassword(data as DataAPI);
+
+      const res = await dispatch(actionToDispatch).unwrap();
+
+      if (res?.success) {
+        setIsEmailSent(true);
+        dispatch(
+          setNotificationMessage({
+            messageType: 'success',
+            notificationMessage: 'The email was sent successfully.',
+          }),
+        );
       }
     } catch (error) {
       __DEV__ && console.log('XX -> CheckEmailScreen.tsx:56 -> error :', error);
-      // navigation.popToTop();
+      // Errors are now handled by the rejected case in the extraReducers,
+      // which will display a notification.
     }
   };
 
   const handleTimerProgress = (val: any) => {
     if (val === 0) {
-      setShowFocusTimer(true);
+      setCanResend(true);
     }
   };
 
-  const handleTimerFinish = () => {
-    // timerRef.current.resetTimer();
-    // setShowFocusTimer(true);
-  };
+  // const handleTimerFinish = () => {
+  //   // timerRef.current.resetTimer();
+  //   // setShowFocusTimer(true);
+  // };
 
-  const handleResendEmail = () => {
-    setShowFocusTimer(false);
-    timerRef.current.resetTimer();
-  };
+  // const handleResendEmail = () => {
+  //   setShowFocusTimer(false);
+  //   timerRef.current.resetTimer();
+  // };
 
   return (
     <FormProvider {...method}>
@@ -91,7 +92,7 @@ const CheckEmailScreen = ({
               : 'Please insert your email to\n reset your password'}
           </Text>
           <Text style={styles.subTitle2}>
-            {showMessage &&
+            {isEmailSent &&
               `Check your inbox to validate the email\n and ${
                 checkMode.includes('new')
                   ? 'create your account.'
@@ -102,7 +103,7 @@ const CheckEmailScreen = ({
         <View style={styles.inputBox}>
           <Separator borderWidth={0} />
           <InputAuthField
-            editable={!showMessage}
+            editable={!isEmailSent}
             inputStyles={styles.textinput}
             name="email"
             label="Email"
@@ -120,7 +121,7 @@ const CheckEmailScreen = ({
         </View>
         <View style={styles.buttonBox}>
           <Button
-            disabled={showMessage}
+            disabled={isEmailSent}
             title={checkMode.includes('new') ? 'Check email' : 'Reset password'}
             onPress={handleSubmit(onSubmit)}
             buttonStyles={{ backgroundColor: colors.second }}
@@ -129,13 +130,13 @@ const CheckEmailScreen = ({
         </View>
         <Separator height={12} borderWidth={0} />
         <View style={{ height: 40 }}>
-          {showMessage && (
+          {isEmailSent && (
             <Pressable
-              disabled={!showFocusTimer}
+              disabled={!canResend}
               style={[
                 { flexDirection: 'row' },
                 styles.resendBox,
-                showFocusTimer && styles.resetBoxOnFocus,
+                canResend && styles.resetBoxOnFocus,
               ]}
               onPress={handleSubmit(onSubmit)}>
               <Text style={styles.resendText}>
@@ -144,13 +145,13 @@ const CheckEmailScreen = ({
               <CountDownTimer
                 ref={timerRef}
                 timestamp={180}
-                timerOnProgress={(val: any) => handleTimerProgress(val)}
-                timerCallback={() => handleTimerFinish()}
+                timerOnProgress={handleTimerProgress}
+                timerCallback={() => setCanResend(true)}
                 containerStyle={{
                   justifyContent: 'center',
                   alignItems: 'center',
                   // backgroundColor: colors.second,
-                  display: showFocusTimer && 'none',
+                  display: canResend ? 'none' : 'flex',
                 }}
                 textStyle={{
                   ...textVar.mediumBold,
@@ -159,7 +160,7 @@ const CheckEmailScreen = ({
                   letterSpacing: 0.8,
                 }}
               />
-              {showFocusTimer && <Text style={[styles.resendText]}>00:00</Text>}
+              {canResend && <Text style={[styles.resendText]}>00:00</Text>}
             </Pressable>
           )}
         </View>

@@ -1,6 +1,6 @@
 import { countriesList } from '@constants/countriesList';
-import { useEffect, useState } from 'react';
-import { getLocales } from 'react-native-localize';
+import { useEffect, useMemo, useState } from 'react';
+import { getLocales, Locale } from 'react-native-localize';
 import { useAppSelector } from 'src/store/authHook';
 import { userAuth } from 'src/store/authSlice';
 
@@ -10,82 +10,57 @@ const useUserData = () => {
     null,
   );
   const [defaultDialCode, setDefaultDialCode] = useState<string | null>(null);
+  const [codeIndex, setCodeIndex] = useState<number | null>(null);
   const [phoneData, setPhoneData] = useState<{
     code: string | null;
     dialCode: string | null;
     number: string | null;
   } | null>(null);
-  const [codeIndex, setCodeIndex] = useState<number | null>(null);
-  const [indexToScroll, setIndexToScroll] = useState<number | null>(null);
-  const [phoneLenght, setPhoneLenght] = useState<number | null>(null);
 
-  const getIndexToScroll = () => {
-    if (phoneData) {
-      countriesList.map((item, index) => {
-        if (item.dialCode === phoneData.dialCode) {
-          setIndexToScroll(index);
-        }
+  // Effect for initializing phone data on mount, based on user profile or device locale.
+  useEffect(() => {
+    if (!user) return;
+
+    // If user already has a phone number saved, use that.
+    if (user.phoneNumber?.number) {
+      setPhoneData({
+        dialCode: user.phoneNumber.dialCode,
+        code: user.phoneNumber.code,
+        number: user.phoneNumber.number,
       });
-    } else {
-      setIndexToScroll(0);
+      return;
     }
-  };
 
-  useEffect(() => {
-    getIndexToScroll();
-  }, [phoneData, codeIndex]);
+    // Otherwise, determine the default from the device's locale.
+    const deviceLocale: Locale | undefined = getLocales()[0];
+    const defaultCountry = countriesList.find(
+      country => country.code === deviceLocale?.countryCode,
+    );
 
-  useEffect(() => {
-    if (user) {
-      if (!user.phoneNumber.number) {
-        const getLocalsCodes = getLocales();
-        countriesList.map((item, index) => {
-          item.code === getLocalsCodes[0].countryCode &&
-            setDefaultDialCode(item.dialCode ?? '00');
-        });
-        setDefaultCountryCode(getLocalsCodes[0].countryCode ?? '00');
-      } else if (user.phoneNumber.number) {
-        setPhoneData({
-          dialCode: user.phoneNumber.dialCode,
-          code: user.phoneNumber.code,
-          number: user.phoneNumber.number,
-        });
-      }
+    if (defaultCountry) {
+      setDefaultCountryCode(defaultCountry.code);
+      setDefaultDialCode(defaultCountry.dialCode);
     }
   }, []);
 
+  // Memoize the index to scroll to, preventing re-calculation on every render.
+  const indexToScroll = useMemo(() => {
+    if (!phoneData?.dialCode) return 0;
+    const index = countriesList.findIndex(
+      country => country.dialCode === phoneData.dialCode,
+    );
+    return index > -1 ? index : 0;
+  }, [phoneData]);
+
+  // Effect to update phone data when a new country is selected from a picker.
   useEffect(() => {
-    getIndexToScroll();
-    if (!codeIndex) {
-      if (user) {
-        if (!user.phoneNumber.number) {
-          const getLocalsCodes = getLocales();
-          countriesList.map((item, index) => {
-            item.code === getLocalsCodes[0].countryCode &&
-              setDefaultDialCode(item.dialCode);
-          });
-          setDefaultCountryCode(getLocalsCodes[0].countryCode);
-        } else if (user.phoneNumber.number) {
-          getIndexToScroll();
-          setPhoneData({
-            dialCode: user.phoneNumber.dialCode,
-            code: user.phoneNumber.code,
-            number: user.phoneNumber.number,
-          });
-        }
-      }
-    } else if (codeIndex) {
-      getIndexToScroll();
-      if (user) {
-        countriesList.map((item, index) => {
-          index === codeIndex &&
-            setPhoneData({
-              dialCode: item.dialCode,
-              code: item.code,
-              number: user.phoneNumber.number,
-            });
-        });
-      }
+    if (codeIndex !== null) {
+      const selectedCountry = countriesList[codeIndex];
+      setPhoneData(prevData => ({
+        dialCode: selectedCountry.dialCode,
+        code: selectedCountry.code,
+        number: prevData?.number || null, // Keep existing number if available
+      }));
     }
   }, [codeIndex]);
 

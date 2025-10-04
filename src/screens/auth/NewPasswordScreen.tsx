@@ -18,12 +18,13 @@ import {
 } from 'src/store/authHook';
 /* Types */
 import { CustomJwtPayload } from '@hooks/types';
-import { AuthStackScreenProps } from 'src/navigation/types';
 import { TColors } from '@constants/types';
+import { AuthStackScreenProps } from '@navigation/types';
 /* Utilities & constants */
 import { SCREEN } from '@constants/sizes';
 import { setNotificationMessage, userAuth } from 'src/store/authSlice';
 import { textVar } from '@constants/textVar';
+import { DataAPI } from '@store/types';
 /* Assets */
 
 interface FormNewDataProps {
@@ -54,22 +55,18 @@ const NewPasswordScreen = ({
         setEmail(userEmail);
 
         if (decode.exp) {
-          if (Date.now() / 1000 > decode.exp) {
+          const isExpired = Date.now() / 1000 > decode.exp;
+          if (isExpired) {
             dispatch(
               setNotificationMessage({
                 messageType: 'warning',
                 notificationMessage: 'Code expired. Please, try again!',
               }),
             );
-            !messageType &&
-              navigation.navigate('CheckEmailScreen', {
-                checkMode: 'new_password',
-              });
-            setTimeout(() => {
-              navigation.navigate('CheckEmailScreen', {
-                checkMode: 'new_password',
-              });
-            }, 2900);
+            // Immediately replace the current screen to prevent further interaction.
+            navigation.replace('CheckEmailScreen', {
+              checkMode: newUser ? 'new_password' : 'reset_password',
+            });
           }
         }
       } else {
@@ -103,29 +100,24 @@ const NewPasswordScreen = ({
         password: data.new_password,
         token: emailToken,
       };
-      if (newUser) {
-        try {
-          const res = await dispatch(createUser(dataAPI)).unwrap();
 
-          if (res?.success) {
-            navigation.navigate('LoginScreen');
-          }
-        } catch (error) {
-          __DEV__ &&
-            console.log('XX -> NewPasswordScreen.tsx:97 -> error :', error);
-          navigation.popToTop();
+      const actionToDispatch = newUser
+        ? createUser(dataAPI as DataAPI)
+        : updatePassword(dataAPI as DataAPI);
+
+      try {
+        const res = await dispatch(actionToDispatch).unwrap();
+        if (res?.success) {
+          navigation.navigate('LoginScreen');
         }
-      } else {
-        try {
-          const res = await dispatch(updatePassword(dataAPI)).unwrap();
-          if (res?.success) {
-            navigation.navigate('LoginScreen');
-          }
-        } catch (error) {
-          __DEV__ &&
-            console.log('XX -> NewPasswordScreen.tsx:107 -> error :', error);
-          navigation.popToTop();
-        }
+      } catch (error) {
+        __DEV__ &&
+          console.log(
+            'XX -> NewPasswordScreen.tsx -> onSubmit -> error :',
+            error,
+          );
+        // Errors are now handled by the rejected case in the extraReducers.
+        // We no longer navigate away on failure.
       }
     }
   };

@@ -14,6 +14,7 @@ import HeaderGoBack from '@components/shared/HeaderGoBack';
 import useStyles from '@hooks/useStyles';
 import { editUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
 import useUserData from '@hooks/useUserData';
+import useWhenToScroll from '@hooks/useWhenToScroll';
 /* Types */
 import { TColors } from '@constants/types';
 import { SettingsStackScreenProps } from 'src/navigation/types';
@@ -53,8 +54,8 @@ const ProfileScreen = ({
   const { setCodeIndex } = useUserData();
   const { handleSubmit, control, reset, setValue, getValues } = method;
   const { colors, styles } = useStyles(createStyles);
+  const [layoutHeight, setLayoutHeight] = useState(0);
   const [editEnable, setEditEnable] = useState(false);
-  const [scrollEnabled, setScrollEnabled] = useState(false);
   const dispatch = useAppDispatch();
 
   const handleEditInfo = () => {
@@ -68,20 +69,11 @@ const ProfileScreen = ({
   };
 
   const onSubmit = async (data: ProfileDataProps) => {
-    const userData: Record<string, string> = {};
-    Object.entries(data).forEach(([key, value]) => {
-      if (key !== 'email') {
-        userData[key] = value;
-      }
-    });
-
-    const dataAPI = {
-      userData: userData,
-      token: token,
-    };
+    const { email, ...userData } = data;
+    const dataAPI = { userData };
 
     try {
-      const res = await dispatch(editUser(dataAPI)).unwrap();
+      const res = await dispatch(editUser(dataAPI as any)).unwrap();
       if (!res?.success) {
         navigation.navigate('AuthNavigator', { screen: 'LoginScreen' });
       }
@@ -92,14 +84,8 @@ const ProfileScreen = ({
     setEditEnable(false);
   };
 
-  const onLayoutHandle = (event: any) => {
-    const { height } = event.nativeEvent.layout;
-    if (Math.floor(height) <= SCREEN.heightFixed * 491) {
-      setScrollEnabled(false);
-    } else {
-      setScrollEnabled(true);
-    }
-  };
+  const scrollEnabled = useWhenToScroll(layoutHeight);
+
   return (
     <SafeAreaView style={styles.container}>
       <HeaderGoBack onPress={() => navigation.goBack()} />
@@ -131,7 +117,9 @@ const ProfileScreen = ({
       <KeyboardScrollView
         extraScroll={Platform.OS === 'ios' ? 4 : 0}
         scrollEnabled={scrollEnabled}>
-        <View style={styles.inputBox} onLayout={onLayoutHandle}>
+        <View
+          style={styles.inputBox}
+          onLayout={e => setLayoutHeight(e.nativeEvent.layout.height)}>
           <InputAuthField
             editable={false}
             inputStyles={styles.textinput}

@@ -5,6 +5,7 @@ import { useAppDispatch, validateRefreshToken } from 'src/store/authHook';
 import { CustomJwtPayload, UseCheckTokenReturn } from './types';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { Platform } from 'react-native';
+import { DataAPI } from '@store/types';
 
 export const useCheckToken = (): UseCheckTokenReturn => {
   const [refreshTokenSaved, setRefreshTokenSaved] = useState<boolean>(false);
@@ -26,47 +27,40 @@ export const useCheckToken = (): UseCheckTokenReturn => {
     // resetAutoLogin();
     const checkLocalStorage = async () => {
       try {
-        const isGoogleSignin = GoogleSignin.hasPreviousSignIn();
-
         const rememberMeFlag = await Keychain.getGenericPassword({
           service: 'secret remember me',
         });
-
-        const rememberToken =
-          rememberMeFlag && JSON.parse(rememberMeFlag.password);
-
-        if (rememberToken) {
-          const refreshToken = await Keychain.getGenericPassword({
-            service: 'secret token',
-          });
-          if (refreshToken) {
-            setRefreshTokenSaved(true);
-            const decodedToken = jwtDecode<CustomJwtPayload>(
-              refreshToken.password,
-            );
-            const currentTime = Math.floor(Date.now() / 1000);
-            if (decodedToken.exp !== undefined) {
-              if (currentTime <= decodedToken.exp) {
-                const res = await dispatch(
-                  validateRefreshToken({ token: refreshToken.password }),
-                );
-                if (!(res.payload as { success: boolean })?.success) {
-                  setRefreshTokenSaved(true);
-                  setIsExpired(true);
-                  resetAutoLogin();
-                  return;
-                }
-                isGoogleSignin && (await GoogleSignin.signInSilently());
-                setRefreshTokenSaved(true);
-                setIsExpired(false);
-                return;
-              }
-            }
-          }
-        } else {
+        if (!rememberMeFlag || rememberMeFlag.password !== 'true') {
           resetAutoLogin();
           return;
         }
+
+        const refreshToken = await Keychain.getGenericPassword({
+          service: 'secret token',
+        });
+        if (!refreshToken) {
+          resetAutoLogin();
+          return;
+        }
+
+        setRefreshTokenSaved(true);
+        const decodedToken = jwtDecode<CustomJwtPayload>(refreshToken.password);
+        const currentTime = Math.floor(Date.now() / 1000);
+
+        if (!decodedToken.exp || currentTime > decodedToken.exp) {
+          setIsExpired(true);
+          resetAutoLogin();
+          return;
+        }
+
+        await dispatch(
+          validateRefreshToken({ token: refreshToken.password } as DataAPI),
+        ).unwrap();
+
+        if (GoogleSignin.hasPreviousSignIn()) {
+          await GoogleSignin.signInSilently();
+        }
+        setIsExpired(false);
       } catch (error) {
         __DEV__ &&
           console.log(

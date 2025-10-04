@@ -14,20 +14,13 @@ import { useAppDispatch } from 'src/store/authHook';
 import { googleLogin } from 'src/store/otherAuthHooks';
 /* Types */
 import { TColors } from '@constants/types';
-import { AuthStackScreenProps } from 'src/navigation/types';
+import { AuthStackScreenProps } from '@navigation/types';
 /* Utilities & constants */
 import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
 import { IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
 /* Assets */
 import { AppleIcon, GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
-
-/* Core libs & third parties libs */
-/* Custom components */
-/* Custom hooks */
-/* Types */
-/* Utilities & constants */
-/* Assets */
 
 GoogleSignin.configure({
   webClientId: WEB_CLIENT_ID,
@@ -44,33 +37,21 @@ const WelcomeScreen = ({
   const { colors, styles } = useStyles(createStyles);
   const dispatch = useAppDispatch();
 
-  const GoogleLogin = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const googleUser = await GoogleSignin.signIn();
-      return googleUser;
-    } catch (error) {
-      __DEV__ &&
-        console.log(
-          'XX -> WelcomeScreen.tsx:35 -> GoogleLogin -> error :',
-          error,
-        );
-    }
-  };
-
   const handleGoogleLogin = async () => {
     try {
-      const googleLoginRes = await GoogleLogin();
-      const res = await dispatch(
-        googleLogin(googleLoginRes?.data?.idToken),
-      ).unwrap();
+      await GoogleSignin.hasPlayServices();
+      const googleResponse = await GoogleSignin.signIn();
+      const idToken = googleResponse.data!.idToken;
+
+      const res = await dispatch(googleLogin(idToken)).unwrap();
+
       if (res?.success) {
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       }
     } catch (error) {
       __DEV__ &&
         console.log(
-          'XX -> WelcomeScreen.tsx:45 -> handleGoogleLogin -> error :',
+          'XX -> WelcomeScreen.tsx -> handleGoogleLogin -> error :',
           error,
         );
     }
