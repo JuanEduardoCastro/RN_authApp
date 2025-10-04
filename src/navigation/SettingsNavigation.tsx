@@ -6,7 +6,7 @@ import { SettingsParamList } from './types';
 
 const Stack = createNativeStackNavigator<SettingsParamList>();
 
-const SettingsNavigator = () => {
+const SettingsNavigation = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -19,4 +19,4 @@ const SettingsNavigator = () => {
   );
 };
 
-export default SettingsNavigator;
+export default SettingsNavigation;
