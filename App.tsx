@@ -58,8 +58,10 @@ function App() {
 
   return (
     <KeyboardProvider>
-      <SplashScreen handleAppIsReady={handleAppIsReady} isAppReady={isAppReady}>
-        <SafeAreaProvider>
+      <SafeAreaProvider>
+        <SplashScreen
+          handleAppIsReady={handleAppIsReady}
+          isAppReady={isAppReady}>
           <ModeProvider>
             {loader && <Loader />}
             <NotificationBanner />
@@ -67,8 +69,8 @@ function App() {
               <RootNavigator />
             </NavigationContainer>
           </ModeProvider>
-        </SafeAreaProvider>
-      </SplashScreen>
+        </SplashScreen>
+      </SafeAreaProvider>
     </KeyboardProvider>
   );
 }

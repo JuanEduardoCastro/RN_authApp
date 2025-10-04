@@ -1,23 +1,20 @@
-import { View, Text } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useMode } from '@context/ModeContext';
 
+/**
+ * A hook to persist the current theme to AsyncStorage.
+ * It listens for changes in the ModeContext and saves the new theme name.
+ */
 const useThemeStorage = () => {
   const { themeName } = useMode();
-  const [theme, setTheme] = useState('luxury');
 
   useEffect(() => {
-    const checkThemeStoraged = async () => {
-      const themeStoraged = await AsyncStorage.getItem('theme');
-      themeStoraged && setTheme(themeStoraged);
-    };
-    checkThemeStoraged();
+    // When the themeName from the context changes, save it to storage.
+    if (themeName) {
+      AsyncStorage.setItem('theme', themeName);
+    }
   }, [themeName]);
-
-  return { theme };
-
-  /* USE MEMO HERE !!!!!!!!!!!!!!!!!!!! */
 };
 
 export default useThemeStorage;

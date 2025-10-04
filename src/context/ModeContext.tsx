@@ -4,6 +4,7 @@ import React, {
   ReactNode,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import {
@@ -20,7 +21,7 @@ interface ModeContextProps {
   colors: TColors;
   toggleMode: () => void;
   setColorTheme: (themeName: ColorThemeProps) => void;
-  themeName: string;
+  themeName: ColorThemeProps;
 }
 
 type ThemeProviderProps = {
@@ -29,99 +30,53 @@ type ThemeProviderProps = {
 
 const ModeContext = createContext<ModeContextProps | undefined>(undefined);
 
+const themes: Record<ColorThemeProps, ColorNameProps> = {
+  luxury,
+  calm,
+  gold,
+  passion,
+};
+
 export const ModeProvider = ({ children }: ThemeProviderProps) => {
   const systemColorScheme = useColorScheme();
   const [mode, setMode] = useState<ColorModeProps>(
     systemColorScheme || 'light',
   );
-  const [theme, setTheme] = useState<ColorNameProps>(luxury);
+  const [themeName, setThemeName] = useState<ColorThemeProps>('luxury');
 
   useEffect(() => {
-    const checkLocalStorage = async () => {
-      const isInMode = await AsyncStorage.getItem('mode');
-      if (isInMode) {
-        if (isInMode === 'light') {
-          setMode('light');
-        } else if (isInMode === 'dark') {
-          setMode('dark');
-        } else {
-          setMode(systemColorScheme || 'light');
-        }
-      }
+    const initialize = async () => {
+      const storedMode = (await AsyncStorage.getItem('mode')) as ColorModeProps;
+      const storedTheme = (await AsyncStorage.getItem(
+        'theme',
+      )) as ColorThemeProps;
+
+      setMode(storedMode || systemColorScheme || 'light');
+      setThemeName(storedTheme || 'luxury');
     };
-
-    const checkThemeStorage = async () => {
-      const themeStorage = await AsyncStorage.getItem('theme');
-      if (themeStorage) {
-        switch (themeStorage) {
-          case 'luxury':
-            setTheme(luxury);
-            return;
-          case 'calm':
-            setTheme(calm);
-            return;
-          case 'gold':
-            setTheme(gold);
-            return;
-          case 'passion':
-            setTheme(passion);
-            return;
-
-          default:
-            setTheme(luxury);
-            AsyncStorage.setItem('theme', 'luxury');
-            break;
-        }
-      }
-    };
-
-    checkLocalStorage();
-    checkThemeStorage();
+    initialize();
   }, []);
 
   const setColorTheme = (themeName: ColorThemeProps) => {
-    switch (themeName) {
-      case 'luxury':
-        setTheme(luxury);
-        AsyncStorage.setItem('theme', 'luxury');
-        return;
-      case 'calm':
-        setTheme(calm);
-        AsyncStorage.setItem('theme', 'calm');
-        return;
-      case 'gold':
-        setTheme(gold);
-        AsyncStorage.setItem('theme', 'gold');
-        return;
-      case 'passion':
-        setTheme(passion);
-        AsyncStorage.setItem('theme', 'passion');
-        return;
-
-      default:
-        setTheme(luxury);
-        AsyncStorage.setItem('theme', 'luxury');
-        break;
-    }
+    setThemeName(themeName);
+    AsyncStorage.setItem('theme', themeName);
   };
 
   const toggleMode = () => {
-    setMode(prevMode => (prevMode === 'light' ? 'dark' : 'light'));
-    if (mode === 'light') {
-      AsyncStorage.setItem('mode', 'dark');
-    } else if (mode === 'dark') {
-      AsyncStorage.setItem('mode', 'light');
-    } else {
-      AsyncStorage.removeItem('mode');
-    }
+    setMode(prevMode => {
+      const newMode = prevMode === 'light' ? 'dark' : 'light';
+      AsyncStorage.setItem('mode', newMode);
+      return newMode;
+    });
   };
 
-  const colors =
-    mode === 'light'
-      ? { ...theme.lightMode, ...sharedColors }
-      : { ...theme.darkMode, ...sharedColors };
+  const colors = useMemo(() => {
+    const currentTheme = themes[themeName];
+    return mode === 'light'
+      ? { ...currentTheme.lightMode, ...sharedColors }
+      : { ...currentTheme.darkMode, ...sharedColors };
+  }, [mode, themeName]);
 
-  const themeName = JSON.stringify(theme);
   return (
     <ModeContext.Provider
       value={{ mode, colors, toggleMode, setColorTheme, themeName }}>
