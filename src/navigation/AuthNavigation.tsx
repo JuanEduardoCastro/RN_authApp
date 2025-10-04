@@ -8,29 +8,16 @@ import { AuthStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
-const AuthNavigator = () => {
+const AuthNavigation = () => {
   return (
     <Stack.Navigator
       screenOptions={{
         gestureEnabled: false,
         headerShown: false,
       }}>
-      <Stack.Screen
-        name={'WelcomeScreen'}
-        component={WelcomeScreen}
-        options={{ gestureEnabled: false }}
-      />
-      <Stack.Screen
-        name={'LoginScreen'}
-        component={LoginScreen}
-        options={{ gestureEnabled: false }}
-      />
-      <Stack.Screen
-        name={'CheckEmailScreen'}
-        component={CheckEmailScreen}
-        options={{ gestureEnabled: false }}
-      />
-
+      <Stack.Screen name={'WelcomeScreen'} component={WelcomeScreen} />
+      <Stack.Screen name={'LoginScreen'} component={LoginScreen} />
+      <Stack.Screen name={'CheckEmailScreen'} component={CheckEmailScreen} />
       <Stack.Screen
         name={'NewPasswordScreen'}
         component={NewPasswordScreen}
@@ -40,4 +27,4 @@ const AuthNavigator = () => {
   );
 };
 
-export default AuthNavigator;
+export default AuthNavigation;

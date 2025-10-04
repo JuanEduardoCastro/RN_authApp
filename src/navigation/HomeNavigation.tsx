@@ -1,18 +1,18 @@
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import SettingsNavigator from './SettingsNavigator';
+import SettingsNavigator from './SettingsNavigation';
 import HomeScreen from '@screens/home/HomeScreen';
 import { HomeTabParamList } from './types';
-import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
-import { HomeIcon, ProfileIcon, SettingsIcon } from '@assets/svg/icons';
+import { HomeIcon, SettingsIcon } from '@assets/svg/icons';
+import useStyles from '@hooks/useStyles';
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
 
-const HomeNavigator = () => {
+const HomeNavigation = () => {
   const { colors, styles } = useStyles(createStyles);
   const inset = useSafeAreaInsets();
 
@@ -36,7 +36,7 @@ const HomeNavigator = () => {
           shadowOpacity: 0.19,
           shadowRadius: 10,
           position: 'absolute',
-          bottom: Platform.OS === 'ios' ? 0 : inset.bottom,
+          bottom: Platform.OS === 'ios' ? 0 : 8,
         },
 
         tabBarIcon: ({ size, focused, color }) => {
@@ -68,6 +68,6 @@ const HomeNavigator = () => {
   );
 };
 
-export default HomeNavigator;
+export default HomeNavigation;
 
 const createStyles = (colors: TColors) => StyleSheet.create({});

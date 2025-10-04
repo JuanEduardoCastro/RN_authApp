@@ -12,6 +12,7 @@ import { Provider } from 'react-redux';
 import { SplashScreen } from '@components/splash/SplashScreen';
 import Loader from '@components/shared/loader/Loader';
 import NotificationBanner from '@components/shared/notifications/NotificationBanner';
+import RootNavigator from '@navigation/RootNavigation';
 /* Custom hooks */
 /* Types */
 import { RootStackParamList } from '@navigation/types';
@@ -20,7 +21,6 @@ import { ModeProvider } from '@context/ModeContext';
 import store from '@store/store';
 import { useAppSelector } from '@store/authHook';
 import { userAuth } from '@store/authSlice';
-import RootNavigator from '@navigation/RootNavigator';
 /* Assets */
 
 if (__DEV__) {
