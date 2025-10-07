@@ -9,6 +9,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { DataAPI, UserCredentialsPayload } from './types';
 import { Platform } from 'react-native';
 import api from './apiService';
+import { useTranslation } from 'react-i18next';
 
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppSelector = useSelector.withTypes<RootState>();
@@ -21,6 +22,7 @@ export const useAppSelector = useSelector.withTypes<RootState>();
 export const validateRefreshToken = createAsyncThunk(
   'users/validaterfreshtoken',
   async (data: DataAPI, { rejectWithValue }) => {
+    const { t } = useTranslation();
     try {
       const response = await api.get('/users/validatetoken', {
         headers: { Authorization: `Bearer ${data.token}` },
@@ -37,17 +39,18 @@ export const validateRefreshToken = createAsyncThunk(
           user: response.data.user,
           token: response.data.accessToken,
           messageType: 'success',
-          notificationMessage: `Welcome back ${response.data.user.firstName}!`,
+          notificationMessage: `${t('success-welcome-back')}${
+            response.data.user.firstName
+          }!`,
         };
       }
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: 'An unknown error occurred.',
+        notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
       const message =
-        error.response?.data?.notificationMessage ||
-        'Session validation failed.';
+        error.response?.data?.notificationMessage || t('error-session-val');
       return rejectWithValue({
         messageType: 'error',
         notificationMessage: message,
@@ -64,6 +67,7 @@ export const validateRefreshToken = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   'users/login',
   async (data: DataAPI, { rejectWithValue }) => {
+    const { t } = useTranslation();
     try {
       const response = await api.post('/users/login', {
         email: data.email,
@@ -88,16 +92,16 @@ export const loginUser = createAsyncThunk(
           user: response.data.user,
           token: response.data.accessToken,
           messageType: 'success',
-          notificationMessage: 'Welcome!!',
+          notificationMessage: t('success-welcome'),
         };
       }
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: 'An unknown error occurred.',
+        notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
       const message =
-        error.response?.data?.notificationMessage || 'Wrong credentials!';
+        error.response?.data?.notificationMessage || t('error-credentials');
       return rejectWithValue({
         messageType: 'error',
         notificationMessage: message,
@@ -114,6 +118,7 @@ export const loginUser = createAsyncThunk(
 export const createUser = createAsyncThunk(
   'users/create',
   async (data: DataAPI, { rejectWithValue }) => {
+    const { t } = useTranslation();
     try {
       const response = await api.post(
         `/users/create`,
@@ -124,17 +129,16 @@ export const createUser = createAsyncThunk(
         return {
           success: true,
           messageType: 'success',
-          notificationMessage:
-            'User created successfully.\nPlase log in with credentials',
+          notificationMessage: t('success-log-in'),
         };
       }
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: 'An unknown error occurred.',
+        notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
       const message =
-        error.response?.data?.notificationMessage || 'Email check failed.';
+        error.response?.data?.notificationMessage || t('error-email-check');
       return rejectWithValue({
         messageType: 'error',
         notificationMessage: message,
@@ -151,11 +155,12 @@ export const createUser = createAsyncThunk(
 export const editUser = createAsyncThunk(
   'users/edituser',
   async (data: DataAPI, { getState, rejectWithValue }) => {
+    const { t } = useTranslation();
     const { auth } = getState() as RootState;
     if (!auth.token || !auth.user?._id) {
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: 'Not authenticated.',
+        notificationMessage: t('error-authenticated'),
       });
     }
 
@@ -169,16 +174,16 @@ export const editUser = createAsyncThunk(
         return {
           success: true,
           messageType: 'success',
-          notificationMessage: 'Profile updated successfully!',
+          notificationMessage: t('success-profile-updated'),
         };
       }
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: 'An unknown error occurred.',
+        notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
       const message =
-        error.response?.data?.notificationMessage || 'Update failed.';
+        error.response?.data?.notificationMessage || t('error-update');
       return rejectWithValue({
         messageType: 'error',
         notificationMessage: message,
@@ -195,6 +200,7 @@ export const editUser = createAsyncThunk(
 export const logoutUser = createAsyncThunk(
   'users/logout',
   async (data: DataAPI, { rejectWithValue }) => {
+    const { t } = useTranslation();
     try {
       const isGoogleSignin = GoogleSignin.hasPreviousSignIn();
       if (isGoogleSignin) {
@@ -211,16 +217,16 @@ export const logoutUser = createAsyncThunk(
           success: true,
           error: null,
           messageType: 'success',
-          notificationMessage: 'Log out successfully!\nSee you next time!',
+          notificationMessage: t('success-log-out'),
         };
       }
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: 'An unknown error occurred.',
+        notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
       const message =
-        error.response?.data?.notificationMessage || 'Email check failed.';
+        error.response?.data?.notificationMessage || t('error-email-check');
       return rejectWithValue({
         messageType: 'error',
         notificationMessage: message,
@@ -239,6 +245,8 @@ export const logoutUser = createAsyncThunk(
 export const checkEmail = createAsyncThunk(
   'users/checkemail',
   async (data: DataAPI, { rejectWithValue }) => {
+    const { t } = useTranslation();
+
     try {
       const response = await api.post('/users/checkemail', data);
       // Status 200 means the email was sent successfully
@@ -252,7 +260,7 @@ export const checkEmail = createAsyncThunk(
         // dispatch(
         //   setNotificationMessage({
         //     messageType: 'success',
-        //     notificationMessage: 'The email was sent.',
+        //     notificationMessage: t("success-email-sent"),
         //   }),
         // );
         return { success: true };
@@ -261,18 +269,17 @@ export const checkEmail = createAsyncThunk(
       if (response.status === 204) {
         return rejectWithValue({
           messageType: 'warning',
-          notificationMessage:
-            'This email is already in use.\nPlease try another one.',
+          notificationMessage: t('warning-email-in-use'),
         });
       }
       // Fallback for other unexpected success statuses
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: 'An unexpected error occurred.',
+        notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
       const message =
-        error.response?.data?.notificationMessage || 'Email check failed.';
+        error.response?.data?.notificationMessage || t('error-email-check');
       return rejectWithValue({
         messageType: 'error',
         notificationMessage: message,
@@ -289,6 +296,8 @@ export const checkEmail = createAsyncThunk(
 export const resetPassword = createAsyncThunk(
   'users/resetpassword',
   async (data: DataAPI, { rejectWithValue }) => {
+    const { t } = useTranslation();
+
     try {
       const response = await api.post('/users/resetpassword', data);
       if (response.status === 200) {
@@ -301,7 +310,7 @@ export const resetPassword = createAsyncThunk(
         // dispatch(
         //   setNotificationMessage({
         //     messageType: 'success',
-        //     notificationMessage: 'The email was sent.',
+        //     notificationMessage: t("success-email-sent"),
         //   }),
         // );
         return {
@@ -311,16 +320,16 @@ export const resetPassword = createAsyncThunk(
       } else if (response.status === 204) {
         return rejectWithValue({
           messageType: 'warning',
-          notificationMessage: 'This email is not registered.',
+          notificationMessage: t('warning-email-not-registered'),
         });
       }
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: 'An unexpected error occurred.',
+        notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
       const message =
-        error.response?.data?.notificationMessage || 'Password reset failed.';
+        error.response?.data?.notificationMessage || t('error-password-reset');
       return rejectWithValue({
         messageType: 'error',
         notificationMessage: message,
@@ -337,6 +346,7 @@ export const resetPassword = createAsyncThunk(
 export const updatePassword = createAsyncThunk(
   'users/updatepassword',
   async (data: DataAPI, { rejectWithValue }) => {
+    const { t } = useTranslation();
     try {
       const decodeToken = jwtDecode<CustomJwtPayload>(data.token as string);
       const response = await api.put(
@@ -348,17 +358,16 @@ export const updatePassword = createAsyncThunk(
         return {
           success: true,
           messageType: 'success',
-          notificationMessage:
-            'Password updated successfully.\nPlease log in with new credentials.',
+          notificationMessage: t('success-password-updated'),
         };
       }
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: 'An unknown error occurred.',
+        notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
       const message =
-        error.response?.data?.notificationMessage || 'Password update failed.';
+        error.response?.data?.notificationMessage || t('error-password-update');
       return rejectWithValue({
         messageType: 'error',
         notificationMessage: message,

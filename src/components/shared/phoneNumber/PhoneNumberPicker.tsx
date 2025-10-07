@@ -48,15 +48,7 @@ const PhoneNumberPicker = ({
   inputStyles,
   ...props
 }: PhoneNumberPickerProps) => {
-  const {
-    phoneData,
-    setPhoneData,
-    codeIndex,
-    setCodeIndex,
-    indexToScroll,
-    defaultCountryCode,
-    defaultDialCode,
-  } = useUserData();
+  const { indexToScroll, defaultCountryCode, defaultDialCode } = useUserData();
   const { field, fieldState } = useController({ name, control, rules });
   const { colors, styles } = useStyles(createStlyes);
   const isOpen = useSharedValue(false);

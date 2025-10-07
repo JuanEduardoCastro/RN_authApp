@@ -1,6 +1,6 @@
 /* Core libs & third parties libs */
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useRef } from 'react';
+import React, { use, useRef } from 'react';
 /* Custom components */
 import Separator from '@components/shared/Separator';
 import Button from '@components/shared/Button';
@@ -16,6 +16,7 @@ import { HomeTabScreenProps } from 'src/navigation/types';
 import { setNotificationMessage, userAuth } from 'src/store/authSlice';
 import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
+import { useTranslation } from 'react-i18next';
 /* Assets */
 
 const HomeScreen = ({
@@ -27,13 +28,14 @@ const HomeScreen = ({
   const { user } = useAppSelector(userAuth);
   const { accessTokenTimer, refreshTokenTimer } = useTimeExpired();
   const { colors, styles } = useStyles(createStyles);
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const createErrorMesage = () => {
     dispatch(
       setNotificationMessage({
         messageType: 'error',
-        notificationMessage: 'This is notificacion test! ',
+        notificationMessage: t('error-test-message'),
       }),
     );
   };
@@ -42,7 +44,7 @@ const HomeScreen = ({
 
   return (
     <View style={styles.container}>
-      <Button title="Create new error" onPress={createErrorMesage} />
+      <Button title={t('new-error-button')} onPress={createErrorMesage} />
       <Separator border={false} />
       <Text style={styles.text}>Home Screen</Text>
       <Separator border={false} />

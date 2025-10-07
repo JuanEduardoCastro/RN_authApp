@@ -1,6 +1,6 @@
 /* Core libs & third parties libs */
 import { Linking, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { use } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 /* Custom components */
 import Separator from '@components/shared/Separator';
@@ -21,6 +21,7 @@ import { textVar } from '@constants/textVar';
 import { IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
 /* Assets */
 import { AppleIcon, GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
+import { useTranslation } from 'react-i18next';
 
 GoogleSignin.configure({
   webClientId: WEB_CLIENT_ID,
@@ -35,6 +36,7 @@ const WelcomeScreen = ({
 }: AuthStackScreenProps<'WelcomeScreen'>) => {
   useBackHandler();
   const { colors, styles } = useStyles(createStyles);
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const handleGoogleLogin = async () => {
@@ -57,19 +59,19 @@ const WelcomeScreen = ({
     }
   };
 
-  const handleGitHubLogin = async () => {
-    const clientID = process.env.GITHUB_CLIENT_ID;
-    const redirectURI = process.env.GITHUB_REDIRECT_URI;
-    const URL = `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}`;
-    const supported = await Linking.canOpenURL(URL);
-    if (supported) {
-      await Linking.openURL(URL);
-    }
-    // const redirectResponse = await axios.get(
-    //   `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}`,
-    // );
-    __DEV__ && console.log('QUE PASA ACA --------------->', supported);
-  };
+  // const handleGitHubLogin = async () => {
+  //   const clientID = process.env.GITHUB_CLIENT_ID;
+  //   const redirectURI = process.env.GITHUB_REDIRECT_URI;
+  //   const URL = `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}`;
+  //   const supported = await Linking.canOpenURL(URL);
+  //   if (supported) {
+  //     await Linking.openURL(URL);
+  //   }
+  //   // const redirectResponse = await axios.get(
+  //   //   `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}`,
+  //   // );
+  //   __DEV__ && console.log('QUE PASA ACA --------------->', supported);
+  // };
 
   return (
     <BGGradient
@@ -79,18 +81,17 @@ const WelcomeScreen = ({
       angleCenter={{ x: 0.8, y: 1 }}>
       <View style={styles.container}>
         <View style={styles.titleBox}>
-          <Text style={styles.title}>WELCOME TO AUTH APP</Text>
-          <Text style={styles.subTitle}>USER AUTHORIZATION DEMO</Text>
+          <Text style={styles.title}>{t('welcome-title')} </Text>
+          <Text style={styles.subTitle}>{t('welcome-subtitle')}</Text>
           <Separator border={false} height={60} />
         </View>
         <View style={styles.titleBox}>
-          <Text style={styles.subTitle}>Plase login to your account </Text>
-          <Text style={styles.subTitle}>and try the app </Text>
+          <Text style={styles.subTitle}>{t('login-message')}</Text>
         </View>
         <View style={styles.buttonBox}>
           <ButtonWithIcon
             buttonStyles={{ backgroundColor: colors.light }}
-            title={'...with your email'}
+            title={t('with-email')}
             Icon={MailIcon}
             iconProps={{
               width: SCREEN.widthFixed * 20,
@@ -100,7 +101,7 @@ const WelcomeScreen = ({
           />
           <ButtonWithIcon
             buttonStyles={{ backgroundColor: colors.light }}
-            title={'...with Google'}
+            title={t('with-google')}
             Icon={GoogleIcon}
             iconProps={{
               width: SCREEN.widthFixed * 20,
@@ -109,14 +110,14 @@ const WelcomeScreen = ({
             onPress={handleGoogleLogin}
           />
           {/* <ButtonWithIcon
-            title={'...with GitHub'}
+             title={t('with-github')}
             Icon={GithubIcon}
             iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
             onPress={handleGitHubLogin}
           /> */}
           {/* {Platform.OS === 'ios' && (
             <ButtonWithIcon
-              title={'...with apple'}
+               title={t('with-apple')}
               Icon={AppleIcon}
               iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
               onPress={() => Alert.alert('Enter with apple account')}
@@ -124,12 +125,12 @@ const WelcomeScreen = ({
           )} */}
         </View>
         <View style={styles.titleBox}>
-          <Text style={styles.subTitle}>- or -</Text>
+          <Text style={styles.subTitle}>{t('or')}</Text>
         </View>
         <View style={styles.buttonBox}>
           <Button
             buttonStyles={{ backgroundColor: colors.light }}
-            title={'Register with your email'}
+            title={t('register-email')}
             onPress={() =>
               navigation.navigate('CheckEmailScreen', {
                 checkMode: 'new_password',
@@ -158,10 +159,12 @@ const createStyles = (colors: TColors) =>
     title: {
       ...textVar.titleBold,
       color: colors.light,
+      textAlign: 'center',
     },
     subTitle: {
       ...textVar.large,
       color: colors.light,
+      textAlign: 'center',
     },
     buttonBox: {
       width: SCREEN.widthFixed * 320,

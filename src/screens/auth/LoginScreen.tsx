@@ -17,6 +17,7 @@ import { AuthStackScreenProps } from '@navigation/types';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
+import { useTranslation } from 'react-i18next';
 /* Assets */
 
 interface FormDataProps {
@@ -34,6 +35,7 @@ const LoginScreen = ({
   const methods = useForm<FormDataProps>();
   const { handleSubmit, control } = methods;
   const { colors, styles } = useStyles(createStlyes);
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const onSubmit = async (data: FormDataProps) => {
@@ -52,51 +54,49 @@ const LoginScreen = ({
     <FormProvider {...methods}>
       <View style={styles.container}>
         <View style={styles.titleBox}>
-          <Text style={styles.subTitle}>
-            {'Enter your account with your email'}
-          </Text>
+          <Text style={styles.subTitle}>{t('enter-email-title')}</Text>
         </View>
         <View style={styles.inputBox}>
           <Separator borderWidth={0} />
           <InputAuthField
             inputStyles={styles.textinput}
             name="email"
-            label="Email"
+            label={t('email-label')}
             control={control}
             rules={{
-              required: 'Email is required',
+              required: t('email-required'),
               pattern: {
                 value:
                   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                message: 'Invalid email address',
+                message: t('email-invalid'),
               },
             }}
-            placeholder="Enter your email"
+            placeholder={t('enter-email-placeholder')}
           />
           <InputAuthField
             inputStyles={styles.textinput}
             name="password"
-            label="Password"
+            label={t('password-label')}
             control={control}
             rules={{
-              required: 'Password is required',
+              required: t('password-required'),
               minLength: {
                 value: 6,
-                message: 'Password must be at least 6 characters',
+                message: t('password-invalid'),
               },
             }}
-            placeholder="Enter your password"
+            placeholder={t('enter-password-placeholder')}
           />
           <CheckBoxCustom
             name="rememberMe"
-            label="Remember me"
+            label={t('remember-me-label')}
             control={control}
           />
         </View>
         <Separator borderWidth={0} height={16} />
         <View style={styles.buttonBox}>
           <Button
-            title="Login"
+            title={t('login-button')}
             onPress={handleSubmit(onSubmit)}
             buttonStyles={{ backgroundColor: colors.second }}
             textStyles={{ color: colors.textNgt, fontWeight: 600 }}
@@ -104,11 +104,11 @@ const LoginScreen = ({
         </View>
         <View style={styles.gobackBox}>
           <ButtonNoBorder
-            title={'Go back to select other option!'}
+            title={t('go-back-button')}
             onPress={() => navigation.popToTop()}
           />
           <ButtonNoBorder
-            title={'Reset your password'}
+            title={t('reset-password-go-to')}
             onPress={() =>
               navigation.navigate('CheckEmailScreen', {
                 checkMode: 'reset_password',

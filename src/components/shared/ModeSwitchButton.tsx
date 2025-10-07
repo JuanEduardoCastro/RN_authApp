@@ -25,7 +25,7 @@ const ModeSwitchButton = ({
     const translateX =
       mode === 'light'
         ? withTiming(0, { duration: 200 })
-        : withTiming(width / 2, { duration: 200 });
+        : withTiming(width / 2.3, { duration: 200 });
     return {
       transform: [{ translateX }],
     };

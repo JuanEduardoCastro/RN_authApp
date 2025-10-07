@@ -25,6 +25,7 @@ import { SCREEN } from '@constants/sizes';
 import { setNotificationMessage, userAuth } from 'src/store/authSlice';
 import { textVar } from '@constants/textVar';
 import { DataAPI } from '@store/types';
+import { useTranslation } from 'react-i18next';
 /* Assets */
 
 interface FormNewDataProps {
@@ -43,6 +44,7 @@ const NewPasswordScreen = ({
   const method = useForm<FormNewDataProps>();
   const { handleSubmit, control, setError } = method;
   const { colors, styles } = useStyles(createStlyes);
+  const { t } = useTranslation();
   const [email, setEmail] = useState<string | null>(null);
   const [newUser, setNewUser] = useState<boolean>(true);
 
@@ -53,14 +55,13 @@ const NewPasswordScreen = ({
         const userEmail = decode.email;
         decode.isNew !== undefined && setNewUser(decode.isNew);
         setEmail(userEmail);
-
         if (decode.exp) {
           const isExpired = Date.now() / 1000 > decode.exp;
           if (isExpired) {
             dispatch(
               setNotificationMessage({
                 messageType: 'warning',
-                notificationMessage: 'Code expired. Please, try again!',
+                notificationMessage: t('warning-code-expired'),
               }),
             );
             // Immediately replace the current screen to prevent further interaction.
@@ -74,14 +75,16 @@ const NewPasswordScreen = ({
         dispatch(
           setNotificationMessage({
             messageType: 'warning',
-            notificationMessage:
-              'There is no email checked. Please, try again!',
+            notificationMessage: t('warning-email-checked'),
           }),
         );
       }
     } catch (error) {
       __DEV__ &&
-        console.log('XX -> NewPassword.tsx:46 -> useEffect -> error :', error);
+        console.log(
+          'XX -> NewPasswordScreen.tsx:84 -> useEffect -> error :',
+          error,
+        );
       navigation.popToTop();
     }
   }, []);
@@ -91,7 +94,7 @@ const NewPasswordScreen = ({
       dispatch(
         setNotificationMessage({
           messageType: 'warning',
-          notificationMessage: 'The two passwords must be the same.',
+          notificationMessage: t('warning-two-passwords'),
         }),
       );
     } else {
@@ -113,7 +116,7 @@ const NewPasswordScreen = ({
       } catch (error) {
         __DEV__ &&
           console.log(
-            'XX -> NewPasswordScreen.tsx -> onSubmit -> error :',
+            'XX -> NewPasswordScreen.tsx:118 -> onSubmit -> error :',
             error,
           );
         // Errors are now handled by the rejected case in the extraReducers.
@@ -127,7 +130,7 @@ const NewPasswordScreen = ({
       <View style={styles.container}>
         <View style={styles.titleBox}>
           <Text style={styles.subTitle}>
-            {'Enter a new password for your account'}
+            {t('new-password-label-placeholder')}
           </Text>
         </View>
         <View style={styles.inputBox}>
@@ -135,35 +138,37 @@ const NewPasswordScreen = ({
           <InputAuthField
             inputStyles={styles.textinput}
             name="new_password"
-            label="New password"
+            label={t('new-password-label')}
             control={control}
             rules={{
-              required: 'Password is required',
+              required: t('password-required'),
               minLength: {
                 value: 6,
-                message: 'Password must be at least 6 characters',
+                message: t('password-invalid'),
               },
             }}
-            placeholder="Enter your new password"
+            placeholder={t('new-password-label-placeholder')}
           />
           <InputAuthField
             inputStyles={styles.textinput}
             name="confirm_password"
-            label="Confirm password"
+            label={t('confirm-password-label')}
             control={control}
             rules={{
-              required: 'Password is required',
+              required: t('password-required'),
               minLength: {
                 value: 6,
-                message: 'Password must be at least 6 characters',
+                message: t('password-invalid'),
               },
             }}
-            placeholder="Confirm your new password"
+            placeholder={t('confirm-password-label-placeholder')}
           />
         </View>
         <View style={styles.buttonBox}>
           <Button
-            title={newUser ? 'Register user' : 'New password'}
+            title={
+              newUser ? t('register-user-button') : t('new-password-button')
+            }
             onPress={handleSubmit(onSubmit)}
             buttonStyles={{ backgroundColor: colors.second }}
             textStyles={{ color: colors.textNgt, fontWeight: 600 }}
@@ -171,7 +176,7 @@ const NewPasswordScreen = ({
         </View>
         <View style={styles.gobackBox}>
           <ButtonNoBorder
-            title={'Go back to select other option!'}
+            title={t('go-back-button')}
             onPress={() => navigation.popToTop()}
           />
         </View>

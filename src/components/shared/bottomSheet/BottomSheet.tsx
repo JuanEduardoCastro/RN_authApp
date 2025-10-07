@@ -1,5 +1,5 @@
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
-import React, { ReactNode, useEffect } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import Animated, {
   SharedValue,
   useAnimatedStyle,
@@ -28,15 +28,15 @@ const BottomSheet = ({
 }: BottomSheetProps) => {
   const { colors, styles } = useStyles(createStlyes);
   const height = useSharedValue(0);
-  const isMounted = useSharedValue(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    isMounted.value = isOpen.value;
+    isOpen.value ? setIsVisible(true) : setIsVisible(false);
   }, [isOpen.value]);
 
-  // Only render the modal if it's mounted.
-  // This allows exit animations to complete before unmounting.
-  if (!isMounted.value) return null;
+  const handleCloseModal = () => {
+    setIsVisible(false);
+  };
 
   const progress = useDerivedValue(() =>
     withTiming(isOpen.value ? 0 : 1, { duration }),
@@ -48,10 +48,16 @@ const BottomSheet = ({
 
   const backdropStyle = useAnimatedStyle(() => ({
     opacity: 0.5 - progress.value,
+    zIndex: isOpen.value
+      ? 1
+      : withDelay(duration, withTiming(-1, { duration: 0 })),
   }));
 
   return (
-    <Modal transparent={true} visible={true} onRequestClose={toggleSheet}>
+    <Modal
+      transparent={true}
+      visible={isVisible}
+      onRequestClose={handleCloseModal}>
       <Animated.View style={[styles.backdrop, backdropStyle]}>
         <Pressable style={styles.closeButton} onPress={toggleSheet} />
       </Animated.View>

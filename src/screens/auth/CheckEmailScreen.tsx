@@ -18,6 +18,7 @@ import { textVar } from '@constants/textVar';
 import { AuthStackScreenProps } from '@navigation/types';
 import { setNotificationMessage } from '@store/authSlice';
 import { DataAPI } from '@store/types';
+import { useTranslation } from 'react-i18next';
 /* Assets */
 
 interface CheckEmailProps {
@@ -33,6 +34,7 @@ const CheckEmailScreen = ({
   const method = useForm<CheckEmailProps>();
   const { handleSubmit, control } = method;
   const { colors, styles } = useStyles(createStlyes);
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [isEmailSent, setIsEmailSent] = useState<boolean>(false);
   const [canResend, setCanResend] = useState<boolean>(false);
@@ -55,7 +57,7 @@ const CheckEmailScreen = ({
         dispatch(
           setNotificationMessage({
             messageType: 'success',
-            notificationMessage: 'The email was sent successfully.',
+            notificationMessage: t('success-email-sent'),
           }),
         );
       }
@@ -88,15 +90,15 @@ const CheckEmailScreen = ({
         <View style={styles.titleBox}>
           <Text style={styles.subTitle}>
             {checkMode.includes('new')
-              ? 'Please check your email to create\n a new account'
-              : 'Please insert your email to\n reset your password'}
+              ? t('check-email-title')
+              : t('reset-password-title')}
           </Text>
           <Text style={styles.subTitle2}>
             {isEmailSent &&
-              `Check your inbox to validate the email\n and ${
+              `${t('check-email-subtitle')} ${
                 checkMode.includes('new')
-                  ? 'create your account.'
-                  : 'reset your password.'
+                  ? t('create-account')
+                  : t('reset-password')
               }`}
           </Text>
         </View>
@@ -106,23 +108,27 @@ const CheckEmailScreen = ({
             editable={!isEmailSent}
             inputStyles={styles.textinput}
             name="email"
-            label="Email"
+            label={t('email-label')}
             control={control}
             rules={{
-              required: 'Email is required',
+              required: t('email-required'),
               pattern: {
                 value:
                   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                message: 'Invalid email address',
+                message: t('email-invalid'),
               },
             }}
-            placeholder="Enter your email"
+            placeholder={t('enter-email-placeholder')}
           />
         </View>
         <View style={styles.buttonBox}>
           <Button
             disabled={isEmailSent}
-            title={checkMode.includes('new') ? 'Check email' : 'Reset password'}
+            title={
+              checkMode.includes('new')
+                ? t('check-email-button')
+                : t('reset-password-button')
+            }
             onPress={handleSubmit(onSubmit)}
             buttonStyles={{ backgroundColor: colors.second }}
             textStyles={{ color: colors.textNgt, fontWeight: 600 }}
@@ -139,9 +145,7 @@ const CheckEmailScreen = ({
                 canResend && styles.resetBoxOnFocus,
               ]}
               onPress={handleSubmit(onSubmit)}>
-              <Text style={styles.resendText}>
-                You can resend the email in:{' '}
-              </Text>
+              <Text style={styles.resendText}>{t('resend-email-button')}</Text>
               <CountDownTimer
                 ref={timerRef}
                 timestamp={180}
@@ -166,13 +170,13 @@ const CheckEmailScreen = ({
         </View>
         <View style={styles.gobackBox}>
           <ButtonNoBorder
-            title={'Go back to select other option!'}
+            title={t('go-back-button')}
             onPress={() => navigation.popToTop()}
           />
           {/* <Pressable
             style={{ padding: 8 }}
             onPress={() =>
-              navigation.navigate('NewPasswordScreen', { token: null })
+              navigation.navigate('NewPasswordScreen', { emailToken: null })
             }>
             <Text style={styles.gobackText}>new password</Text>
           </Pressable> */}

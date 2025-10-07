@@ -1,6 +1,6 @@
 /* Core libs & third parties libs */
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
 /* Custom components */
@@ -22,6 +22,7 @@ import { SettingsStackScreenProps } from 'src/navigation/types';
 import { userAuth } from 'src/store/authSlice';
 import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
+import { useTranslation } from 'react-i18next';
 /* Assets */
 
 interface ProfileDataProps {
@@ -54,6 +55,7 @@ const ProfileScreen = ({
   const { setCodeIndex } = useUserData();
   const { handleSubmit, control, reset, setValue, getValues } = method;
   const { colors, styles } = useStyles(createStyles);
+  const { t } = useTranslation();
   const [layoutHeight, setLayoutHeight] = useState(0);
   const [editEnable, setEditEnable] = useState(false);
   const dispatch = useAppDispatch();
@@ -79,7 +81,7 @@ const ProfileScreen = ({
       }
     } catch (error) {
       __DEV__ &&
-        console.log('XX -> ProfileScreen.tsx:76 -> onSubmit -> error :', error);
+        console.log('XX -> ProfileScreen.tsx:84 -> onSubmit -> error :', error);
     }
     setEditEnable(false);
   };
@@ -90,11 +92,9 @@ const ProfileScreen = ({
     <SafeAreaView style={styles.container}>
       <HeaderGoBack onPress={() => navigation.goBack()} />
       <View style={styles.titleBox}>
-        <Text style={styles.title}>This is your profile screen</Text>
+        <Text style={styles.title}>{t('profile-title')}</Text>
         <Separator border={false} height={12} />
-        <Text style={styles.subTitle}>
-          Please, complete your personal information
-        </Text>
+        <Text style={styles.subTitle}>{t('profile-subtitle')}</Text>
       </View>
       <Separator border={false} height={32} />
       <View style={styles.buttonBox}>
@@ -103,12 +103,14 @@ const ProfileScreen = ({
           <Pressable
             onPress={editEnable ? handleSubmit(onSubmit) : handleEditInfo}>
             <Text style={styles.editButtonText}>
-              {editEnable ? 'Save' : 'Edit'}
+              {editEnable ? t('save-profile-button') : t('edit-profile-button')}
             </Text>
           </Pressable>
           {editEnable && (
             <Pressable onPress={handleCancelEditInfo}>
-              <Text style={styles.cancelButtonText}>Cancel</Text>
+              <Text style={styles.cancelButtonText}>
+                {t('cancel-profile-button')}
+              </Text>
             </Pressable>
           )}
         </View>
@@ -124,40 +126,40 @@ const ProfileScreen = ({
             editable={false}
             inputStyles={styles.textinput}
             name="email"
-            label="Email"
+            label={t('email-label')}
             control={control}
           />
           <InputAuthField
             editable={editEnable}
             inputStyles={styles.textinput}
             name="firstName"
-            label="First name"
+            label={t('first-name-label')}
             control={control}
-            placeholder="Firs name"
+            placeholder={t('first-name-placeholder')}
           />
           <InputAuthField
             editable={editEnable}
             inputStyles={styles.textinput}
             name="lastName"
-            label="Family name"
+            label={t('last-name-label')}
             control={control}
-            placeholder="Family name"
+            placeholder={t('last-name-placeholder')}
           />
           <PhoneNumberPicker
             editable={editEnable}
             inputStyles={styles.textinput}
             name="phoneNumber"
-            label="Phone number"
+            label={t('phone-number-label')}
             control={control}
-            placeholder="Phone number"
+            placeholder={t('phone-number-placeholder')}
           />
           <InputAuthField
             editable={editEnable}
             inputStyles={styles.textinput}
             name="occupation"
-            label="Occupation"
+            label={t('occupation-label')}
             control={control}
-            placeholder="Occupation"
+            placeholder={t('occupation-placeholder')}
           />
         </View>
         <Separator border={false} height={Platform.OS === 'ios' ? 60 : 80} />
