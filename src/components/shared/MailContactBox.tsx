@@ -11,6 +11,7 @@ import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
+import { useTranslation } from 'react-i18next';
 
 /* Core libs & third parties libs */
 /* Custom components */
@@ -25,6 +26,8 @@ type MailContactBoxProps = {
 
 const MailContactBox = ({ title }: MailContactBoxProps) => {
   const { colors, styles } = useStyles(createStyles);
+  const { t } = useTranslation();
+
   const subject = 'Contact from auth-app!';
   const body = `Today, ${new Date(Date.now()).toISOString()}`;
 
@@ -48,7 +51,7 @@ const MailContactBox = ({ title }: MailContactBoxProps) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>Contact ...</Text>
+      <Text style={styles.titleText}>{t('contact-title')}...</Text>
       <Pressable
         onPress={handleOpenMailApp}
         style={({ pressed }) => [styles.mailBox, pressed && styles.pressed]}

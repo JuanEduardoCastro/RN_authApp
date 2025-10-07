@@ -13,6 +13,7 @@ import {
   validateRefreshToken,
 } from './authHook';
 import { googleLogin } from './otherAuthHooks';
+import { useTranslation } from 'react-i18next';
 
 const initialState: AuthState = {
   loader: false,
@@ -22,6 +23,8 @@ const initialState: AuthState = {
   messageType: null,
   notificationMessage: null,
 };
+
+const { t } = useTranslation();
 
 const authSlice = createSlice({
   name: 'auth',
@@ -81,7 +84,7 @@ const authSlice = createSlice({
         const payload = action.payload as Partial<NotificationMessagePayload>;
         state.messageType = payload.messageType ?? 'error';
         state.notificationMessage =
-          payload.notificationMessage ?? 'An error occurred';
+          payload.notificationMessage ?? t('error-error');
       })
 
       /* login user */
@@ -105,7 +108,7 @@ const authSlice = createSlice({
         const payload = action.payload as Partial<NotificationMessagePayload>;
         state.messageType = payload.messageType ?? 'error';
         state.notificationMessage =
-          payload.notificationMessage ?? 'An error occurred';
+          payload.notificationMessage ?? t('error-error');
       })
 
       /* create user */
@@ -123,7 +126,7 @@ const authSlice = createSlice({
         const payload = action.payload as Partial<NotificationMessagePayload>;
         state.messageType = payload.messageType ?? 'error';
         state.notificationMessage =
-          payload.notificationMessage ?? 'An error occurred';
+          payload.notificationMessage ?? t('error-error');
       })
 
       /* edit user */
@@ -158,7 +161,7 @@ const authSlice = createSlice({
         const payload = action.payload as Partial<NotificationMessagePayload>;
         state.messageType = payload.messageType ?? 'error';
         state.notificationMessage =
-          payload.notificationMessage ?? 'Logout failed.';
+          payload.notificationMessage ?? t('error-logout');
       })
 
       /* googlesignin user  */
@@ -182,7 +185,7 @@ const authSlice = createSlice({
         const payload = action.payload as Partial<NotificationMessagePayload>;
         state.messageType = payload.messageType ?? 'error';
         state.notificationMessage =
-          payload.notificationMessage ?? 'An error occurred';
+          payload.notificationMessage ?? t('error-error');
       });
   },
 });

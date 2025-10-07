@@ -2,6 +2,7 @@ import * as Keychain from 'react-native-keychain';
 import { createAsyncThunk, isRejectedWithValue } from '@reduxjs/toolkit';
 import { isErrorWithCode } from '@react-native-google-signin/google-signin';
 import api from './apiService';
+import { useTranslation } from 'react-i18next';
 
 /**
  * User login with Google signin and persist in time
@@ -11,10 +12,11 @@ import api from './apiService';
 export const googleLogin = createAsyncThunk(
   'users/googlelogin',
   async (idToken: string | null, { rejectWithValue }) => {
+    const { t } = useTranslation();
     if (!idToken) {
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: 'An unknown error occurred.',
+        notificationMessage: t('error-google-unknown'),
       });
     }
 
@@ -70,7 +72,9 @@ export const googleLogin = createAsyncThunk(
               user: loginUser.data.user,
               token: loginUser.data.accessToken,
               messageType: 'success',
-              notificationMessage: `Welcome ${loginUser.data.user.firstName}`,
+              notificationMessage: `${t('success-welcome')} ${
+                loginUser.data.user.firstName
+              }`,
             };
           }
 
@@ -93,7 +97,7 @@ export const googleLogin = createAsyncThunk(
           //     user: loginUser.data.user,
           //     token: loginUser.data.accessToken,
           //     messageType: 'success',
-          //     notificationMessage: `Welcome back ${loginUser.data.user.firstName}`,
+          //     notificationMessage: ` ${t("success-welcome-back")} ${loginUser.data.user.firstName}`,
           //   };
           // }
           // if (createUSer.status === 201) {
@@ -107,13 +111,13 @@ export const googleLogin = createAsyncThunk(
           // user: loginUser.data.user,
           // token: loginUser.data.accessToken,
           // messageType: 'success',
-          // notificationMessage: `Welcome back ${loginUser.data.user.firstName}`,
+          // notificationMessage: `${t("success-welcome-back")} ${loginUser.data.user.firstName}`,
           // };
         }
       }
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: 'An unknown error occurred during login.',
+        notificationMessage: t('error-google-unknown'),
       });
     } catch (error: any) {
       __DEV__ && console.log('XX -> otherAuthHooks.ts:108 -> error :', error);
@@ -126,7 +130,7 @@ export const googleLogin = createAsyncThunk(
 
         return rejectWithValue({
           messageType: 'error',
-          notificationMessage: `Google Signin failed: ${error.code}`,
+          notificationMessage: `${t('error-google-signin')} ${error.code}`,
         });
       }
     }

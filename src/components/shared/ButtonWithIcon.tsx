@@ -77,7 +77,7 @@ const createStyles = (colors: TColors) =>
     text: {
       ...textVar.base,
       textAlign: 'center',
-      color: colors.text,
+      // color: colors.danger,
     },
     disabled: {
       opacity: 0.5,

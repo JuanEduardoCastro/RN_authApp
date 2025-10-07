@@ -25,6 +25,7 @@ module.exports = {
           '@constants': './src/constants',
           '@context': './src/context',
           '@hooks': './src/hooks',
+          '@locale': './src/locale',
           '@navigation': './src/navigation',
           '@screens': './src/screens',
           '@store': './src/store',

@@ -56,7 +56,7 @@ const PhoneListContainer = ({
     }
   };
 
-  const handleSelectCode = (codeSelected: string, index: number) => {
+  const handleSelectCode = (index: number) => {
     setSelectedIndex(index);
     flatListRef.current?.scrollToIndex({
       index: index,
@@ -101,9 +101,7 @@ const PhoneListContainer = ({
             index: index,
           })}
           renderItem={({ item, index }) => (
-            <Pressable
-              key={index + 1}
-              onPress={() => handleSelectCode(item.dialCode, index)}>
+            <Pressable key={index + 1} onPress={() => handleSelectCode(index)}>
               <View
                 style={[
                   styles.countryCard,

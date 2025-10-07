@@ -5,13 +5,13 @@ import useKeyboardEvents from '@hooks/useKeyboardEvents';
 
 type KeyboardScrollViewProps = {
   children: ReactNode;
-  extraBottomOffset?: number;
+  extraScroll?: number;
   scrollEnabled?: boolean;
 };
 
 const KeyboardScrollView = ({
   children,
-  extraBottomOffset = 100,
+  extraScroll = 100,
   scrollEnabled = true,
 }: KeyboardScrollViewProps) => {
   const { isKeyboardOpen } = useKeyboardEvents();
@@ -22,7 +22,7 @@ const KeyboardScrollView = ({
       scrollEnabled={isKeyboardOpen || scrollEnabled}
       style={styles.container}
       showsVerticalScrollIndicator={false}
-      bottomOffset={20 + extraBottomOffset}
+      bottomOffset={20 + extraScroll}
       disableScrollOnKeyboardHide={true}
       extraKeyboardSpace={10}
       keyboardShouldPersistTaps={'always'}>

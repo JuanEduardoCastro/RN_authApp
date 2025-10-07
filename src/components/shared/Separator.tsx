@@ -27,15 +27,19 @@ const Separator = ({
     <View
       style={[
         styles.separator,
-        {
-          height,
-          backgroundColor: background,
-          borderBottomWidth: border ? borderWidth : 0,
-          borderBottomColor: borderColor ?? colors.darkBase,
-          borderStyle,
-        },
-      ]}
-    />
+        { height: height, backgroundColor: background },
+      ]}>
+      <View
+        style={[
+          styles.line,
+          {
+            borderWidth: border ? borderWidth : 0,
+            borderColor: colors.darkBase ?? borderColor,
+            borderStyle: borderStyle,
+          },
+        ]}
+      />
+    </View>
   );
 };
 
@@ -47,4 +51,5 @@ const createStyles = (colors: TColors) =>
       width: SCREEN.width100,
       justifyContent: 'center',
     },
+    line: {},
   });

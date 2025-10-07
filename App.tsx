@@ -6,6 +6,7 @@ import {
   configureReanimatedLogger,
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
+import { I18nextProvider } from 'react-i18next';
 import { LinkingOptions, NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 /* Custom components */
@@ -21,6 +22,8 @@ import { ModeProvider } from '@context/ModeContext';
 import store from '@store/store';
 import { useAppSelector } from '@store/authHook';
 import { userAuth } from '@store/authSlice';
+import i18n from 'src/locale/i18next';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 /* Assets */
 
 if (__DEV__) {
@@ -57,21 +60,25 @@ function App() {
   };
 
   return (
-    <KeyboardProvider>
-      <SafeAreaProvider>
-        <SplashScreen
-          handleAppIsReady={handleAppIsReady}
-          isAppReady={isAppReady}>
-          <ModeProvider>
-            {loader && <Loader />}
-            <NotificationBanner />
-            <NavigationContainer linking={linking}>
-              <RootNavigator />
-            </NavigationContainer>
-          </ModeProvider>
-        </SplashScreen>
-      </SafeAreaProvider>
-    </KeyboardProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <KeyboardProvider>
+        <SafeAreaProvider>
+          <I18nextProvider i18n={i18n}>
+            <SplashScreen
+              handleAppIsReady={handleAppIsReady}
+              isAppReady={isAppReady}>
+              <ModeProvider>
+                {loader && <Loader />}
+                <NotificationBanner />
+                <NavigationContainer linking={linking}>
+                  <RootNavigator />
+                </NavigationContainer>
+              </ModeProvider>
+            </SplashScreen>
+          </I18nextProvider>
+        </SafeAreaProvider>
+      </KeyboardProvider>
+    </GestureHandlerRootView>
   );
 }
 
