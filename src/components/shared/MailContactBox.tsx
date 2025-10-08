@@ -41,7 +41,11 @@ const MailContactBox = ({ title }: MailContactBoxProps) => {
       try {
         await Linking.openURL(mailURL);
       } catch (error) {
-        __DEV__ && console.log('XX -> MailContactBox.tsx:26 -> error :', error);
+        __DEV__ &&
+          console.log(
+            'XX -> MailContactBox.tsx:44 -> handleOpenMailApp -> error :',
+            error,
+          );
         Alert.alert('Error', 'Could not open mail app.');
       }
     } else {

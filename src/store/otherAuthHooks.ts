@@ -11,8 +11,9 @@ import { useTranslation } from 'react-i18next';
 
 export const googleLogin = createAsyncThunk(
   'users/googlelogin',
-  async (idToken: string | null, { rejectWithValue }) => {
-    const { t } = useTranslation();
+  async (data: any, { rejectWithValue }) => {
+    const { idToken, t } = data;
+
     if (!idToken) {
       return rejectWithValue({
         messageType: 'error',

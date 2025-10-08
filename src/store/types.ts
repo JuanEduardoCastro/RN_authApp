@@ -44,6 +44,7 @@ export interface NotificationMessagePayload {
 }
 
 export interface DataAPI {
+  t: any;
   email: string | null;
   password: string | null;
   rememberMe: boolean;

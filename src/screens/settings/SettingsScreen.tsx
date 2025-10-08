@@ -58,15 +58,6 @@ const SettingsScreen = ({
   const [isVisible, setIsVisible] = useState(false);
   const dispatch = useAppDispatch();
 
-  // useEffect(() => {
-  //   const checkLng = async () => {
-  //     const locale = getLocales();
-  //     console.log('language locale -->', locale[0].languageCode);
-  //     console.log('language stored -->', await AsyncStorage.getItem('lng'));
-  //   };
-  //   checkLng();
-  // }, []);
-
   const toggleSheet = () => {
     setIsVisible(!isVisible);
   };
@@ -74,14 +65,17 @@ const SettingsScreen = ({
   const handleLogut = async () => {
     try {
       const res = await dispatch(
-        logoutUser({ email: user?.email } as DataAPI),
+        logoutUser({ email: user?.email, t } as DataAPI),
       ).unwrap();
       if (res?.success) {
         navigation.navigate('AuthNavigator', { screen: 'WelcomeScreen' });
       }
     } catch (error) {
       __DEV__ &&
-        console.log('XX -> HomeScreen.tsx:26 -> handleLogut -> error :', error);
+        console.log(
+          'XX -> SettingsScreen.tsx:74 -> handleLogut -> error :',
+          error,
+        );
     }
   };
 

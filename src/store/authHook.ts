@@ -9,7 +9,6 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { DataAPI, UserCredentialsPayload } from './types';
 import { Platform } from 'react-native';
 import api from './apiService';
-import { useTranslation } from 'react-i18next';
 
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppSelector = useSelector.withTypes<RootState>();
@@ -22,7 +21,7 @@ export const useAppSelector = useSelector.withTypes<RootState>();
 export const validateRefreshToken = createAsyncThunk(
   'users/validaterfreshtoken',
   async (data: DataAPI, { rejectWithValue }) => {
-    const { t } = useTranslation();
+    const { t } = data;
     try {
       const response = await api.get('/users/validatetoken', {
         headers: { Authorization: `Bearer ${data.token}` },
@@ -49,6 +48,7 @@ export const validateRefreshToken = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
+      __DEV__ && console.log('XX -> authHook.ts:51 -> error :', error);
       const message =
         error.response?.data?.notificationMessage || t('error-session-val');
       return rejectWithValue({
@@ -67,7 +67,7 @@ export const validateRefreshToken = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   'users/login',
   async (data: DataAPI, { rejectWithValue }) => {
-    const { t } = useTranslation();
+    const { t } = data;
     try {
       const response = await api.post('/users/login', {
         email: data.email,
@@ -100,6 +100,7 @@ export const loginUser = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
+      __DEV__ && console.log('XX -> authHook.ts:102 -> error :', error);
       const message =
         error.response?.data?.notificationMessage || t('error-credentials');
       return rejectWithValue({
@@ -118,7 +119,7 @@ export const loginUser = createAsyncThunk(
 export const createUser = createAsyncThunk(
   'users/create',
   async (data: DataAPI, { rejectWithValue }) => {
-    const { t } = useTranslation();
+    const { t } = data;
     try {
       const response = await api.post(
         `/users/create`,
@@ -137,6 +138,7 @@ export const createUser = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
+      __DEV__ && console.log('XX -> authHook.ts:141 -> error :', error);
       const message =
         error.response?.data?.notificationMessage || t('error-email-check');
       return rejectWithValue({
@@ -155,9 +157,15 @@ export const createUser = createAsyncThunk(
 export const editUser = createAsyncThunk(
   'users/edituser',
   async (data: DataAPI, { getState, rejectWithValue }) => {
-    const { t } = useTranslation();
+    const { t, userData } = data;
+    // console.log('XX -> authHook.ts:161 -> userData :', userData);
     const { auth } = getState() as RootState;
-    if (!auth.token || !auth.user?._id) {
+    // console.log('XX -> authHook.ts:163 -> auth :', auth.user);
+
+    const decodeToken = jwtDecode<CustomJwtPayload>(auth.token as string);
+    console.log('XX -> authHook.ts:165 -> decodeToken :', decodeToken);
+
+    if (!auth.token || !decodeToken._id) {
       return rejectWithValue({
         messageType: 'error',
         notificationMessage: t('error-authenticated'),
@@ -166,8 +174,8 @@ export const editUser = createAsyncThunk(
 
     try {
       const editUserResponse = await api.put(
-        `/users/edituser/${auth.user._id}`,
-        data.userData,
+        `/users/edituser/${decodeToken._id}`,
+        userData,
         { headers: { Authorization: `Bearer ${auth.token}` } },
       );
       if (editUserResponse.status === 201) {
@@ -182,6 +190,7 @@ export const editUser = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
+      __DEV__ && console.log('XX -> authHook.ts:187 -> error :', error);
       const message =
         error.response?.data?.notificationMessage || t('error-update');
       return rejectWithValue({
@@ -200,7 +209,7 @@ export const editUser = createAsyncThunk(
 export const logoutUser = createAsyncThunk(
   'users/logout',
   async (data: DataAPI, { rejectWithValue }) => {
-    const { t } = useTranslation();
+    const { t } = data;
     try {
       const isGoogleSignin = GoogleSignin.hasPreviousSignIn();
       if (isGoogleSignin) {
@@ -225,6 +234,7 @@ export const logoutUser = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
+      __DEV__ && console.log('XX -> authHook.ts:231 -> error :', error);
       const message =
         error.response?.data?.notificationMessage || t('error-email-check');
       return rejectWithValue({
@@ -245,7 +255,7 @@ export const logoutUser = createAsyncThunk(
 export const checkEmail = createAsyncThunk(
   'users/checkemail',
   async (data: DataAPI, { rejectWithValue }) => {
-    const { t } = useTranslation();
+    const { t } = data;
 
     try {
       const response = await api.post('/users/checkemail', data);
@@ -278,6 +288,7 @@ export const checkEmail = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
+      __DEV__ && console.log('XX -> authHook.ts:285 -> error :', error);
       const message =
         error.response?.data?.notificationMessage || t('error-email-check');
       return rejectWithValue({
@@ -296,7 +307,7 @@ export const checkEmail = createAsyncThunk(
 export const resetPassword = createAsyncThunk(
   'users/resetpassword',
   async (data: DataAPI, { rejectWithValue }) => {
-    const { t } = useTranslation();
+    const { t } = data;
 
     try {
       const response = await api.post('/users/resetpassword', data);
@@ -328,6 +339,7 @@ export const resetPassword = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
+      __DEV__ && console.log('XX -> authHook.ts:336 -> error :', error);
       const message =
         error.response?.data?.notificationMessage || t('error-password-reset');
       return rejectWithValue({
@@ -346,7 +358,7 @@ export const resetPassword = createAsyncThunk(
 export const updatePassword = createAsyncThunk(
   'users/updatepassword',
   async (data: DataAPI, { rejectWithValue }) => {
-    const { t } = useTranslation();
+    const { t } = data;
     try {
       const decodeToken = jwtDecode<CustomJwtPayload>(data.token as string);
       const response = await api.put(
@@ -366,6 +378,7 @@ export const updatePassword = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
+      __DEV__ && console.log('XX -> authHook.ts:375 -> error :', error);
       const message =
         error.response?.data?.notificationMessage || t('error-password-update');
       return rejectWithValue({

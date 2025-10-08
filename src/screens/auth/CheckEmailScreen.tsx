@@ -47,8 +47,8 @@ const CheckEmailScreen = ({
       }
 
       const actionToDispatch = checkMode.includes('new')
-        ? checkEmail(data as DataAPI)
-        : resetPassword(data as DataAPI);
+        ? checkEmail({ ...data, t } as DataAPI)
+        : resetPassword({ ...data, t } as DataAPI);
 
       const res = await dispatch(actionToDispatch).unwrap();
 
@@ -62,7 +62,11 @@ const CheckEmailScreen = ({
         );
       }
     } catch (error) {
-      __DEV__ && console.log('XX -> CheckEmailScreen.tsx:56 -> error :', error);
+      __DEV__ &&
+        console.log(
+          'XX -> CheckEmailScreen.tsx:65 -> onSubmit -> error :',
+          error,
+        );
       // Errors are now handled by the rejected case in the extraReducers,
       // which will display a notification.
     }
