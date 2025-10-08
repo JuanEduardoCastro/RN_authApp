@@ -6,8 +6,10 @@ import { CustomJwtPayload, UseCheckTokenReturn } from './types';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { Platform } from 'react-native';
 import { DataAPI } from '@store/types';
+import { useTranslation } from 'react-i18next';
 
 export const useCheckToken = (): UseCheckTokenReturn => {
+  const { t } = useTranslation();
   const [refreshTokenSaved, setRefreshTokenSaved] = useState<boolean>(false);
   const [checkCompleted, setCheckCompleted] = useState<boolean>(false);
   const [isExpired, setIsExpired] = useState<boolean>(true);
@@ -54,7 +56,7 @@ export const useCheckToken = (): UseCheckTokenReturn => {
         }
 
         await dispatch(
-          validateRefreshToken({ token: refreshToken.password } as DataAPI),
+          validateRefreshToken({ t, token: refreshToken.password } as DataAPI),
         ).unwrap();
 
         if (GoogleSignin.hasPreviousSignIn()) {
@@ -64,7 +66,7 @@ export const useCheckToken = (): UseCheckTokenReturn => {
       } catch (error) {
         __DEV__ &&
           console.log(
-            'XX -> useCheckToken.tsx:59 -> checkLocalStorage -> error :',
+            'XX -> useCheckToken.tsx:67 -> checkLocalStorage -> error :',
             error,
           );
         resetAutoLogin();

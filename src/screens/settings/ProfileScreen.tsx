@@ -72,16 +72,19 @@ const ProfileScreen = ({
 
   const onSubmit = async (data: ProfileDataProps) => {
     const { email, ...userData } = data;
-    const dataAPI = { userData };
+    const dataAPI = { userData, t };
+    console.log('lo que esta para mandar -->', dataAPI);
 
     try {
       const res = await dispatch(editUser(dataAPI as any)).unwrap();
+      console.log('XX -> ProfileScreen.tsx:79 -> onSubmit -> res :', res);
+
       if (!res?.success) {
         navigation.navigate('AuthNavigator', { screen: 'LoginScreen' });
       }
     } catch (error) {
       __DEV__ &&
-        console.log('XX -> ProfileScreen.tsx:84 -> onSubmit -> error :', error);
+        console.log('XX -> ProfileScreen.tsx:83 -> onSubmit -> error :', error);
     }
     setEditEnable(false);
   };
@@ -118,7 +121,8 @@ const ProfileScreen = ({
       <Separator border={false} height={24} />
       <KeyboardScrollView
         extraScroll={Platform.OS === 'ios' ? 4 : 0}
-        scrollEnabled={scrollEnabled}>
+        // scrollEnabled={scrollEnabled}
+      >
         <View
           style={styles.inputBox}
           onLayout={e => setLayoutHeight(e.nativeEvent.layout.height)}>
@@ -210,6 +214,7 @@ const createStyles = (colors: TColors) =>
       color: colors.danger,
     },
     inputBox: {
+      width: SCREEN.width100,
       flex: 1,
       paddingHorizontal: 16,
     },

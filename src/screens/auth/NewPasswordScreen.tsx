@@ -82,7 +82,7 @@ const NewPasswordScreen = ({
     } catch (error) {
       __DEV__ &&
         console.log(
-          'XX -> NewPasswordScreen.tsx:84 -> useEffect -> error :',
+          'XX -> NewPasswordScreen.tsx:83 -> NewPasswordScreen -> error :',
           error,
         );
       navigation.popToTop();
@@ -102,6 +102,7 @@ const NewPasswordScreen = ({
         email: email,
         password: data.new_password,
         token: emailToken,
+        t,
       };
 
       const actionToDispatch = newUser
@@ -119,6 +120,7 @@ const NewPasswordScreen = ({
             'XX -> NewPasswordScreen.tsx:118 -> onSubmit -> error :',
             error,
           );
+
         // Errors are now handled by the rejected case in the extraReducers.
         // We no longer navigate away on failure.
       }

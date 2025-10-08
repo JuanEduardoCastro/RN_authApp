@@ -24,8 +24,6 @@ const initialState: AuthState = {
   notificationMessage: null,
 };
 
-const { t } = useTranslation();
-
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -84,7 +82,7 @@ const authSlice = createSlice({
         const payload = action.payload as Partial<NotificationMessagePayload>;
         state.messageType = payload.messageType ?? 'error';
         state.notificationMessage =
-          payload.notificationMessage ?? t('error-error');
+          payload.notificationMessage ?? 'An error occurred';
       })
 
       /* login user */
@@ -108,7 +106,7 @@ const authSlice = createSlice({
         const payload = action.payload as Partial<NotificationMessagePayload>;
         state.messageType = payload.messageType ?? 'error';
         state.notificationMessage =
-          payload.notificationMessage ?? t('error-error');
+          payload.notificationMessage ?? 'An error occurred';
       })
 
       /* create user */
@@ -126,7 +124,7 @@ const authSlice = createSlice({
         const payload = action.payload as Partial<NotificationMessagePayload>;
         state.messageType = payload.messageType ?? 'error';
         state.notificationMessage =
-          payload.notificationMessage ?? t('error-error');
+          payload.notificationMessage ?? 'An error occurred';
       })
 
       /* edit user */
@@ -161,7 +159,7 @@ const authSlice = createSlice({
         const payload = action.payload as Partial<NotificationMessagePayload>;
         state.messageType = payload.messageType ?? 'error';
         state.notificationMessage =
-          payload.notificationMessage ?? t('error-logout');
+          payload.notificationMessage ?? 'An error occurred';
       })
 
       /* googlesignin user  */
@@ -185,7 +183,7 @@ const authSlice = createSlice({
         const payload = action.payload as Partial<NotificationMessagePayload>;
         state.messageType = payload.messageType ?? 'error';
         state.notificationMessage =
-          payload.notificationMessage ?? t('error-error');
+          payload.notificationMessage ?? 'An error occurred';
       });
   },
 });

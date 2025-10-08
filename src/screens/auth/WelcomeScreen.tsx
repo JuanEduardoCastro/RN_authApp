@@ -44,8 +44,9 @@ const WelcomeScreen = ({
       await GoogleSignin.hasPlayServices();
       const googleResponse = await GoogleSignin.signIn();
       const idToken = googleResponse.data!.idToken;
+      const data = { idToken, t };
 
-      const res = await dispatch(googleLogin(idToken)).unwrap();
+      const res = await dispatch(googleLogin(data)).unwrap();
 
       if (res?.success) {
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
@@ -53,7 +54,7 @@ const WelcomeScreen = ({
     } catch (error) {
       __DEV__ &&
         console.log(
-          'XX -> WelcomeScreen.tsx -> handleGoogleLogin -> error :',
+          'XX -> WelcomeScreen.tsx:55 -> handleGoogleLogin -> error :',
           error,
         );
     }

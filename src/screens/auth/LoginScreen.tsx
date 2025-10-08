@@ -40,13 +40,13 @@ const LoginScreen = ({
 
   const onSubmit = async (data: FormDataProps) => {
     try {
-      const res = await dispatch(loginUser(data)).unwrap();
+      const res = await dispatch(loginUser({ ...data, t })).unwrap();
       if (res?.success) {
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       }
     } catch (error) {
       __DEV__ &&
-        console.log('XX -> LoginScreen.tsx:42 -> onSubmit -> error :', error);
+        console.log('XX -> LoginScreen.tsx:48 -> onSubmit -> error :', error);
       navigation.popToTop();
     }
   };
