@@ -22,11 +22,15 @@ export const validateRefreshToken = createAsyncThunk(
   'users/validaterfreshtoken',
   async (data: DataAPI, { rejectWithValue }) => {
     const { t } = data;
-    try {
-      const response = await api.get('/users/validatetoken', {
-        headers: { Authorization: `Bearer ${data.token}` },
-      });
 
+    try {
+      const response = await api.post(
+        '/users/token/refresh',
+        {},
+        {
+          headers: { Authorization: `Bearer ${data.token}` },
+        },
+      );
       if (response.status === 200) {
         __DEV__ &&
           console.log(
@@ -158,12 +162,9 @@ export const editUser = createAsyncThunk(
   'users/edituser',
   async (data: DataAPI, { getState, rejectWithValue }) => {
     const { t, userData } = data;
-    // console.log('XX -> authHook.ts:161 -> userData :', userData);
     const { auth } = getState() as RootState;
-    // console.log('XX -> authHook.ts:163 -> auth :', auth.user);
 
     const decodeToken = jwtDecode<CustomJwtPayload>(auth.token as string);
-    console.log('XX -> authHook.ts:165 -> decodeToken :', decodeToken);
 
     if (!auth.token || !decodeToken._id) {
       return rejectWithValue({
@@ -173,14 +174,17 @@ export const editUser = createAsyncThunk(
     }
 
     try {
-      const editUserResponse = await api.put(
-        `/users/edituser/${decodeToken._id}`,
+      const editUserResponse = await api.patch(
+        `/users/${decodeToken._id}`,
         userData,
         { headers: { Authorization: `Bearer ${auth.token}` } },
       );
-      if (editUserResponse.status === 201) {
+
+      if (editUserResponse.status === 200) {
         return {
           success: true,
+          user: editUserResponse.data.user,
+          token: editUserResponse.data.accessToken,
           messageType: 'success',
           notificationMessage: t('success-profile-updated'),
         };
@@ -258,7 +262,7 @@ export const checkEmail = createAsyncThunk(
     const { t } = data;
 
     try {
-      const response = await api.post('/users/checkemail', data);
+      const response = await api.post('/users/check-email', data);
       // Status 200 means the email was sent successfully
       if (response.status === 200) {
         __DEV__ &&
@@ -310,7 +314,7 @@ export const resetPassword = createAsyncThunk(
     const { t } = data;
 
     try {
-      const response = await api.post('/users/resetpassword', data);
+      const response = await api.post('/users/reset-password', data);
       if (response.status === 200) {
         __DEV__ &&
           (console.log('--> --> --> --> --> --> --> --> --> --> '),
@@ -362,7 +366,7 @@ export const updatePassword = createAsyncThunk(
     try {
       const decodeToken = jwtDecode<CustomJwtPayload>(data.token as string);
       const response = await api.put(
-        `/users/updatepuser/${decodeToken._id}`,
+        `/users/${decodeToken._id}/password`,
         { email: data.email, password: data.password },
         { headers: { Authorization: `Bearer ${data.token}` } },
       );

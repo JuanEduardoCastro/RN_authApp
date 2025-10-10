@@ -32,6 +32,7 @@ export const useCheckToken = (): UseCheckTokenReturn => {
         const rememberMeFlag = await Keychain.getGenericPassword({
           service: 'secret remember me',
         });
+
         if (!rememberMeFlag || rememberMeFlag.password !== 'true') {
           resetAutoLogin();
           return;
