@@ -73,7 +73,6 @@ const ProfileScreen = ({
   const onSubmit = async (data: ProfileDataProps) => {
     const { email, ...userData } = data;
     const dataAPI = { userData, t };
-    console.log('lo que esta para mandar -->', dataAPI);
 
     try {
       const res = await dispatch(editUser(dataAPI as any)).unwrap();
