@@ -12,7 +12,7 @@
   "enter-email-title": "Ingresa a tu cuenta con tu email.",
   "email-label": "Email",
   "enter-email-placeholder": "Ingresa tu email",
-  "email-require": "El email es obligatorio.",
+  "email-required": "El email es obligatorio.",
   "email-invalid": "Dirección de email no válida.",
   "password-label": "Contraseña",
   "enter-password-placeholder": "Ingresa tu contraseña",
@@ -96,7 +96,7 @@
 
   "succes": "Éxito",
   "success-email-sent": "El email fue enviado con éxito.",
-  "success-welcome-back": "Bienvenido de nuevo",
+  "success-welcome-back": "Bienvenido de nuevo ",
   "success-welcome": "¡Bienvenido!",
   "success-log-in": "Usuario creado con éxito.\nPor favor, inicia sesión con tus credenciales.",
   "success-profile-updated": "¡Perfil actualizado con éxito!",

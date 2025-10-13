@@ -99,7 +99,7 @@ const CheckEmailScreen = ({
           </Text>
           <Text style={styles.subTitle2}>
             {isEmailSent &&
-              `${t('check-email-subtitle')} ${
+              `${t('check-inbox')} ${
                 checkMode.includes('new')
                   ? t('create-account')
                   : t('reset-password')

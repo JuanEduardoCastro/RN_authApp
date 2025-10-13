@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
  */
 
 export const googleLogin = createAsyncThunk(
-  'users/googlelogin',
+  'users/googlesignin',
   async (data: any, { rejectWithValue }) => {
     const { idToken, t } = data;
 
@@ -26,35 +26,69 @@ export const googleLogin = createAsyncThunk(
         `https://oauth2.googleapis.com/tokeninfo?id_token=${idToken}`,
       );
 
-      const { sub, email, given_name, family_name, picture } =
-        googleResponse.data;
-
       if (googleResponse.status === 200) {
-        const checkEmail = await api.post(`/users/checkemail`, {
+        const { sub, email, given_name, family_name, picture } =
+          googleResponse.data;
+
+        const checkEmailWithProvider = await api.post(`/users/check-provider`, {
           email: email,
-          isGoogleLogin: true,
+          provider: 'google',
         });
 
-        if (checkEmail.status === 200) {
+        if (checkEmailWithProvider.status === 200) {
+          const emailTokenResponse = checkEmailWithProvider.data.emailToken;
           const userData = {
             email: email,
             password: sub,
-            isGoogleLogin: true,
+            provider: 'google',
             firstName: given_name,
             lastName: family_name,
             avatarURL: picture,
           };
-          await api.post(`/users/create`, userData, {
-            headers: {
-              Authorization: `Bearer ${checkEmail.data.emailToken}`,
+          const createUserWithProvider = await api.post(
+            `/users/create`,
+            userData,
+            {
+              headers: {
+                Authorization: `Bearer ${emailTokenResponse}`,
+              },
             },
-          });
+          );
 
+          if (createUserWithProvider.status === 201) {
+            const loginNewUser = await api.post(`/users/login`, {
+              email: email,
+              password: sub,
+            });
+            if (loginNewUser.status === 200) {
+              await Keychain.setGenericPassword(
+                'refreshToken',
+                loginNewUser.data.refreshToken,
+                {
+                  service: 'secret token',
+                  accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
+                },
+              );
+              await Keychain.setGenericPassword('remember', 'true', {
+                service: 'secret remember me',
+                accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
+              });
+              return {
+                success: true,
+                user: loginNewUser.data.user,
+                token: loginNewUser.data.accessToken,
+                messageType: 'success',
+                notificationMessage: `${t('success-welcome')}${' '}${
+                  loginNewUser.data.user.firstName
+                }`,
+              };
+            }
+          }
+        } else if (checkEmailWithProvider.status === 204) {
           const loginUser = await api.post(`/users/login`, {
             email: email,
             password: sub,
           });
-
           if (loginUser.status === 200) {
             await Keychain.setGenericPassword(
               'refreshToken',
@@ -73,47 +107,11 @@ export const googleLogin = createAsyncThunk(
               user: loginUser.data.user,
               token: loginUser.data.accessToken,
               messageType: 'success',
-              notificationMessage: `${t('success-welcome')} ${
+              notificationMessage: `${t('success-welcome-back')}${' '}${
                 loginUser.data.user.firstName
               }`,
             };
           }
-
-          // if (loginUser.status === 200) {
-          //   await Keychain.setGenericPassword(
-          //     'refreshToken',
-          //     loginUser.data.refreshToken,
-          //     {
-          //       service: 'secret token',
-          //       accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
-          //     },
-          //   );
-          //   await Keychain.setGenericPassword('remember', 'true', {
-          //     service: 'secret remember me',
-          //     accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
-          //   });
-          //   return {
-          //     success: true,
-          //     error: null,
-          //     user: loginUser.data.user,
-          //     token: loginUser.data.accessToken,
-          //     messageType: 'success',
-          //     notificationMessage: ` ${t("success-welcome-back")} ${loginUser.data.user.firstName}`,
-          //   };
-          // }
-          // if (createUSer.status === 201) {
-
-          // }
-        } else if (checkEmail.status === 204) {
-          //TODO check when the user already exist and login successfully
-          // return {
-          //   success: true,
-          //   error: null,
-          // user: loginUser.data.user,
-          // token: loginUser.data.accessToken,
-          // messageType: 'success',
-          // notificationMessage: `${t("success-welcome-back")} ${loginUser.data.user.firstName}`,
-          // };
         }
       }
       return rejectWithValue({
@@ -121,13 +119,9 @@ export const googleLogin = createAsyncThunk(
         notificationMessage: t('error-google-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> otherAuthHooks.ts:108 -> error :', error);
+      __DEV__ && console.log('XX -> otherAuthHooks.ts:116 -> error :', error);
       if (isErrorWithCode(error)) {
-        __DEV__ &&
-          console.log(
-            'XX -> isErrorWithCode -> otherAuthHooks.ts:146 -> return -> error :',
-            error.code,
-          );
+        __DEV__ && console.log('XX -> otherAuthHooks.ts:118 -> error :', error);
 
         return rejectWithValue({
           messageType: 'error',

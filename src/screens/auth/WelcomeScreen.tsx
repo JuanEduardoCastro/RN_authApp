@@ -1,6 +1,6 @@
 /* Core libs & third parties libs */
 import { Linking, StyleSheet, Text, View } from 'react-native';
-import React, { use } from 'react';
+import React, { use, useState } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 /* Custom components */
 import Separator from '@components/shared/Separator';
@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 GoogleSignin.configure({
   webClientId: WEB_CLIENT_ID,
   iosClientId: IOS_CLIENT_ID,
-  offlineAccess: true,
+  offlineAccess: false,
   scopes: ['profile', 'email'],
 });
 
@@ -38,23 +38,36 @@ const WelcomeScreen = ({
   const { colors, styles } = useStyles(createStyles);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const [googleButtonDisabled, setGoogleButtonDisabled] = useState(false);
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleOriginalSignin = async () => {
+    setGoogleButtonDisabled(true);
     try {
-      await GoogleSignin.hasPlayServices();
+      const playServicesAvailable = await GoogleSignin.hasPlayServices();
+      if (!playServicesAvailable) {
+        await GoogleSignin.signOut();
+        setGoogleButtonDisabled(false);
+        throw Error;
+      }
       const googleResponse = await GoogleSignin.signIn();
-      const idToken = googleResponse.data!.idToken;
-      const data = { idToken, t };
+      if (!googleResponse) {
+        await GoogleSignin.signOut();
+        setGoogleButtonDisabled(false);
+        throw Error;
+      }
+      const { idToken, accessToken } = await GoogleSignin.getTokens();
 
+      const data = { idToken, t };
       const res = await dispatch(googleLogin(data)).unwrap();
 
       if (res?.success) {
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       }
+      setGoogleButtonDisabled(false);
     } catch (error) {
       __DEV__ &&
         console.log(
-          'XX -> WelcomeScreen.tsx:55 -> handleGoogleLogin -> error :',
+          'XX -> WelcomeScreen.tsx:64 -> handleGoogleOriginalSignin -> error :',
           error,
         );
     }
@@ -101,6 +114,7 @@ const WelcomeScreen = ({
             onPress={() => navigation.navigate('LoginScreen')}
           />
           <ButtonWithIcon
+            disabled={googleButtonDisabled}
             buttonStyles={{ backgroundColor: colors.light }}
             title={t('with-google')}
             Icon={GoogleIcon}
@@ -108,7 +122,8 @@ const WelcomeScreen = ({
               width: SCREEN.widthFixed * 20,
               height: SCREEN.heightFixed * 20,
             }}
-            onPress={handleGoogleLogin}
+            onPress={handleGoogleOriginalSignin}
+            // onPress={handleGoogleLogin}
           />
           {/* <ButtonWithIcon
              title={t('with-github')}

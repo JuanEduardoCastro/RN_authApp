@@ -115,7 +115,7 @@ export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
           />
           <View style={styles.versionContainer}>
             <Text style={styles.versionText}>
-              Version 0.1.1 (01) (redux refactor)
+              Version 0.1.1 (10) (redux refactor)
             </Text>
           </View>
         </BGGradient>
