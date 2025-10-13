@@ -62,7 +62,7 @@ const createStyles = (colors: TColors) =>
     },
     text: {
       ...textVar.base,
-      color: colors.text,
+      // color: colors.text,
     },
     disabled: {
       opacity: 0.5,

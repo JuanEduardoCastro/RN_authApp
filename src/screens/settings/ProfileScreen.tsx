@@ -76,7 +76,6 @@ const ProfileScreen = ({
 
     try {
       const res = await dispatch(editUser(dataAPI as any)).unwrap();
-      console.log('XX -> ProfileScreen.tsx:79 -> onSubmit -> res :', res);
 
       if (!res?.success) {
         navigation.navigate('AuthNavigator', { screen: 'LoginScreen' });

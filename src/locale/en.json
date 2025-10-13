@@ -12,7 +12,7 @@
   "enter-email-title": "Enter your account with your email.",
   "email-label": "Email",
   "enter-email-placeholder": "Enter your email",
-  "email-require": "Email is required.",
+  "email-required": "Email is required.",
   "email-invalid": "Invalid email address",
   "password-label": "Password",
   "enter-password-placeholder": "Enter your password",

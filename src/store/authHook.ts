@@ -1,12 +1,11 @@
 import * as Keychain from 'react-native-keychain';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from './store';
-import { createAsyncThunk, isRejectedWithValue } from '@reduxjs/toolkit';
-import { setLoader, setNotificationMessage } from './authSlice';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { jwtDecode } from 'jwt-decode';
 import { CustomJwtPayload } from '@hooks/types';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { DataAPI, UserCredentialsPayload } from './types';
+import { DataAPI } from './types';
 import { Platform } from 'react-native';
 import api from './apiService';
 
@@ -19,7 +18,7 @@ export const useAppSelector = useSelector.withTypes<RootState>();
  */
 
 export const validateRefreshToken = createAsyncThunk(
-  'users/validaterfreshtoken',
+  'users/token/refresh',
   async (data: DataAPI, { rejectWithValue }) => {
     const { t } = data;
 
@@ -159,7 +158,7 @@ export const createUser = createAsyncThunk(
  */
 
 export const editUser = createAsyncThunk(
-  'users/edituser',
+  'users/:id',
   async (data: DataAPI, { getState, rejectWithValue }) => {
     const { t, userData } = data;
     const { auth } = getState() as RootState;
@@ -257,7 +256,7 @@ export const logoutUser = createAsyncThunk(
  */
 
 export const checkEmail = createAsyncThunk(
-  'users/checkemail',
+  'users/check-email',
   async (data: DataAPI, { rejectWithValue }) => {
     const { t } = data;
 
@@ -270,13 +269,6 @@ export const checkEmail = createAsyncThunk(
           console.log('--> --> EL TOKEN PARA EL MAIL '),
           console.log(response.data.data),
           console.log('--> --> --> --> --> --> --> --> --> --> '));
-        // dispatch(setLoader(false));
-        // dispatch(
-        //   setNotificationMessage({
-        //     messageType: 'success',
-        //     notificationMessage: t("success-email-sent"),
-        //   }),
-        // );
         return { success: true };
       }
       // Status 204 means the email is already in use
@@ -309,7 +301,7 @@ export const checkEmail = createAsyncThunk(
  */
 
 export const resetPassword = createAsyncThunk(
-  'users/resetpassword',
+  'users/reset-password',
   async (data: DataAPI, { rejectWithValue }) => {
     const { t } = data;
 
@@ -321,13 +313,6 @@ export const resetPassword = createAsyncThunk(
           console.log('--> --> EL TOKEN PARA LA CONTRASEÑA '),
           console.log(response.data.data),
           console.log('--> --> --> --> --> --> --> --> --> --> '));
-        // dispatch(setLoader(false));
-        // dispatch(
-        //   setNotificationMessage({
-        //     messageType: 'success',
-        //     notificationMessage: t("success-email-sent"),
-        //   }),
-        // );
         return {
           success: true,
           error: null,
@@ -360,7 +345,7 @@ export const resetPassword = createAsyncThunk(
  */
 
 export const updatePassword = createAsyncThunk(
-  'users/updatepassword',
+  'users/password',
   async (data: DataAPI, { rejectWithValue }) => {
     const { t } = data;
     try {
