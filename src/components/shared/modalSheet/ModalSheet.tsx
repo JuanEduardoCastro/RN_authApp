@@ -6,17 +6,17 @@ import { SCREEN } from '@constants/sizes';
 import { TColors } from '@constants/types';
 import { textVar } from '@constants/textVar';
 
-type ModalSheetButtonProps = {
+type ModalSheetProps = {
   children: ReactNode;
   modalIsVisible: boolean;
   toggleSheet: (prev: boolean) => void;
 };
 
-const ModalSheetButton = ({
+const ModalSheet = ({
   children,
   modalIsVisible,
   toggleSheet,
-}: ModalSheetButtonProps) => {
+}: ModalSheetProps) => {
   const { colors, styles } = useStyles(createStlyes);
 
   const handleCloseModal = () => {
@@ -30,23 +30,13 @@ const ModalSheetButton = ({
       visible={modalIsVisible}
       onRequestClose={handleCloseModal}>
       <View style={[styles.backdrop]}>
-        <Pressable
-          style={styles.closeButton}
-          onPress={prev => toggleSheet(!prev)}
-        />
-      </View>
-      <View style={[styles.sheet]}>
-        <View style={styles.cropLine}>
-          <Separator borderWidth={3} height={12} />
-        </View>
-
-        {children}
+        <View style={[styles.sheet]}>{children}</View>
       </View>
     </Modal>
   );
 };
 
-export default ModalSheetButton;
+export default ModalSheet;
 
 const createStlyes = (colors: TColors) =>
   StyleSheet.create({
@@ -55,22 +45,17 @@ const createStlyes = (colors: TColors) =>
       flex: 1,
       width: SCREEN.width100,
       height: SCREEN.height100,
-      backgroundColor: colors.gray,
-      opacity: 0.5,
+      backgroundColor: colors.gray50,
       zIndex: 1,
-    },
-    closeButton: {
-      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     sheet: {
       backgroundColor: colors.background,
       padding: 8,
-      height: SCREEN.heightFixed * 300,
-      width: '100%',
-      position: 'absolute',
-      bottom: 0,
-      borderTopRightRadius: 20,
-      borderTopLeftRadius: 20,
+      height: SCREEN.heightFixed * 240,
+      width: '70%',
+      borderRadius: 20,
       zIndex: 2,
       alignItems: 'center',
       justifyContent: 'center',
@@ -81,10 +66,5 @@ const createStlyes = (colors: TColors) =>
       justifyContent: 'flex-start',
       alignItems: 'center',
       gap: 8,
-    },
-    cropLine: {
-      width: 60,
-      overflow: 'hidden',
-      borderRadius: 50,
     },
   });

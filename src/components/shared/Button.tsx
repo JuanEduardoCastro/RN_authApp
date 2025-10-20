@@ -37,8 +37,8 @@ const Button = ({
       testID="button"
       style={({ pressed }) => [
         styles.button,
-        buttonStyles,
         props.disabled && styles.disabled,
+        buttonStyles,
       ]}
       {...props}>
       <Text style={[styles.text, textStyles]}>{title}</Text>
