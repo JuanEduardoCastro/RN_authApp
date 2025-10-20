@@ -4,7 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const useBackHandler = () => {
   const countRef = useRef(0);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useFocusEffect(
     useCallback(() => {

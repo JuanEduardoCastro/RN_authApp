@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -50,7 +52,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app requires access to your location</string>
+	<string>This app require access to your phone location</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -68,11 +70,11 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>The app requires access to photo gallery</string>
+	<string>The app require access to your photo gallery.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>The app requires access to the camera</string>
+	<string>The app require access to your phone camera.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>The app requires access to the microphone</string>
+	<string>The app require access to your phone microphone.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Luckiest Guy Regular.ttf</string>

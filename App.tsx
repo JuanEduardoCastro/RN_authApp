@@ -6,6 +6,7 @@ import {
   configureReanimatedLogger,
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { I18nextProvider } from 'react-i18next';
 import { LinkingOptions, NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
@@ -23,7 +24,6 @@ import store from '@store/store';
 import { useAppSelector } from '@store/authHook';
 import { userAuth } from '@store/authSlice';
 import i18n from 'src/locale/i18next';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 /* Assets */
 
 if (__DEV__) {
@@ -66,7 +66,8 @@ function App() {
           <I18nextProvider i18n={i18n}>
             <SplashScreen
               handleAppIsReady={handleAppIsReady}
-              isAppReady={isAppReady}>
+              isAppReady={isAppReady}
+            >
               <ModeProvider>
                 {loader && <Loader />}
                 <NotificationBanner />
