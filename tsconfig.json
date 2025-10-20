@@ -1,5 +1,7 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json",
+  "extends": "@react-native/typescript-config",
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["**/node_modules", "**/Pods"],
   "compilerOptions": {
     "types": ["react-native", "jest"],
     "ignoreDeprecations": "6.0",
@@ -10,7 +12,7 @@
       "@constants/*": ["src/constants/*"],
       "@context/*": ["src/context/*"],
       "@hooks/*": ["src/hooks/*"],
-      "@locale/*": ["src/locale"],
+      "@locale/*": ["src/locale/*"],
       "@navigation/*": ["src/navigation/*"],
       "@screens/*": ["src/screens/*"],
       "@store/*": ["src/store/*"],

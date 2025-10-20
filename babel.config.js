@@ -1,5 +1,3 @@
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-
 module.exports = {
   presets: ['module:@react-native/babel-preset'],
   plugins: [
@@ -48,6 +46,6 @@ module.exports = {
         },
       },
     ],
-    'react-native-reanimated/plugin',
+    'react-native-worklets/plugin',
   ],
 };

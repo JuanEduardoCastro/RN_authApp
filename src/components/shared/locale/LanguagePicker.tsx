@@ -16,6 +16,11 @@ import languagesList from '@constants/languagesList';
 import i18next from 'i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+type LanguageInfo = {
+  flag: string;
+  nativeName: string;
+};
+
 type LanguagePickerProps = {
   toggleSheet: (prev: boolean) => void;
   onSelectLanguage?: (index: number) => void;
@@ -46,10 +51,19 @@ const LanguagePicker = ({
         renderItem={({ item, index }) => (
           <Pressable
             style={styles.countryCard}
-            onPress={() => handleSelectLanguage(item)}>
-            <Text style={styles.textFlag}>{languagesList[item].flag}</Text>
+            onPress={() => handleSelectLanguage(item)}
+          >
+            <Text style={styles.textFlag}>
+              {
+                (languagesList as unknown as Record<string, LanguageInfo>)[item]
+                  .flag
+              }
+            </Text>
             <Text style={styles.textName}>
-              {languagesList[item].nativeName}
+              {
+                (languagesList as unknown as Record<string, LanguageInfo>)[item]
+                  .nativeName
+              }
             </Text>
           </Pressable>
         )}

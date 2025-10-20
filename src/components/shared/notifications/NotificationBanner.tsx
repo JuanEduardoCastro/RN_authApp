@@ -52,7 +52,8 @@ const NotificationBanner = () => {
   };
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
+    let timeoutId: ReturnType<typeof setTimeout>;
+    // let timeoutId: NodeJS.Timeout;
 
     if (messageType) {
       starAnimation(0);
@@ -84,7 +85,8 @@ const NotificationBanner = () => {
         <Animated.View
           accessibilityRole="alert"
           accessibilityLabel={`Notification: ${notificationMessage}`}
-          style={[styles.container, animatedStyle, { paddingTop: insets.top }]}>
+          style={[styles.container, animatedStyle, { paddingTop: insets.top }]}
+        >
           <Pressable
             onPress={handleCloseBanner}
             style={
@@ -93,7 +95,8 @@ const NotificationBanner = () => {
                 borderRadius: 24,
                 opacity: 0.96,
               }
-            }>
+            }
+          >
             <View style={styles.bannerBox}>
               <View style={styles.bannerTextBox}>
                 <Text style={styles.bannerText}>
