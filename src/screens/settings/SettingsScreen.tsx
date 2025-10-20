@@ -1,6 +1,5 @@
 /* Core libs & third parties libs */
 import {
-  FlatList,
   Platform,
   Pressable,
   ScrollView,
@@ -8,7 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 /* Custom components */
 import Separator from '@components/shared/Separator';
@@ -26,7 +25,6 @@ import { SCREEN } from '@constants/sizes';
 import { setNotificationMessage, userAuth } from 'src/store/authSlice';
 import { useMode } from '@context/ModeContext';
 import { textVar } from '@constants/textVar';
-import languagesList from '../../constants/languagesList';
 /* Assets */
 import {
   CheckIcon,
@@ -36,16 +34,12 @@ import {
   ProfileIcon,
 } from '@assets/svg/icons';
 import { DataAPI } from '@store/types';
-import BottomSheet from '@components/shared/bottomSheet/BottomSheet';
-import { useSharedValue } from 'react-native-reanimated';
-import { resources } from 'src/locale/i18next';
-import ModalSheetButton from '@components/shared/bottomSheet/ModalSheetButton';
-import { set } from 'react-hook-form';
 import LanguagePicker from '@components/shared/locale/LanguagePicker';
 import CustomModal from '@components/shared/bottomSheet/CustomModal';
 import { useTranslation } from 'react-i18next';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getLocales } from 'react-native-localize';
+import ModalSheet from '@components/shared/modalSheet/ModalSheet';
+import Button from '@components/shared/Button';
+import LogoutModal from '@components/shared/modalSheet/LogoutModal';
 
 const SettingsScreen = ({
   route,
@@ -56,10 +50,15 @@ const SettingsScreen = ({
   const { colors, styles } = useStyles(createStyles);
   const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
+  const [confirmLogoutModal, setConfirmLogoutModal] = useState(false);
   const dispatch = useAppDispatch();
 
   const toggleSheet = () => {
     setIsVisible(!isVisible);
+  };
+
+  const toggleModalSheet = () => {
+    setConfirmLogoutModal(!confirmLogoutModal);
   };
 
   const handleLogut = async () => {
@@ -93,7 +92,7 @@ const SettingsScreen = ({
         <ScrollView style={styles.listScroll}>
           <ListCard
             title={t('logout-button')}
-            onPress={handleLogut}
+            onPress={toggleModalSheet}
             icon={<PowerIcon width={24} height={24} color={colors.text} />}
           />
           <Separator height={40} />
@@ -152,12 +151,19 @@ const SettingsScreen = ({
         </ScrollView>
         <MailContactBox title="authorization.demo.app@gmail.com" />
       </View>
-      {/* <ModalSheetButton modalIsVisible={isVisible} toggleSheet={setIsVisible}>
-        <LanguagePicker toggleSheet={setIsVisible} />
-      </ModalSheetButton> */}
       <CustomModal modalIsVisible={isVisible} toggleSheet={toggleSheet}>
         <LanguagePicker toggleSheet={toggleSheet} />
       </CustomModal>
+      {/* {confirmLogoutModal && ( */}
+      <ModalSheet
+        modalIsVisible={confirmLogoutModal}
+        toggleSheet={toggleModalSheet}>
+        <LogoutModal
+          toggleModalSheet={toggleModalSheet}
+          handleLogut={handleLogut}
+        />
+      </ModalSheet>
+      {/* )} */}
     </SafeAreaView>
   );
 };
@@ -200,5 +206,10 @@ const createStyles = (colors: TColors) =>
     modeText: {
       ...textVar.base,
       color: colors.text,
+    },
+    modalText: {
+      ...textVar.mediumBold,
+      color: colors.text,
+      textAlign: 'center',
     },
   });

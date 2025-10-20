@@ -37,7 +37,7 @@ const CustomModal = ({
   const height = useSharedValue(0);
 
   const progress = useDerivedValue(() =>
-    withTiming(modalIsVisible ? 0 : 1, { duration: 300 }),
+    withTiming(modalIsVisible ? 0 : 1, { duration: 100 }),
   );
 
   const animatedBackdropStyle = useAnimatedStyle(() => ({
@@ -70,7 +70,7 @@ const CustomModal = ({
       </Animated.View>
       <Animated.View
         style={[styles.bottomSheet]}
-        entering={SlideInDown.springify().damping(18).stiffness(120)}
+        entering={SlideInDown.springify().damping(60).stiffness(300)}
         exiting={SlideOutDown}>
         <View style={styles.header}>
           <View style={styles.cropLine}>
