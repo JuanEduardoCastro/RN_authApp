@@ -1,5 +1,11 @@
 /* Core libs & third parties libs */
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { jwtDecode } from 'jwt-decode';
@@ -129,7 +135,11 @@ const NewPasswordScreen = ({
 
   return (
     <FormProvider {...method}>
-      <View style={styles.container}>
+      {/* <View style={styles.container}> */}
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}>
         <View style={styles.titleBox}>
           <Text style={styles.subTitle}>
             {t('new-password-label-placeholder')}
@@ -182,7 +192,8 @@ const NewPasswordScreen = ({
             onPress={() => navigation.popToTop()}
           />
         </View>
-      </View>
+      </KeyboardAvoidingView>
+      {/* </View> */}
     </FormProvider>
   );
 };
