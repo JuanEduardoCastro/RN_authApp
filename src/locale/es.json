@@ -104,5 +104,7 @@
   "success-password-updated": "Contraseña actualizada con éxito.\nPor favor, inicia sesión con las nuevas credenciales.",
 
   "information": "¡Información!",
-  "information-another-screen": "Redirigiendo a otra pantalla."
+  "information-another-screen": "Redirigiendo a otra pantalla.",
+
+  "logout-message": "Estás seguro que quieres salir de tu cuenta?"
 }

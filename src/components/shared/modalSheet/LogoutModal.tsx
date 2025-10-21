@@ -4,6 +4,7 @@ import Button from '../Button';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { textVar } from '@constants/textVar';
+import { useTranslation } from 'react-i18next';
 
 type LogoutModalProps = {
   toggleModalSheet: () => void;
@@ -12,10 +13,11 @@ type LogoutModalProps = {
 
 const LogoutModal = ({ toggleModalSheet, handleLogut }: LogoutModalProps) => {
   const { colors, styles } = useStyles(createStyles);
+  const { t } = useTranslation();
 
   return (
     <View style={styles.logoutModal}>
-      <Text style={styles.modalText}>Are you sure you want to log out?</Text>
+      <Text style={styles.modalText}>{t('logout-message')}</Text>
       <View style={styles.buttonBox}>
         <Button
           title="No"
