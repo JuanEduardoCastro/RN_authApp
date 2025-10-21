@@ -104,5 +104,7 @@
   "success-password-updated": "Password updated successfully.\nPlease log in with new credentials.",
 
   "information": "Information!",
-  "information-another-screen": "Re direct to another screen!"
+  "information-another-screen": "Re direct to another screen!",
+
+  "logout-message": "Are you sure you want to log out?"
 }
