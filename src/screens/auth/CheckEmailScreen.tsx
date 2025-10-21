@@ -1,5 +1,12 @@
 /* Core libs & third parties libs */
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, { useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import CountDownTimer from 'react-native-countdown-timer-hooks';
@@ -90,7 +97,11 @@ const CheckEmailScreen = ({
 
   return (
     <FormProvider {...method}>
-      <View style={styles.container}>
+      {/* <View style={styles.container}> */}
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}>
         <View style={styles.titleBox}>
           <Text style={styles.subTitle}>
             {checkMode.includes('new')
@@ -185,7 +196,8 @@ const CheckEmailScreen = ({
             <Text style={styles.gobackText}>new password</Text>
           </Pressable> */}
         </View>
-      </View>
+      </KeyboardAvoidingView>
+      {/* </View> */}
     </FormProvider>
   );
 };
