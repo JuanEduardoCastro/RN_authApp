@@ -55,6 +55,8 @@ function App() {
   const { loader } = useAppSelector(userAuth);
   const [isAppReady, setIsAppReady] = useState(false);
 
+  console.log('que viene aca --->', linking);
+
   const handleAppIsReady = () => {
     setIsAppReady(true);
   };
@@ -66,11 +68,11 @@ function App() {
           <I18nextProvider i18n={i18n}>
             <SplashScreen
               handleAppIsReady={handleAppIsReady}
-              isAppReady={isAppReady}
-            >
+              isAppReady={isAppReady}>
               <ModeProvider>
                 {loader && <Loader />}
                 <NotificationBanner />
+                {/* <NavigationContainer> */}
                 <NavigationContainer linking={linking}>
                   <RootNavigator />
                 </NavigationContainer>

@@ -106,5 +106,7 @@
   "information": "Information!",
   "information-another-screen": "Re direct to another screen!",
 
-  "logout-message": "Are you sure you want to log out?"
+  "logout-message": "Are you sure you want to log out?",
+  "logout-cancel": "No",
+  "logout-confirmation": "Yes"
 }

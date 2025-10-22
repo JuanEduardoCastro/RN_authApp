@@ -114,7 +114,7 @@ export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
             onLoad={() => setImageState(IMG_STATE.FADE_IN_IMAGE)}
           />
           <View style={styles.versionContainer}>
-            <Text style={styles.versionText}>Version 0.1.1 (1)</Text>
+            <Text style={styles.versionText}>Version 0.1.1 (4)</Text>
           </View>
         </BGGradient>
       </SafeAreaProvider>

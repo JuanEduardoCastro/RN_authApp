@@ -5,6 +5,7 @@ import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { textVar } from '@constants/textVar';
 import { useTranslation } from 'react-i18next';
+import { SCREEN } from '@constants/sizes';
 
 type LogoutModalProps = {
   toggleModalSheet: () => void;
@@ -20,12 +21,16 @@ const LogoutModal = ({ toggleModalSheet, handleLogut }: LogoutModalProps) => {
       <Text style={styles.modalText}>{t('logout-message')}</Text>
       <View style={styles.buttonBox}>
         <Button
-          title="No"
+          title={t('logout-cancel')}
           onPress={toggleModalSheet}
           buttonStyles={styles.noButton}
           textStyles={styles.textButton}
         />
-        <Button title="Yes" onPress={handleLogut} />
+        <Button
+          title={t('logout-confirmation')}
+          onPress={handleLogut}
+          buttonStyles={styles.yesButton}
+        />
       </View>
     </View>
   );
@@ -38,6 +43,7 @@ const createStyles = (colors: TColors) =>
     logoutModal: {
       // backgroundColor: 'lightgray',
       gap: 40,
+      paddingHorizontal: 26,
     },
     modalText: {
       ...textVar.mediumBold,
@@ -49,9 +55,13 @@ const createStyles = (colors: TColors) =>
       justifyContent: 'space-around',
     },
     noButton: {
+      width: SCREEN.widthFixed * 75,
       backgroundColor: colors.background,
       borderWidth: 1,
       borderColor: colors.second,
+    },
+    yesButton: {
+      width: SCREEN.widthFixed * 75,
     },
     textButton: {
       ...textVar.base,

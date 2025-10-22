@@ -1,5 +1,6 @@
 /* Core libs & third parties libs */
 import {
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -47,6 +48,7 @@ const CheckEmailScreen = ({
   const [canResend, setCanResend] = useState<boolean>(false);
 
   const onSubmit = async (data: CheckEmailProps) => {
+    Keyboard.dismiss();
     try {
       if (canResend) {
         setCanResend(false);

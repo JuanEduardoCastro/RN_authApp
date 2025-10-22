@@ -1,5 +1,6 @@
 /* Core libs & third parties libs */
 import {
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -46,6 +47,7 @@ const LoginScreen = ({
   const dispatch = useAppDispatch();
 
   const onSubmit = async (data: FormDataProps) => {
+    Keyboard.dismiss();
     try {
       const res = await dispatch(loginUser({ ...data, t })).unwrap();
       if (res?.success) {
