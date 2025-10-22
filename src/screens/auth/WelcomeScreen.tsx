@@ -89,10 +89,10 @@ const WelcomeScreen = ({
 
   return (
     <BGGradient
-      colorInit={'#6b21a8'}
+      colorInit={'#7646c9'}
       colorEnd={colors.dark}
       angle={160}
-      angleCenter={{ x: 0.8, y: 1 }}>
+      angleCenter={{ x: 0.7, y: 0.9 }}>
       <View style={styles.container}>
         <View style={styles.titleBox}>
           <Text style={styles.title}>{t('welcome-title')} </Text>

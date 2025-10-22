@@ -96,3 +96,7 @@ env.d.ts
 
 #old-version
 old-version/
+
+#AWS S3 
+index.html
+assetlinks.json

@@ -106,5 +106,7 @@
   "information": "¡Información!",
   "information-another-screen": "Redirigiendo a otra pantalla.",
 
-  "logout-message": "Estás seguro que quieres salir de tu cuenta?"
+  "logout-message": "Estás seguro que quieres salir de tu cuenta?",
+  "logout-cancel": "No",
+  "logout-confirmation": "Si"
 }

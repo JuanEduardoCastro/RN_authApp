@@ -1,5 +1,12 @@
 /* Core libs & third parties libs */
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  Keyboard,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, { use, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -61,16 +68,19 @@ const ProfileScreen = ({
   const dispatch = useAppDispatch();
 
   const handleEditInfo = () => {
+    Keyboard.dismiss();
     setEditEnable(true);
   };
 
   const handleCancelEditInfo = () => {
+    Keyboard.dismiss();
     setCodeIndex(null);
     setEditEnable(false);
     reset();
   };
 
   const onSubmit = async (data: ProfileDataProps) => {
+    Keyboard.dismiss();
     const { email, ...userData } = data;
     const dataAPI = { userData, t };
 

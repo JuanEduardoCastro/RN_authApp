@@ -6,9 +6,9 @@ import { setCredentials, setResetCredentials } from '@store/authSlice';
 
 export const HOST = __DEV__
   ? Platform.OS === 'ios'
-    ? 'http://localhost:3005'
-    : 'http://10.0.2.2:3005'
-  : 'https://auth-app-fo8j.onrender.com';
+    ? 'http://localhost:3000'
+    : 'http://10.0.2.2:3000'
+  : 'http://rnauthappbe-production.up.railway.app';
 
 const api = axios.create({
   baseURL: HOST,

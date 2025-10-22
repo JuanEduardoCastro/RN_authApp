@@ -1,5 +1,6 @@
 /* Core libs & third parties libs */
 import {
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
@@ -55,6 +56,7 @@ const NewPasswordScreen = ({
   const [newUser, setNewUser] = useState<boolean>(true);
 
   useEffect(() => {
+    console.log('LLEGA EL TOKEN --->', emailToken);
     try {
       if (emailToken !== null) {
         const decode = jwtDecode<CustomJwtPayload>(emailToken);
@@ -96,6 +98,7 @@ const NewPasswordScreen = ({
   }, []);
 
   const onSubmit = async (data: FormNewDataProps) => {
+    Keyboard.dismiss();
     if (data.new_password !== data.confirm_password) {
       dispatch(
         setNotificationMessage({
