@@ -13,7 +13,6 @@ import {
   validateRefreshToken,
 } from './authHook';
 import { googleLogin } from './otherAuthHooks';
-import { useTranslation } from 'react-i18next';
 
 const initialState: AuthState = {
   loader: false,

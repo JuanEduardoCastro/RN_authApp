@@ -6,7 +6,6 @@ import { jwtDecode } from 'jwt-decode';
 import { CustomJwtPayload } from '@hooks/types';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { DataAPI } from './types';
-import { Platform } from 'react-native';
 import api from './apiService';
 
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
@@ -31,11 +30,11 @@ export const validateRefreshToken = createAsyncThunk(
         },
       );
       if (response.status === 200) {
-        __DEV__ &&
-          console.log(
-            'The user is authorized',
-            Platform.OS === 'ios' ? 'in iOS' : 'in Android',
-          );
+        // __DEV__ &&
+        //   console.log(
+        //     'The user is authorized',
+        //     Platform.OS === 'ios' ? 'in iOS' : 'in Android',
+        //   );
         return {
           success: true,
           user: response.data.user,
