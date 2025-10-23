@@ -2,7 +2,6 @@ import * as Keychain from 'react-native-keychain';
 import { createAsyncThunk, isRejectedWithValue } from '@reduxjs/toolkit';
 import { isErrorWithCode } from '@react-native-google-signin/google-signin';
 import api from './apiService';
-import { useTranslation } from 'react-i18next';
 
 /**
  * User login with Google signin and persist in time

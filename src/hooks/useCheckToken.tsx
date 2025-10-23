@@ -15,44 +15,44 @@ export const useCheckToken = (): UseCheckTokenReturn => {
   const [isExpired, setIsExpired] = useState<boolean>(true);
   const dispatch = useAppDispatch();
 
-  const resetAutoLogin = async () => {
-    __DEV__ &&
-      console.log(Platform.OS === 'ios' ? 'iOS' : 'Android', 'RESET USER');
-    setRefreshTokenSaved(false);
-    setIsExpired(true);
-    await Keychain.resetGenericPassword({ service: 'secret token' });
-    await Keychain.resetGenericPassword({ service: 'secret remember me' });
-    await GoogleSignin.signOut();
-  };
-
   useEffect(() => {
-    // resetAutoLogin();
+    // resetAutoLogin(); // This is in case of hard reset
     const checkLocalStorage = async () => {
+      let finalRefreshTokenSaved = false;
+      let finalIsExpired = true;
+
+      const resetAutoLogin = async () => {
+        await Keychain.resetGenericPassword({ service: 'secret token' });
+        await Keychain.resetGenericPassword({ service: 'secret remember me' });
+        if (GoogleSignin.hasPreviousSignIn()) {
+          await GoogleSignin.signOut();
+        }
+      };
+
       try {
         const rememberMeFlag = await Keychain.getGenericPassword({
           service: 'secret remember me',
         });
 
         if (!rememberMeFlag || rememberMeFlag.password !== 'true') {
-          resetAutoLogin();
+          await resetAutoLogin();
           return;
         }
 
         const refreshToken = await Keychain.getGenericPassword({
           service: 'secret token',
         });
+
         if (!refreshToken) {
-          resetAutoLogin();
+          await resetAutoLogin();
           return;
         }
 
-        setRefreshTokenSaved(true);
         const decodedToken = jwtDecode<CustomJwtPayload>(refreshToken.password);
         const currentTime = Math.floor(Date.now() / 1000);
 
         if (!decodedToken.exp || currentTime > decodedToken.exp) {
-          setIsExpired(true);
-          resetAutoLogin();
+          await resetAutoLogin();
           return;
         }
 
@@ -63,22 +63,26 @@ export const useCheckToken = (): UseCheckTokenReturn => {
         if (GoogleSignin.hasPreviousSignIn()) {
           await GoogleSignin.signInSilently();
         }
-        setIsExpired(false);
+
+        finalRefreshTokenSaved = true;
+        finalIsExpired = false;
       } catch (error) {
         __DEV__ &&
           console.log(
             'XX -> useCheckToken.tsx:67 -> checkLocalStorage -> error :',
             error,
           );
-        resetAutoLogin();
+        await resetAutoLogin();
       } finally {
         __DEV__ &&
           console.log(Platform.OS === 'ios' ? 'iOS' : 'Android', 'Finalizo');
+        setRefreshTokenSaved(finalRefreshTokenSaved);
+        setIsExpired(finalIsExpired);
         setCheckCompleted(true);
       }
     };
     checkLocalStorage();
-  }, []);
+  }, [dispatch, t]);
 
   return { refreshTokenSaved, isExpired, checkCompleted };
 };

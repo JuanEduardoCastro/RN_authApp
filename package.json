@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "start-cache": "react-native start -- --reset-cache --client-logs"
+    "start-cache": "react-native start -- --reset-cache --client-logs",
+    "start-logs": "react-native start --client-logs"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",

@@ -3,9 +3,7 @@ import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import BGGradient from '@components/shared/BGGradient';
 import { SCREEN } from '@constants/sizes';
-import { useAppSelector } from 'src/store/authHook';
 import { useCheckToken } from '@hooks/useCheckToken';
-import { userAuth } from 'src/store/authSlice';
 import { textVar } from '@constants/textVar';
 
 type SplashScreenProps = {
@@ -41,31 +39,16 @@ const IMG_STATE = {
 };
 
 export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
-  const { user } = useAppSelector(userAuth);
-  const { refreshTokenSaved, isExpired, checkCompleted } = useCheckToken();
+  const { checkCompleted } = useCheckToken();
   const containerOpacity = useRef(new Animated.Value(1)).current;
   const imageOpacity = useRef(new Animated.Value(0)).current;
   const [imageState, setImageState] = useState(IMG_STATE.LOADING_IMAGE);
 
-  __DEV__ &&
-    console.log(
-      'refreshTokenSaved, isExpired, checkCompleted',
-      refreshTokenSaved,
-      isExpired,
-      checkCompleted,
-    );
-
-  const checkUserLogged = async () => {
+  useEffect(() => {
     if (checkCompleted) {
-      if (refreshTokenSaved && !isExpired) {
-        if (user) {
-          handleAppIsReady();
-        }
-      } else {
-        handleAppIsReady();
-      }
+      handleAppIsReady();
     }
-  };
+  }, [checkCompleted, handleAppIsReady]);
 
   useEffect(() => {
     if (imageState === IMG_STATE.FADE_IN_IMAGE) {
@@ -75,8 +58,6 @@ export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
         useNativeDriver: true,
       }).start(() => setImageState(IMG_STATE.WAIT_FOR_APP_TO_BE_READY));
     }
-
-    checkUserLogged();
   }, [imageOpacity, imageState]);
 
   useEffect(() => {
