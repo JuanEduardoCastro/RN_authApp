@@ -5,6 +5,10 @@ import BGGradient from '@components/shared/BGGradient';
 import { SCREEN } from '@constants/sizes';
 import { useCheckToken } from '@hooks/useCheckToken';
 import { textVar } from '@constants/textVar';
+import packagejson from 'package.json';
+
+const APP_VERSION = packagejson.version;
+const APP_BUILD = packagejson.build;
 
 type SplashScreenProps = {
   children: ReactNode;
@@ -95,7 +99,9 @@ export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
             onLoad={() => setImageState(IMG_STATE.FADE_IN_IMAGE)}
           />
           <View style={styles.versionContainer}>
-            <Text style={styles.versionText}>Version 0.1.1 (4)</Text>
+            <Text style={styles.versionText}>
+              Version {APP_VERSION}, build ({APP_BUILD})
+            </Text>
           </View>
         </BGGradient>
       </SafeAreaProvider>
