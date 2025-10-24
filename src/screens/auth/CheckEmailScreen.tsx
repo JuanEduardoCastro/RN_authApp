@@ -99,7 +99,6 @@ const CheckEmailScreen = ({
 
   return (
     <FormProvider {...method}>
-      {/* <View style={styles.container}> */}
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -199,7 +198,6 @@ const CheckEmailScreen = ({
           </Pressable>
         </View>
       </KeyboardAvoidingView>
-      {/* </View> */}
     </FormProvider>
   );
 };

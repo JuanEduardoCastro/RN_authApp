@@ -3,7 +3,6 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   StyleSheet,
   Text,
   View,
@@ -36,10 +35,7 @@ interface FormDataProps {
   userData: Record<string, string>;
 }
 
-const LoginScreen = ({
-  navigation,
-  route,
-}: AuthStackScreenProps<'LoginScreen'>) => {
+const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
   const methods = useForm<FormDataProps>();
   const { handleSubmit, control } = methods;
   const { colors, styles } = useStyles(createStlyes);
@@ -61,7 +57,6 @@ const LoginScreen = ({
   };
   return (
     <FormProvider {...methods}>
-      {/* <View style={styles.container}> */}
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -130,7 +125,6 @@ const LoginScreen = ({
           />
         </View>
       </KeyboardAvoidingView>
-      {/* </View> */}
     </FormProvider>
   );
 };

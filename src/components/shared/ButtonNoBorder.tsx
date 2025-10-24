@@ -10,7 +10,6 @@ import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { textVar } from '@constants/textVar';
 import Animated, {
-  interpolateColor,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -26,7 +25,7 @@ const ButtonNoBorder = ({
   textStyles,
   ...props
 }: ButtonNoBorderProps) => {
-  const { colors, styles } = useStyles(createStyles);
+  const { styles } = useStyles(createStyles);
   const scale = useSharedValue(1);
 
   const animationStyles = useAnimatedStyle(() => {
@@ -47,7 +46,7 @@ const ButtonNoBorder = ({
     <Pressable
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      style={({ pressed }) => [props.disabled && styles.disabled]}
+      style={[props.disabled && styles.disabled]}
       {...props}>
       <Animated.View style={[styles.button, animationStyles]}>
         <Text style={[styles.gobackText, textStyles]}>{title}</Text>

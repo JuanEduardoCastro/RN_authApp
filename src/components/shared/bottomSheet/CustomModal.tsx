@@ -1,20 +1,17 @@
 import { SCREEN } from '@constants/sizes';
 import { TColors } from '@constants/types';
 import useStyles from '@hooks/useStyles';
-import React, { ReactNode, useEffect, useRef } from 'react';
+import React, { ReactNode } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, {
-  runOnJS,
   SlideInDown,
   SlideOutDown,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
   withDelay,
-  withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Separator from '../Separator';
 import { textVar } from '@constants/textVar';
 
@@ -24,17 +21,14 @@ type CustomModalProps = {
   toggleSheet: () => void;
 };
 
-const SHEET_HIGHT = SCREEN.heightFixed * 300;
-
 const CustomModal = ({
   children,
   modalIsVisible,
   toggleSheet,
 }: CustomModalProps) => {
-  const { colors, styles } = useStyles(createStyles);
+  const { styles } = useStyles(createStyles);
 
   const translateY = useSharedValue(0);
-  const height = useSharedValue(0);
 
   const progress = useDerivedValue(() =>
     withTiming(modalIsVisible ? 0 : 1, { duration: 100 }),
@@ -69,7 +63,7 @@ const CustomModal = ({
         <Pressable style={styles.closeButton} onPress={toggleSheet} />
       </Animated.View>
       <Animated.View
-        style={[styles.bottomSheet]}
+        style={[styles.bottomSheet, animatedSheetStyle]}
         entering={SlideInDown.springify().damping(60).stiffness(300)}
         exiting={SlideOutDown}>
         <View style={styles.header}>

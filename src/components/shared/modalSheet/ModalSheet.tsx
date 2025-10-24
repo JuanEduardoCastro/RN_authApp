@@ -1,10 +1,8 @@
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
-import React, { ReactNode, use } from 'react';
-import Separator from '../Separator';
+import { Modal, StyleSheet, View } from 'react-native';
+import React, { ReactNode } from 'react';
 import useStyles from '@hooks/useStyles';
 import { SCREEN } from '@constants/sizes';
 import { TColors } from '@constants/types';
-import { textVar } from '@constants/textVar';
 
 type ModalSheetProps = {
   children: ReactNode;
@@ -17,7 +15,7 @@ const ModalSheet = ({
   modalIsVisible,
   toggleSheet,
 }: ModalSheetProps) => {
-  const { colors, styles } = useStyles(createStlyes);
+  const { styles } = useStyles(createStlyes);
 
   const handleCloseModal = () => {
     toggleSheet(false);

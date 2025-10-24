@@ -1,33 +1,26 @@
 /* Core libs & third parties libs */
 import { StyleSheet, Text, View } from 'react-native';
-import React, { use, useRef } from 'react';
+import React from 'react';
 /* Custom components */
 import Separator from '@components/shared/Separator';
 import Button from '@components/shared/Button';
 /* Custom hooks */
 import useStyles from '@hooks/useStyles';
-import { useAppDispatch, useAppSelector } from 'src/store/authHook';
-import useTimeExpired from '@hooks/useTimeExpired';
+import { useAppDispatch } from 'src/store/authHook';
 import useBackHandler from '@hooks/useBackHandler';
 /* Types */
 import { TColors } from '@constants/types';
 import { HomeTabScreenProps } from 'src/navigation/types';
 /* Utilities & constants */
-import { setNotificationMessage, userAuth } from 'src/store/authSlice';
+import { setNotificationMessage } from 'src/store/authSlice';
 import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
 import { useTranslation } from 'react-i18next';
 /* Assets */
 
-const HomeScreen = ({
-  navigation,
-  route,
-}: HomeTabScreenProps<'HomeScreen'>) => {
+const HomeScreen = ({}: HomeTabScreenProps<'HomeScreen'>) => {
   useBackHandler();
-  const timerRef = useRef<any>(null);
-  const { user } = useAppSelector(userAuth);
-  const { accessTokenTimer, refreshTokenTimer } = useTimeExpired();
-  const { colors, styles } = useStyles(createStyles);
+  const { styles } = useStyles(createStyles);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -39,8 +32,6 @@ const HomeScreen = ({
       }),
     );
   };
-
-  const handleTimerProgress = (val: any) => {};
 
   return (
     <View style={styles.container}>

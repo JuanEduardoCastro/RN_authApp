@@ -2,7 +2,7 @@ import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 import useStyles from '@hooks/useStyles';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   Platform,
@@ -15,6 +15,7 @@ import { resources } from 'src/locale/i18next';
 import languagesList from '@constants/languagesList';
 import i18next from 'i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getLocales } from 'react-native-localize';
 
 type LanguageInfo = {
   flag: string;
@@ -23,17 +24,29 @@ type LanguageInfo = {
 
 type LanguagePickerProps = {
   toggleSheet: (prev: boolean) => void;
-  onSelectLanguage?: (index: number) => void;
-  selectLanguage?: string;
 };
 
-const LanguagePicker = ({
-  toggleSheet,
-  onSelectLanguage,
-  selectLanguage,
-}: LanguagePickerProps) => {
+const LanguagePicker = ({ toggleSheet }: LanguagePickerProps) => {
   const flatListRef = useRef<any>(null);
-  const { colors, styles } = useStyles(createStyles);
+  const { styles } = useStyles(createStyles);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>();
+
+  useEffect(() => {
+    const checkLanguage = async () => {
+      let langName = '';
+      const lngStored = await AsyncStorage.getItem('lng');
+      if (lngStored) {
+        langName = lngStored;
+      } else {
+        const locales = getLocales();
+        langName = locales[0].languageCode;
+      }
+      const index = Object.keys(resources).indexOf(langName);
+      setSelectedIndex(index);
+    };
+
+    checkLanguage();
+  }, []);
 
   const handleSelectLanguage = async (lng: any) => {
     i18next.changeLanguage(lng);
@@ -48,11 +61,17 @@ const LanguagePicker = ({
         data={Object.keys(resources)}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item}
-        renderItem={({ item, index }) => (
+        renderItem={({ index, item }) => (
           <Pressable
-            style={styles.countryCard}
-            onPress={() => handleSelectLanguage(item)}
-          >
+            style={[
+              styles.countryCard,
+              selectedIndex === index && styles.selectedItem,
+              index === 0 && { marginTop: SCREEN.heightFixed * 35 * 2 },
+              index === Object.keys(resources).length - 1 && {
+                marginBottom: SCREEN.heightFixed * 35 * 2,
+              },
+            ]}
+            onPress={() => handleSelectLanguage(item)}>
             <Text style={styles.textFlag}>
               {
                 (languagesList as unknown as Record<string, LanguageInfo>)[item]
@@ -78,14 +97,12 @@ const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      // width: SCREEN.widthFixed,
       justifyContent: 'flex-start',
       alignItems: 'center',
       gap: 8,
     },
     commandsBox: {
       width: SCREEN.width100,
-      flexDirection: 'row',
       justifyContent: 'space-between',
       paddingHorizontal: 18,
       paddingVertical: 8,
@@ -105,7 +122,6 @@ const createStyles = (colors: TColors) =>
       borderColor: colors.second,
     },
     countryCard: {
-      // width: SCREEN.widthFixed * 300,
       width: 'auto',
       height: SCREEN.heightFixed * 35,
       flexDirection: 'row',
@@ -118,22 +134,11 @@ const createStyles = (colors: TColors) =>
       color: colors.text,
       textAlign: 'center',
     },
-    textCode: {
-      ...textVar.base,
-      width: 50,
-      // fontSize: 16,
-      color: colors.text,
-      textAlign: 'right',
-    },
     textName: {
       ...textVar.large,
-      width: 'auto',
-      // fontSize: 20,
-      paddingLeft: 8,
+      // width: 'auto',
+      paddingHorizontal: 8,
       color: colors.text,
       overflow: 'hidden',
-    },
-    text: {
-      color: colors.text,
     },
   });

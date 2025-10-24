@@ -40,7 +40,7 @@ const themes: Record<ColorThemeProps, ColorNameProps> = {
 export const ModeProvider = ({ children }: ThemeProviderProps) => {
   const systemColorScheme = useColorScheme();
   const [mode, setMode] = useState<ColorModeProps>(
-    systemColorScheme || 'light',
+    systemColorScheme === 'dark' ? 'dark' : 'light',
   );
   const [themeName, setThemeName] = useState<ColorThemeProps>('luxury');
 
@@ -51,11 +51,11 @@ export const ModeProvider = ({ children }: ThemeProviderProps) => {
         'theme',
       )) as ColorThemeProps;
 
-      setMode(storedMode || systemColorScheme || 'light');
+      setMode(storedMode || (systemColorScheme === 'dark' ? 'dark' : 'light'));
       setThemeName(storedTheme || 'luxury');
     };
     initialize();
-  }, []);
+  }, [systemColorScheme]);
 
   const setColorTheme = (themeName: ColorThemeProps) => {
     setThemeName(themeName);

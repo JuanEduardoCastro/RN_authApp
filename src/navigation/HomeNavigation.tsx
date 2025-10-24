@@ -1,20 +1,17 @@
-import { StyleSheet, Platform } from 'react-native';
 import React from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SettingsNavigator from './SettingsNavigation';
 import HomeScreen from '@screens/home/HomeScreen';
 import { HomeTabParamList } from './types';
-import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
 import { HomeIcon, SettingsIcon } from '@assets/svg/icons';
-import useStyles from '@hooks/useStyles';
+import { useMode } from '@context/ModeContext';
+import { Platform } from 'react-native';
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
 
 const HomeNavigation = () => {
-  const { colors, styles } = useStyles(createStyles);
-  const inset = useSafeAreaInsets();
+  const { colors } = useMode();
 
   return (
     <Tab.Navigator
@@ -39,7 +36,7 @@ const HomeNavigation = () => {
           bottom: Platform.OS === 'ios' ? 0 : 8,
         },
 
-        tabBarIcon: ({ size, focused, color }) => {
+        tabBarIcon: ({ focused }) => {
           switch (route.name) {
             case 'HomeScreen':
               return (
@@ -69,5 +66,3 @@ const HomeNavigation = () => {
 };
 
 export default HomeNavigation;
-
-const createStyles = (colors: TColors) => StyleSheet.create({});

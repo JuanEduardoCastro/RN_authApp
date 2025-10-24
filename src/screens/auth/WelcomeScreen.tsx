@@ -1,6 +1,6 @@
 /* Core libs & third parties libs */
-import { Linking, StyleSheet, Text, View } from 'react-native';
-import React, { use, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 /* Custom components */
 import Separator from '@components/shared/Separator';
@@ -20,7 +20,7 @@ import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
 import { IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
 /* Assets */
-import { AppleIcon, GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
+import { GoogleIcon, MailIcon } from '@assets/svg/icons';
 import { useTranslation } from 'react-i18next';
 
 GoogleSignin.configure({
@@ -32,7 +32,6 @@ GoogleSignin.configure({
 
 const WelcomeScreen = ({
   navigation,
-  route,
 }: AuthStackScreenProps<'WelcomeScreen'>) => {
   useBackHandler();
   const { colors, styles } = useStyles(createStyles);
@@ -55,7 +54,7 @@ const WelcomeScreen = ({
         setGoogleButtonDisabled(false);
         throw Error;
       }
-      const { idToken, accessToken } = await GoogleSignin.getTokens();
+      const { idToken } = await GoogleSignin.getTokens();
 
       const data = { idToken, t };
       const res = await dispatch(googleLogin(data)).unwrap();

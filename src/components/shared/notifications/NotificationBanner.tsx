@@ -1,6 +1,6 @@
 /* Core libs & third parties libs */
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -52,13 +52,10 @@ const NotificationBanner = () => {
   };
 
   useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
-    // let timeoutId: NodeJS.Timeout;
-
     if (messageType) {
       starAnimation(0);
 
-      timeoutId = setTimeout(() => {
+      setTimeout(() => {
         starAnimation(-100);
         dispatch(
           setNotificationMessage({
@@ -68,7 +65,7 @@ const NotificationBanner = () => {
         );
       }, 4000);
     }
-  }, [messageType]);
+  }, [messageType, dispatch, starAnimation]);
 
   const handleCloseBanner = () => {
     starAnimation(-100);

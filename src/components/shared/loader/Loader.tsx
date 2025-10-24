@@ -11,7 +11,7 @@ import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 
 const Loader = () => {
-  const { colors, styles } = useStyles(createStyles);
+  const { styles } = useStyles(createStyles);
   const rotation = useSharedValue(0);
 
   useEffect(() => {

@@ -38,11 +38,9 @@ import LanguagePicker from '@components/shared/locale/LanguagePicker';
 import CustomModal from '@components/shared/bottomSheet/CustomModal';
 import { useTranslation } from 'react-i18next';
 import ModalSheet from '@components/shared/modalSheet/ModalSheet';
-import Button from '@components/shared/Button';
 import LogoutModal from '@components/shared/modalSheet/LogoutModal';
 
 const SettingsScreen = ({
-  route,
   navigation,
 }: SettingsStackScreenProps<'SettingsScreen'>) => {
   const { user } = useAppSelector(userAuth);
@@ -154,7 +152,6 @@ const SettingsScreen = ({
       <CustomModal modalIsVisible={isVisible} toggleSheet={toggleSheet}>
         <LanguagePicker toggleSheet={toggleSheet} />
       </CustomModal>
-      {/* {confirmLogoutModal && ( */}
       <ModalSheet
         modalIsVisible={confirmLogoutModal}
         toggleSheet={toggleModalSheet}>
@@ -163,7 +160,6 @@ const SettingsScreen = ({
           handleLogut={handleLogut}
         />
       </ModalSheet>
-      {/* )} */}
     </SafeAreaView>
   );
 };

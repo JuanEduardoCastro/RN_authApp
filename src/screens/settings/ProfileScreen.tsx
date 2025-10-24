@@ -7,7 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, { use, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
 /* Custom components */
@@ -21,7 +21,6 @@ import HeaderGoBack from '@components/shared/HeaderGoBack';
 import useStyles from '@hooks/useStyles';
 import { editUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
 import useUserData from '@hooks/useUserData';
-import useWhenToScroll from '@hooks/useWhenToScroll';
 /* Types */
 import { TColors } from '@constants/types';
 import { SettingsStackScreenProps } from 'src/navigation/types';
@@ -41,14 +40,10 @@ interface ProfileDataProps {
   avatarURL: string | undefined;
 }
 
-const tabbarHeight =
-  Platform.OS === 'ios' ? SCREEN.heightFixed * 80 : SCREEN.heightFixed * 60;
-
 const ProfileScreen = ({
   navigation,
-  route,
 }: SettingsStackScreenProps<'ProfileScreen'>) => {
-  const { user, token } = useAppSelector(userAuth);
+  const { user } = useAppSelector(userAuth);
   const method = useForm<ProfileDataProps>({
     defaultValues: {
       firstName: user?.firstName,
@@ -60,10 +55,9 @@ const ProfileScreen = ({
     },
   });
   const { setCodeIndex } = useUserData();
-  const { handleSubmit, control, reset, setValue, getValues } = method;
-  const { colors, styles } = useStyles(createStyles);
+  const { handleSubmit, control, reset } = method;
+  const { styles } = useStyles(createStyles);
   const { t } = useTranslation();
-  const [layoutHeight, setLayoutHeight] = useState(0);
   const [editEnable, setEditEnable] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -97,8 +91,6 @@ const ProfileScreen = ({
     setEditEnable(false);
   };
 
-  const scrollEnabled = useWhenToScroll(layoutHeight);
-
   return (
     <SafeAreaView style={styles.container}>
       <HeaderGoBack onPress={() => navigation.goBack()} />
@@ -127,13 +119,8 @@ const ProfileScreen = ({
         </View>
       </View>
       <Separator border={false} height={24} />
-      <KeyboardScrollView
-        extraScroll={Platform.OS === 'ios' ? 4 : 0}
-        // scrollEnabled={scrollEnabled}
-      >
-        <View
-          style={styles.inputBox}
-          onLayout={e => setLayoutHeight(e.nativeEvent.layout.height)}>
+      <KeyboardScrollView extraScroll={Platform.OS === 'ios' ? 4 : 0}>
+        <View style={styles.inputBox}>
           <InputAuthField
             editable={false}
             inputStyles={styles.textinput}

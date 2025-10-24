@@ -11,6 +11,8 @@ import ImagePicker from 'react-native-image-crop-picker';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
+import { useAppDispatch } from 'src/store/authHook';
+import { setNotificationMessage } from 'src/store/authSlice';
 import { CameraIcon } from '@assets/svg/icons';
 
 type AvatarViewProps = {
@@ -20,8 +22,9 @@ type AvatarViewProps = {
 } & PressableProps;
 
 const AvatarView = ({ name, control, rules, ...props }: AvatarViewProps) => {
-  const { field, fieldState } = useController({ name, control, rules });
+  const { field } = useController({ name, control, rules });
   const { colors, styles } = useStyles(createStyles);
+  const dispatch = useAppDispatch();
 
   const openImageCropPicker = () => {
     ImagePicker.openPicker({
@@ -43,7 +46,12 @@ const AvatarView = ({ name, control, rules, ...props }: AvatarViewProps) => {
       })
       .catch(error => {
         if (error.code !== 'E_PICKER_CANCELLED') {
-          console.error('ImagePicker Error: ', error);
+          dispatch(
+            setNotificationMessage({
+              messageType: 'error',
+              notificationMessage: error.message,
+            }),
+          );
         }
       });
   };

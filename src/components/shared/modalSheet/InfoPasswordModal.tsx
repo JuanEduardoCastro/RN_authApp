@@ -12,7 +12,7 @@ type InfoPasswordModalProps = {
 };
 
 const InfoPasswordModal = ({ toggleModalSheet }: InfoPasswordModalProps) => {
-  const { colors, styles } = useStyles(createStyles);
+  const { styles } = useStyles(createStyles);
   const { t } = useTranslation();
 
   return (
