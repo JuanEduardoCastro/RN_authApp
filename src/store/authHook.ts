@@ -30,11 +30,6 @@ export const validateRefreshToken = createAsyncThunk(
         },
       );
       if (response.status === 200) {
-        // __DEV__ &&
-        //   console.log(
-        //     'The user is authorized',
-        //     Platform.OS === 'ios' ? 'in iOS' : 'in Android',
-        //   );
         return {
           success: true,
           user: response.data.user,

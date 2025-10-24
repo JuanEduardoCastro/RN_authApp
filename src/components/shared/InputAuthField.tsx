@@ -26,6 +26,8 @@ import {
   EyeOpenIcon,
   PencilIcon,
 } from '@assets/svg/icons';
+import ModalSheet from './modalSheet/ModalSheet';
+import InfoPasswordModal from './modalSheet/InfoPasswordModal';
 
 type InputAuthFieldProps = {
   name: string;
@@ -48,14 +50,36 @@ const InputAuthField = ({
   const { field, fieldState } = useController({ name, control, rules });
   const { colors, styles } = useStyles(createStlyes);
   const [toggleSecureEntry, setToggleSecureEntry] = useState(true);
+  const [openInfo, setOpenInfo] = useState(false);
 
   const handleSecureEntry = () => {
     setToggleSecureEntry(!toggleSecureEntry);
   };
 
+  const handleOpenInfo = () => {
+    setOpenInfo(!openInfo);
+    console.log('info open');
+  };
+
   return (
     <View style={styles.container}>
-      {label && <Text style={[styles.label, labelStyles]}>{label}</Text>}
+      {label && (
+        <View style={styles.labelBox}>
+          <Text style={[styles.label, labelStyles]}>{label}</Text>
+          <Pressable
+            style={styles.buttonInfoIcon}
+            onPress={() => handleOpenInfo()}>
+            <Text
+              style={[
+                styles.label,
+                labelStyles,
+                { ...textVar.smallBold, textAlign: 'center' },
+              ]}>
+              ⓘ
+            </Text>
+          </Pressable>
+        </View>
+      )}
       <View
         style={[
           styles.inputBox,
@@ -99,6 +123,9 @@ const InputAuthField = ({
           <Text style={styles.errorText}>{fieldState.error.message}</Text>
         )}
       </View>
+      <ModalSheet modalIsVisible={openInfo} toggleSheet={handleOpenInfo}>
+        <InfoPasswordModal toggleModalSheet={handleOpenInfo} />
+      </ModalSheet>
     </View>
   );
 };
@@ -110,10 +137,22 @@ const createStlyes = (colors: TColors) =>
     container: {
       marginBottom: 10,
     },
+    labelBox: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      gap: 4,
+    },
     label: {
       ...textVar.base,
       color: colors.text,
       marginBottom: 5,
+    },
+    buttonInfoIcon: {
+      paddingHorizontal: 4,
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 2,
     },
     inputBox: {
       flexDirection: 'row',
