@@ -9,6 +9,12 @@ import React from 'react';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { textVar } from '@constants/textVar';
+import Animated, {
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 type ButtonNoBorderProps = {
   title: string;
@@ -21,14 +27,31 @@ const ButtonNoBorder = ({
   ...props
 }: ButtonNoBorderProps) => {
   const { colors, styles } = useStyles(createStyles);
+  const scale = useSharedValue(1);
+
+  const animationStyles = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
+
+  const handlePressIn = () => {
+    scale.value = withTiming(0.97, { duration: 80 });
+  };
+
+  const handlePressOut = () => {
+    scale.value = withTiming(1, { duration: 150 });
+  };
+
   return (
     <Pressable
-      style={({ pressed }) => [
-        styles.button,
-        props.disabled && styles.disabled,
-      ]}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      style={({ pressed }) => [props.disabled && styles.disabled]}
       {...props}>
-      <Text style={[styles.gobackText, textStyles]}>{title}</Text>
+      <Animated.View style={[styles.button, animationStyles]}>
+        <Text style={[styles.gobackText, textStyles]}>{title}</Text>
+      </Animated.View>
     </Pressable>
   );
 };

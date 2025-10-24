@@ -65,6 +65,7 @@ const WelcomeScreen = ({
       }
       setGoogleButtonDisabled(false);
     } catch (error) {
+      setGoogleButtonDisabled(false);
       __DEV__ &&
         console.log(
           'XX -> WelcomeScreen.tsx:64 -> handleGoogleOriginalSignin -> error :',
