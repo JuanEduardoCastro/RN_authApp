@@ -49,7 +49,7 @@ const NewPasswordScreen = ({
   const { messageType } = useAppSelector(userAuth);
   const dispatch = useAppDispatch();
   const method = useForm<FormNewDataProps>();
-  const { handleSubmit, control, setError } = method;
+  const { handleSubmit, control, setError, watch } = method;
   const { colors, styles } = useStyles(createStlyes);
   const { t } = useTranslation();
   const [email, setEmail] = useState<string | null>(null);
@@ -157,9 +157,29 @@ const NewPasswordScreen = ({
             rules={{
               required: t('password-required'),
               minLength: {
-                value: 6,
+                value: 8,
                 message: t('password-invalid'),
               },
+              validate: (value: string) => {
+                if (!/[A-Z]/.test(value)) {
+                  return t('info-password-uppercase');
+                }
+                if (!/[a-z]/.test(value)) {
+                  return t('info-password-lowercase');
+                }
+                if (!/[0-9]/.test(value)) {
+                  return t('info-password-number');
+                }
+                if (!/[^a-zA-Z0-9]/.test(value)) {
+                  return t('info-password-symbol');
+                }
+                return true;
+              },
+              // pattern: {
+              //   value:
+              //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+              //   message: t('password-regex'),
+              // },
             }}
             placeholder={t('new-password-label-placeholder')}
           />
@@ -171,8 +191,24 @@ const NewPasswordScreen = ({
             rules={{
               required: t('password-required'),
               minLength: {
-                value: 6,
+                value: 8,
                 message: t('password-invalid'),
+              },
+              validate: (value: string) => {
+                value === watch('new_password') || "Password doesn't match!";
+                if (!/[A-Z]/.test(value)) {
+                  return 'Password must contain at least one uppercase letter';
+                }
+                if (!/[a-z]/.test(value)) {
+                  return 'Password must contain at least one lowercase letter';
+                }
+                if (!/[0-9]/.test(value)) {
+                  return 'Password must contain at least one number';
+                }
+                if (!/[^a-zA-Z0-9]/.test(value)) {
+                  return 'Password must contain at least one special character';
+                }
+                return true;
               },
             }}
             placeholder={t('confirm-password-label-placeholder')}
@@ -239,3 +275,30 @@ const createStlyes = (colors: TColors) =>
       color: colors.second,
     },
   });
+
+/* 
+    validate: () => {
+            if (!/[A-Z]/.test(value)) {
+              return 'Password must contain at least one uppercase letter';
+            }
+            if (!/[a-z]/.test(value)) {
+              return 'Password must contain at least one lowercase letter';
+            }
+            if (!/[0-9]/.test(value)) {
+              return 'Password must contain at least one number';
+            }
+            if (!/[^a-zA-Z0-9]/.test(value)) {
+              return 'Password must contain at least one special character';
+            }
+            return true; // Validation passed
+          },
+
+          
+          return 'Password must contain at least one uppercase letter';
+
+              return 'Password must contain at least one lowercase letter';
+
+              return 'Password must contain at least one number';
+
+              return 'Password must contain at least one special character';
+  */

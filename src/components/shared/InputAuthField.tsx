@@ -58,7 +58,6 @@ const InputAuthField = ({
 
   const handleOpenInfo = () => {
     setOpenInfo(!openInfo);
-    console.log('info open');
   };
 
   return (
@@ -66,18 +65,20 @@ const InputAuthField = ({
       {label && (
         <View style={styles.labelBox}>
           <Text style={[styles.label, labelStyles]}>{label}</Text>
-          <Pressable
-            style={styles.buttonInfoIcon}
-            onPress={() => handleOpenInfo()}>
-            <Text
-              style={[
-                styles.label,
-                labelStyles,
-                { ...textVar.smallBold, textAlign: 'center' },
-              ]}>
-              ⓘ
-            </Text>
-          </Pressable>
+          {name.includes('password') && (
+            <Pressable
+              style={styles.buttonInfoIcon}
+              onPress={() => handleOpenInfo()}>
+              <Text
+                style={[
+                  styles.label,
+                  labelStyles,
+                  { ...textVar.smallBold, textAlign: 'center' },
+                ]}>
+                ⓘ
+              </Text>
+            </Pressable>
+          )}
         </View>
       )}
       <View

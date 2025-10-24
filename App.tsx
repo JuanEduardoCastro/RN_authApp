@@ -55,8 +55,6 @@ function App() {
   const { loader } = useAppSelector(userAuth);
   const [isAppReady, setIsAppReady] = useState(false);
 
-  // console.log('que viene aca --->', linking);
-
   const handleAppIsReady = () => {
     setIsAppReady(true);
   };

@@ -17,6 +17,11 @@ import { TColors } from '@constants/types';
 /* Utilities & constants */
 import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 /* Assets */
 
 type ButtonWithIconProps = {
@@ -38,22 +43,42 @@ const ButtonWithIcon = ({
   ...props
 }: ButtonWithIconProps) => {
   const { colors, styles } = useStyles(createStyles);
+  const scale = useSharedValue(1);
+
+  const animationStyles = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
+
+  const handlePressIn = () => {
+    scale.value = withTiming(0.97, { duration: 80 });
+  };
+
+  const handlePressOut = () => {
+    scale.value = withTiming(1, { duration: 150 });
+  };
 
   return (
     <Pressable
-      style={[
-        styles.button,
-        buttonStyles,
-        { flexDirection: atPosition },
-        props.disabled && styles.disabled,
-      ]}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      style={({ pressed }) => [props.disabled && styles.disabled]}
       {...props}>
-      {Icon && (
-        <View style={styles.iconBox}>
-          <Icon {...iconProps} />
-        </View>
-      )}
-      <Text style={[styles.text, textStyles]}>{title}</Text>
+      <Animated.View
+        style={[
+          styles.button,
+          buttonStyles,
+          { flexDirection: atPosition },
+          animationStyles,
+        ]}>
+        {Icon && (
+          <View style={styles.iconBox}>
+            <Icon {...iconProps} />
+          </View>
+        )}
+        <Text style={[styles.text, textStyles]}>{title}</Text>
+      </Animated.View>
     </Pressable>
   );
 };
