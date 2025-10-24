@@ -190,13 +190,13 @@ const CheckEmailScreen = ({
             title={t('go-back-button')}
             onPress={() => navigation.popToTop()}
           />
-          {/* <Pressable
+          <Pressable
             style={{ padding: 8 }}
             onPress={() =>
               navigation.navigate('NewPasswordScreen', { emailToken: null })
             }>
-            <Text style={styles.gobackText}>new password</Text>
-          </Pressable> */}
+            <Text style={styles.gobackText}> justDev -- NEW PASSWPORD </Text>
+          </Pressable>
         </View>
       </KeyboardAvoidingView>
       {/* </View> */}

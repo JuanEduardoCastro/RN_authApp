@@ -56,7 +56,6 @@ const NewPasswordScreen = ({
   const [newUser, setNewUser] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log('LLEGA EL TOKEN --->', emailToken);
     try {
       if (emailToken !== null) {
         const decode = jwtDecode<CustomJwtPayload>(emailToken);
@@ -73,13 +72,13 @@ const NewPasswordScreen = ({
               }),
             );
             // Immediately replace the current screen to prevent further interaction.
-            navigation.replace('CheckEmailScreen', {
-              checkMode: newUser ? 'new_password' : 'reset_password',
-            });
+            // navigation.replace('CheckEmailScreen', {
+            //   checkMode: newUser ? 'new_password' : 'reset_password',
+            // });
           }
         }
       } else {
-        navigation.popToTop();
+        // navigation.popToTop();
         dispatch(
           setNotificationMessage({
             messageType: 'warning',
