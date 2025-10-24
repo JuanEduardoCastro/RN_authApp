@@ -35,12 +35,11 @@ type PhoneListContainerProps = {
 
 const PhoneListContainer = ({
   toggleSheet,
-  selectedValue,
   indexToScroll,
   onSelectCountry,
 }: PhoneListContainerProps) => {
   const flatListRef = useRef<any>(null);
-  const { colors, styles } = useStyles(createStlyes);
+  const { styles } = useStyles(createStlyes);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(
     indexToScroll,
   );
@@ -95,7 +94,7 @@ const PhoneListContainer = ({
           onLayout={handleOnLayout}
           showsVerticalScrollIndicator={false}
           extraData={selectedIndex}
-          getItemLayout={(data, index) => ({
+          getItemLayout={(_, index) => ({
             length: SCREEN.heightFixed * 35,
             offset: SCREEN.heightFixed * 35 * index + 70,
             index: index,

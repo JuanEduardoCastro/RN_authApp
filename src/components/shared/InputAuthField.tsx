@@ -21,10 +21,8 @@ import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
 /* Assets */
 import {
-  EditIcon,
   EyeCloseIcon,
   EyeOpenIcon,
-  PencilIcon,
 } from '@assets/svg/icons';
 import ModalSheet from './modalSheet/ModalSheet';
 import InfoPasswordModal from './modalSheet/InfoPasswordModal';

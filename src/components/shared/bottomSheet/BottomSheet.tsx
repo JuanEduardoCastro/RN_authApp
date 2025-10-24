@@ -26,7 +26,7 @@ const BottomSheet = ({
   duration = 300,
   children,
 }: BottomSheetProps) => {
-  const { colors, styles } = useStyles(createStlyes);
+  const { styles } = useStyles(createStlyes);
   const height = useSharedValue(0);
   const [isVisible, setIsVisible] = useState(false);
 

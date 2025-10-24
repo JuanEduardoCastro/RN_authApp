@@ -42,7 +42,7 @@ const ButtonWithIcon = ({
   atPosition = 'row',
   ...props
 }: ButtonWithIconProps) => {
-  const { colors, styles } = useStyles(createStyles);
+  const { styles } = useStyles(createStyles);
   const scale = useSharedValue(1);
 
   const animationStyles = useAnimatedStyle(() => {
@@ -63,7 +63,7 @@ const ButtonWithIcon = ({
     <Pressable
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      style={({ pressed }) => [props.disabled && styles.disabled]}
+      style={[props.disabled && styles.disabled]}
       {...props}>
       <Animated.View
         style={[

@@ -51,5 +51,7 @@ const createStyles = (colors: TColors) =>
       width: SCREEN.width100,
       justifyContent: 'center',
     },
-    line: {},
+    line: {
+      backgroundColor: colors.transparent,
+    },
   });

@@ -25,10 +25,10 @@ type MailContactBoxProps = {
 };
 
 const MailContactBox = ({ title }: MailContactBoxProps) => {
-  const { colors, styles } = useStyles(createStyles);
+  const { styles } = useStyles(createStyles);
   const { t } = useTranslation();
 
-  const subject = 'Contact from auth-app!';
+  const subject = 'Contact from Auth Sample app!';
   const body = `Today, ${new Date(Date.now()).toISOString()}`;
 
   const mailURL = `mailto:${title}?subject=${encodeURIComponent(

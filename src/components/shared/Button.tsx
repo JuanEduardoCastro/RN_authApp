@@ -35,7 +35,7 @@ const Button = ({
   textStyles,
   ...props
 }: ButtonProps) => {
-  const { colors, styles } = useStyles(createStyles);
+  const { styles } = useStyles(createStyles);
   const scale = useSharedValue(1);
 
   const animationStyles = useAnimatedStyle(() => {
@@ -57,7 +57,7 @@ const Button = ({
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       testID="button"
-      style={({ pressed }) => [props.disabled && styles.disabled]}
+      style={[props.disabled && styles.disabled]}
       {...props}>
       <Animated.View style={[styles.button, animationStyles, buttonStyles]}>
         <Text style={[styles.text, textStyles]}>{title}</Text>

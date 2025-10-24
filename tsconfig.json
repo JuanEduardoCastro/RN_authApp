@@ -4,7 +4,6 @@
   "exclude": ["**/node_modules", "**/Pods"],
   "compilerOptions": {
     "types": ["react-native", "jest"],
-    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "@assets/*": ["src/assets/*"],
@@ -17,6 +16,8 @@
       "@screens/*": ["src/screens/*"],
       "@store/*": ["src/store/*"],
       "@utils/*": ["src/utils/*"]
-    }
+    },
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   }
 }

@@ -17,19 +17,14 @@ import Separator from '@components/shared/Separator';
 import ButtonNoBorder from '@components/shared/ButtonNoBorder';
 /* Custom hooks */
 import useStyles from '@hooks/useStyles';
-import {
-  createUser,
-  updatePassword,
-  useAppDispatch,
-  useAppSelector,
-} from 'src/store/authHook';
+import { createUser, updatePassword, useAppDispatch } from 'src/store/authHook';
 /* Types */
 import { CustomJwtPayload } from '@hooks/types';
 import { TColors } from '@constants/types';
 import { AuthStackScreenProps } from '@navigation/types';
 /* Utilities & constants */
 import { SCREEN } from '@constants/sizes';
-import { setNotificationMessage, userAuth } from 'src/store/authSlice';
+import { setNotificationMessage } from 'src/store/authSlice';
 import { textVar } from '@constants/textVar';
 import { DataAPI } from '@store/types';
 import { useTranslation } from 'react-i18next';
@@ -46,10 +41,9 @@ const NewPasswordScreen = ({
   route,
 }: AuthStackScreenProps<'NewPasswordScreen'>) => {
   const { emailToken } = route.params;
-  const { messageType } = useAppSelector(userAuth);
   const dispatch = useAppDispatch();
   const method = useForm<FormNewDataProps>();
-  const { handleSubmit, control, setError, watch } = method;
+  const { handleSubmit, control, watch } = method;
   const { colors, styles } = useStyles(createStlyes);
   const { t } = useTranslation();
   const [email, setEmail] = useState<string | null>(null);
@@ -72,13 +66,13 @@ const NewPasswordScreen = ({
               }),
             );
             // Immediately replace the current screen to prevent further interaction.
-            // navigation.replace('CheckEmailScreen', {
-            //   checkMode: newUser ? 'new_password' : 'reset_password',
-            // });
+            navigation.replace('CheckEmailScreen', {
+              checkMode: newUser ? 'new_password' : 'reset_password',
+            });
           }
         }
       } else {
-        // navigation.popToTop();
+        navigation.popToTop();
         dispatch(
           setNotificationMessage({
             messageType: 'warning',
@@ -137,7 +131,6 @@ const NewPasswordScreen = ({
 
   return (
     <FormProvider {...method}>
-      {/* <View style={styles.container}> */}
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -175,11 +168,6 @@ const NewPasswordScreen = ({
                 }
                 return true;
               },
-              // pattern: {
-              //   value:
-              //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-              //   message: t('password-regex'),
-              // },
             }}
             placeholder={t('new-password-label-placeholder')}
           />
@@ -231,7 +219,6 @@ const NewPasswordScreen = ({
           />
         </View>
       </KeyboardAvoidingView>
-      {/* </View> */}
     </FormProvider>
   );
 };
@@ -248,7 +235,6 @@ const createStlyes = (colors: TColors) =>
       padding: 20,
     },
     titleBox: {
-      // backgroundColor: "pink",
       justifyContent: 'center',
       alignItems: 'center',
       gap: 12,
@@ -275,30 +261,3 @@ const createStlyes = (colors: TColors) =>
       color: colors.second,
     },
   });
-
-/* 
-    validate: () => {
-            if (!/[A-Z]/.test(value)) {
-              return 'Password must contain at least one uppercase letter';
-            }
-            if (!/[a-z]/.test(value)) {
-              return 'Password must contain at least one lowercase letter';
-            }
-            if (!/[0-9]/.test(value)) {
-              return 'Password must contain at least one number';
-            }
-            if (!/[^a-zA-Z0-9]/.test(value)) {
-              return 'Password must contain at least one special character';
-            }
-            return true; // Validation passed
-          },
-
-          
-          return 'Password must contain at least one uppercase letter';
-
-              return 'Password must contain at least one lowercase letter';
-
-              return 'Password must contain at least one number';
-
-              return 'Password must contain at least one special character';
-  */

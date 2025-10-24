@@ -22,6 +22,7 @@ export const validateRefreshToken = createAsyncThunk(
     const { t } = data;
 
     try {
+      console.log('esta entrando acá? ');
       const response = await api.post(
         '/users/token/refresh',
         {},

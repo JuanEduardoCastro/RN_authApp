@@ -22,7 +22,7 @@ const CheckBoxCustom = ({
   rules,
   disabled,
 }: CheckBoxCustomProps) => {
-  const { field, fieldState } = useController({ name, control, rules });
+  const { field } = useController({ name, control, rules });
   const { colors, styles } = useStyles(createStlyes);
 
   return (

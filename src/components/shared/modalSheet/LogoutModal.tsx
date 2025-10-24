@@ -13,7 +13,7 @@ type LogoutModalProps = {
 };
 
 const LogoutModal = ({ toggleModalSheet, handleLogut }: LogoutModalProps) => {
-  const { colors, styles } = useStyles(createStyles);
+  const { styles } = useStyles(createStyles);
   const { t } = useTranslation();
 
   return (
