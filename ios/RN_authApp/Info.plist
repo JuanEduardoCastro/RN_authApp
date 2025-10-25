@@ -36,12 +36,12 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>GIDClientID</key>
 	<string>851060951342-uhu25rpaq0brova5bjn44hcs7pmrie1e.apps.googleusercontent.com</string>
 	<key>GIDRedirectURI</key>
 	<string>com.googleusercontent.851060951342-uhu25rpaq0brova5bjn44hcs7pmrie1e:/oauth2redirect/google</string>
-	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -51,10 +51,27 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>The app require access to your phone camera.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app require access to your phone location</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>The app require access to your phone microphone.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>The app require access to your photo gallery.</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Luckiest Guy Regular.ttf</string>
+		<string>Manrope-Bold.ttf</string>
+		<string>Manrope-ExtraBold.ttf</string>
+		<string>Manrope-ExtraLight.ttf</string>
+		<string>Manrope-Light.ttf</string>
+		<string>Manrope-Medium.ttf</string>
+		<string>Manrope-Regular.ttf</string>
+		<string>Manrope-SemiBold.ttf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -69,22 +86,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>The app require access to your photo gallery.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>The app require access to your phone camera.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>The app require access to your phone microphone.</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Luckiest Guy Regular.ttf</string>
-		<string>Manrope-Bold.ttf</string>
-		<string>Manrope-ExtraBold.ttf</string>
-		<string>Manrope-ExtraLight.ttf</string>
-		<string>Manrope-Light.ttf</string>
-		<string>Manrope-Medium.ttf</string>
-		<string>Manrope-Regular.ttf</string>
-		<string>Manrope-SemiBold.ttf</string>
-	</array>
 </dict>
 </plist>
