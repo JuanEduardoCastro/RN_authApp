@@ -13,3 +13,6 @@ const api = axios.create({
 });
 
 export default api;
+
+/* 'https://rnauthappbe-production.up.railway.app';
+ */
