@@ -1,3 +1,11 @@
+import groovy.json.JsonSlurper
+
+def getPackageBuild(key) {
+    def packageFile = new File("../package.json")
+    def packageJson = new JsonSlurper().parseText(packageFile.text)
+    return packageJson[key]
+}
+
 buildscript {
     ext {
         buildToolsVersion = "36.0.0"

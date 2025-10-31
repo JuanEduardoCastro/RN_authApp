@@ -100,7 +100,7 @@ export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
           />
           <View style={styles.versionContainer}>
             <Text style={styles.versionText}>
-              Version {APP_VERSION}, build ({APP_BUILD})
+              Version {APP_VERSION}, build ({JSON.stringify(APP_BUILD)})
             </Text>
           </View>
         </BGGradient>
