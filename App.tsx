@@ -1,5 +1,5 @@
 /* Core libs & third parties libs */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import {
