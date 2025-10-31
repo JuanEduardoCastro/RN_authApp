@@ -24,7 +24,6 @@ import store from '@store/store';
 import { useAppSelector } from '@store/authHook';
 import { userAuth } from '@store/authSlice';
 import i18n from 'src/locale/i18next';
-import { Alert, Linking } from 'react-native';
 /* Assets */
 
 if (__DEV__) {
@@ -40,18 +39,18 @@ const AppWrapper = () => {
 };
 
 // authapp://app/new-password/:token
-// const linking: LinkingOptions<RootStackParamList> = {
-//   prefixes: ['authapp://app'],
-//   config: {
-//     screens: {
-//       AuthNavigator: {
-//         screens: {
-//           NewPasswordScreen: 'new-password/:emailToken',
-//         },
-//       },
-//     },
-//   },
-// };
+const linking: LinkingOptions<RootStackParamList> = {
+  prefixes: ['authapp://', 'https://d2wi1nboge7qqt.cloudfront.net'],
+  config: {
+    screens: {
+      AuthNavigator: {
+        screens: {
+          NewPasswordScreen: 'app/new-password/:emailToken',
+        },
+      },
+    },
+  },
+};
 
 function App() {
   const { loader } = useAppSelector(userAuth);
@@ -61,31 +60,33 @@ function App() {
     setIsAppReady(true);
   };
 
-  const handleDeepLink = (event: any) => {
-    Alert.alert('handleDeepLink', event.url);
-  };
+  // const handleDeepLink = (event: any) => {
+  //   Alert.alert('handleDeepLink', event.url);
 
-  useEffect(() => {
-    Linking.addEventListener('url', handleDeepLink);
+  // };
 
-    return () => {
-      Linking.removeAllListeners('url');
-    };
-  }, []);
+  // useEffect(() => {
+  //   Linking.addEventListener('url', handleDeepLink);
 
-  useEffect(() => {
-    const getInitialURL = async () => {
-      const url = await Linking.getInitialURL();
-      if (url === null) {
-        return;
-      }
-      if (url) {
-        Alert.alert(url);
-      }
-    };
-    getInitialURL();
-    return () => {};
-  }, []);
+  //   return () => {
+  //     Linking.removeAllListeners('url');
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   const getInitialURL = async () => {
+  //     const url = await Linking.getInitialURL();
+  //     if (url === null) {
+  //       return;
+  //     }
+  //     if (url) {
+  //       Alert.alert('QUE VIENE ACA', url);
+  //       navigation
+  //     }
+  //   };
+  //   getInitialURL();
+  //   return () => {};
+  // }, []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -98,10 +99,7 @@ function App() {
               <ModeProvider>
                 {loader && <Loader />}
                 <NotificationBanner />
-                {/* <NavigationContainer> */}
-                <NavigationContainer
-                // linking={linking}
-                >
+                <NavigationContainer linking={linking}>
                   <RootNavigator />
                 </NavigationContainer>
               </ModeProvider>
