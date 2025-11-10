@@ -51,7 +51,9 @@ const NewPasswordScreen = ({
 
   useEffect(() => {
     try {
+      console.log('QUE VIENE ACA', emailToken);
       if (emailToken !== null) {
+        console.log('ENTRO AL TOKEN NO ES NULL');
         const decode = jwtDecode<CustomJwtPayload>(emailToken);
         const userEmail = decode.email;
         decode.isNew !== undefined && setNewUser(decode.isNew);

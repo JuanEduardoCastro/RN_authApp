@@ -80,7 +80,6 @@ android {
 
     namespace "com.rn_authapp"
     defaultConfig {
-        
         applicationId "com.rn_authapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
