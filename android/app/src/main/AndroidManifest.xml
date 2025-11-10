@@ -1,10 +1,12 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" 
+  package="com.rn_authapp">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.front" android:required="false" />
+    
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
@@ -30,15 +32,17 @@
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="https"
-              android:host="d2wi1nboge7qqt.cloudfront.net"
-              android:pathPrefix="/app/new-password/" /> 
+              android:host="app.authdemoapp-jec.com"
+              android:pathPrefix="/app/new-password" /> 
+            <data android:scheme="authapp" android:host="app" />  
         </intent-filter>
-        <intent-filter android:label="filter_react_native">
+        <intent-filter android:autoVerify="true">
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="authapp"  />
-            <data android:host="/app/new-password/"  />
+            <data android:scheme="authapp"
+              android:host="app"
+              android:pathPrefix="/new-password" /> 
         </intent-filter>
       </activity>
     </application>

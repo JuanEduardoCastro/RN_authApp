@@ -1,5 +1,5 @@
 /* Core libs & third parties libs */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import {
@@ -24,6 +24,7 @@ import store from '@store/store';
 import { useAppSelector } from '@store/authHook';
 import { userAuth } from '@store/authSlice';
 import i18n from 'src/locale/i18next';
+import { Linking } from 'react-native';
 /* Assets */
 
 if (__DEV__) {
@@ -38,9 +39,32 @@ const AppWrapper = () => {
   );
 };
 
-// authapp://app/new-password/:token
 const linking: LinkingOptions<RootStackParamList> = {
-  prefixes: ['authapp://', 'https://d2wi1nboge7qqt.cloudfront.net'],
+  prefixes: [
+    'authapp://',
+    'https://d2wi1nboge7qqt.cloudfront.net',
+    'https://app.authdemoapp-jec.com',
+  ],
+  subscribe(listener) {
+    const onReceiveURL = ({ url }: { url: string }) => {
+      console.log('ESTO ES EL URL -----> ', url);
+      listener(url);
+    };
+
+    const suscription = Linking.addEventListener('url', onReceiveURL);
+
+    return () => {
+      suscription.remove();
+    };
+  },
+  async getInitialURL() {
+    const url = await Linking.getInitialURL();
+    if (url) {
+      console.log('COLD START -------> ', url);
+    } else {
+      console.log('NO HAY URL ');
+    }
+  },
   config: {
     screens: {
       AuthNavigator: {
