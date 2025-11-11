@@ -27,6 +27,7 @@ import { AuthStackScreenProps } from '@navigation/types';
 import { setNotificationMessage } from '@store/authSlice';
 import { DataAPI } from '@store/types';
 import { useTranslation } from 'react-i18next';
+import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
 /* Assets */
 
 interface CheckEmailProps {
@@ -103,100 +104,105 @@ const CheckEmailScreen = ({
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}>
-        <View style={styles.titleBox}>
-          <Text style={styles.subTitle}>
-            {checkMode.includes('new')
-              ? t('check-email-title')
-              : t('reset-password-title')}
-          </Text>
-          <Text style={styles.subTitle2}>
-            {isEmailSent &&
-              `${t('check-inbox')} ${
-                checkMode.includes('new')
-                  ? t('create-account')
-                  : t('reset-password')
-              }`}
-          </Text>
-        </View>
-        <View style={styles.inputBox}>
-          <Separator borderWidth={0} />
-          <InputAuthField
-            editable={!isEmailSent}
-            inputStyles={styles.textinput}
-            name="email"
-            label={t('email-label')}
-            control={control}
-            rules={{
-              required: t('email-required'),
-              pattern: {
-                value:
-                  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                message: t('email-invalid'),
-              },
-            }}
-            placeholder={t('enter-email-placeholder')}
-          />
-        </View>
-        <View style={styles.buttonBox}>
-          <Button
-            disabled={isEmailSent}
-            title={
-              checkMode.includes('new')
-                ? t('check-email-button')
-                : t('reset-password-button')
-            }
-            onPress={handleSubmit(onSubmit)}
-            buttonStyles={{ backgroundColor: colors.second }}
-            textStyles={{ color: colors.textNgt, fontWeight: 600 }}
-          />
-        </View>
-        <Separator height={12} borderWidth={0} />
-        <View style={{ height: 40 }}>
-          {isEmailSent && (
-            <Pressable
-              disabled={!canResend}
-              style={[
-                { flexDirection: 'row' },
-                styles.resendBox,
-                canResend && styles.resetBoxOnFocus,
-              ]}
-              onPress={handleSubmit(onSubmit)}>
-              <Text style={styles.resendText}>{t('resend-email-button')}</Text>
-              <CountDownTimer
-                ref={timerRef}
-                timestamp={180}
-                timerOnProgress={handleTimerProgress}
-                timerCallback={() => setCanResend(true)}
-                containerStyle={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  // backgroundColor: colors.second,
-                  display: canResend ? 'none' : 'flex',
+        <DismissKeyboardOnClick>
+          <View>
+            <View style={styles.titleBox}>
+              <Text style={styles.subTitle}>
+                {checkMode.includes('new')
+                  ? t('check-email-title')
+                  : t('reset-password-title')}
+              </Text>
+              <Text style={styles.subTitle2}>
+                {isEmailSent &&
+                  `${t('check-inbox')} ${
+                    checkMode.includes('new')
+                      ? t('create-account')
+                      : t('reset-password')
+                  }`}
+              </Text>
+            </View>
+            <View style={styles.inputBox}>
+              <Separator borderWidth={0} />
+              <InputAuthField
+                editable={!isEmailSent}
+                inputStyles={styles.textinput}
+                name="email"
+                label={t('email-label')}
+                control={control}
+                rules={{
+                  required: t('email-required'),
+                  pattern: {
+                    value:
+                      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                    message: t('email-invalid'),
+                  },
                 }}
-                textStyle={{
-                  ...textVar.mediumBold,
-                  color: colors.text,
-                  opacity: 0.5,
-                  letterSpacing: 0.8,
-                }}
+                placeholder={t('enter-email-placeholder')}
               />
-              {canResend && <Text style={[styles.resendText]}>00:00</Text>}
-            </Pressable>
-          )}
-        </View>
-        <View style={styles.gobackBox}>
-          <ButtonNoBorder
-            title={t('go-back-button')}
-            onPress={() => navigation.popToTop()}
-          />
-          {/* <Pressable
+            </View>
+            <View style={styles.buttonBox}>
+              <Button
+                disabled={isEmailSent}
+                title={
+                  checkMode.includes('new')
+                    ? t('check-email-button')
+                    : t('reset-password-button')
+                }
+                onPress={handleSubmit(onSubmit)}
+                buttonStyles={styles.button}
+                textStyles={styles.buttonText}
+              />
+            </View>
+            <Separator height={12} borderWidth={0} />
+            <View style={{ height: 40 }}>
+              {isEmailSent && (
+                <Pressable
+                  disabled={!canResend}
+                  style={[
+                    { flexDirection: 'row' },
+                    styles.resendBox,
+                    canResend && styles.resetBoxOnFocus,
+                  ]}
+                  onPress={handleSubmit(onSubmit)}>
+                  <Text style={styles.resendText}>
+                    {t('resend-email-button')}
+                  </Text>
+                  <CountDownTimer
+                    ref={timerRef}
+                    timestamp={180}
+                    timerOnProgress={handleTimerProgress}
+                    timerCallback={() => setCanResend(true)}
+                    containerStyle={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      display: canResend ? 'none' : 'flex',
+                    }}
+                    textStyle={{
+                      ...textVar.mediumBold,
+                      color: colors.text,
+                      opacity: 0.5,
+                      letterSpacing: 0.8,
+                    }}
+                  />
+                  {canResend && <Text style={[styles.resendText]}>00:00</Text>}
+                </Pressable>
+              )}
+            </View>
+            <View style={styles.gobackBox}>
+              <ButtonNoBorder
+                title={t('go-back-button')}
+                onPress={() => navigation.popToTop()}
+              />
+              {/* <Pressable
             style={{ padding: 8 }}
             onPress={() =>
               navigation.navigate('NewPasswordScreen', { emailToken: null })
             }>
             <Text style={styles.gobackText}> justDev -- NEW PASSWPORD </Text>
           </Pressable> */}
-        </View>
+            </View>
+          </View>
+        </DismissKeyboardOnClick>
       </KeyboardAvoidingView>
     </FormProvider>
   );
@@ -263,10 +269,21 @@ const createStlyes = (colors: TColors) =>
       borderColor: colors.second,
     },
     buttonBox: {
-      width: SCREEN.widthFixed * 240,
+      width: SCREEN.width100,
+      alignItems: 'center',
       paddingVertical: 12,
     },
-    gobackBox: {},
+    button: {
+      backgroundColor: colors.second,
+      width: SCREEN.width50,
+    },
+    buttonText: {
+      ...textVar.baseBold,
+      color: colors.textNgt,
+    },
+    gobackBox: {
+      alignItems: 'center',
+    },
     gobackText: {
       ...textVar.medium,
       color: colors.second,

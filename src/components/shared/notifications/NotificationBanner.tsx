@@ -25,6 +25,7 @@ import {
   SuccessIcon,
   WarningIcon,
 } from '@assets/svg/icons';
+import { SCREEN } from '@constants/sizes';
 
 const iconMap = {
   error: { Icon: ErrorIcon, color: 'danger' as keyof TColors },
@@ -82,8 +83,7 @@ const NotificationBanner = () => {
         <Animated.View
           accessibilityRole="alert"
           accessibilityLabel={`Notification: ${notificationMessage}`}
-          style={[styles.container, animatedStyle, { paddingTop: insets.top }]}
-        >
+          style={[styles.container, animatedStyle, { paddingTop: insets.top }]}>
           <Pressable
             onPress={handleCloseBanner}
             style={
@@ -92,8 +92,7 @@ const NotificationBanner = () => {
                 borderRadius: 24,
                 opacity: 0.96,
               }
-            }
-          >
+            }>
             <View style={styles.bannerBox}>
               <View style={styles.bannerTextBox}>
                 <Text style={styles.bannerText}>
@@ -132,7 +131,7 @@ const createStyles = (colors: TColors) =>
     container: {
       ...StyleSheet.absoluteFillObject,
       flex: 1,
-      height: 100,
+      height: SCREEN.heightFixed * 100,
       backgroundColor: colors.transparent,
       zIndex: 100,
       marginTop: 12,
@@ -141,7 +140,7 @@ const createStyles = (colors: TColors) =>
     bannerBox: {
       backgroundColor: colors.notifications,
       opacity: 0.86,
-      height: 70,
+      height: SCREEN.heightFixed * 70,
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -161,7 +160,7 @@ const createStyles = (colors: TColors) =>
       width: 32,
     },
     blurView: {
-      height: 70,
+      height: SCREEN.heightFixed * 70,
       position: 'absolute',
       top: 0,
       right: 0,

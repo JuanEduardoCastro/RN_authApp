@@ -25,6 +25,7 @@ import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
 import { useTranslation } from 'react-i18next';
+import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
 /* Assets */
 
 interface FormDataProps {
@@ -38,7 +39,7 @@ interface FormDataProps {
 const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
   const methods = useForm<FormDataProps>();
   const { handleSubmit, control } = methods;
-  const { colors, styles } = useStyles(createStlyes);
+  const { styles } = useStyles(createStlyes);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -60,70 +61,74 @@ const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}>
-        <View style={styles.titleBox}>
-          <Text style={styles.subTitle}>{t('enter-email-title')}</Text>
-        </View>
-        <View style={styles.inputBox}>
-          <Separator borderWidth={0} />
-          <InputAuthField
-            inputStyles={styles.textinput}
-            name="email"
-            label={t('email-label')}
-            control={control}
-            rules={{
-              required: t('email-required'),
-              pattern: {
-                value:
-                  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                message: t('email-invalid'),
-              },
-            }}
-            placeholder={t('enter-email-placeholder')}
-          />
-          <InputAuthField
-            inputStyles={styles.textinput}
-            name="password"
-            label={t('password-label')}
-            control={control}
-            rules={{
-              required: t('password-required'),
-              minLength: {
-                value: 6,
-                message: t('password-invalid'),
-              },
-            }}
-            placeholder={t('enter-password-placeholder')}
-          />
-          <CheckBoxCustom
-            name="rememberMe"
-            label={t('remember-me-label')}
-            control={control}
-          />
-        </View>
-        <Separator borderWidth={0} height={16} />
-        <View style={styles.buttonBox}>
-          <Button
-            title={t('login-button')}
-            onPress={handleSubmit(onSubmit)}
-            buttonStyles={{ backgroundColor: colors.second }}
-            textStyles={{ color: colors.textNgt, fontWeight: 600 }}
-          />
-        </View>
-        <View style={styles.gobackBox}>
-          <ButtonNoBorder
-            title={t('go-back-button')}
-            onPress={() => navigation.popToTop()}
-          />
-          <ButtonNoBorder
-            title={t('reset-password-go-to')}
-            onPress={() =>
-              navigation.navigate('CheckEmailScreen', {
-                checkMode: 'reset_password',
-              })
-            }
-          />
-        </View>
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 4 : 0}>
+        <DismissKeyboardOnClick>
+          <View>
+            <View style={styles.titleBox}>
+              <Text style={styles.subTitle}>{t('enter-email-title')}</Text>
+            </View>
+            <View style={styles.inputBox}>
+              <Separator borderWidth={0} />
+              <InputAuthField
+                inputStyles={styles.textinput}
+                name="email"
+                label={t('email-label')}
+                control={control}
+                rules={{
+                  required: t('email-required'),
+                  pattern: {
+                    value:
+                      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                    message: t('email-invalid'),
+                  },
+                }}
+                placeholder={t('enter-email-placeholder')}
+              />
+              <InputAuthField
+                inputStyles={styles.textinput}
+                name="password"
+                label={t('password-label')}
+                control={control}
+                rules={{
+                  required: t('password-required'),
+                  minLength: {
+                    value: 6,
+                    message: t('password-invalid'),
+                  },
+                }}
+                placeholder={t('enter-password-placeholder')}
+              />
+              <CheckBoxCustom
+                name="rememberMe"
+                label={t('remember-me-label')}
+                control={control}
+              />
+            </View>
+            <Separator borderWidth={0} height={16} />
+            <View style={styles.buttonBox}>
+              <Button
+                title={t('login-button')}
+                onPress={handleSubmit(onSubmit)}
+                buttonStyles={styles.button}
+                textStyles={styles.buttonText}
+              />
+            </View>
+            <View style={styles.gobackBox}>
+              <ButtonNoBorder
+                title={t('go-back-button')}
+                onPress={() => navigation.popToTop()}
+              />
+              <ButtonNoBorder
+                title={t('reset-password-go-to')}
+                onPress={() =>
+                  navigation.navigate('CheckEmailScreen', {
+                    checkMode: 'reset_password',
+                  })
+                }
+              />
+            </View>
+          </View>
+        </DismissKeyboardOnClick>
       </KeyboardAvoidingView>
     </FormProvider>
   );
@@ -158,8 +163,17 @@ const createStlyes = (colors: TColors) =>
       borderColor: colors.second,
     },
     buttonBox: {
-      width: SCREEN.widthFixed * 240,
+      width: SCREEN.width100,
+      alignItems: 'center',
       paddingVertical: 12,
+    },
+    button: {
+      backgroundColor: colors.second,
+      width: SCREEN.width50,
+    },
+    buttonText: {
+      ...textVar.baseBold,
+      color: colors.textNgt,
     },
     gobackBox: {
       alignItems: 'center',

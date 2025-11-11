@@ -20,10 +20,7 @@ import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
 /* Assets */
-import {
-  EyeCloseIcon,
-  EyeOpenIcon,
-} from '@assets/svg/icons';
+import { EyeCloseIcon, EyeOpenIcon } from '@assets/svg/icons';
 import ModalSheet from './modalSheet/ModalSheet';
 import InfoPasswordModal from './modalSheet/InfoPasswordModal';
 
@@ -163,7 +160,7 @@ const createStlyes = (colors: TColors) =>
     },
     input: {
       ...textVar.base,
-      height: SCREEN.heightFixed * 46,
+      height: SCREEN.heightFixed * 48,
       flexGrow: 1,
       width: 'auto',
       paddingVertical: 10,
@@ -180,7 +177,7 @@ const createStlyes = (colors: TColors) =>
       borderColor: colors.gray,
     },
     errorBox: {
-      height: SCREEN.heightFixed * 19,
+      height: SCREEN.heightFixed * 20,
     },
     errorText: {
       ...textVar.mediumBold,

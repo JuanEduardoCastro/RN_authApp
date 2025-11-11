@@ -169,6 +169,7 @@ const createStyles = (colors: TColors) =>
       alignItems: 'center',
     },
     titleBox: {
+      width: SCREEN.width90,
       justifyContent: 'center',
       alignItems: 'center',
     },
@@ -178,12 +179,12 @@ const createStyles = (colors: TColors) =>
       textAlign: 'center',
     },
     subTitle: {
-      ...textVar.large,
+      ...textVar.base,
       color: colors.light,
       textAlign: 'center',
     },
     buttonBox: {
-      width: SCREEN.widthFixed * 320,
+      width: SCREEN.width75,
       paddingVertical: 12,
       marginVertical: 8,
       gap: 18,

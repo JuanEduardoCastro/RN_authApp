@@ -29,6 +29,7 @@ import { userAuth } from 'src/store/authSlice';
 import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
 import { useTranslation } from 'react-i18next';
+import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
 /* Assets */
 
 interface ProfileDataProps {
@@ -120,48 +121,53 @@ const ProfileScreen = ({
       </View>
       <Separator border={false} height={24} />
       <KeyboardScrollView extraScroll={Platform.OS === 'ios' ? 4 : 0}>
-        <View style={styles.inputBox}>
-          <InputAuthField
-            editable={false}
-            inputStyles={styles.textinput}
-            name="email"
-            label={t('email-label')}
-            control={control}
-          />
-          <InputAuthField
-            editable={editEnable}
-            inputStyles={styles.textinput}
-            name="firstName"
-            label={t('first-name-label')}
-            control={control}
-            placeholder={t('first-name-placeholder')}
-          />
-          <InputAuthField
-            editable={editEnable}
-            inputStyles={styles.textinput}
-            name="lastName"
-            label={t('last-name-label')}
-            control={control}
-            placeholder={t('last-name-placeholder')}
-          />
-          <PhoneNumberPicker
-            editable={editEnable}
-            inputStyles={styles.textinput}
-            name="phoneNumber"
-            label={t('phone-number-label')}
-            control={control}
-            placeholder={t('phone-number-placeholder')}
-          />
-          <InputAuthField
-            editable={editEnable}
-            inputStyles={styles.textinput}
-            name="occupation"
-            label={t('occupation-label')}
-            control={control}
-            placeholder={t('occupation-placeholder')}
-          />
-        </View>
-        <Separator border={false} height={Platform.OS === 'ios' ? 60 : 80} />
+        <DismissKeyboardOnClick>
+          <View style={styles.inputBox}>
+            <InputAuthField
+              editable={false}
+              inputStyles={styles.textinput}
+              name="email"
+              label={t('email-label')}
+              control={control}
+            />
+            <InputAuthField
+              editable={editEnable}
+              inputStyles={styles.textinput}
+              name="firstName"
+              label={t('first-name-label')}
+              control={control}
+              placeholder={t('first-name-placeholder')}
+            />
+            <InputAuthField
+              editable={editEnable}
+              inputStyles={styles.textinput}
+              name="lastName"
+              label={t('last-name-label')}
+              control={control}
+              placeholder={t('last-name-placeholder')}
+            />
+            <PhoneNumberPicker
+              editable={editEnable}
+              inputStyles={styles.textinput}
+              name="phoneNumber"
+              label={t('phone-number-label')}
+              control={control}
+              placeholder={t('phone-number-placeholder')}
+            />
+            <InputAuthField
+              editable={editEnable}
+              inputStyles={styles.textinput}
+              name="occupation"
+              label={t('occupation-label')}
+              control={control}
+              placeholder={t('occupation-placeholder')}
+            />
+            <Separator
+              border={false}
+              height={Platform.OS === 'ios' ? 60 : 80}
+            />
+          </View>
+        </DismissKeyboardOnClick>
       </KeyboardScrollView>
     </SafeAreaView>
   );

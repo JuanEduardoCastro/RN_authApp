@@ -42,6 +42,7 @@ export default InfoPasswordModal;
 const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
+      width: SCREEN.widthFixed * 280,
       // backgroundColor: 'lightgray',
       gap: 20,
       paddingHorizontal: 10,
@@ -53,7 +54,7 @@ const createStyles = (colors: TColors) =>
       paddingBottom: 8,
     },
     modalTextBox: {
-      // backgroundColor: 'lightgray',
+      // backgroundColor: 'blue',
       justifyContent: 'center',
       alignItems: 'flex-start',
       gap: 2,
@@ -68,7 +69,7 @@ const createStyles = (colors: TColors) =>
       justifyContent: 'space-around',
     },
     acceptButton: {
-      minWidth: SCREEN.widthFixed * 77,
+      width: SCREEN.width75 / 2,
       backgroundColor: colors.background,
       borderWidth: 1,
       borderColor: colors.second,

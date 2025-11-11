@@ -28,6 +28,7 @@ import { setNotificationMessage } from 'src/store/authSlice';
 import { textVar } from '@constants/textVar';
 import { DataAPI } from '@store/types';
 import { useTranslation } from 'react-i18next';
+import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
 /* Assets */
 
 interface FormNewDataProps {
@@ -44,16 +45,14 @@ const NewPasswordScreen = ({
   const dispatch = useAppDispatch();
   const method = useForm<FormNewDataProps>();
   const { handleSubmit, control, watch } = method;
-  const { colors, styles } = useStyles(createStlyes);
+  const { styles } = useStyles(createStlyes);
   const { t } = useTranslation();
   const [email, setEmail] = useState<string | null>(null);
   const [newUser, setNewUser] = useState<boolean>(true);
 
   useEffect(() => {
     try {
-      console.log('QUE VIENE ACA', emailToken);
       if (emailToken !== null) {
-        console.log('ENTRO AL TOKEN NO ES NULL');
         const decode = jwtDecode<CustomJwtPayload>(emailToken);
         const userEmail = decode.email;
         decode.isNew !== undefined && setNewUser(decode.isNew);
@@ -67,7 +66,6 @@ const NewPasswordScreen = ({
                 notificationMessage: t('warning-code-expired'),
               }),
             );
-            // Immediately replace the current screen to prevent further interaction.
             navigation.replace('CheckEmailScreen', {
               checkMode: newUser ? 'new_password' : 'reset_password',
             });
@@ -124,9 +122,6 @@ const NewPasswordScreen = ({
             'XX -> NewPasswordScreen.tsx:118 -> onSubmit -> error :',
             error,
           );
-
-        // Errors are now handled by the rejected case in the extraReducers.
-        // We no longer navigate away on failure.
       }
     }
   };
@@ -137,89 +132,94 @@ const NewPasswordScreen = ({
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}>
-        <View style={styles.titleBox}>
-          <Text style={styles.subTitle}>
-            {t('new-password-label-placeholder')}
-          </Text>
-        </View>
-        <View style={styles.inputBox}>
-          <Separator borderWidth={0} />
-          <InputAuthField
-            inputStyles={styles.textinput}
-            name="new_password"
-            label={t('new-password-label')}
-            control={control}
-            rules={{
-              required: t('password-required'),
-              minLength: {
-                value: 8,
-                message: t('password-invalid'),
-              },
-              validate: (value: string) => {
-                if (!/[A-Z]/.test(value)) {
-                  return t('info-password-uppercase');
+        <DismissKeyboardOnClick>
+          <View>
+            <View style={styles.titleBox}>
+              <Text style={styles.subTitle}>
+                {t('new-password-label-placeholder')}
+              </Text>
+            </View>
+            <View style={styles.inputBox}>
+              <Separator borderWidth={0} />
+              <InputAuthField
+                inputStyles={styles.textinput}
+                name="new_password"
+                label={t('new-password-label')}
+                control={control}
+                rules={{
+                  required: t('password-required'),
+                  minLength: {
+                    value: 8,
+                    message: t('password-invalid'),
+                  },
+                  validate: (value: string) => {
+                    if (!/[A-Z]/.test(value)) {
+                      return t('info-password-uppercase');
+                    }
+                    if (!/[a-z]/.test(value)) {
+                      return t('info-password-lowercase');
+                    }
+                    if (!/[0-9]/.test(value)) {
+                      return t('info-password-number');
+                    }
+                    if (!/[^a-zA-Z0-9]/.test(value)) {
+                      return t('info-password-symbol');
+                    }
+                    return true;
+                  },
+                }}
+                placeholder={t('new-password-label-placeholder')}
+              />
+              <InputAuthField
+                inputStyles={styles.textinput}
+                name="confirm_password"
+                label={t('confirm-password-label')}
+                control={control}
+                rules={{
+                  required: t('password-required'),
+                  minLength: {
+                    value: 8,
+                    message: t('password-invalid'),
+                  },
+                  validate: (value: string) => {
+                    value === watch('new_password') ||
+                      "Password doesn't match!";
+                    if (!/[A-Z]/.test(value)) {
+                      return 'Password must contain at least one uppercase letter';
+                    }
+                    if (!/[a-z]/.test(value)) {
+                      return 'Password must contain at least one lowercase letter';
+                    }
+                    if (!/[0-9]/.test(value)) {
+                      return 'Password must contain at least one number';
+                    }
+                    if (!/[^a-zA-Z0-9]/.test(value)) {
+                      return 'Password must contain at least one special character';
+                    }
+                    return true;
+                  },
+                }}
+                placeholder={t('confirm-password-label-placeholder')}
+              />
+            </View>
+            <View style={styles.buttonBox}>
+              <Button
+                title={
+                  newUser ? t('register-user-button') : t('new-password-button')
                 }
-                if (!/[a-z]/.test(value)) {
-                  return t('info-password-lowercase');
-                }
-                if (!/[0-9]/.test(value)) {
-                  return t('info-password-number');
-                }
-                if (!/[^a-zA-Z0-9]/.test(value)) {
-                  return t('info-password-symbol');
-                }
-                return true;
-              },
-            }}
-            placeholder={t('new-password-label-placeholder')}
-          />
-          <InputAuthField
-            inputStyles={styles.textinput}
-            name="confirm_password"
-            label={t('confirm-password-label')}
-            control={control}
-            rules={{
-              required: t('password-required'),
-              minLength: {
-                value: 8,
-                message: t('password-invalid'),
-              },
-              validate: (value: string) => {
-                value === watch('new_password') || "Password doesn't match!";
-                if (!/[A-Z]/.test(value)) {
-                  return 'Password must contain at least one uppercase letter';
-                }
-                if (!/[a-z]/.test(value)) {
-                  return 'Password must contain at least one lowercase letter';
-                }
-                if (!/[0-9]/.test(value)) {
-                  return 'Password must contain at least one number';
-                }
-                if (!/[^a-zA-Z0-9]/.test(value)) {
-                  return 'Password must contain at least one special character';
-                }
-                return true;
-              },
-            }}
-            placeholder={t('confirm-password-label-placeholder')}
-          />
-        </View>
-        <View style={styles.buttonBox}>
-          <Button
-            title={
-              newUser ? t('register-user-button') : t('new-password-button')
-            }
-            onPress={handleSubmit(onSubmit)}
-            buttonStyles={{ backgroundColor: colors.second }}
-            textStyles={{ color: colors.textNgt, fontWeight: 600 }}
-          />
-        </View>
-        <View style={styles.gobackBox}>
-          <ButtonNoBorder
-            title={t('go-back-button')}
-            onPress={() => navigation.popToTop()}
-          />
-        </View>
+                onPress={handleSubmit(onSubmit)}
+                buttonStyles={styles.button}
+                textStyles={styles.buttonText}
+              />
+            </View>
+            <View style={styles.gobackBox}>
+              <ButtonNoBorder
+                title={t('go-back-button')}
+                onPress={() => navigation.popToTop()}
+              />
+            </View>
+          </View>
+        </DismissKeyboardOnClick>
       </KeyboardAvoidingView>
     </FormProvider>
   );
@@ -254,10 +254,20 @@ const createStlyes = (colors: TColors) =>
       borderColor: colors.second,
     },
     buttonBox: {
-      width: SCREEN.widthFixed * 240,
+      width: SCREEN.width100,
       paddingVertical: 12,
     },
-    gobackBox: {},
+    button: {
+      backgroundColor: colors.second,
+      width: SCREEN.width50,
+    },
+    buttonText: {
+      ...textVar.baseBold,
+      color: colors.textNgt,
+    },
+    gobackBox: {
+      alignItems: 'center',
+    },
     gobackText: {
       ...textVar.medium,
       color: colors.second,

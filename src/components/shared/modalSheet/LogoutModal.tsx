@@ -55,13 +55,13 @@ const createStyles = (colors: TColors) =>
       justifyContent: 'space-around',
     },
     noButton: {
-      width: SCREEN.widthFixed * 77,
+      width: SCREEN.widthFixed * 85,
       backgroundColor: colors.background,
       borderWidth: 1,
       borderColor: colors.second,
     },
     yesButton: {
-      width: SCREEN.widthFixed * 77,
+      width: SCREEN.widthFixed * 85,
     },
     textButton: {
       ...textVar.base,
