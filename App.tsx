@@ -1,5 +1,5 @@
 /* Core libs & third parties libs */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import {
@@ -24,12 +24,17 @@ import store from '@store/store';
 import { useAppSelector } from '@store/authHook';
 import { userAuth } from '@store/authSlice';
 import i18n from 'src/locale/i18next';
-import { Linking } from 'react-native';
+import { Dimensions, Linking } from 'react-native';
 /* Assets */
 
 if (__DEV__) {
   configureReanimatedLogger({ level: ReanimatedLogLevel.warn, strict: false });
 }
+
+const { width, height } = Dimensions.get('window');
+
+console.log('el width: ', width);
+console.log('el height: ', height);
 
 const AppWrapper = () => {
   return (

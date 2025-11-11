@@ -23,7 +23,7 @@ const ModalSheet = ({
 
   return (
     <Modal
-      animationType={'none'}
+      animationType={'fade'}
       transparent={true}
       visible={modalIsVisible}
       onRequestClose={handleCloseModal}>
@@ -51,8 +51,8 @@ const createStlyes = (colors: TColors) =>
     sheet: {
       backgroundColor: colors.background,
       padding: 8,
-      height: SCREEN.heightFixed * 240,
-      width: '70%',
+      height: SCREEN.heightFixed * 280,
+      width: SCREEN.width80,
       borderRadius: 20,
       zIndex: 2,
       alignItems: 'center',

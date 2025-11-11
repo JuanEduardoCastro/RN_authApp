@@ -34,7 +34,7 @@ const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
       width: SCREEN.width100,
-      height: SCREEN.heightFixed * 28,
+      height: SCREEN.heightFixed * 30,
       flexDirection: 'row',
       alignItems: 'center',
       paddingHorizontal: 12,
