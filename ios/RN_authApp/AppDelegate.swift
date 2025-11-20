@@ -2,7 +2,9 @@ import UIKit
 import React
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
-import Firebase
+import FirebaseCore
+import FirebaseMessaging
+import UserNotifications
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -23,6 +25,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   ) -> Bool {
     
     FirebaseApp.configure()
+
+    if FirebaseApp.app() == nil {
+        print("FATAL ERROR: Firebase failed to configure.")
+    } else {
+        print("Firebase configured successfully.")
+    }
+
+
+    print("--- Attempting APNs Registration ---")
+    application.registerForRemoteNotifications()
+
+
     
     let delegate = ReactNativeDelegate()
     let factory = RCTReactNativeFactory(delegate: delegate)
@@ -41,6 +55,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     return true
   }
+
+  func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Messaging.messaging().apnsToken = deviceToken
+    }
+
+  func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("Failed to register for remote notifications: \(error.localizedDescription)")
+    }
+  
 }
 
 class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {

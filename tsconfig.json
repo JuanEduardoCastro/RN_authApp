@@ -5,6 +5,7 @@
   "compilerOptions": {
     "types": ["react-native", "jest"],
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "paths": {
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
