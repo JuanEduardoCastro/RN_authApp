@@ -1,48 +1,48 @@
 {
   "project_info": {
-    "project_number": "130405150648",
-    "project_id": "authorization-demo-app",
-    "storage_bucket": "authorization-demo-app.firebasestorage.app"
+    "project_number": "851060951342",
+    "project_id": "user-auth-app-467718",
+    "storage_bucket": "user-auth-app-467718.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:130405150648:android:fa154cafa381a26336e94d",
+        "mobilesdk_app_id": "1:851060951342:android:7891be4185ef9242abd2bf",
         "android_client_info": {
           "package_name": "com.rn_authapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "130405150648-6orvta3m0tr581c5teh05euhu7d8v6u8.apps.googleusercontent.com",
+          "client_id": "851060951342-vh88l0s561iqnofhgtssakif3sgv4pbb.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.rn_authapp",
-            "certificate_hash": "7fd55c542ac38925acfe1b51c650bbb937c01511"
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {
-          "client_id": "130405150648-f747r0sr5t8793bforvmc00l06nmgkf7.apps.googleusercontent.com",
+          "client_id": "851060951342-ipvomkabj3u8abitn0ac0br9hltpa8a9.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDu9ljfJHF4ocOC-qjmZ8zXYtw_AP_x-nU"
+          "current_key": "AIzaSyDL2LhDk1V2-TNs9hMUS6OF3ZVYcCbLy34"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "130405150648-f747r0sr5t8793bforvmc00l06nmgkf7.apps.googleusercontent.com",
+              "client_id": "851060951342-ipvomkabj3u8abitn0ac0br9hltpa8a9.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "130405150648-ucr0ame9d8o4r3sbalpa9to8gn7a6q10.apps.googleusercontent.com",
+              "client_id": "851060951342-uhu25rpaq0brova5bjn44hcs7pmrie1e.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "org.reactjs.native.example.RN-authApp"
+                "bundle_id": "com.RN_authApp"
               }
             }
           ]

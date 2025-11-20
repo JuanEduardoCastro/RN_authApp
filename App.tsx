@@ -1,5 +1,5 @@
 /* Core libs & third parties libs */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import {
@@ -24,17 +24,17 @@ import store from '@store/store';
 import { useAppSelector } from '@store/authHook';
 import { userAuth } from '@store/authSlice';
 import i18n from 'src/locale/i18next';
-import { Dimensions, Linking } from 'react-native';
+import { Linking } from 'react-native';
+import {
+  requestPermissionForNotification,
+  setupMessageListener,
+} from '@utils/notifications/pushNotificationService';
+
 /* Assets */
 
 if (__DEV__) {
   configureReanimatedLogger({ level: ReanimatedLogLevel.warn, strict: false });
 }
-
-const { width, height } = Dimensions.get('window');
-
-console.log('el width: ', width);
-console.log('el height: ', height);
 
 const AppWrapper = () => {
   return (
@@ -52,7 +52,7 @@ const linking: LinkingOptions<RootStackParamList> = {
   ],
   subscribe(listener) {
     const onReceiveURL = ({ url }: { url: string }) => {
-      console.log('ESTO ES EL URL -----> ', url);
+      __DEV__ && console.log('ESTO ES EL URL -----> ', url);
       listener(url);
     };
 
@@ -65,9 +65,9 @@ const linking: LinkingOptions<RootStackParamList> = {
   async getInitialURL() {
     const url = await Linking.getInitialURL();
     if (url) {
-      console.log('COLD START -------> ', url);
+      __DEV__ && console.log('COLD START -------> ', url);
     } else {
-      console.log('NO HAY URL ');
+      __DEV__ && console.log('NO HAY URL ');
     }
   },
   config: {
@@ -85,37 +85,18 @@ function App() {
   const { loader } = useAppSelector(userAuth);
   const [isAppReady, setIsAppReady] = useState(false);
 
+  useEffect(() => {
+    requestPermissionForNotification();
+    const unsubscribe = setupMessageListener();
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   const handleAppIsReady = () => {
     setIsAppReady(true);
   };
-
-  // const handleDeepLink = (event: any) => {
-  //   Alert.alert('handleDeepLink', event.url);
-
-  // };
-
-  // useEffect(() => {
-  //   Linking.addEventListener('url', handleDeepLink);
-
-  //   return () => {
-  //     Linking.removeAllListeners('url');
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   const getInitialURL = async () => {
-  //     const url = await Linking.getInitialURL();
-  //     if (url === null) {
-  //       return;
-  //     }
-  //     if (url) {
-  //       Alert.alert('QUE VIENE ACA', url);
-  //       navigation
-  //     }
-  //   };
-  //   getInitialURL();
-  //   return () => {};
-  // }, []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
