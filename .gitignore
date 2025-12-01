@@ -37,8 +37,8 @@ local.properties
 *.hprof
 .cxx/
 *.keystore
-!debug.keystore
 debug.keystore
+android/app/debug.keystore
 .kotlin/
 android/app/release
 
@@ -98,8 +98,16 @@ env.d.ts
 #old-version
 old-version/
 
+#Firebase
+/ios/GoogleService-Info.plist
+/android/app/google-services.json
+
+
 #AWS S3 
 index.html
 assetlinks.json
 apple-app-site-association
 update-ios-version.sh
+
+#Cluade code
+CLAUDE.md

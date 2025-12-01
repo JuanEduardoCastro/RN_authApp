@@ -65,11 +65,14 @@ export const loginUser = createAsyncThunk(
   'users/login',
   async (data: DataAPI, { rejectWithValue }) => {
     const { t } = data;
+    console.log('ENTRA AL LOGIN ????');
     try {
+      console.log('ENTRA AL TRY/CATCH ????');
       const response = await api.post('/users/login', {
         email: data.email,
         password: data.password,
       });
+      console.log('XX -> authHook.ts:75 -> response :', response.status);
       if (response.status === 200) {
         const { refreshToken } = response.data;
         await Keychain.setGenericPassword('refreshToken', refreshToken, {
@@ -256,6 +259,7 @@ export const checkEmail = createAsyncThunk(
 
     try {
       const response = await api.post('/users/check-email', data);
+      console.log('XX -> authHook.ts:259 -> response :', response);
       // Status 200 means the email was sent successfully
       if (response.status === 200) {
         __DEV__ &&
