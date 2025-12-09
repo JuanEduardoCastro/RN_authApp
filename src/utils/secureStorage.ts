@@ -86,7 +86,7 @@ export const secureGetStorage = async (
           'XX -> secureStorage.ts:80 -> secureGetStorage -> credentials :',
           `[SecureGetStorage] ℹ️ No credentials found in: ${service}`,
         );
-      return { success: true, data: undefined };
+      return { success: false, data: undefined };
     }
 
     __DEV__ &&

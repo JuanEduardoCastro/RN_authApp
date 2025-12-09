@@ -276,8 +276,9 @@ export const editUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
   'users/logout',
-  async (data: DataAPI, { rejectWithValue }) => {
+  async (data: DataAPI, { getState, rejectWithValue }) => {
     const { t, email } = data;
+    const { auth } = getState() as RootState;
     try {
       const deviceId = await DeviceInfo.getUniqueId();
 
@@ -287,9 +288,12 @@ export const logoutUser = createAsyncThunk(
       }
 
       const response = await api.post('/users/logout', { email: email });
+      console.log('XX -> authHook.ts:290 -> response :', response.status);
 
       if (response.status === 200) {
-        await api.delete(`/users/device-token/${deviceId}`);
+        await api.delete(`/users/device-token/${deviceId}`, {
+          headers: { Authorization: `Bearer ${auth.token}` },
+        });
         await secureDelete(KeychainService.REFRESH_TOKEN);
         await secureDelete(KeychainService.REMEMBER_ME);
 
