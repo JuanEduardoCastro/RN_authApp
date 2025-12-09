@@ -1,4 +1,3 @@
-import * as Keychain from 'react-native-keychain';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from './store';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -7,6 +6,19 @@ import { CustomJwtPayload } from '@hooks/types';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { DataAPI } from './types';
 import api from './apiService';
+import DeviceInfo from 'react-native-device-info';
+import { registerFCMToken } from '@utils/notifications/registerFCMToken';
+import { parseApiError } from '@utils/errorHandler';
+import {
+  checkEmailRateLimiter,
+  loginRateLimiter,
+  resetPasswordRateLimiter,
+} from '@utils/rateLimiter';
+import {
+  KeychainService,
+  secureDelete,
+  secureSetStorage,
+} from '@utils/secureStorage';
 
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppSelector = useSelector.withTypes<RootState>();
@@ -32,11 +44,11 @@ export const validateRefreshToken = createAsyncThunk(
       if (response.status === 200) {
         return {
           success: true,
-          user: response.data.user,
-          token: response.data.accessToken,
+          user: response.data.data.user,
+          token: response.data.data.accessToken,
           messageType: 'success',
           notificationMessage: `${t('success-welcome-back')}${
-            response.data.user.firstName
+            response.data.data.user.firstName
           }!`,
         };
       }
@@ -45,12 +57,11 @@ export const validateRefreshToken = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:51 -> error :', error);
-      const message =
-        error.response?.data?.notificationMessage || t('error-session-val');
+      __DEV__ && console.log('XX -> authHook.ts:59 -> error :', error);
+      const parsedError = parseApiError(error, t, 'error-session-val');
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: message,
+        notificationMessage: parsedError.message,
       });
     }
   },
@@ -65,32 +76,70 @@ export const loginUser = createAsyncThunk(
   'users/login',
   async (data: DataAPI, { rejectWithValue }) => {
     const { t } = data;
-    console.log('ENTRA AL LOGIN ????');
+
+    const rateLimit = loginRateLimiter.checkRateLimit();
+
+    if (rateLimit.isLocked) {
+      __DEV__ &&
+        console.log(
+          'XX -> authHook.ts:81 -> rateLimit :',
+          `Login rate limited for ${rateLimit.remainingTime}s`,
+        );
+
+      return rejectWithValue({
+        messageType: 'error',
+        notificationMessage: t('error-rate-limit-login', {
+          seconds: rateLimit.remainingTime,
+        }),
+      });
+    }
+
+    if (rateLimit.attemptsLeft <= 2 && rateLimit.attemptsLeft > 0) {
+      __DEV__ &&
+        console.log(
+          'XX -> authHook.ts:97 -> rateLimit :',
+          `Login attempts remaining: ${rateLimit.attemptsLeft}`,
+        );
+    }
+
     try {
-      console.log('ENTRA AL TRY/CATCH ????');
       const response = await api.post('/users/login', {
         email: data.email,
         password: data.password,
       });
-      console.log('XX -> authHook.ts:75 -> response :', response.status);
       if (response.status === 200) {
-        const { refreshToken } = response.data;
-        await Keychain.setGenericPassword('refreshToken', refreshToken, {
-          service: 'secret token',
-          accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
-        });
-        if (data.rememberMe) {
-          const rememberMeFlag = 'true';
-          await Keychain.setGenericPassword('remember', rememberMeFlag, {
-            service: 'secret remember me',
-            accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
-          });
+        const { refreshToken } = response.data.data;
+
+        const saveResult = await secureSetStorage(
+          'refreshToken',
+          refreshToken,
+          KeychainService.REFRESH_TOKEN,
+        );
+
+        if (!saveResult.success) {
+          __DEV__ && console.warn('Failed to save refresh token to Keychain');
         }
+
+        if (data.rememberMe) {
+          const rememberResult = await secureSetStorage(
+            'remember',
+            'true',
+            KeychainService.REMEMBER_ME,
+          );
+
+          if (!rememberResult.success) {
+            __DEV__ && console.warn('Failed to save remember me flag');
+          }
+        }
+
+        await registerFCMToken(response.data.data.accessToken);
+        loginRateLimiter.recordSuccessfulAttempt();
+
         return {
           success: true,
           error: null,
-          user: response.data.user,
-          token: response.data.accessToken,
+          user: response.data.data.user,
+          token: response.data.data.accessToken,
           messageType: 'success',
           notificationMessage: t('success-welcome'),
         };
@@ -100,12 +149,32 @@ export const loginUser = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:102 -> error :', error);
+      __DEV__ && console.log('XX -> authHook.ts:152 -> error :', error);
+
+      loginRateLimiter.recordFailedAttempt();
+      const parsedError = parseApiError(error, t, 'error-credentials');
+      const newRateLimit = loginRateLimiter.checkRateLimit();
+
+      if (newRateLimit.isLocked) {
+        return rejectWithValue({
+          messageType: 'error',
+          notificationMessage: t('error-rate-limit-login', {
+            seconds: newRateLimit.remainingTime,
+          }),
+        });
+      }
+
+      const attemptsLeft = newRateLimit.attemptsLeft;
       const message =
-        error.response?.data?.notificationMessage || t('error-credentials');
+        attemptsLeft > 0 && attemptsLeft <= 2
+          ? `${parsedError.message} ${t('warning-attempts-left', {
+              count: attemptsLeft,
+            })}`
+          : parsedError.message;
+
       return rejectWithValue({
-        messageType: 'error',
-        notificationMessage: message,
+        messageType: parsedError.type === 'timeout' ? 'warning' : 'error',
+        notificationMessage: parsedError.message || message,
       });
     }
   },
@@ -138,12 +207,11 @@ export const createUser = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:141 -> error :', error);
-      const message =
-        error.response?.data?.notificationMessage || t('error-email-check');
+      __DEV__ && console.log('XX -> authHook.ts:209 -> error :', error);
+      const parsedError = parseApiError(error, t, 'error-email-check');
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: message,
+        notificationMessage: parsedError.message,
       });
     }
   },
@@ -179,8 +247,8 @@ export const editUser = createAsyncThunk(
       if (editUserResponse.status === 200) {
         return {
           success: true,
-          user: editUserResponse.data.user,
-          token: editUserResponse.data.accessToken,
+          user: editUserResponse.data.data.user,
+          token: editUserResponse.data.data.accessToken,
           messageType: 'success',
           notificationMessage: t('success-profile-updated'),
         };
@@ -190,12 +258,12 @@ export const editUser = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:187 -> error :', error);
-      const message =
-        error.response?.data?.notificationMessage || t('error-update');
+      __DEV__ && console.log('XX -> authHook.ts:260 -> error :', error);
+
+      const parsedError = parseApiError(error, t, 'error-update');
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: message,
+        notificationMessage: parsedError.message,
       });
     }
   },
@@ -209,19 +277,22 @@ export const editUser = createAsyncThunk(
 export const logoutUser = createAsyncThunk(
   'users/logout',
   async (data: DataAPI, { rejectWithValue }) => {
-    const { t } = data;
+    const { t, email } = data;
     try {
+      const deviceId = await DeviceInfo.getUniqueId();
+
       const isGoogleSignin = GoogleSignin.hasPreviousSignIn();
       if (isGoogleSignin) {
         await GoogleSignin.signOut();
       }
 
-      const response = await api.post('/users/logout', data);
+      const response = await api.post('/users/logout', { email: email });
+
       if (response.status === 200) {
-        await Keychain.resetGenericPassword({ service: 'secret token' });
-        await Keychain.resetGenericPassword({
-          service: 'secret remember me',
-        });
+        await api.delete(`/users/device-token/${deviceId}`);
+        await secureDelete(KeychainService.REFRESH_TOKEN);
+        await secureDelete(KeychainService.REMEMBER_ME);
+
         return {
           success: true,
           error: null,
@@ -234,12 +305,12 @@ export const logoutUser = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:231 -> error :', error);
-      const message =
-        error.response?.data?.notificationMessage || t('error-email-check');
+      __DEV__ && console.log('XX -> authHook.ts:307 -> error :', error);
+
+      const parsedError = parseApiError(error, t, 'error-logout');
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: message,
+        notificationMessage: parsedError.message,
       });
     }
   },
@@ -257,37 +328,37 @@ export const checkEmail = createAsyncThunk(
   async (data: DataAPI, { rejectWithValue }) => {
     const { t } = data;
 
+    const rateLimit = checkEmailRateLimiter.checkRateLimit();
+    if (rateLimit.isLocked) {
+      return rejectWithValue({
+        messageType: 'error',
+        notificationMessage: t('error-rate-limit-email', {
+          seconds: rateLimit.remainingTime,
+        }),
+      });
+    }
+
     try {
       const response = await api.post('/users/check-email', data);
-      console.log('XX -> authHook.ts:259 -> response :', response);
       // Status 200 means the email was sent successfully
       if (response.status === 200) {
-        __DEV__ &&
-          (console.log('--> --> --> --> --> --> --> --> --> --> '),
-          console.log('--> --> EL TOKEN PARA EL MAIL '),
-          console.log(response.data.data),
-          console.log('--> --> --> --> --> --> --> --> --> --> '));
-        return { success: true };
+        checkEmailRateLimiter.recordSuccessfulAttempt();
+        return { success: true, error: null };
       }
-      // Status 204 means the email is already in use
-      if (response.status === 204) {
-        return rejectWithValue({
-          messageType: 'warning',
-          notificationMessage: t('warning-email-in-use'),
-        });
-      }
-      // Fallback for other unexpected success statuses
+
       return rejectWithValue({
         messageType: 'error',
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:285 -> error :', error);
-      const message =
-        error.response?.data?.notificationMessage || t('error-email-check');
+      __DEV__ && console.log('XX -> authHook.ts:359 -> error :', error);
+
+      checkEmailRateLimiter.recordFailedAttempt();
+
+      const parsedError = parseApiError(error, t, 'error-email-check');
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: message,
+        notificationMessage: parsedError.message,
       });
     }
   },
@@ -303,18 +374,21 @@ export const resetPassword = createAsyncThunk(
   async (data: DataAPI, { rejectWithValue }) => {
     const { t } = data;
 
+    const rateLimit = resetPasswordRateLimiter.checkRateLimit();
+    if (rateLimit.isLocked) {
+      return rejectWithValue({
+        messageType: 'error',
+        notificationMessage: t('error-rate-limit-reset', {
+          seconds: rateLimit.remainingTime,
+        }),
+      });
+    }
+
     try {
       const response = await api.post('/users/reset-password', data);
       if (response.status === 200) {
-        __DEV__ &&
-          (console.log('--> --> --> --> --> --> --> --> --> --> '),
-          console.log('--> --> EL TOKEN PARA LA CONTRASEÑA '),
-          console.log(response.data.data),
-          console.log('--> --> --> --> --> --> --> --> --> --> '));
-        return {
-          success: true,
-          error: null,
-        };
+        resetPasswordRateLimiter.recordSuccessfulAttempt();
+        return { success: true, error: null };
       } else if (response.status === 204) {
         return rejectWithValue({
           messageType: 'warning',
@@ -326,12 +400,14 @@ export const resetPassword = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:336 -> error :', error);
-      const message =
-        error.response?.data?.notificationMessage || t('error-password-reset');
+      __DEV__ && console.log('XX -> authHook.ts:408 -> error :', error);
+      resetPasswordRateLimiter.recordFailedAttempt();
+
+      const parsedError = parseApiError(error, t, 'error-password-reset');
+
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: message,
+        notificationMessage: parsedError.message,
       });
     }
   },
@@ -365,12 +441,12 @@ export const updatePassword = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:375 -> error :', error);
-      const message =
-        error.response?.data?.notificationMessage || t('error-password-update');
+      __DEV__ && console.log('XX -> authHook.ts:449 -> error :', error);
+
+      const parsedError = parseApiError(error, t, 'error-password-update');
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: message,
+        notificationMessage: parsedError.message,
       });
     }
   },

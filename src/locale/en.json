@@ -73,6 +73,7 @@
   "warning": "Warning",
   "warning-code-expired": "Code expired. Please, try again!",
   "warning-email-checked": "There is no email checked. Please, try again!",
+  "error-invalid-token": "Invalid link. Please try again.",
   "warning-two-passwords": "The two passwords must be the same.",
   "warning-email-in-use": "This email is already in use.\nPlease try another one.",
   "warning-email-not-registered": "This email is not registered.",
@@ -82,7 +83,7 @@
   "error-no-mail-app": "No Mail App.",
   "error-mail-configure": "Please configure a mail client to continue.",
   "error-test-message": "This is notificacion test!",
-  "error-unknown": "An unknown error occurred.",
+  "error-unknown": "Something went wrong. Please try again.",
   "error-authenticated": "Not authenticated.",
   "error-session-val": "Session validation failed.",
   "error-credentials": "Wrong credentials!",
@@ -96,7 +97,7 @@
   "error-google-signin": "Google Signin failed: ",
 
   "succes": "Success.",
-  "success-email-sent": "The email was sent successfully.",
+  "success-email-sent": "If the email is correct, you will\n receive a confirmation email.",
   "success-welcome-back": "Welcome back ",
   "success-welcome": "Welcome!!",
   "success-log-in": "User created successfully.\nPlase log in with credentials",
@@ -117,5 +118,14 @@
   "info-password-lowercase": "At least one lowercase letter (a-z).",
   "info-password-number": "At least one number (0-9).",
   "info-password-symbol": "At least one symbol ($,#,@,%, etc.).",
-  "info-accept": "Accept"
+  "info-accept": "Accept",
+
+  "error-request-timeout": "Request timed out. Please check your\nconnection and try again.",
+  "error-network": "No internet connection. Please check your\nnetwork and try again.",
+  "error-server": "Server is experiencing issues.\nPlease try again later.",
+
+  "error-rate-limit-login": "Too many failed login attempts.\nPlease try again in {{seconds}} seconds.",
+  "error-rate-limit-reset": "Too many password reset requests.\nPlease try again in {{seconds}} seconds.",
+  "error-rate-limit-email": "Too many email verification requests.\nPlease try again in {{seconds}} seconds.",
+  "warning-attempts-left": "({{count}} attempts left)"
 }

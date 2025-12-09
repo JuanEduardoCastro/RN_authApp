@@ -20,10 +20,10 @@ export interface CustomJwtPayload extends JwtPayload {
 }
 
 export interface UseTimeExpiredReturn {
-  accessTokenTimer: any | null;
-  refreshTokenTimer: any | null;
+  accessTokenTimer: number | null;
+  refreshTokenTimer: number | null;
 }
 
 export interface UseWhenToScroll {
-  leyoutHeight: number;
+  layoutHeight: number;
 }

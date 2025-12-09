@@ -92,7 +92,7 @@ const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
                 rules={{
                   required: t('password-required'),
                   minLength: {
-                    value: 6,
+                    value: 8,
                     message: t('password-invalid'),
                   },
                 }}

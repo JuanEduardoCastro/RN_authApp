@@ -28,6 +28,7 @@ import { Linking } from 'react-native';
 import {
   requestPermissionForNotification,
   setupMessageListener,
+  setupTokenRefreshListener,
 } from '@utils/notifications/pushNotificationService';
 
 /* Assets */
@@ -52,7 +53,7 @@ const linking: LinkingOptions<RootStackParamList> = {
   ],
   subscribe(listener) {
     const onReceiveURL = ({ url }: { url: string }) => {
-      __DEV__ && console.log('ESTO ES EL URL -----> ', url);
+      __DEV__ && console.log('url received.');
       listener(url);
     };
 
@@ -65,9 +66,9 @@ const linking: LinkingOptions<RootStackParamList> = {
   async getInitialURL() {
     const url = await Linking.getInitialURL();
     if (url) {
-      __DEV__ && console.log('COLD START -------> ', url);
+      __DEV__ && console.log('COLD START');
     } else {
-      __DEV__ && console.log('NO HAY URL ');
+      __DEV__ && console.log('NO HAY URL');
     }
   },
   config: {
@@ -88,9 +89,11 @@ function App() {
   useEffect(() => {
     requestPermissionForNotification();
     const unsubscribe = setupMessageListener();
+    const unsubscribeTokenRefresh = setupTokenRefreshListener();
 
     return () => {
       unsubscribe();
+      unsubscribeTokenRefresh();
     };
   }, []);
 

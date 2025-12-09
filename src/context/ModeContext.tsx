@@ -14,7 +14,11 @@ import {
   TColors,
 } from '@constants/types';
 import { sharedColors, luxury, calm, gold, passion } from '@constants/colors';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  KeychainService,
+  secureGetStorage,
+  secureSetStorage,
+} from '@utils/secureStorage';
 
 interface ModeContextProps {
   mode: ColorModeProps;
@@ -46,26 +50,31 @@ export const ModeProvider = ({ children }: ThemeProviderProps) => {
 
   useEffect(() => {
     const initialize = async () => {
-      const storedMode = (await AsyncStorage.getItem('mode')) as ColorModeProps;
-      const storedTheme = (await AsyncStorage.getItem(
-        'theme',
-      )) as ColorThemeProps;
+      try {
+        const storedMode = await secureGetStorage(KeychainService.MODE);
+        const storedTheme = await secureGetStorage(KeychainService.THEME);
 
-      setMode(storedMode || (systemColorScheme === 'dark' ? 'dark' : 'light'));
-      setThemeName(storedTheme || 'luxury');
+        setMode(
+          (storedMode.data?.password as ColorModeProps) ||
+            (systemColorScheme === 'dark' ? 'dark' : 'light'),
+        );
+        setThemeName(
+          (storedTheme.data?.password as ColorThemeProps) || 'luxury',
+        );
+      } catch (error) {}
     };
     initialize();
   }, [systemColorScheme]);
 
   const setColorTheme = (themeName: ColorThemeProps) => {
     setThemeName(themeName);
-    AsyncStorage.setItem('theme', themeName);
+    secureSetStorage('theme', themeName, KeychainService.THEME);
   };
 
   const toggleMode = () => {
     setMode(prevMode => {
       const newMode = prevMode === 'light' ? 'dark' : 'light';
-      AsyncStorage.setItem('mode', newMode);
+      secureSetStorage('mode', newMode, KeychainService.MODE);
       return newMode;
     });
   };

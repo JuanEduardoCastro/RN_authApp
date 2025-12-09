@@ -7,17 +7,23 @@ import {
   AuthorizationStatus,
   getMessaging,
   setBackgroundMessageHandler,
+  onTokenRefresh,
 } from '@react-native-firebase/messaging';
 import { Alert, PermissionsAndroid, Platform } from 'react-native';
 
 import { getApp } from '@react-native-firebase/app';
+import { registerFCMToken } from './registerFCMToken';
+import { KeychainService, secureGetStorage } from '@utils/secureStorage';
 
+const MAX_RETRIES = 5;
+const RETRY_DELAY = 1000;
 const firebaseApp = getApp();
 const messagingInstance = getMessaging(firebaseApp);
 
 setBackgroundMessageHandler(messagingInstance, async remoteMessage => {
   __DEV__ &&
     console.log(
+      'XX -> pushNotificationService.ts:22 -> remoteMessage :',
       'FCM Message received in background/quit state (iOS/Android):',
       remoteMessage,
     );
@@ -29,8 +35,12 @@ export const requestPermissionForNotification = async () => {
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
     );
+
     if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-      __DEV__ && console.log('Notification permission denied (Android).');
+      __DEV__ &&
+        console.log(
+          'XX -> pushNotificationService.ts:38 -> requestPermissionForNotification -> Notification permission denied (Android).',
+        );
       return;
     }
   } else if (Platform.OS === 'ios') {
@@ -39,21 +49,76 @@ export const requestPermissionForNotification = async () => {
       authStatus !== AuthorizationStatus.AUTHORIZED &&
       authStatus !== AuthorizationStatus.PROVISIONAL
     ) {
-      __DEV__ && console.log('Notification permission denied (iOS).');
+      __DEV__ &&
+        console.log(
+          'XX -> pushNotificationService.ts:50 -> requestPermissionForNotification -> Notification permission denied (iOS).',
+        );
       return;
     }
-    // await messaging().registerDeviceForRemoteMessages();
   }
 
   /* Retrieve token */
-  try {
-    const token = await getToken(messagingInstance);
-    __DEV__ && console.log(`✅ ${Platform.OS} FCM Device Token:`, token);
-    // 🔥 ACTION: Send this unique token to your backend/server for sending targeted messages.
-    // Example: sendTokenToServer(token);
-  } catch (error) {
-    console.error('Error fetching FCM token:', error);
-    return;
+  if (Platform.OS === 'ios') {
+    await getTokenWithRetry();
+  } else {
+    try {
+      const token = await getToken(messagingInstance);
+
+      if (token) {
+        __DEV__ &&
+          console.log(
+            'XX -> pushNotificationService.ts:64 -> requestPermissionForNotification -> token :',
+            `✅ ${Platform.OS} FCM Device Token:`,
+          );
+        // 🔥 ACTION: Send this unique token to your backend/server for sending targeted messages.0
+        // Example: sendTokenToServer(token);
+      }
+    } catch (error) {
+      __DEV__ &&
+        console.log(
+          'XX -> pushNotificationService.ts:70 -> requestPermissionForNotification -> error :',
+          'Error fetching FCM token:',
+          error,
+        );
+      return;
+    }
+  }
+};
+
+const getTokenWithRetry = async (
+  maxRetries = MAX_RETRIES,
+  retryDelay = RETRY_DELAY,
+) => {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const token = await getToken(messagingInstance);
+
+      __DEV__ &&
+        console.log(
+          'XX -> pushNotificationService.ts:90 -> getTokenWithRetry -> token :',
+          'iOS FCM Device Token (attempts: ' + attempt + '):',
+        );
+      return token;
+    } catch (error) {
+      const isApnsError = (error as Error)?.message.includes('No APNS token');
+
+      if (isApnsError && attempt < maxRetries) {
+        __DEV__ &&
+          console.log(
+            'XX -> pushNotificationService.ts:98 -> getTokenWithRetry -> error :',
+            `APNS token not ready, retrying in ${retryDelay}ms (attempt ${attempt}/${maxRetries})...`,
+          );
+        await new Promise((resolve: any) => setTimeout(resolve, retryDelay));
+      } else {
+        if (isApnsError) {
+          console.warn(
+            '⚠️ Could not get FCM token - APNS not available (simulator or missing configuration)',
+          );
+        } else {
+          console.error('Error fetching FCM token:', error);
+        }
+      }
+    }
   }
 };
 
@@ -94,4 +159,25 @@ export const setupMessageListener = () => {
   });
 
   return unsubscribeOnMessage;
+};
+
+export const setupTokenRefreshListener = () => {
+  return onTokenRefresh(messagingInstance, async newToken => {
+    __DEV__ && console.log('FCT token refreshed! ');
+    // get accessToken from redux
+    // You'll need to pass this from App.tsx where you have Redux access
+    // Or store it in local storage
+    newToken;
+
+    try {
+      const credentials = await secureGetStorage(KeychainService.REFRESH_TOKEN);
+
+      if (credentials.data) {
+        const credentialT = credentials.data.password;
+        await registerFCMToken(credentialT);
+      }
+    } catch (error) {
+      __DEV__ && console.log('Failed to update refreshed token.');
+    }
+  });
 };

@@ -29,6 +29,10 @@ import { textVar } from '@constants/textVar';
 import { DataAPI } from '@store/types';
 import { useTranslation } from 'react-i18next';
 import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
+import {
+  validateEmailToken,
+  validatePasswordInput,
+} from '@utils/validationHelper';
 /* Assets */
 
 interface FormNewDataProps {
@@ -51,34 +55,51 @@ const NewPasswordScreen = ({
   const [newUser, setNewUser] = useState<boolean>(true);
 
   useEffect(() => {
-    try {
-      if (emailToken !== null) {
-        const decode = jwtDecode<CustomJwtPayload>(emailToken);
-        const userEmail = decode.email;
-        decode.isNew !== undefined && setNewUser(decode.isNew);
-        setEmail(userEmail);
-        if (decode.exp) {
-          const isExpired = Date.now() / 1000 > decode.exp;
-          if (isExpired) {
-            dispatch(
-              setNotificationMessage({
-                messageType: 'warning',
-                notificationMessage: t('warning-code-expired'),
-              }),
-            );
-            navigation.replace('CheckEmailScreen', {
-              checkMode: newUser ? 'new_password' : 'reset_password',
-            });
-          }
-        }
-      } else {
-        navigation.popToTop();
-        dispatch(
-          setNotificationMessage({
-            messageType: 'warning',
-            notificationMessage: t('warning-email-checked'),
-          }),
+    if (!emailToken || emailToken == null) {
+      navigation.popToTop();
+      dispatch(
+        setNotificationMessage({
+          messageType: 'warning',
+          notificationMessage: t('warning-email-checked'),
+        }),
+      );
+      return;
+    }
+
+    const validationToken = validateEmailToken(emailToken);
+
+    if (validationToken) {
+      __DEV__ &&
+        console.log(
+          'XX -> NewPasswordScreen.tsx:67 -> NewPasswordScreen -> Invalid token for new user/ppassword',
         );
+      navigation.popToTop();
+      dispatch(
+        setNotificationMessage({
+          messageType: 'error',
+          notificationMessage: t('error-invalid-token'), //add to locale
+        }),
+      );
+      return;
+    }
+    try {
+      const decode = jwtDecode<CustomJwtPayload>(emailToken);
+      const userEmail = decode.email;
+      decode.isNew !== undefined && setNewUser(decode.isNew);
+      setEmail(userEmail);
+      if (decode.exp) {
+        const isExpired = Date.now() / 1000 > decode.exp;
+        if (isExpired) {
+          dispatch(
+            setNotificationMessage({
+              messageType: 'warning',
+              notificationMessage: t('warning-code-expired'),
+            }),
+          );
+          navigation.replace('CheckEmailScreen', {
+            checkMode: newUser ? 'new_password' : 'reset_password',
+          });
+        }
       }
     } catch (error) {
       __DEV__ &&
@@ -153,19 +174,7 @@ const NewPasswordScreen = ({
                     message: t('password-invalid'),
                   },
                   validate: (value: string) => {
-                    if (!/[A-Z]/.test(value)) {
-                      return t('info-password-uppercase');
-                    }
-                    if (!/[a-z]/.test(value)) {
-                      return t('info-password-lowercase');
-                    }
-                    if (!/[0-9]/.test(value)) {
-                      return t('info-password-number');
-                    }
-                    if (!/[^a-zA-Z0-9]/.test(value)) {
-                      return t('info-password-symbol');
-                    }
-                    return true;
+                    validatePasswordInput(value);
                   },
                 }}
                 placeholder={t('new-password-label-placeholder')}
@@ -182,21 +191,10 @@ const NewPasswordScreen = ({
                     message: t('password-invalid'),
                   },
                   validate: (value: string) => {
-                    value === watch('new_password') ||
-                      "Password doesn't match!";
-                    if (!/[A-Z]/.test(value)) {
-                      return 'Password must contain at least one uppercase letter';
+                    if (value !== watch('new_password')) {
+                      return t('warning-two-passwords');
                     }
-                    if (!/[a-z]/.test(value)) {
-                      return 'Password must contain at least one lowercase letter';
-                    }
-                    if (!/[0-9]/.test(value)) {
-                      return 'Password must contain at least one number';
-                    }
-                    if (!/[^a-zA-Z0-9]/.test(value)) {
-                      return 'Password must contain at least one special character';
-                    }
-                    return true;
+                    validatePasswordInput(value);
                   },
                 }}
                 placeholder={t('confirm-password-label-placeholder')}

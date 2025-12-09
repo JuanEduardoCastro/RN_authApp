@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import * as Keychain from 'react-native-keychain';
 import { jwtDecode } from 'jwt-decode';
 import { useAppSelector } from 'src/store/authHook';
 import { userAuth } from 'src/store/authSlice';
 import { CustomJwtPayload, UseTimeExpiredReturn } from './types';
+import { KeychainService, secureGetStorage } from '@utils/secureStorage';
 
 const useTimeExpired = (): UseTimeExpiredReturn => {
   const { token } = useAppSelector(userAuth);
@@ -29,19 +29,32 @@ const useTimeExpired = (): UseTimeExpiredReturn => {
 
   useEffect(() => {
     const getRefreshTokenExp = async () => {
-      const credentials = await Keychain.getGenericPassword({
-        service: 'secret token',
-      });
-      if (credentials) {
+      try {
+        const result = await secureGetStorage(KeychainService.REFRESH_TOKEN);
+        if (!result.success || !result.data) {
+          setRefreshTokenTimer(0);
+          return;
+        }
+
+        const credentials = result.data;
         const currentTime = Math.floor(Date.now() / 1000);
         const decodedToken = jwtDecode<CustomJwtPayload>(credentials.password);
+
         if (decodedToken.exp && currentTime < decodedToken.exp) {
           setRefreshTokenTimer(decodedToken.exp - currentTime);
         } else {
           setRefreshTokenTimer(0);
         }
+      } catch (error) {
+        __DEV__ &&
+          console.log(
+            'XX -> useTimeExpired.tsx:49 -> getRefreshTokenExp -> Error getting refresh token expiration:',
+            error,
+          );
+        setRefreshTokenTimer(0);
       }
     };
+
     getRefreshTokenExp();
   }, [token]);
 

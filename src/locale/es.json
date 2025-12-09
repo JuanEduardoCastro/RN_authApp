@@ -73,6 +73,7 @@
   "warning": "Advertencia",
   "warning-code-expired": "Código expirado.\n¡Por favor, inténtalo de nuevo!",
   "warning-email-checked": "No hay ningún email verificado.\n¡Por favor, inténtalo de nuevo!",
+  "error-invalid-token": "Enlace invalido.\nPor favor, inténtalo de nuevo.",
   "warning-two-passwords": "Las contraseñas deben ser iguales.",
   "warning-email-in-use": "Este email ya está en uso.\nPor favor, prueba con otro.",
   "warning-email-not-registered": "Este email no está registrado.",
@@ -82,7 +83,7 @@
   "error-no-mail-app": "No hay aplicación de email.",
   "error-mail-configure": "Por favor, configura un cliente de email para continuar.",
   "error-test-message": "¡Esta es una prueba de notificación!",
-  "error-unknown": "Ocurrió un error desconocido.",
+  "error-unknown": "Algo salió mal.\nPor favor intenta nuevamente.",
   "error-authenticated": "Usuario no valido.",
   "error-session-val": "Falló la validación de la sesión.",
   "error-credentials": "¡Credenciales incorrectas!",
@@ -96,7 +97,7 @@
   "error-google-signin": "Error en el inicio de sesión con Google: ",
 
   "succes": "Éxito",
-  "success-email-sent": "El email fue enviado con éxito.",
+  "success-email-sent": "Si el email es correcto,\n recibirás un email de confirmación.",
   "success-welcome-back": "Bienvenido de nuevo ",
   "success-welcome": "¡Bienvenido!",
   "success-log-in": "Usuario creado con éxito.\nPor favor, inicia sesión con tus credenciales.",
@@ -117,5 +118,14 @@
   "info-password-lowercase": "Al menos una letra minúscula (a-z).",
   "info-password-number": "Al menos un número (0-9).",
   "info-password-symbol": "Al menos un símbolo ($,#,@,%, etc.).",
-  "info-accept": "Aceptar"
+  "info-accept": "Aceptar",
+
+  "error-request-timeout": "Tiempo de espera agotado. Por favor verifica\ntu conexión e intenta nuevamente.",
+  "error-network": "Sin conexión a internet. Por favor verifica\ntu red e intenta nuevamente.",
+  "error-server": "El servidor está experimentando problemas.\nPor favor intenta más tarde.",
+
+  "error-rate-limit-login": "Demasiados intentos de inicio de\nsesión fallidos. Por favor intenta nuevamente en {{seconds}} segundos.",
+  "error-rate-limit-reset": "Demasiadas solicitudes de restablecimiento\nde contraseña. Por favor intenta nuevamente en {{seconds}} segundos.",
+  "error-rate-limit-email": "Demasiadas solicitudes de verificación\nde correo. Por favor intenta nuevamente en {{seconds}} segundos.",
+  "warning-attempts-left": "({{count}} intentos restantes)"
 }

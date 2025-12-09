@@ -14,8 +14,12 @@ import {
 import { resources } from 'src/locale/i18next';
 import languagesList from '@constants/languagesList';
 import i18next from 'i18next';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getLocales } from 'react-native-localize';
+import {
+  KeychainService,
+  secureGetStorage,
+  secureSetStorage,
+} from '@utils/secureStorage';
 
 type LanguageInfo = {
   flag: string;
@@ -34,9 +38,9 @@ const LanguagePicker = ({ toggleSheet }: LanguagePickerProps) => {
   useEffect(() => {
     const checkLanguage = async () => {
       let langName = '';
-      const lngStored = await AsyncStorage.getItem('lng');
-      if (lngStored) {
-        langName = lngStored;
+      const lngStored = await secureGetStorage(KeychainService.LANGUAGE);
+      if (lngStored.data) {
+        langName = lngStored.data.password;
       } else {
         const locales = getLocales();
         langName = locales[0].languageCode;
@@ -50,7 +54,7 @@ const LanguagePicker = ({ toggleSheet }: LanguagePickerProps) => {
 
   const handleSelectLanguage = async (lng: any) => {
     i18next.changeLanguage(lng);
-    await AsyncStorage.setItem('lng', lng);
+    await secureSetStorage('lng', lng, KeychainService.LANGUAGE);
     toggleSheet(false);
   };
 

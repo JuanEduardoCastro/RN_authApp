@@ -73,6 +73,8 @@ const WelcomeScreen = ({
     }
   };
 
+  //TODO implement GitHub login and Aple login
+
   // const handleGitHubLogin = async () => {
   //   const clientID = process.env.GITHUB_CLIENT_ID;
   //   const redirectURI = process.env.GITHUB_REDIRECT_URI;
@@ -84,7 +86,6 @@ const WelcomeScreen = ({
   //   // const redirectResponse = await axios.get(
   //   //   `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}`,
   //   // );
-  //   __DEV__ && console.log('QUE PASA ACA --------------->', supported);
   // };
 
   return (

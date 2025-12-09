@@ -1,7 +1,8 @@
-import * as Keychain from 'react-native-keychain';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { isErrorWithCode } from '@react-native-google-signin/google-signin';
 import api from './apiService';
+import { KeychainService, secureSetStorage } from '@utils/secureStorage';
+import { parseApiError } from '@utils/errorHandler';
 
 /**
  * User login with Google signin and persist in time
@@ -35,7 +36,8 @@ export const googleLogin = createAsyncThunk(
         });
 
         if (checkEmailWithProvider.status === 200) {
-          const emailTokenResponse = checkEmailWithProvider.data.emailToken;
+          const emailTokenResponse =
+            checkEmailWithProvider.data.data.emailToken;
           const userData = {
             email: email,
             password: sub,
@@ -60,25 +62,24 @@ export const googleLogin = createAsyncThunk(
               password: sub,
             });
             if (loginNewUser.status === 200) {
-              await Keychain.setGenericPassword(
+              await secureSetStorage(
                 'refreshToken',
-                loginNewUser.data.refreshToken,
-                {
-                  service: 'secret token',
-                  accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
-                },
+                loginNewUser.data.data.refreshToken,
+                KeychainService.REFRESH_TOKEN,
               );
-              await Keychain.setGenericPassword('remember', 'true', {
-                service: 'secret remember me',
-                accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
-              });
+
+              await secureSetStorage(
+                'remember',
+                'true',
+                KeychainService.REMEMBER_ME,
+              );
               return {
                 success: true,
-                user: loginNewUser.data.user,
-                token: loginNewUser.data.accessToken,
+                user: loginNewUser.data.data.user,
+                token: loginNewUser.data.data.accessToken,
                 messageType: 'success',
                 notificationMessage: `${t('success-welcome')}${' '}${
-                  loginNewUser.data.user.firstName
+                  loginNewUser.data.data.user.firstName
                 }`,
               };
             }
@@ -89,25 +90,25 @@ export const googleLogin = createAsyncThunk(
             password: sub,
           });
           if (loginUser.status === 200) {
-            await Keychain.setGenericPassword(
+            await secureSetStorage(
               'refreshToken',
-              loginUser.data.refreshToken,
-              {
-                service: 'secret token',
-                accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
-              },
+              loginUser.data.data.refreshToken,
+              KeychainService.REFRESH_TOKEN,
             );
-            await Keychain.setGenericPassword('remember', 'true', {
-              service: 'secret remember me',
-              accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
-            });
+
+            await secureSetStorage(
+              'remember',
+              'true',
+              KeychainService.REMEMBER_ME,
+            );
+
             return {
               success: true,
-              user: loginUser.data.user,
-              token: loginUser.data.accessToken,
+              user: loginUser.data.data.user,
+              token: loginUser.data.data.accessToken,
               messageType: 'success',
               notificationMessage: `${t('success-welcome-back')}${' '}${
-                loginUser.data.user.firstName
+                loginUser.data.data.user.firstName
               }`,
             };
           }
@@ -118,13 +119,14 @@ export const googleLogin = createAsyncThunk(
         notificationMessage: t('error-google-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> otherAuthHooks.ts:116 -> error :', error);
+      __DEV__ && console.log('XX -> otherAuthHooks.ts:121 -> error :', error);
       if (isErrorWithCode(error)) {
-        __DEV__ && console.log('XX -> otherAuthHooks.ts:118 -> error :', error);
+        __DEV__ && console.log('XX -> otherAuthHooks.ts:123 -> error :', error);
 
+        const parsedError = parseApiError(error, t, 'error-google-signin');
         return rejectWithValue({
           messageType: 'error',
-          notificationMessage: `${t('error-google-signin')} ${error.code}`,
+          notificationMessage: parsedError.message,
         });
       }
     }

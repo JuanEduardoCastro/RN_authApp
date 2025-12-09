@@ -8,7 +8,20 @@ const store = configureStore({
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
-      serializableCheck: false,
+      // serializableCheck: false,
+      serializableCheck: {
+        ignoredActions: [
+          'users/token/refresh',
+          'users/login',
+          'users/create',
+          'users/:id',
+          'users/logout',
+          'users/check-email',
+          'users/reset-password',
+          'users/password',
+        ],
+        ignoredActionPaths: ['payload.t', 'meta.arg.t'],
+      },
     }),
 });
 

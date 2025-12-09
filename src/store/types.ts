@@ -1,3 +1,6 @@
+import { AxiosRequestConfig } from 'axios';
+import { TFunction } from 'i18next';
+
 export interface AuthState {
   loader: boolean;
   token: string | null;
@@ -9,7 +12,7 @@ export interface AuthState {
 
 export interface UserCredentialsPayload extends AuthState {
   success: boolean;
-  error: any;
+  error: Error;
 }
 
 export interface UserCredentials {
@@ -34,8 +37,8 @@ export interface User {
   isAppleLogin: boolean;
   avatarURL: string;
   avatarBuffer: string;
-  createdAt: any;
-  updatedAt: any;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 
 export interface NotificationMessagePayload {
@@ -44,10 +47,29 @@ export interface NotificationMessagePayload {
 }
 
 export interface DataAPI {
-  t: any;
+  t: TFunction;
   email: string | null;
   password: string | null;
   rememberMe: boolean;
   token: string | null;
   userData: Record<string, string>;
+}
+
+export type ErrorType = 'timeout' | 'network' | 'unknown' | 'server' | 'client';
+
+export interface ParsedError {
+  type: ErrorType;
+  message: string;
+  statusCode?: number;
+}
+
+export interface ApiErrorResponse {
+  notificationMessage?: string;
+  message?: string;
+  error?: string;
+  statusCode?: number;
+}
+
+export interface RetryableAxiosRequestConfig extends AxiosRequestConfig {
+  _retry?: boolean;
 }
