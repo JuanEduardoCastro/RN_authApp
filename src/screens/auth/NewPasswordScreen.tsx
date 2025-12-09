@@ -17,7 +17,6 @@ import Separator from '@components/shared/Separator';
 import ButtonNoBorder from '@components/shared/ButtonNoBorder';
 /* Custom hooks */
 import useStyles from '@hooks/useStyles';
-import { createUser, updatePassword, useAppDispatch } from 'src/store/authHook';
 /* Types */
 import { CustomJwtPayload } from '@hooks/types';
 import { TColors } from '@constants/types';
@@ -33,6 +32,8 @@ import {
   validateEmailToken,
   validatePasswordInput,
 } from '@utils/validationHelper';
+import { useAppDispatch } from '@store/hooks';
+import { createUser, updatePassword } from '@store/thunks';
 /* Assets */
 
 interface FormNewDataProps {

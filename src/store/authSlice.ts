@@ -4,14 +4,14 @@ import {
   NotificationMessagePayload,
   UserCredentialsPayload,
 } from './types';
-import { RootState } from './store';
 import {
   createUser,
   editUser,
   loginUser,
   logoutUser,
   validateRefreshToken,
-} from './authHook';
+} from './thunks';
+import { RootState } from './store';
 import { googleLogin } from './otherAuthHooks';
 
 const initialState: AuthState = {

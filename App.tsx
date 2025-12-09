@@ -21,7 +21,6 @@ import { RootStackParamList } from '@navigation/types';
 /* Utilities & constants */
 import { ModeProvider } from '@context/ModeContext';
 import store from '@store/store';
-import { useAppSelector } from '@store/authHook';
 import { userAuth } from '@store/authSlice';
 import i18n from 'src/locale/i18next';
 import { Linking } from 'react-native';
@@ -30,6 +29,7 @@ import {
   setupMessageListener,
   setupTokenRefreshListener,
 } from '@utils/notifications/pushNotificationService';
+import { useAppSelector } from '@store/hooks';
 
 /* Assets */
 

@@ -18,7 +18,6 @@ import Button from '@components/shared/Button';
 import ButtonNoBorder from '@components/shared/ButtonNoBorder';
 /* Custom hooks */
 import useStyles from '@hooks/useStyles';
-import { checkEmail, resetPassword, useAppDispatch } from '@store/authHook';
 /* Types */
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
@@ -28,6 +27,8 @@ import { setNotificationMessage } from '@store/authSlice';
 import { DataAPI } from '@store/types';
 import { useTranslation } from 'react-i18next';
 import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
+import { useAppDispatch } from '@store/hooks';
+import { checkEmail, resetPassword } from '@store/thunks';
 /* Assets */
 
 interface CheckEmailProps {

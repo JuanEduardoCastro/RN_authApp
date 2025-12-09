@@ -12,7 +12,6 @@ import { BlurView } from '@react-native-community/blur';
 /* Custom components */
 /* Custom hooks */
 import useStyles from '@hooks/useStyles';
-import { useAppDispatch, useAppSelector } from 'src/store/authHook';
 /* Types */
 import { TColors } from '@constants/types';
 /* Utilities & constants */
@@ -26,6 +25,7 @@ import {
   WarningIcon,
 } from '@assets/svg/icons';
 import { SCREEN } from '@constants/sizes';
+import { useAppDispatch, useAppSelector } from '@store/hooks';
 
 const iconMap = {
   error: { Icon: ErrorIcon, color: 'danger' as keyof TColors },

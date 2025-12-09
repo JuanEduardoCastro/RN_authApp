@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import { useAppSelector } from 'src/store/authHook';
 import { userAuth } from 'src/store/authSlice';
 import { CustomJwtPayload, UseTimeExpiredReturn } from './types';
 import { KeychainService, secureGetStorage } from '@utils/secureStorage';
+import { useAppSelector } from '@store/hooks';
 
 const useTimeExpired = (): UseTimeExpiredReturn => {
   const { token } = useAppSelector(userAuth);

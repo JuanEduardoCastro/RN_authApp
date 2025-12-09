@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import { useAppDispatch, validateRefreshToken } from 'src/store/authHook';
 import { CustomJwtPayload, UseCheckTokenReturn } from './types';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { Platform } from 'react-native';
@@ -11,6 +10,8 @@ import {
   secureDelete,
   secureGetStorage,
 } from '@utils/secureStorage';
+import { useAppDispatch } from '@store/hooks';
+import { validateRefreshToken } from '@store/thunks';
 
 export const useCheckToken = (): UseCheckTokenReturn => {
   const { t } = useTranslation();

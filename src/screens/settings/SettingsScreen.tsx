@@ -16,7 +16,6 @@ import ModeSwitchButton from '@components/shared/ModeSwitchButton';
 import MailContactBox from '@components/shared/MailContactBox';
 /* Custom hooks */
 import useStyles from '@hooks/useStyles';
-import { logoutUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
 /* Types */
 import { TColors } from '@constants/types';
 import { SettingsStackScreenProps } from 'src/navigation/types';
@@ -39,6 +38,8 @@ import CustomModal from '@components/shared/bottomSheet/CustomModal';
 import { useTranslation } from 'react-i18next';
 import ModalSheet from '@components/shared/modalSheet/ModalSheet';
 import LogoutModal from '@components/shared/modalSheet/LogoutModal';
+import { useAppDispatch, useAppSelector } from '@store/hooks';
+import { logoutUser } from '@store/thunks';
 
 const SettingsScreen = ({
   navigation,

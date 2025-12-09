@@ -17,7 +17,6 @@ import Separator from '@components/shared/Separator';
 import ButtonNoBorder from '@components/shared/ButtonNoBorder';
 /* Custom hooks */
 import useStyles from '@hooks/useStyles';
-import { loginUser, useAppDispatch } from 'src/store/authHook';
 /* Types */
 import { AuthStackScreenProps } from '@navigation/types';
 /* Utilities & constants */
@@ -26,6 +25,8 @@ import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
 import { useTranslation } from 'react-i18next';
 import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
+import { useAppDispatch } from '@store/hooks';
+import { loginUser } from '@store/thunks';
 /* Assets */
 
 interface FormDataProps {

@@ -10,7 +10,6 @@ import ButtonWithIcon from '@components/shared/ButtonWithIcon';
 /* Custom hooks */
 import useStyles from '@hooks/useStyles';
 import useBackHandler from '@hooks/useBackHandler';
-import { useAppDispatch } from 'src/store/authHook';
 import { googleLogin } from 'src/store/otherAuthHooks';
 /* Types */
 import { TColors } from '@constants/types';
@@ -22,6 +21,7 @@ import { IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
 /* Assets */
 import { GoogleIcon, MailIcon } from '@assets/svg/icons';
 import { useTranslation } from 'react-i18next';
+import { useAppDispatch } from '@store/hooks';
 
 GoogleSignin.configure({
   webClientId: WEB_CLIENT_ID,

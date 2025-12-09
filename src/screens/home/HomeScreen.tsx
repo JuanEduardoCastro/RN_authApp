@@ -6,7 +6,6 @@ import Separator from '@components/shared/Separator';
 import Button from '@components/shared/Button';
 /* Custom hooks */
 import useStyles from '@hooks/useStyles';
-import { useAppDispatch } from 'src/store/authHook';
 import useBackHandler from '@hooks/useBackHandler';
 /* Types */
 import { TColors } from '@constants/types';
@@ -16,6 +15,7 @@ import { setNotificationMessage } from 'src/store/authSlice';
 import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
 import { useTranslation } from 'react-i18next';
+import { useAppDispatch } from '@store/hooks';
 /* Assets */
 
 const HomeScreen = ({}: HomeTabScreenProps<'HomeScreen'>) => {

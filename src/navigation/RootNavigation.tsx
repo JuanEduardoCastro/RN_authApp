@@ -2,9 +2,9 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AuthNavigator from './AuthNavigation';
 import HomeNavigator from './HomeNavigation';
-import { useAppSelector } from 'src/store/authHook';
 import { RootStackParamList } from './types';
 import { userAuth } from 'src/store/authSlice';
+import { useAppSelector } from '@store/hooks';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

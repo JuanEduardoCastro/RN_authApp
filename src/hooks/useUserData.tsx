@@ -1,7 +1,7 @@
 import { countriesList } from '@constants/countriesList';
+import { useAppSelector } from '@store/hooks';
 import { useEffect, useMemo, useState } from 'react';
 import { getLocales, Locale } from 'react-native-localize';
-import { useAppSelector } from 'src/store/authHook';
 import { userAuth } from 'src/store/authSlice';
 
 const useUserData = () => {

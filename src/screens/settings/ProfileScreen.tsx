@@ -19,7 +19,6 @@ import KeyboardScrollView from '@components/shared/KeyboardScrollView';
 import HeaderGoBack from '@components/shared/HeaderGoBack';
 /* Custom hooks */
 import useStyles from '@hooks/useStyles';
-import { editUser, useAppDispatch, useAppSelector } from 'src/store/authHook';
 import useUserData from '@hooks/useUserData';
 /* Types */
 import { TColors } from '@constants/types';
@@ -30,6 +29,8 @@ import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
 import { useTranslation } from 'react-i18next';
 import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
+import { editUser } from '@store/thunks';
+import { useAppDispatch, useAppSelector } from '@store/hooks';
 /* Assets */
 
 interface ProfileDataProps {

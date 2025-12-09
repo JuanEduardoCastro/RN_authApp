@@ -11,9 +11,9 @@ import ImagePicker from 'react-native-image-crop-picker';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { SCREEN } from '@constants/sizes';
-import { useAppDispatch } from 'src/store/authHook';
 import { setNotificationMessage } from 'src/store/authSlice';
 import { CameraIcon } from '@assets/svg/icons';
+import { useAppDispatch } from '@store/hooks';
 
 type AvatarViewProps = {
   name: string;
