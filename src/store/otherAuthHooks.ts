@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { isErrorWithCode } from '@react-native-google-signin/google-signin';
 import api from './apiService';
 import { KeychainService, secureSetStorage } from '@utils/secureStorage';
 import { parseApiError } from '@utils/errorHandler';
 import { registerFCMToken } from '@utils/notifications/registerFCMToken';
 import { loginRateLimiter } from '@utils/rateLimiter';
+import { TFunction } from 'i18next';
 
 /**
  * User login with Google signin and persist in time
@@ -13,7 +13,7 @@ import { loginRateLimiter } from '@utils/rateLimiter';
 
 export const googleLogin = createAsyncThunk(
   'users/googlesignin',
-  async (data: any, { rejectWithValue }) => {
+  async (data: { idToken: string; t: TFunction }, { rejectWithValue }) => {
     const { idToken, t } = data;
 
     const rateLimit = loginRateLimiter.checkRateLimit();
@@ -102,16 +102,14 @@ export const googleLogin = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> otherAuthHooks.ts:121 -> error :', error);
-      if (isErrorWithCode(error)) {
-        __DEV__ && console.log('XX -> otherAuthHooks.ts:123 -> error :', error);
+      __DEV__ && console.log('XX -> otherAuthHooks.ts:123 -> error :', error);
 
-        const parsedError = parseApiError(error, t, 'error-google-signin');
-        return rejectWithValue({
-          messageType: 'error',
-          notificationMessage: parsedError.message,
-        });
-      }
+      const parsedError = parseApiError(error, t, 'error-google-signin');
+      loginRateLimiter.recordFailedAttempt();
+      return rejectWithValue({
+        messageType: 'error',
+        notificationMessage: parsedError.message,
+      });
     }
   },
 );

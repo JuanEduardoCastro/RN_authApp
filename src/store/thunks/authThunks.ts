@@ -188,7 +188,13 @@ export const logoutUser = createAsyncThunk(
         await GoogleSignin.signOut();
       }
 
-      const response = await api.post('/users/logout', { email: email });
+      const response = await api.post(
+        '/users/logout',
+        { email: email },
+        {
+          headers: { Authorization: `Bearer ${auth.token}` },
+        },
+      );
       console.log('XX -> authHook.ts:290 -> response :', response.status);
 
       if (response.status === 200) {

@@ -95,6 +95,7 @@
   "error-logout": "Logout failed.",
   "error-google-unknown": "An unknown error occurred during login.",
   "error-google-signin": "Google Signin failed: ",
+  "error-google-play-services": "Something went wrong with Google Services",
 
   "succes": "Success.",
   "success-email-sent": "If the email is correct, you will\n receive a confirmation email.",

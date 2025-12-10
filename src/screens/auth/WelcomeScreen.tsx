@@ -22,6 +22,11 @@ import { IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
 import { GoogleIcon, MailIcon } from '@assets/svg/icons';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '@store/hooks';
+import { setNotificationMessage } from '@store/authSlice';
+
+if (!WEB_CLIENT_ID || !IOS_CLIENT_ID) {
+  throw new Error('❌ Missing Google OAuth credentials!');
+}
 
 GoogleSignin.configure({
   webClientId: WEB_CLIENT_ID,
@@ -46,12 +51,24 @@ const WelcomeScreen = ({
       if (!playServicesAvailable) {
         await GoogleSignin.signOut();
         setGoogleButtonDisabled(false);
-        throw Error;
+        dispatch(
+          setNotificationMessage({
+            messageType: 'error',
+            notificationMessage: t('error-google-play-services'),
+          }),
+        );
+        return;
       }
       const googleResponse = await GoogleSignin.signIn();
       if (!googleResponse) {
         await GoogleSignin.signOut();
         setGoogleButtonDisabled(false);
+        dispatch(
+          setNotificationMessage({
+            messageType: 'error',
+            notificationMessage: t('error-google-signin'),
+          }),
+        );
         throw Error;
       }
       const { idToken } = await GoogleSignin.getTokens();
