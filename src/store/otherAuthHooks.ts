@@ -3,6 +3,8 @@ import { isErrorWithCode } from '@react-native-google-signin/google-signin';
 import api from './apiService';
 import { KeychainService, secureSetStorage } from '@utils/secureStorage';
 import { parseApiError } from '@utils/errorHandler';
+import { registerFCMToken } from '@utils/notifications/registerFCMToken';
+import { loginRateLimiter } from '@utils/rateLimiter';
 
 /**
  * User login with Google signin and persist in time
@@ -14,6 +16,31 @@ export const googleLogin = createAsyncThunk(
   async (data: any, { rejectWithValue }) => {
     const { idToken, t } = data;
 
+    const rateLimit = loginRateLimiter.checkRateLimit();
+
+    if (rateLimit.isLocked) {
+      __DEV__ &&
+        console.log(
+          'XX -> authHook.ts:81 -> rateLimit :',
+          `Login rate limited for ${rateLimit.remainingTime}s`,
+        );
+
+      return rejectWithValue({
+        messageType: 'error',
+        notificationMessage: t('error-rate-limit-login', {
+          seconds: rateLimit.remainingTime,
+        }),
+      });
+    }
+
+    if (rateLimit.attemptsLeft <= 2 && rateLimit.attemptsLeft > 0) {
+      __DEV__ &&
+        console.log(
+          'XX -> authHook.ts:97 -> rateLimit :',
+          `Login attempts remaining: ${rateLimit.attemptsLeft}`,
+        );
+    }
+
     if (!idToken) {
       return rejectWithValue({
         messageType: 'error',
@@ -22,101 +49,57 @@ export const googleLogin = createAsyncThunk(
     }
 
     try {
-      const googleResponse = await api.get(
-        `https://oauth2.googleapis.com/tokeninfo?id_token=${idToken}`,
+      const validateGoogleResponse = await api.post(
+        '/users/google-login',
+        {},
+        {
+          headers: { Authorization: `Bearer ${idToken}` },
+        },
+      );
+      console.log(
+        'XX -> otherAuthHooks.ts:30 -> validateGoogleResponse :',
+        validateGoogleResponse.status,
+        validateGoogleResponse.data,
       );
 
-      if (googleResponse.status === 200) {
-        const { sub, email, given_name, family_name, picture } =
-          googleResponse.data;
+      if (validateGoogleResponse.status === 200) {
+        const { refreshToken } = validateGoogleResponse.data.data;
 
-        const checkEmailWithProvider = await api.post(`/users/check-provider`, {
-          email: email,
-          provider: 'google',
-        });
+        const saveResult = await secureSetStorage(
+          'refreshToken',
+          refreshToken,
+          KeychainService.REFRESH_TOKEN,
+        );
 
-        if (checkEmailWithProvider.status === 200) {
-          const emailTokenResponse =
-            checkEmailWithProvider.data.data.emailToken;
-          const userData = {
-            email: email,
-            password: sub,
-            provider: 'google',
-            firstName: given_name,
-            lastName: family_name,
-            avatarURL: picture,
-          };
-          const createUserWithProvider = await api.post(
-            `/users/create`,
-            userData,
-            {
-              headers: {
-                Authorization: `Bearer ${emailTokenResponse}`,
-              },
-            },
-          );
-
-          if (createUserWithProvider.status === 201) {
-            const loginNewUser = await api.post(`/users/login`, {
-              email: email,
-              password: sub,
-            });
-            if (loginNewUser.status === 200) {
-              await secureSetStorage(
-                'refreshToken',
-                loginNewUser.data.data.refreshToken,
-                KeychainService.REFRESH_TOKEN,
-              );
-
-              await secureSetStorage(
-                'remember',
-                'true',
-                KeychainService.REMEMBER_ME,
-              );
-              return {
-                success: true,
-                user: loginNewUser.data.data.user,
-                token: loginNewUser.data.data.accessToken,
-                messageType: 'success',
-                notificationMessage: `${t('success-welcome')}${' '}${
-                  loginNewUser.data.data.user.firstName
-                }`,
-              };
-            }
-          }
-        } else if (checkEmailWithProvider.status === 204) {
-          const loginUser = await api.post(`/users/login`, {
-            email: email,
-            password: sub,
-          });
-          if (loginUser.status === 200) {
-            await secureSetStorage(
-              'refreshToken',
-              loginUser.data.data.refreshToken,
-              KeychainService.REFRESH_TOKEN,
-            );
-
-            await secureSetStorage(
-              'remember',
-              'true',
-              KeychainService.REMEMBER_ME,
-            );
-
-            return {
-              success: true,
-              user: loginUser.data.data.user,
-              token: loginUser.data.data.accessToken,
-              messageType: 'success',
-              notificationMessage: `${t('success-welcome-back')}${' '}${
-                loginUser.data.data.user.firstName
-              }`,
-            };
-          }
+        if (!saveResult.success) {
+          __DEV__ && console.warn('Failed to save refresh token to Keychain.');
         }
+
+        const rememberResult = await secureSetStorage(
+          'remember',
+          'true',
+          KeychainService.REMEMBER_ME,
+        );
+
+        if (!rememberResult.success) {
+          __DEV__ && console.warn('Failed to save remember me flag.');
+        }
+
+        await registerFCMToken(validateGoogleResponse.data.data.accessToken);
+        loginRateLimiter.recordSuccessfulAttempt();
+
+        return {
+          success: true,
+          error: null,
+          user: validateGoogleResponse.data.data.user,
+          token: validateGoogleResponse.data.data.accessToken,
+          messageType: 'success',
+          notificationMessage: t('success-welcome'),
+        };
       }
       return rejectWithValue({
         messageType: 'error',
-        notificationMessage: t('error-google-unknown'),
+        notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
       __DEV__ && console.log('XX -> otherAuthHooks.ts:121 -> error :', error);

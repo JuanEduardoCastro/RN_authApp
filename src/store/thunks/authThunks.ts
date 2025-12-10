@@ -107,7 +107,7 @@ export const loginUser = createAsyncThunk(
         );
 
         if (!saveResult.success) {
-          __DEV__ && console.warn('Failed to save refresh token to Keychain');
+          __DEV__ && console.warn('Failed to save refresh token to Keychain.');
         }
 
         if (data.rememberMe) {
@@ -118,7 +118,7 @@ export const loginUser = createAsyncThunk(
           );
 
           if (!rememberResult.success) {
-            __DEV__ && console.warn('Failed to save remember me flag');
+            __DEV__ && console.warn('Failed to save remember me flag.');
           }
         }
 
