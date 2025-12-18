@@ -113,6 +113,7 @@
   "logout-cancel": "No",
   "logout-confirmation": "Yes",
 
+  "info-password-max": "The password is too long.",
   "info-password-message": "The password must have:",
   "info-password-length": "At least 8 characters long.",
   "info-password-uppercase": "At least one uppercase letter (A-Z).",

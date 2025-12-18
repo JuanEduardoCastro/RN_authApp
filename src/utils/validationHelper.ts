@@ -63,6 +63,9 @@ export const validateEmailToken = (token: string | null): string | null => {
 };
 
 export const validatePasswordInput = (value: string): string | boolean => {
+  if (value.length > 128) {
+    return t('info-password-max');
+  }
   if (!/[A-Z]/.test(value)) {
     return t('info-password-uppercase');
   }

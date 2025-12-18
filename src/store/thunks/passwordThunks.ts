@@ -6,7 +6,7 @@ import { parseApiError } from '@utils/errorHandler';
 import {
   checkEmailRateLimiter,
   resetPasswordRateLimiter,
-} from '@utils/rateLimiter';
+} from '@utils/persistentRateLimiter';
 import { jwtDecode } from 'jwt-decode';
 
 /**
@@ -19,7 +19,7 @@ export const checkEmail = createAsyncThunk(
   async (data: DataAPI, { rejectWithValue }) => {
     const { t } = data;
 
-    const rateLimit = checkEmailRateLimiter.checkRateLimit();
+    const rateLimit = await checkEmailRateLimiter.checkRateLimit();
     if (rateLimit.isLocked) {
       return rejectWithValue({
         messageType: 'error',
@@ -42,7 +42,7 @@ export const checkEmail = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:359 -> error :', error);
+      __DEV__ && console.log('XX -> passwordThunks.ts:45 -> error :', error);
 
       checkEmailRateLimiter.recordFailedAttempt();
 
@@ -65,7 +65,7 @@ export const resetPassword = createAsyncThunk(
   async (data: DataAPI, { rejectWithValue }) => {
     const { t } = data;
 
-    const rateLimit = resetPasswordRateLimiter.checkRateLimit();
+    const rateLimit = await resetPasswordRateLimiter.checkRateLimit();
     if (rateLimit.isLocked) {
       return rejectWithValue({
         messageType: 'error',
@@ -91,7 +91,7 @@ export const resetPassword = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:408 -> error :', error);
+      __DEV__ && console.log('XX -> passwordThunks.ts:94 -> error :', error);
       resetPasswordRateLimiter.recordFailedAttempt();
 
       const parsedError = parseApiError(error, t, 'error-password-reset');
@@ -132,7 +132,7 @@ export const updatePassword = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:449 -> error :', error);
+      __DEV__ && console.log('XX -> passwordThunks.ts:135 -> error :', error);
 
       const parsedError = parseApiError(error, t, 'error-password-update');
       return rejectWithValue({

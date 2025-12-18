@@ -34,6 +34,7 @@ import {
 } from '@utils/validationHelper';
 import { useAppDispatch } from '@store/hooks';
 import { createUser, updatePassword } from '@store/thunks';
+
 /* Assets */
 
 interface FormNewDataProps {
@@ -174,8 +175,12 @@ const NewPasswordScreen = ({
                     value: 8,
                     message: t('password-invalid'),
                   },
+                  maxLength: {
+                    value: 128,
+                    message: t('info-password-max'),
+                  },
                   validate: (value: string) => {
-                    validatePasswordInput(value);
+                    return validatePasswordInput(value);
                   },
                 }}
                 placeholder={t('new-password-label-placeholder')}
@@ -191,11 +196,15 @@ const NewPasswordScreen = ({
                     value: 8,
                     message: t('password-invalid'),
                   },
+                  maxLength: {
+                    value: 128,
+                    message: t('info-password-max'),
+                  },
                   validate: (value: string) => {
                     if (value !== watch('new_password')) {
                       return t('warning-two-passwords');
                     }
-                    validatePasswordInput(value);
+                    return validatePasswordInput(value);
                   },
                 }}
                 placeholder={t('confirm-password-label-placeholder')}

@@ -30,12 +30,15 @@ import {
   setupTokenRefreshListener,
 } from '@utils/notifications/pushNotificationService';
 import { useAppSelector } from '@store/hooks';
+import { initializePinning } from '@utils/sslPinning';
 
 /* Assets */
 
 if (__DEV__) {
   configureReanimatedLogger({ level: ReanimatedLogLevel.warn, strict: false });
 }
+
+initializePinning();
 
 const AppWrapper = () => {
   return (

@@ -78,8 +78,7 @@ const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
                 rules={{
                   required: t('email-required'),
                   pattern: {
-                    value:
-                      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                     message: t('email-invalid'),
                   },
                 }}
@@ -95,6 +94,10 @@ const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
                   minLength: {
                     value: 8,
                     message: t('password-invalid'),
+                  },
+                  maxLength: {
+                    value: 128,
+                    message: t('info-password-max'),
                   },
                 }}
                 placeholder={t('enter-password-placeholder')}

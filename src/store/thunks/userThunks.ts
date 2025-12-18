@@ -3,6 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '@store/apiService';
 import { RootState } from '@store/store';
 import { DataAPI } from '@store/types';
+import { cleanUserData } from '@utils/cleanUserData';
 import { parseApiError } from '@utils/errorHandler';
 import { jwtDecode } from 'jwt-decode';
 
@@ -33,7 +34,7 @@ export const createUser = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:209 -> error :', error);
+      __DEV__ && console.log('XX -> userThunks.ts:36 -> error :', error);
       const parsedError = parseApiError(error, t, 'error-email-check');
       return rejectWithValue({
         messageType: 'error',
@@ -64,9 +65,10 @@ export const editUser = createAsyncThunk(
     }
 
     try {
+      const sanitizedData = cleanUserData(userData || {});
       const editUserResponse = await api.patch(
         `/users/${decodeToken._id}`,
-        userData,
+        sanitizedData,
         { headers: { Authorization: `Bearer ${auth.token}` } },
       );
 
@@ -84,7 +86,7 @@ export const editUser = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:260 -> error :', error);
+      __DEV__ && console.log('XX -> userThunks.ts:87 -> error :', error);
 
       const parsedError = parseApiError(error, t, 'error-update');
       return rejectWithValue({

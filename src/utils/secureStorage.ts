@@ -21,9 +21,14 @@ export const secureSetStorage = async (
   options?: Keychain.SetOptions,
 ): Promise<KeychainResult> => {
   try {
+    const accessibility =
+      service === KeychainService.REFRESH_TOKEN
+        ? Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY
+        : Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK;
+
     await Keychain.setGenericPassword(username, password, {
       service,
-      accessible: Keychain.ACCESSIBLE.AFTER_FIRST_UNLOCK,
+      accessible: accessibility,
       ...options,
     });
 

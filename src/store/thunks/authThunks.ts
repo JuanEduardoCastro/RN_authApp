@@ -5,7 +5,7 @@ import { RootState } from '@store/store';
 import { DataAPI } from '@store/types';
 import { parseApiError } from '@utils/errorHandler';
 import { registerFCMToken } from '@utils/notifications/registerFCMToken';
-import { loginRateLimiter } from '@utils/rateLimiter';
+import { loginRateLimiter } from '@utils/persistentRateLimiter';
 import {
   KeychainService,
   secureDelete,
@@ -47,7 +47,7 @@ export const validateRefreshToken = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:59 -> error :', error);
+      __DEV__ && console.log('XX -> authThunks.ts:50 -> error :', error);
       const parsedError = parseApiError(error, t, 'error-session-val');
       return rejectWithValue({
         messageType: 'error',
@@ -67,12 +67,12 @@ export const loginUser = createAsyncThunk(
   async (data: DataAPI, { rejectWithValue }) => {
     const { t } = data;
 
-    const rateLimit = loginRateLimiter.checkRateLimit();
+    const rateLimit = await loginRateLimiter.checkRateLimit();
 
     if (rateLimit.isLocked) {
       __DEV__ &&
         console.log(
-          'XX -> authHook.ts:81 -> rateLimit :',
+          'XX -> authThunks.ts:73 -> rateLimit :',
           `Login rate limited for ${rateLimit.remainingTime}s`,
         );
 
@@ -87,7 +87,7 @@ export const loginUser = createAsyncThunk(
     if (rateLimit.attemptsLeft <= 2 && rateLimit.attemptsLeft > 0) {
       __DEV__ &&
         console.log(
-          'XX -> authHook.ts:97 -> rateLimit :',
+          'XX -> authThunks.ts:89 -> rateLimit :',
           `Login attempts remaining: ${rateLimit.attemptsLeft}`,
         );
     }
@@ -123,7 +123,7 @@ export const loginUser = createAsyncThunk(
         }
 
         await registerFCMToken(response.data.data.accessToken);
-        loginRateLimiter.recordSuccessfulAttempt();
+        await loginRateLimiter.recordSuccessfulAttempt();
 
         return {
           success: true,
@@ -139,11 +139,11 @@ export const loginUser = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:152 -> error :', error);
+      __DEV__ && console.log('XX -> authThunks.ts:142 -> error :', error);
 
-      loginRateLimiter.recordFailedAttempt();
+      await loginRateLimiter.recordFailedAttempt();
       const parsedError = parseApiError(error, t, 'error-credentials');
-      const newRateLimit = loginRateLimiter.checkRateLimit();
+      const newRateLimit = await loginRateLimiter.checkRateLimit();
 
       if (newRateLimit.isLocked) {
         return rejectWithValue({
@@ -195,13 +195,13 @@ export const logoutUser = createAsyncThunk(
           headers: { Authorization: `Bearer ${auth.token}` },
         },
       );
-      console.log('XX -> authHook.ts:290 -> response :', response.status);
 
       if (response.status === 200) {
         await api.delete(`/users/device-token/${deviceId}`, {
           headers: { Authorization: `Bearer ${auth.token}` },
         });
         await secureDelete(KeychainService.REFRESH_TOKEN);
+
         await secureDelete(KeychainService.REMEMBER_ME);
 
         return {
@@ -216,7 +216,7 @@ export const logoutUser = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> authHook.ts:307 -> error :', error);
+      __DEV__ && console.log('XX -> authThunks.ts:219 -> error :', error);
 
       const parsedError = parseApiError(error, t, 'error-logout');
       return rejectWithValue({

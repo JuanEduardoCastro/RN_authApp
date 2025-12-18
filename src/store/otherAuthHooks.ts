@@ -3,7 +3,7 @@ import api from './apiService';
 import { KeychainService, secureSetStorage } from '@utils/secureStorage';
 import { parseApiError } from '@utils/errorHandler';
 import { registerFCMToken } from '@utils/notifications/registerFCMToken';
-import { loginRateLimiter } from '@utils/rateLimiter';
+import { loginRateLimiter } from '@utils/persistentRateLimiter';
 import { TFunction } from 'i18next';
 
 /**
@@ -16,12 +16,12 @@ export const googleLogin = createAsyncThunk(
   async (data: { idToken: string; t: TFunction }, { rejectWithValue }) => {
     const { idToken, t } = data;
 
-    const rateLimit = loginRateLimiter.checkRateLimit();
+    const rateLimit = await loginRateLimiter.checkRateLimit();
 
     if (rateLimit.isLocked) {
       __DEV__ &&
         console.log(
-          'XX -> authHook.ts:81 -> rateLimit :',
+          'XX -> otherAuthHooks.ts:22 -> rateLimit :',
           `Login rate limited for ${rateLimit.remainingTime}s`,
         );
 
@@ -36,7 +36,7 @@ export const googleLogin = createAsyncThunk(
     if (rateLimit.attemptsLeft <= 2 && rateLimit.attemptsLeft > 0) {
       __DEV__ &&
         console.log(
-          'XX -> authHook.ts:97 -> rateLimit :',
+          'XX -> otherAuthHooks.ts:37 -> rateLimit :',
           `Login attempts remaining: ${rateLimit.attemptsLeft}`,
         );
     }
@@ -55,11 +55,6 @@ export const googleLogin = createAsyncThunk(
         {
           headers: { Authorization: `Bearer ${idToken}` },
         },
-      );
-      console.log(
-        'XX -> otherAuthHooks.ts:30 -> validateGoogleResponse :',
-        validateGoogleResponse.status,
-        validateGoogleResponse.data,
       );
 
       if (validateGoogleResponse.status === 200) {
@@ -86,7 +81,7 @@ export const googleLogin = createAsyncThunk(
         }
 
         await registerFCMToken(validateGoogleResponse.data.data.accessToken);
-        loginRateLimiter.recordSuccessfulAttempt();
+        await loginRateLimiter.recordSuccessfulAttempt();
 
         return {
           success: true,
@@ -102,10 +97,10 @@ export const googleLogin = createAsyncThunk(
         notificationMessage: t('error-unknown'),
       });
     } catch (error: any) {
-      __DEV__ && console.log('XX -> otherAuthHooks.ts:123 -> error :', error);
+      __DEV__ && console.log('XX -> otherAuthHooks.ts:100 -> error :', error);
 
       const parsedError = parseApiError(error, t, 'error-google-signin');
-      loginRateLimiter.recordFailedAttempt();
+      await loginRateLimiter.recordFailedAttempt();
       return rejectWithValue({
         messageType: 'error',
         notificationMessage: parsedError.message,

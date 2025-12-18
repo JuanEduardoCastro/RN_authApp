@@ -14,6 +14,7 @@ import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import { getApp } from '@react-native-firebase/app';
 import { registerFCMToken } from './registerFCMToken';
 import { KeychainService, secureGetStorage } from '@utils/secureStorage';
+import api from '@store/apiService';
 
 const MAX_RETRIES = 5;
 const RETRY_DELAY = 1000;
@@ -111,11 +112,12 @@ const getTokenWithRetry = async (
         await new Promise((resolve: any) => setTimeout(resolve, retryDelay));
       } else {
         if (isApnsError) {
-          console.warn(
-            '⚠️ Could not get FCM token - APNS not available (simulator or missing configuration)',
-          );
+          __DEV__ &&
+            console.warn(
+              '⚠️ Could not get FCM token - APNS not available (simulator or missing configuration)',
+            );
         } else {
-          console.error('Error fetching FCM token:', error);
+          __DEV__ && console.error('Error fetching FCM token:', error);
         }
       }
     }
@@ -162,22 +164,28 @@ export const setupMessageListener = () => {
 };
 
 export const setupTokenRefreshListener = () => {
-  return onTokenRefresh(messagingInstance, async newToken => {
+  return onTokenRefresh(messagingInstance, async () => {
     __DEV__ && console.log('FCT token refreshed! ');
-    // get accessToken from redux
-    // You'll need to pass this from App.tsx where you have Redux access
-    // Or store it in local storage
-    newToken;
-
     try {
       const credentials = await secureGetStorage(KeychainService.REFRESH_TOKEN);
-
       if (credentials.data) {
-        const credentialT = credentials.data.password;
-        await registerFCMToken(credentialT);
+        const refreshToken = credentials.data.password;
+        const response = await api.post(
+          '/users/token/refresh',
+          {},
+          {
+            headers: { Authorization: `Bearer ${refreshToken}` },
+          },
+        );
+        if (response.status === 200) {
+          const accessToken = response.data.data.accessToken;
+          await registerFCMToken(accessToken);
+          __DEV__ && console.log('FCM token re-registered successfully');
+        }
       }
     } catch (error) {
-      __DEV__ && console.log('Failed to update refreshed token.');
+      __DEV__ &&
+        console.log('Failed to refresh and re-register FCM token:', error);
     }
   });
 };
