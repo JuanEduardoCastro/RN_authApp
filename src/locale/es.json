@@ -95,6 +95,8 @@
   "error-logout": "Error al cerrar sesión.",
   "error-google-unknown": "Ocurrió un error desconocido durante el inicio de sesión.",
   "error-google-signin": "Error en el inicio de sesión con Google: ",
+  "error-github-signin": "Error en el inicio de sesión con Github: ",
+  "error-apple-signin": "Error en el inicio de sesión con Apple: ",
   "error-google-play-services": "Algo salió mal con Google Services",
 
   "succes": "Éxito",

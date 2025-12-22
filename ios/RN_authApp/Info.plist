@@ -33,8 +33,10 @@
 			<array>
 				<string>authapp</string>
 				<string>com.googleusercontent.apps.851060951342-uhu25rpaq0brova5bjn44hcs7pmrie1e</string>
+				<string>com.authdemoapp.github</string>
 			</array>
 		</dict>
+		<dict/>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>

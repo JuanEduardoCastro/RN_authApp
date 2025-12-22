@@ -95,6 +95,8 @@
   "error-logout": "Logout failed.",
   "error-google-unknown": "An unknown error occurred during login.",
   "error-google-signin": "Google Signin failed: ",
+  "error-github-signin": "GitHub Signin failed: ",
+  "error-apple-signin": "Apple Signin failed: ",
   "error-google-play-services": "Something went wrong with Google Services",
 
   "succes": "Success.",

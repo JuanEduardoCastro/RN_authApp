@@ -10,22 +10,26 @@ import ButtonWithIcon from '@components/shared/ButtonWithIcon';
 /* Custom hooks */
 import useStyles from '@hooks/useStyles';
 import useBackHandler from '@hooks/useBackHandler';
-import { googleLogin } from 'src/store/otherAuthHooks';
+import { githubLogin, googleLogin } from 'src/store/otherAuthHooks';
 /* Types */
 import { TColors } from '@constants/types';
 import { AuthStackScreenProps } from '@navigation/types';
 /* Utilities & constants */
 import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
-import { IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
+import { GITHUB_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
 /* Assets */
-import { GoogleIcon, MailIcon } from '@assets/svg/icons';
+import { GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '@store/hooks';
 import { setNotificationMessage } from '@store/authSlice';
 
 if (!WEB_CLIENT_ID || !IOS_CLIENT_ID) {
   throw new Error('❌ Missing Google OAuth credentials!');
+}
+
+if (!GITHUB_CLIENT_ID) {
+  throw new Error('❌ Missing GitHub auth credential!');
 }
 
 GoogleSignin.configure({
@@ -43,6 +47,7 @@ const WelcomeScreen = ({
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [googleButtonDisabled, setGoogleButtonDisabled] = useState(false);
+  const [githubButtonDisabled, setGithubButtonDisabled] = useState(false);
 
   const handleGoogleOriginalSignin = async () => {
     setGoogleButtonDisabled(true);
@@ -84,26 +89,35 @@ const WelcomeScreen = ({
       setGoogleButtonDisabled(false);
       __DEV__ &&
         console.log(
-          'XX -> WelcomeScreen.tsx:64 -> handleGoogleOriginalSignin -> error :',
+          'XX -> WelcomeScreen.tsx:87 -> handleGoogleOriginalSignin -> error :',
           error,
         );
     }
   };
 
-  //TODO implement GitHub login and Aple login
-
-  // const handleGitHubLogin = async () => {
-  //   const clientID = process.env.GITHUB_CLIENT_ID;
-  //   const redirectURI = process.env.GITHUB_REDIRECT_URI;
-  //   const URL = `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}`;
-  //   const supported = await Linking.canOpenURL(URL);
-  //   if (supported) {
-  //     await Linking.openURL(URL);
-  //   }
-  //   // const redirectResponse = await axios.get(
-  //   //   `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}`,
-  //   // );
-  // };
+  const handleGitHubLogin = async () => {
+    setGithubButtonDisabled(true);
+    try {
+      console.log('ENTRO AL TRY EN EL SCREEN ');
+      const data = { t };
+      const res = await dispatch(githubLogin(data)).unwrap();
+      console.log(
+        'XX -> WelcomeScreen.tsx:104 -> handleGitHubLogin -> res :',
+        res,
+      );
+      if (res?.success) {
+        navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
+      }
+      setGithubButtonDisabled(false);
+    } catch (error) {
+      setGithubButtonDisabled(false);
+      __DEV__ &&
+        console.log(
+          'XX -> WelcomeScreen.tsx:105 -> handleGithubSignin -> error :',
+          error,
+        );
+    }
+  };
 
   return (
     <BGGradient
@@ -141,14 +155,15 @@ const WelcomeScreen = ({
               height: SCREEN.heightFixed * 20,
             }}
             onPress={handleGoogleOriginalSignin}
-            // onPress={handleGoogleLogin}
           />
-          {/* <ButtonWithIcon
-             title={t('with-github')}
+          <ButtonWithIcon
+            disabled={githubButtonDisabled}
+            buttonStyles={{ backgroundColor: colors.light }}
+            title={t('with-github')}
             Icon={GithubIcon}
             iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
             onPress={handleGitHubLogin}
-          /> */}
+          />
           {/* {Platform.OS === 'ios' && (
             <ButtonWithIcon
                title={t('with-apple')}

@@ -1,5 +1,6 @@
 package com.rn_authapp
 
+import android.content.Intent
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -58,6 +59,11 @@ class MainActivity : ReactActivity() {
       notificationManager.createNotificationChannel(defaultChannel)
     }
   }
+
+  override fun onNewIntent(intent: Intent) {                                                    
+    super.onNewIntent(intent)                                                                    
+    setIntent(intent)                                                                            
+  }                           
 }
 
 

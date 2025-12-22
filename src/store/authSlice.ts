@@ -12,7 +12,7 @@ import {
   validateRefreshToken,
 } from './thunks';
 import { RootState } from './store';
-import { googleLogin } from './otherAuthHooks';
+import { githubLogin, googleLogin } from './otherAuthHooks';
 
 const initialState: AuthState = {
   loader: false,
@@ -175,6 +175,30 @@ const authSlice = createSlice({
         state.notificationMessage = action.payload.notificationMessage;
       })
       .addCase(googleLogin.rejected, (state, action) => {
+        state.loader = false;
+        state.token = null;
+        state.user = null;
+        state.isAuthorized = false;
+        const payload = action.payload as Partial<NotificationMessagePayload>;
+        state.messageType = payload.messageType ?? 'error';
+        state.notificationMessage =
+          payload.notificationMessage ?? 'An error occurred';
+      })
+
+      /* githubsignin user  */
+      .addCase(githubLogin.pending, state => {
+        state.loader = true;
+      })
+      .addCase(githubLogin.fulfilled, (state, action) => {
+        state.loader = false;
+        (state.token = action.payload.token),
+          (state.user = action.payload.user),
+          (state.isAuthorized = true);
+        state.messageType = action.payload
+          .messageType as NotificationMessagePayload['messageType'];
+        state.notificationMessage = action.payload.notificationMessage;
+      })
+      .addCase(githubLogin.rejected, (state, action) => {
         state.loader = false;
         state.token = null;
         state.user = null;

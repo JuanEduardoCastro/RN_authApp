@@ -7,16 +7,40 @@ import FirebaseMessaging
 import UserNotifications
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate,RNAppAuthAuthorizationFlowManager {
   var window: UIWindow?
 
   var reactNativeDelegate: ReactNativeDelegate?
   var reactNativeFactory: RCTReactNativeFactory?
 
+   weak var authorizationFlowManagerDelegate: RNAppAuthAuthorizationFlowManagerDelegate? 
+
   func application(
     _ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]
   ) -> Bool {
+    if let authFlowDelegate = authorizationFlowManagerDelegate { 
+      if authFlowDelegate.resumeExternalUserAgentFlow(with: url) {              
+        return true          
+      }            
+    }      
     return RCTLinkingManager.application(application, open: url, options: options)
+  }
+
+  func application(
+    _ application: UIApplication,
+    continue userActivity: NSUserActivity,
+    restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void
+  ) -> Bool {
+    if let authFlowDelegate = authorizationFlowManagerDelegate { 
+      if authFlowDelegate.resumeExternalUserAgentFlow(with: userActivity.webpageURL!) {              
+        return true          
+      }            
+    }      
+    return RCTLinkingManager.application(
+      application,
+      continue: userActivity,
+      restorationHandler: restorationHandler
+    )
   }
 
   func application(

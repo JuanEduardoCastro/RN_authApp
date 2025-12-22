@@ -88,6 +88,10 @@ android {
         versionCode getPackageBuild("build")
         versionName getPackageBuild("version")
 
+        manifestPlaceholders = [
+            'appAuthRedirectScheme': 'com.authdemoapp.github'
+        ]
+
     }
     signingConfigs {
         release {

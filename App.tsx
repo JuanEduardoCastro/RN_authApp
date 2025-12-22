@@ -51,6 +51,7 @@ const AppWrapper = () => {
 const linking: LinkingOptions<RootStackParamList> = {
   prefixes: [
     'authapp://',
+    'com.authdemoapp.github://',
     'https://d2wi1nboge7qqt.cloudfront.net',
     'https://app.authdemoapp-jec.com',
   ],
@@ -70,8 +71,10 @@ const linking: LinkingOptions<RootStackParamList> = {
     const url = await Linking.getInitialURL();
     if (url) {
       __DEV__ && console.log('COLD START');
+      return url;
     } else {
       __DEV__ && console.log('NO HAY URL');
+      return null;
     }
   },
   config: {
@@ -79,6 +82,7 @@ const linking: LinkingOptions<RootStackParamList> = {
       AuthNavigator: {
         screens: {
           NewPasswordScreen: 'app/new-password/:emailToken',
+          WelcomeScreen: 'callback',
         },
       },
     },

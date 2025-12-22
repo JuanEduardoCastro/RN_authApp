@@ -36,6 +36,7 @@
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = RN_authApp/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = RN_authApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A62CFC07D6ED42AEB6053DDE /* Manrope-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Manrope-Bold.ttf"; path = "../src/assets/fonts/Manrope-Bold.ttf"; sourceTree = "<group>"; };
+		AD7D71D72EF82CE9003554DB /* RN_authApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "RN_authApp-Bridging-Header.h"; path = "RN_authApp/RN_authApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		ADAB308F2ECCFBAE004C8FE3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ADFB7F912EB55B0B002AD5E6 /* RN_authApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RN_authApp.entitlements; path = RN_authApp/RN_authApp.entitlements; sourceTree = "<group>"; };
 		B7CF4547782C499EAE2AC2EF /* Manrope-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Manrope-Regular.ttf"; path = "../src/assets/fonts/Manrope-Regular.ttf"; sourceTree = "<group>"; };
@@ -68,6 +69,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
+				AD7D71D72EF82CE9003554DB /* RN_authApp-Bridging-Header.h */,
 			);
 			name = RN_authApp;
 			sourceTree = "<group>";
@@ -340,6 +342,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.sample.authapp;
 				PRODUCT_NAME = RN_authApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "RN_authApp/RN_authApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -371,6 +374,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.sample.authapp;
 				PRODUCT_NAME = RN_authApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "RN_authApp/RN_authApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

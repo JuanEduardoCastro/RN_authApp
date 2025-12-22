@@ -66,8 +66,8 @@ const SettingsScreen = ({
         logoutUser({ email: user?.email, t } as DataAPI),
       ).unwrap();
       if (res?.success) {
+        navigation.navigate('AuthNavigator', { screen: 'WelcomeScreen' });
         toggleModalSheet();
-        // navigation.navigate('AuthNavigator', { screen: 'WelcomeScreen' });
       }
     } catch (error) {
       toggleModalSheet();
@@ -76,6 +76,7 @@ const SettingsScreen = ({
           'XX -> SettingsScreen.tsx:74 -> handleLogut -> error :',
           error,
         );
+      navigation.navigate('AuthNavigator', { screen: 'WelcomeScreen' });
     }
   };
 
