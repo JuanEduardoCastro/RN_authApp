@@ -74,7 +74,7 @@ const WelcomeScreen = ({
             notificationMessage: t('error-google-signin'),
           }),
         );
-        throw Error;
+        throw new Error();
       }
       const { idToken } = await GoogleSignin.getTokens();
 
@@ -98,13 +98,8 @@ const WelcomeScreen = ({
   const handleGitHubLogin = async () => {
     setGithubButtonDisabled(true);
     try {
-      console.log('ENTRO AL TRY EN EL SCREEN ');
       const data = { t };
       const res = await dispatch(githubLogin(data)).unwrap();
-      console.log(
-        'XX -> WelcomeScreen.tsx:104 -> handleGitHubLogin -> res :',
-        res,
-      );
       if (res?.success) {
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       }

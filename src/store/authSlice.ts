@@ -191,9 +191,9 @@ const authSlice = createSlice({
       })
       .addCase(githubLogin.fulfilled, (state, action) => {
         state.loader = false;
-        (state.token = action.payload.token),
-          (state.user = action.payload.user),
-          (state.isAuthorized = true);
+        state.token = action.payload.token;
+        state.user = action.payload.user;
+        state.isAuthorized = true;
         state.messageType = action.payload
           .messageType as NotificationMessagePayload['messageType'];
         state.notificationMessage = action.payload.notificationMessage;

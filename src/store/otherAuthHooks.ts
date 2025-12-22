@@ -147,10 +147,7 @@ export const githubLogin = createAsyncThunk(
     }
 
     try {
-      console.log('ENTRO AL TRY DE GITHUB LOGIN ????????');
       const authResult = await authorize(githubAuthConfig);
-      console.log('PASO EL AUTHORIZE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-      console.log('XX -> otherAuthHooks.ts:152 -> authResult :', authResult);
       if (!authResult.accessToken) {
         return rejectWithValue({
           messageType: 'error',

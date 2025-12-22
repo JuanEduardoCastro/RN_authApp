@@ -66,6 +66,9 @@ export const validatePasswordInput = (value: string): string | boolean => {
   if (value.length > 128) {
     return t('info-password-max');
   }
+  if (value.length < 8) {
+    return t('info-password-min');
+  }
   if (!/[A-Z]/.test(value)) {
     return t('info-password-uppercase');
   }

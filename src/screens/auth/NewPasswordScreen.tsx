@@ -68,23 +68,23 @@ const NewPasswordScreen = ({
       return;
     }
 
-    const validationToken = validateEmailToken(emailToken);
-
-    if (validationToken) {
-      __DEV__ &&
-        console.log(
-          'XX -> NewPasswordScreen.tsx:67 -> NewPasswordScreen -> Invalid token for new user/ppassword',
-        );
-      navigation.popToTop();
-      dispatch(
-        setNotificationMessage({
-          messageType: 'error',
-          notificationMessage: t('error-invalid-token'), //add to locale
-        }),
-      );
-      return;
-    }
     try {
+      const validationToken = validateEmailToken(emailToken);
+
+      if (validationToken) {
+        __DEV__ &&
+          console.log(
+            'XX -> NewPasswordScreen.tsx:67 -> NewPasswordScreen -> Invalid token for new user/ppassword',
+          );
+        navigation.popToTop();
+        dispatch(
+          setNotificationMessage({
+            messageType: 'error',
+            notificationMessage: t('error-invalid-token'),
+          }),
+        );
+        return;
+      }
       const decode = jwtDecode<CustomJwtPayload>(emailToken);
       const userEmail = decode.email;
       decode.isNew !== undefined && setNewUser(decode.isNew);

@@ -111,3 +111,10 @@ update-ios-version.sh
 
 #Cluade code
 CLAUDE.md
+
+#SSL Certificate
+api_cert.pem
+api_key.pem
+*.pem
+*.crt
+*.key
