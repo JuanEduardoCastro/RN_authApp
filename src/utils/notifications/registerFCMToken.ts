@@ -17,6 +17,7 @@ export const registerFCMToken = async (accessToken: string) => {
     const deviceName = await DeviceInfo.getDeviceName();
     const osVersion = await DeviceInfo.getSystemVersion();
     const appVersion = await DeviceInfo.getVersion();
+    const deviceType = await DeviceInfo.getDeviceType();
 
     const response = await api.post(
       '/users/device-token',
@@ -26,6 +27,7 @@ export const registerFCMToken = async (accessToken: string) => {
         deviceName,
         osVersion,
         appVersion,
+        deviceType,
       },
       {
         headers: {

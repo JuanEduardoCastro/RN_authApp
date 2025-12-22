@@ -90,7 +90,7 @@ const NotificationBanner = () => {
               Platform.OS === 'android' && {
                 backgroundColor: colors.dark,
                 borderRadius: 24,
-                opacity: 0.96,
+                opacity: 0.98,
               }
             }>
             <View style={styles.bannerBox}>
@@ -131,7 +131,7 @@ const createStyles = (colors: TColors) =>
     container: {
       ...StyleSheet.absoluteFillObject,
       flex: 1,
-      height: SCREEN.heightFixed * 100,
+      height: SCREEN.heightFixed * 150,
       backgroundColor: colors.transparent,
       zIndex: 100,
       marginTop: 12,
@@ -161,11 +161,12 @@ const createStyles = (colors: TColors) =>
     },
     blurView: {
       height: SCREEN.heightFixed * 70,
+      borderRadius: 24,
+      overflow: 'hidden',
       position: 'absolute',
       top: 0,
       right: 0,
       bottom: 0,
       left: 0,
-      borderRadius: 24,
     },
   });
