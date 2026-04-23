@@ -1,5 +1,5 @@
 /* Core libs & third parties libs */
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 /* Custom components */
@@ -10,7 +10,7 @@ import ButtonWithIcon from '@components/shared/ButtonWithIcon';
 /* Custom hooks */
 import useStyles from '@hooks/useStyles';
 import useBackHandler from '@hooks/useBackHandler';
-import { githubLogin, googleLogin } from 'src/store/otherAuthHooks';
+import { appleLogin, githubLogin, googleLogin } from 'src/store/otherAuthHooks';
 /* Types */
 import { TColors } from '@constants/types';
 import { AuthStackScreenProps } from '@navigation/types';
@@ -19,7 +19,7 @@ import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
 import { GITHUB_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
 /* Assets */
-import { GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
+import { AppleIcon, GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '@store/hooks';
 import { setNotificationMessage } from '@store/authSlice';
@@ -48,6 +48,7 @@ const WelcomeScreen = ({
   const dispatch = useAppDispatch();
   const [googleButtonDisabled, setGoogleButtonDisabled] = useState(false);
   const [githubButtonDisabled, setGithubButtonDisabled] = useState(false);
+  const [appleButtonDisabled, setAppleButtonDisabled] = useState(false);
 
   const handleGoogleOriginalSignin = async () => {
     setGoogleButtonDisabled(true);
@@ -114,6 +115,25 @@ const WelcomeScreen = ({
     }
   };
 
+  const handleAppleLogin = async () => {
+    setAppleButtonDisabled(true);
+    try {
+      const data = { t };
+      const res = await dispatch(appleLogin(data)).unwrap();
+      if (res?.success) {
+        navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
+      }
+      setAppleButtonDisabled(false);
+    } catch (error) {
+      setAppleButtonDisabled(false);
+      __DEV__ &&
+        console.log(
+          'XX -> WelcomeScreen.tsx:105 -> handleAppleLogin -> error :',
+          error,
+        );
+    }
+  };
+
   return (
     <BGGradient
       colorInit={'#7646c9'}
@@ -159,14 +179,16 @@ const WelcomeScreen = ({
             iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
             onPress={handleGitHubLogin}
           />
-          {/* {Platform.OS === 'ios' && (
+          {Platform.OS === 'ios' && (
             <ButtonWithIcon
-               title={t('with-apple')}
+              disabled={appleButtonDisabled}
+              buttonStyles={{ backgroundColor: colors.light }}
+              title={t('with-apple')}
               Icon={AppleIcon}
               iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
-              onPress={() => Alert.alert('Enter with apple account')}
+              onPress={handleAppleLogin}
             />
-          )} */}
+          )}
         </View>
         <View style={styles.titleBox}>
           <Text style={styles.subTitle}>{t('or')}</Text>

@@ -14,25 +14,6 @@ import { RetryableAxiosRequestConfig } from './types';
 
 let refreshTokenPromise: Promise<string> | null = null;
 
-let failedQueue: {
-  resolve: (value: unknown) => void;
-  reject: (reason?: any) => void;
-}[] = [];
-
-const processQueue = (
-  error: AxiosError | null,
-  token: string | null = null,
-) => {
-  failedQueue.forEach(prom => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve(token);
-    }
-  });
-  failedQueue = [];
-};
-
 export const refreshAccessToken = async (store: AppStore): Promise<string> => {
   if (refreshTokenPromise) {
     return refreshTokenPromise;
@@ -67,10 +48,8 @@ export const refreshAccessToken = async (store: AppStore): Promise<string> => {
       }
 
       store.dispatch(setCredentials({ token: accessToken, user }));
-      processQueue(null, accessToken);
       return accessToken;
     } catch (error) {
-      processQueue(error as AxiosError, null);
       store.dispatch(setResetCredentials());
 
       await secureDelete(KeychainService.REFRESH_TOKEN);

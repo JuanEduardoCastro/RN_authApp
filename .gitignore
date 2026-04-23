@@ -111,6 +111,7 @@ apple-app-site-association
 update-ios-version.sh
 
 #Cluade code
+*.md
 CLAUDE.md
 
 #SSL Certificate
