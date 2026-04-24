@@ -180,7 +180,7 @@ const NewPasswordScreen = ({
                     message: t('info-password-max'),
                   },
                   validate: (value: string) => {
-                    return validatePasswordInput(value);
+                    return validatePasswordInput(value, t);
                   },
                 }}
                 placeholder={t('new-password-label-placeholder')}
@@ -204,7 +204,7 @@ const NewPasswordScreen = ({
                     if (value !== watch('new_password')) {
                       return t('warning-two-passwords');
                     }
-                    return validatePasswordInput(value);
+                    return validatePasswordInput(value, t);
                   },
                 }}
                 placeholder={t('confirm-password-label-placeholder')}

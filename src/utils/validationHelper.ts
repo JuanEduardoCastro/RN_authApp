@@ -1,4 +1,4 @@
-import { t } from 'i18next';
+import { TFunction } from 'i18next';
 
 /**
  * Validates email token format and length
@@ -62,7 +62,10 @@ export const validateEmailToken = (token: string | null): string | null => {
   return null;
 };
 
-export const validatePasswordInput = (value: string): string | boolean => {
+export const validatePasswordInput = (
+  value: string,
+  t: TFunction,
+): string | boolean => {
   if (value.length > 128) {
     return t('info-password-max');
   }

@@ -22,7 +22,7 @@ export const parseApiError = (
   ) {
     return {
       type: 'timeout',
-      message: t('error-timeout'),
+      message: t('error-request-timeout'),
       statusCode: 408,
     };
   }

@@ -1,7 +1,7 @@
 {
   "welcome-title": "WELCOME TO AUTH APP",
   "welcome-subtitle": "USER AUTHORIZATION DEMO",
-  "login-message": "Plase login to your account and try the app.",
+  "login-message": "Please login to your account and try the app.",
   "with-email": "...with your email",
   "with-google": "...with Google",
   "with-github": "...with GitHub",
@@ -99,11 +99,11 @@
   "error-apple-signin": "Apple Signin failed: ",
   "error-google-play-services": "Something went wrong with Google Services",
 
-  "succes": "Success.",
+  "success": "Success.",
   "success-email-sent": "If the email is correct, you will\n receive a confirmation email.",
   "success-welcome-back": "Welcome back ",
   "success-welcome": "Welcome!!",
-  "success-log-in": "User created successfully.\nPlase log in with credentials",
+  "success-log-in": "User created successfully.\nPlease log in with credentials",
   "success-profile-updated": "Profile updated successfully!",
   "success-log-out": "Log out successfully!\nSee you next time!",
   "success-password-updated": "Password updated successfully.\nPlease log in with new credentials.",

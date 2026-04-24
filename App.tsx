@@ -61,10 +61,10 @@ const linking: LinkingOptions<RootStackParamList> = {
       listener(url);
     };
 
-    const suscription = Linking.addEventListener('url', onReceiveURL);
+    const subscription = Linking.addEventListener('url', onReceiveURL);
 
     return () => {
-      suscription.remove();
+      subscription.remove();
     };
   },
   async getInitialURL() {

@@ -164,7 +164,7 @@ export const loginUser = createAsyncThunk(
 
       return rejectWithValue({
         messageType: parsedError.type === 'timeout' ? 'warning' : 'error',
-        notificationMessage: parsedError.message || message,
+        notificationMessage: message,
       });
     }
   },

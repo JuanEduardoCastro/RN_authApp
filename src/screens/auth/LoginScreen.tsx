@@ -54,7 +54,6 @@ const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
     } catch (error) {
       __DEV__ &&
         console.log('XX -> LoginScreen.tsx:48 -> onSubmit -> error :', error);
-      navigation.popToTop();
     }
   };
   return (

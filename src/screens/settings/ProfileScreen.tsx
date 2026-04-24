@@ -83,8 +83,8 @@ const ProfileScreen = ({
     try {
       const res = await dispatch(editUser(dataAPI as any)).unwrap();
 
-      if (!res?.success) {
-        navigation.navigate('AuthNavigator', { screen: 'LoginScreen' });
+      if (res?.success) {
+        navigation.goBack();
       }
     } catch (error) {
       __DEV__ &&

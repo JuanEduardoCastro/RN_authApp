@@ -1,6 +1,6 @@
 /* Core libs & third parties libs */
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -45,19 +45,29 @@ const NotificationBanner = () => {
     transform: [{ translateY: translateY.value }],
   }));
 
-  const starAnimation = (val: number) => {
-    translateY.value = withTiming(val, {
-      duration: 400,
-      easing: Easing.out(Easing.ease),
-    });
-  };
+  const startAnimation = useCallback(
+    (val: number) => {
+      translateY.value = withTiming(val, {
+        duration: 400,
+        easing: Easing.out(Easing.ease),
+      });
+    },
+    [translateY],
+  );
+
+  // const startAnimation = (val: number) => {
+  //   translateY.value = withTiming(val, {
+  //     duration: 400,
+  //     easing: Easing.out(Easing.ease),
+  //   });
+  // };
 
   useEffect(() => {
     if (messageType) {
-      starAnimation(0);
+      startAnimation(0);
 
-      setTimeout(() => {
-        starAnimation(-100);
+      const timer = setTimeout(() => {
+        startAnimation(-100);
         dispatch(
           setNotificationMessage({
             messageType: null,
@@ -65,11 +75,13 @@ const NotificationBanner = () => {
           }),
         );
       }, 4000);
+
+      return () => clearTimeout(timer);
     }
-  }, [messageType, dispatch, starAnimation]);
+  }, [messageType, dispatch, startAnimation]);
 
   const handleCloseBanner = () => {
-    starAnimation(-100);
+    startAnimation(-100);
     dispatch(
       setNotificationMessage({ messageType: null, notificationMessage: null }),
     );

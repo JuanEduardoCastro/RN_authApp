@@ -18,7 +18,7 @@
   "enter-password-placeholder": "Ingresa tu contraseña",
   "password-required": "La contraseña es obligatoria.",
   "password-invalid": "La contraseña debe tener al menos 8 caracteres.",
-  "password-regex": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+  "password-regex": "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un símbolo.",
   "remember-me-label": "Recuérdame",
   "login-button": "Ingresar",
   "go-back-button": "Volver para seleccionar otra opción!",
@@ -99,7 +99,7 @@
   "error-apple-signin": "Error en el inicio de sesión con Apple: ",
   "error-google-play-services": "Algo salió mal con Google Services",
 
-  "succes": "Éxito",
+  "success": "Éxito",
   "success-email-sent": "Si el email es correcto,\n recibirás un email de confirmación.",
   "success-welcome-back": "Bienvenido de nuevo ",
   "success-welcome": "¡Bienvenido!",
