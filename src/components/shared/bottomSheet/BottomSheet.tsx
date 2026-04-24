@@ -26,7 +26,7 @@ const BottomSheet = ({
   duration = 300,
   children,
 }: BottomSheetProps) => {
-  const { styles } = useStyles(createStlyes);
+  const { styles } = useStyles(createStyles);
   const height = useSharedValue(0);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -77,7 +77,7 @@ const BottomSheet = ({
 
 export default BottomSheet;
 
-const createStlyes = (colors: TColors) =>
+const createStyles = (colors: TColors) =>
   StyleSheet.create({
     backdrop: {
       ...StyleSheet.absoluteFillObject,

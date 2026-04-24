@@ -15,7 +15,7 @@ const ModalSheet = ({
   modalIsVisible,
   toggleSheet,
 }: ModalSheetProps) => {
-  const { styles } = useStyles(createStlyes);
+  const { styles } = useStyles(createStyles);
 
   const handleCloseModal = () => {
     toggleSheet(false);
@@ -36,7 +36,7 @@ const ModalSheet = ({
 
 export default ModalSheet;
 
-const createStlyes = (colors: TColors) =>
+const createStyles = (colors: TColors) =>
   StyleSheet.create({
     backdrop: {
       ...StyleSheet.absoluteFillObject,

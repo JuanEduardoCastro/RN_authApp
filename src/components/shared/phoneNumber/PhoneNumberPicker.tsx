@@ -50,7 +50,7 @@ const PhoneNumberPicker = ({
 }: PhoneNumberPickerProps) => {
   const { indexToScroll, defaultCountryCode, defaultDialCode } = useUserData();
   const { field, fieldState } = useController({ name, control, rules });
-  const { colors, styles } = useStyles(createStlyes);
+  const { colors, styles } = useStyles(createStyles);
   const isOpen = useSharedValue(false);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -159,7 +159,7 @@ const PhoneNumberPicker = ({
 
 export default PhoneNumberPicker;
 
-const createStlyes = (colors: TColors) =>
+const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
       marginBottom: 10,

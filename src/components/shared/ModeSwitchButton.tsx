@@ -19,7 +19,7 @@ const ModeSwitchButton = ({
   height = SCREEN.heightFixed * 18,
 }: ModeSwitchButtonProps) => {
   const { mode, toggleMode } = useMode();
-  const { styles } = useStyles(createStlyes);
+  const { styles } = useStyles(createStyles);
 
   const animatedStyle = useAnimatedStyle(() => {
     const translateX =
@@ -45,7 +45,7 @@ const ModeSwitchButton = ({
 
 export default ModeSwitchButton;
 
-const createStlyes = (colors: TColors) =>
+const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
       borderRadius: 50,

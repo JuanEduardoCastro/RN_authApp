@@ -40,7 +40,7 @@ interface FormDataProps {
 const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
   const methods = useForm<FormDataProps>();
   const { handleSubmit, control } = methods;
-  const { styles } = useStyles(createStlyes);
+  const { styles } = useStyles(createStyles);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -139,7 +139,7 @@ const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
 
 export default LoginScreen;
 
-const createStlyes = (colors: TColors) =>
+const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
       backgroundColor: colors.background,

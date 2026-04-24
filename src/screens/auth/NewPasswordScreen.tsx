@@ -51,7 +51,7 @@ const NewPasswordScreen = ({
   const dispatch = useAppDispatch();
   const method = useForm<FormNewDataProps>();
   const { handleSubmit, control, watch } = method;
-  const { styles } = useStyles(createStlyes);
+  const { styles } = useStyles(createStyles);
   const { t } = useTranslation();
   const [email, setEmail] = useState<string | null>(null);
   const [newUser, setNewUser] = useState<boolean>(true);
@@ -235,7 +235,7 @@ const NewPasswordScreen = ({
 
 export default NewPasswordScreen;
 
-const createStlyes = (colors: TColors) =>
+const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
       backgroundColor: colors.background,

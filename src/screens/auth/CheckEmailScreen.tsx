@@ -42,7 +42,7 @@ const CheckEmailScreen = ({
   const { checkMode } = route.params;
   const method = useForm<CheckEmailProps>();
   const { handleSubmit, control } = method;
-  const { colors, styles } = useStyles(createStlyes);
+  const { colors, styles } = useStyles(createStyles);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [isEmailSent, setIsEmailSent] = useState<boolean>(false);
@@ -209,7 +209,7 @@ const CheckEmailScreen = ({
 
 export default CheckEmailScreen;
 
-const createStlyes = (colors: TColors) =>
+const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
       backgroundColor: colors.background,

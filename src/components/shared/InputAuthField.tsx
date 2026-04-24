@@ -43,7 +43,7 @@ const InputAuthField = ({
   ...props
 }: InputAuthFieldProps) => {
   const { field, fieldState } = useController({ name, control, rules });
-  const { colors, styles } = useStyles(createStlyes);
+  const { colors, styles } = useStyles(createStyles);
   const [toggleSecureEntry, setToggleSecureEntry] = useState(true);
   const [openInfo, setOpenInfo] = useState(false);
 
@@ -128,7 +128,7 @@ const InputAuthField = ({
 
 export default InputAuthField;
 
-const createStlyes = (colors: TColors) =>
+const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
       marginBottom: 10,

@@ -39,7 +39,7 @@ const PhoneListContainer = ({
   onSelectCountry,
 }: PhoneListContainerProps) => {
   const flatListRef = useRef<any>(null);
-  const { styles } = useStyles(createStlyes);
+  const { styles } = useStyles(createStyles);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(
     indexToScroll,
   );
@@ -129,7 +129,7 @@ const PhoneListContainer = ({
 
 export default PhoneListContainer;
 
-const createStlyes = (colors: TColors) =>
+const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
       flex: 1,

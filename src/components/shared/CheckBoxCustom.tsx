@@ -23,7 +23,7 @@ const CheckBoxCustom = ({
   disabled,
 }: CheckBoxCustomProps) => {
   const { field } = useController({ name, control, rules });
-  const { colors, styles } = useStyles(createStlyes);
+  const { colors, styles } = useStyles(createStyles);
 
   return (
     <Pressable
@@ -62,7 +62,7 @@ const CheckBoxCustom = ({
 
 export default CheckBoxCustom;
 
-const createStlyes = (colors: TColors) =>
+const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
       width: SCREEN.width100,
