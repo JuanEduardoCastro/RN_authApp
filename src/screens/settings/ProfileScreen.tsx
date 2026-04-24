@@ -31,6 +31,7 @@ import { useTranslation } from 'react-i18next';
 import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
 import { editUser } from '@store/thunks';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
+import { EditUserPayload } from '@store/types';
 /* Assets */
 
 interface ProfileDataProps {
@@ -81,7 +82,7 @@ const ProfileScreen = ({
     const dataAPI = { userData, t };
 
     try {
-      const res = await dispatch(editUser(dataAPI as any)).unwrap();
+      const res = await dispatch(editUser(dataAPI as EditUserPayload)).unwrap();
 
       if (res?.success) {
         navigation.goBack();

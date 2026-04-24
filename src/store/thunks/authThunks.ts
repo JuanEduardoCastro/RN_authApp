@@ -2,7 +2,11 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '@store/apiService';
 import { RootState } from '@store/store';
-import { DataAPI } from '@store/types';
+import {
+  LoginUserPayload,
+  LogoutUserPayload,
+  ValidateRefreshTokenPayload,
+} from '@store/types';
 import { parseApiError } from '@utils/errorHandler';
 import { registerFCMToken } from '@utils/notifications/registerFCMToken';
 import { loginRateLimiter } from '@utils/persistentRateLimiter';
@@ -20,7 +24,7 @@ import DeviceInfo from 'react-native-device-info';
 
 export const validateRefreshToken = createAsyncThunk(
   'users/token/refresh',
-  async (data: DataAPI, { rejectWithValue }) => {
+  async (data: ValidateRefreshTokenPayload, { rejectWithValue }) => {
     const { t } = data;
 
     try {
@@ -64,7 +68,7 @@ export const validateRefreshToken = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   'users/login',
-  async (data: DataAPI, { rejectWithValue }) => {
+  async (data: LoginUserPayload, { rejectWithValue }) => {
     const { t } = data;
 
     const rateLimit = await loginRateLimiter.checkRateLimit();
@@ -177,7 +181,7 @@ export const loginUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
   'users/logout',
-  async (data: DataAPI, { getState, rejectWithValue }) => {
+  async (data: LogoutUserPayload, { getState, rejectWithValue }) => {
     const { t, email } = data;
     const { auth } = getState() as RootState;
     try {

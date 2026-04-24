@@ -3,7 +3,6 @@ import { jwtDecode } from 'jwt-decode';
 import { CustomJwtPayload, UseCheckTokenReturn } from './types';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { Platform } from 'react-native';
-import { DataAPI } from '@store/types';
 import { useTranslation } from 'react-i18next';
 import {
   KeychainService,
@@ -79,7 +78,7 @@ export const useCheckToken = (): UseCheckTokenReturn => {
           validateRefreshToken({
             t,
             token: refreshToken.data.password,
-          } as DataAPI),
+          }),
         ).unwrap();
 
         if (GoogleSignin.hasPreviousSignIn()) {

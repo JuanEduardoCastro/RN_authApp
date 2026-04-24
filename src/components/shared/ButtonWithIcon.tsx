@@ -61,6 +61,8 @@ const ButtonWithIcon = ({
 
   return (
     <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ disabled: !!props.disabled }}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       style={[props.disabled && styles.disabled]}

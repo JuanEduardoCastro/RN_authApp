@@ -151,6 +151,7 @@ const WelcomeScreen = ({
         </View>
         <View style={styles.buttonBox}>
           <ButtonWithIcon
+            accessibilityLabel={t('accessibility-email-login')}
             buttonStyles={{ backgroundColor: colors.light }}
             title={t('with-email')}
             Icon={MailIcon}
@@ -161,6 +162,7 @@ const WelcomeScreen = ({
             onPress={() => navigation.navigate('LoginScreen')}
           />
           <ButtonWithIcon
+            accessibilityLabel={t('accessibility-google-login')}
             disabled={googleButtonDisabled}
             buttonStyles={{ backgroundColor: colors.light }}
             title={t('with-google')}
@@ -172,6 +174,7 @@ const WelcomeScreen = ({
             onPress={handleGoogleOriginalSignin}
           />
           <ButtonWithIcon
+            accessibilityLabel={t('accessibility-github-login')}
             disabled={githubButtonDisabled}
             buttonStyles={{ backgroundColor: colors.light }}
             title={t('with-github')}
@@ -181,6 +184,7 @@ const WelcomeScreen = ({
           />
           {Platform.OS === 'ios' && (
             <ButtonWithIcon
+              accessibilityLabel={t('accessibility-apple-login')}
               disabled={appleButtonDisabled}
               buttonStyles={{ backgroundColor: colors.light }}
               title={t('with-apple')}
@@ -195,6 +199,7 @@ const WelcomeScreen = ({
         </View>
         <View style={styles.buttonBox}>
           <Button
+            accessibilityLabel={t('accessibility-register-login')}
             buttonStyles={{ backgroundColor: colors.light }}
             title={t('register-email')}
             onPress={() =>

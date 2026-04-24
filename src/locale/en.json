@@ -132,5 +132,11 @@
   "error-rate-limit-login": "Too many failed login attempts.\nPlease try again in {{seconds}} seconds.",
   "error-rate-limit-reset": "Too many password reset requests.\nPlease try again in {{seconds}} seconds.",
   "error-rate-limit-email": "Too many email verification requests.\nPlease try again in {{seconds}} seconds.",
-  "warning-attempts-left": "({{count}} attempts left)"
+  "warning-attempts-left": "({{count}} attempts left)",
+
+  "accessibility-email-login": "Sign in with your email",
+  "accessibility-google-login": "Sign in with Google",
+  "accessibility-github-login": "Sign in with GitHub",
+  "accessibility-apple-login": "Sign in with Apple",
+  "accessibility-register-email": "Register with your email"
 }

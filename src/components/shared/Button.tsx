@@ -54,6 +54,8 @@ const Button = ({
 
   return (
     <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ disabled: !!props.disabled }}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       testID="button"

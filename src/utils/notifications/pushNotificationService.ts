@@ -9,12 +9,14 @@ import {
   setBackgroundMessageHandler,
   onTokenRefresh,
 } from '@react-native-firebase/messaging';
-import { Alert, PermissionsAndroid, Platform } from 'react-native';
-
+import { PermissionsAndroid, Platform } from 'react-native';
 import { getApp } from '@react-native-firebase/app';
 import { registerFCMToken } from './registerFCMToken';
 import { KeychainService, secureGetStorage } from '@utils/secureStorage';
 import api from '@store/apiService';
+import store from '@store/store';
+import { setNotificationMessage } from '@store/authSlice';
+import i18n from '@locale/i18next';
 
 const MAX_RETRIES = 5;
 const RETRY_DELAY = 1000;
@@ -131,9 +133,16 @@ export const setupMessageListener = () => {
     async remoteMessage => {
       __DEV__ &&
         console.log('Foreground Message Received (Android):', remoteMessage);
-      Alert.alert(
-        'New Message',
-        `Title: ${remoteMessage.notification?.title}\nBody: ${remoteMessage.notification?.body}`,
+
+      store.dispatch(
+        setNotificationMessage({
+          messageType: 'warning',
+          notificationMessage:
+            remoteMessage.notification?.body ||
+            remoteMessage.notification?.title ||
+            'New Message' ||
+            i18n.t('information-another-screen'),
+        }),
       );
     },
   );

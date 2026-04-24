@@ -1,7 +1,11 @@
 import { CustomJwtPayload } from '@hooks/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '@store/apiService';
-import { DataAPI } from '@store/types';
+import {
+  CheckEmailPayload,
+  ResetPasswordPayload,
+  UpdatePasswordPayload,
+} from '@store/types';
 import { parseApiError } from '@utils/errorHandler';
 import {
   checkEmailRateLimiter,
@@ -16,7 +20,7 @@ import { jwtDecode } from 'jwt-decode';
 
 export const checkEmail = createAsyncThunk(
   'users/check-email',
-  async (data: DataAPI, { rejectWithValue }) => {
+  async (data: CheckEmailPayload, { rejectWithValue }) => {
     const { t } = data;
 
     const rateLimit = await checkEmailRateLimiter.checkRateLimit();
@@ -62,7 +66,7 @@ export const checkEmail = createAsyncThunk(
 
 export const resetPassword = createAsyncThunk(
   'users/reset-password',
-  async (data: DataAPI, { rejectWithValue }) => {
+  async (data: ResetPasswordPayload, { rejectWithValue }) => {
     const { t } = data;
 
     const rateLimit = await resetPasswordRateLimiter.checkRateLimit();
@@ -111,7 +115,7 @@ export const resetPassword = createAsyncThunk(
 
 export const updatePassword = createAsyncThunk(
   'users/password',
-  async (data: DataAPI, { rejectWithValue }) => {
+  async (data: UpdatePasswordPayload, { rejectWithValue }) => {
     const { t } = data;
     try {
       const decodeToken = jwtDecode<CustomJwtPayload>(data.token as string);

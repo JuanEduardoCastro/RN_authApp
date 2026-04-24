@@ -2,7 +2,7 @@ import { CustomJwtPayload } from '@hooks/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '@store/apiService';
 import { RootState } from '@store/store';
-import { DataAPI } from '@store/types';
+import { CreateUserPayload, EditUserPayload } from '@store/types';
 import { cleanUserData } from '@utils/cleanUserData';
 import { parseApiError } from '@utils/errorHandler';
 import { jwtDecode } from 'jwt-decode';
@@ -14,7 +14,7 @@ import { jwtDecode } from 'jwt-decode';
 
 export const createUser = createAsyncThunk(
   'users/create',
-  async (data: DataAPI, { rejectWithValue }) => {
+  async (data: CreateUserPayload, { rejectWithValue }) => {
     const { t } = data;
     try {
       const response = await api.post(
@@ -51,7 +51,7 @@ export const createUser = createAsyncThunk(
 
 export const editUser = createAsyncThunk(
   'users/:id',
-  async (data: DataAPI, { getState, rejectWithValue }) => {
+  async (data: EditUserPayload, { getState, rejectWithValue }) => {
     const { t, userData } = data;
     const { auth } = getState() as RootState;
 

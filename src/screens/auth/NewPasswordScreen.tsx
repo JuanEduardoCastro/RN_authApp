@@ -25,7 +25,7 @@ import { AuthStackScreenProps } from '@navigation/types';
 import { SCREEN } from '@constants/sizes';
 import { setNotificationMessage } from 'src/store/authSlice';
 import { textVar } from '@constants/textVar';
-import { DataAPI } from '@store/types';
+import { CreateUserPayload, UpdatePasswordPayload } from '@store/types';
 import { useTranslation } from 'react-i18next';
 import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
 import {
@@ -131,8 +131,8 @@ const NewPasswordScreen = ({
       };
 
       const actionToDispatch = newUser
-        ? createUser(dataAPI as DataAPI)
-        : updatePassword(dataAPI as DataAPI);
+        ? createUser(dataAPI as CreateUserPayload)
+        : updatePassword(dataAPI as UpdatePasswordPayload);
 
       try {
         const res = await dispatch(actionToDispatch).unwrap();

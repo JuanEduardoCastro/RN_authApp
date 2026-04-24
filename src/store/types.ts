@@ -46,13 +46,50 @@ export interface NotificationMessagePayload {
   notificationMessage: string | null | unknown;
 }
 
-export interface DataAPI {
+export interface ValidateRefreshTokenPayload {
   t: TFunction;
-  email: string | null;
-  password: string | null;
-  rememberMe: boolean;
   token: string | null;
+}
+
+export interface LoginUserPayload {
+  t: TFunction;
+  email: string;
+  password: string;
+  rememberMe: boolean;
+}
+
+export interface LogoutUserPayload {
+  t: TFunction;
+  email: string;
+}
+
+export interface CreateUserPayload {
+  t: TFunction;
+  email: string;
+  password: string;
+  token: string;
+}
+
+export interface EditUserPayload {
+  t: TFunction;
   userData: Record<string, string>;
+}
+
+export interface CheckEmailPayload {
+  t: TFunction;
+  email: string;
+}
+
+export interface ResetPasswordPayload {
+  t: TFunction;
+  email: string;
+}
+
+export interface UpdatePasswordPayload {
+  t: TFunction;
+  email: string;
+  password: string;
+  token: string;
 }
 
 export type ErrorType = 'timeout' | 'network' | 'unknown' | 'server' | 'client';

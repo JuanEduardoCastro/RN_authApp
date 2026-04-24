@@ -132,5 +132,11 @@
   "error-rate-limit-login": "Demasiados intentos de inicio de\nsesión fallidos. Por favor intenta nuevamente en {{seconds}} segundos.",
   "error-rate-limit-reset": "Demasiadas solicitudes de restablecimiento\nde contraseña. Por favor intenta nuevamente en {{seconds}} segundos.",
   "error-rate-limit-email": "Demasiadas solicitudes de verificación\nde correo. Por favor intenta nuevamente en {{seconds}} segundos.",
-  "warning-attempts-left": "({{count}} intentos restantes)"
+  "warning-attempts-left": "({{count}} intentos restantes)",
+
+  "accessibility-email-login": "Iniciar sesión con tu email",
+  "accessibility-google-login": "Iniciar sesión con Google",
+  "accessibility-github-login": "Iniciar sesión con GitHub",
+  "accessibility-apple-login": "Iniciar sesión con Apple",
+  "accessibility-register-email": "Registrarse con tu email"
 }

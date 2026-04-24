@@ -24,7 +24,6 @@ import { SCREEN } from '@constants/sizes';
 import { textVar } from '@constants/textVar';
 import { AuthStackScreenProps } from '@navigation/types';
 import { setNotificationMessage } from '@store/authSlice';
-import { DataAPI } from '@store/types';
 import { useTranslation } from 'react-i18next';
 import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
 import { useAppDispatch } from '@store/hooks';
@@ -58,8 +57,8 @@ const CheckEmailScreen = ({
       }
 
       const actionToDispatch = checkMode.includes('new')
-        ? checkEmail({ ...data, t } as DataAPI)
-        : resetPassword({ ...data, t } as DataAPI);
+        ? checkEmail({ ...data, t })
+        : resetPassword({ ...data, t });
 
       const res = await dispatch(actionToDispatch).unwrap();
 

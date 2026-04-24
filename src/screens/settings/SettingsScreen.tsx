@@ -32,7 +32,7 @@ import {
   PowerIcon,
   ProfileIcon,
 } from '@assets/svg/icons';
-import { DataAPI } from '@store/types';
+import { LogoutUserPayload } from '@store/types';
 import LanguagePicker from '@components/shared/locale/LanguagePicker';
 import CustomModal from '@components/shared/bottomSheet/CustomModal';
 import { useTranslation } from 'react-i18next';
@@ -63,7 +63,7 @@ const SettingsScreen = ({
   const handleLogut = async () => {
     try {
       const res = await dispatch(
-        logoutUser({ email: user?.email, t } as DataAPI),
+        logoutUser({ email: user?.email, t } as LogoutUserPayload),
       ).unwrap();
       if (res?.success) {
         navigation.navigate('AuthNavigator', { screen: 'WelcomeScreen' });
