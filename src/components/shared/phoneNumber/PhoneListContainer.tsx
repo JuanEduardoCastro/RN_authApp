@@ -18,7 +18,7 @@ import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 /* Utilities & constants */
 import { countriesList } from '@constants/countriesList';
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 /* Assets */
 

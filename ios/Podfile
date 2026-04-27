@@ -33,5 +33,19 @@ target 'RN_authApp' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
+    # Xcode 26 beta compatibility fixes — remove once affected pods are updated.
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        # Xcode 26 made non-modular includes a hard error; revert to allowed for all pods.
+        config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+
+        # fmt uses C++20 consteval in a way Xcode 26's stricter Clang rejects.
+        # Compiling under C++17 skips that code path without affecting functionality.
+        if target.name == 'fmt'
+          config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
+        end
+      end
+    end
   end
 end

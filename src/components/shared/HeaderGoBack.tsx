@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import { ChevronIcon } from '@assets/svg/icons';
 import { textVar } from '@constants/textVar';
 

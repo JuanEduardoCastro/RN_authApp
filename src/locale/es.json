@@ -138,5 +138,7 @@
   "accessibility-google-login": "Iniciar sesión con Google",
   "accessibility-github-login": "Iniciar sesión con GitHub",
   "accessibility-apple-login": "Iniciar sesión con Apple",
-  "accessibility-register-email": "Registrarse con tu email"
+  "accessibility-register-email": "Registrarse con tu email",
+
+  "session-expires-at": "Tu sesión expira a las"
 }

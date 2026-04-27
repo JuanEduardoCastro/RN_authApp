@@ -24,7 +24,7 @@ import {
   SuccessIcon,
   WarningIcon,
 } from '@assets/svg/icons';
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 
 const iconMap = {

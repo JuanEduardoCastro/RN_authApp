@@ -15,7 +15,7 @@ import { appleLogin, githubLogin, googleLogin } from 'src/store/otherAuthHooks';
 import { TColors } from '@constants/types';
 import { AuthStackScreenProps } from '@navigation/types';
 /* Utilities & constants */
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { GITHUB_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
 /* Assets */

@@ -21,7 +21,7 @@ import useStyles from '@hooks/useStyles';
 import { AuthStackScreenProps } from '@navigation/types';
 /* Utilities & constants */
 import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { useTranslation } from 'react-i18next';
 import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';

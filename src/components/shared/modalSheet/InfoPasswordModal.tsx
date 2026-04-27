@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import Button from '../Button';
 import { useTranslation } from 'react-i18next';
 import { textVar } from '@constants/textVar';
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 
 type InfoPasswordModalProps = {
   toggleModalSheet: () => void;

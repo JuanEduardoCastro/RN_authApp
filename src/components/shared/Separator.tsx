@@ -2,7 +2,7 @@ import { ColorValue, StyleSheet, View } from 'react-native';
 import React from 'react';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 
 type SeparatorProps = {
   height?: number;

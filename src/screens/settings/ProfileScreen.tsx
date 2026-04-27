@@ -25,13 +25,14 @@ import { TColors } from '@constants/types';
 import { SettingsStackScreenProps } from 'src/navigation/types';
 /* Utilities & constants */
 import { userAuth } from 'src/store/authSlice';
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { useTranslation } from 'react-i18next';
 import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
 import { editUser } from '@store/thunks';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { EditUserPayload } from '@store/types';
+import AvatarViewButton from '@components/shared/AvatarViewButton';
 /* Assets */
 
 interface ProfileDataProps {
@@ -104,7 +105,11 @@ const ProfileScreen = ({
       </View>
       <Separator border={false} height={32} />
       <View style={styles.buttonBox}>
-        <AvatarView name="avatarURL" control={control} disabled={!editEnable} />
+        <AvatarViewButton
+          name="avatarURL"
+          control={control}
+          disabled={!editEnable}
+        />
         <View style={styles.editButton}>
           <Pressable
             onPress={editEnable ? handleSubmit(onSubmit) : handleEditInfo}>

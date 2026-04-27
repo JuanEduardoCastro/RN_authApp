@@ -10,7 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import Separator from '../Separator';
 
 type BottomSheetProps = {

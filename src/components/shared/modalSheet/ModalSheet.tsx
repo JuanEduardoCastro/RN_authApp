@@ -1,7 +1,7 @@
 import { Modal, StyleSheet, View } from 'react-native';
 import React, { ReactNode } from 'react';
 import useStyles from '@hooks/useStyles';
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import { TColors } from '@constants/types';
 
 type ModalSheetProps = {

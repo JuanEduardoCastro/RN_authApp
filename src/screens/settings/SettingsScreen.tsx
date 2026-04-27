@@ -20,7 +20,7 @@ import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { SettingsStackScreenProps } from 'src/navigation/types';
 /* Utilities & constants */
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import { setNotificationMessage, userAuth } from 'src/store/authSlice';
 import { useMode } from '@context/ModeContext';
 import { textVar } from '@constants/textVar';

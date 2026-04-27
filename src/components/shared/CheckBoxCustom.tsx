@@ -3,7 +3,7 @@ import React from 'react';
 import CheckBox from '@react-native-community/checkbox';
 import { Control, useController } from 'react-hook-form';
 import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import useStyles from '@hooks/useStyles';
 import { textVar } from '@constants/textVar';
 

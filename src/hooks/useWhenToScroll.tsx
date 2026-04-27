@@ -1,7 +1,7 @@
 import { useWindowDimensions, Platform } from 'react-native';
 import { useMemo } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 
 /**
  * A custom hook to determine if content needs to be scrollable.

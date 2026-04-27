@@ -32,9 +32,7 @@ export interface User {
     number: string;
   };
   occupation: string;
-  isGoogleLogin: boolean;
-  isGitHubLogin: boolean;
-  isAppleLogin: boolean;
+  provider: 'google' | 'github' | 'apple' | null;
   avatarURL: string;
   avatarBuffer: string;
   createdAt: string | Date;

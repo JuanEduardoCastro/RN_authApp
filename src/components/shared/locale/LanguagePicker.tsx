@@ -1,4 +1,4 @@
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 import useStyles from '@hooks/useStyles';

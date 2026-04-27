@@ -22,7 +22,7 @@ import useUserData from '@hooks/useUserData';
 /* Types */
 import { TColors } from '@constants/types';
 /* Utilities & constants */
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import { countriesList } from '@constants/countriesList';
 import { textVar } from '@constants/textVar';
 /* Assets */

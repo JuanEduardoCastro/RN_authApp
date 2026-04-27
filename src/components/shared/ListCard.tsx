@@ -7,7 +7,7 @@ import useStyles from '@hooks/useStyles';
 /* Types */
 import { TColors } from '@constants/types';
 /* Utilities & constants */
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 /* Assets */
 import { CheckIcon } from '@assets/svg/icons';

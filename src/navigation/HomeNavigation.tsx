@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SettingsNavigator from './SettingsNavigation';
 import HomeScreen from '@screens/home/HomeScreen';
 import { HomeTabParamList } from './types';
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import { HomeIcon, SettingsIcon } from '@assets/svg/icons';
 import { useMode } from '@context/ModeContext';
 import { Platform } from 'react-native';

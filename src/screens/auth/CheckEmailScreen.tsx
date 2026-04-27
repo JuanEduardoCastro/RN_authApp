@@ -20,7 +20,7 @@ import ButtonNoBorder from '@components/shared/ButtonNoBorder';
 import useStyles from '@hooks/useStyles';
 /* Types */
 import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { AuthStackScreenProps } from '@navigation/types';
 import { setNotificationMessage } from '@store/authSlice';

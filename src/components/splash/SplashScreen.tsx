@@ -2,7 +2,7 @@ import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import BGGradient from '@components/shared/BGGradient';
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import { useCheckToken } from '@hooks/useCheckToken';
 import { textVar } from '@constants/textVar';
 import packagejson from 'package.json';

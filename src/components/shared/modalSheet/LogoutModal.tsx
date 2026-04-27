@@ -5,7 +5,7 @@ import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { textVar } from '@constants/textVar';
 import { useTranslation } from 'react-i18next';
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 
 type LogoutModalProps = {
   toggleModalSheet: () => void;

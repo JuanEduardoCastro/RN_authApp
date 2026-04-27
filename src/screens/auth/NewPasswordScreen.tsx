@@ -22,7 +22,7 @@ import { CustomJwtPayload } from '@hooks/types';
 import { TColors } from '@constants/types';
 import { AuthStackScreenProps } from '@navigation/types';
 /* Utilities & constants */
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import { setNotificationMessage } from 'src/store/authSlice';
 import { textVar } from '@constants/textVar';
 import { CreateUserPayload, UpdatePasswordPayload } from '@store/types';

@@ -1,4 +1,4 @@
-import { SCREEN } from '@constants/sizes';
+import { SCREEN } from '@constants/dimensions';
 import { TColors } from '@constants/types';
 import useStyles from '@hooks/useStyles';
 import React, { ReactNode } from 'react';
