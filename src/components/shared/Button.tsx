@@ -14,7 +14,7 @@ import useStyles from '@hooks/useStyles';
 /* Types */
 import { TColors } from '@constants/types';
 /* Utilities & constants */
-import { SCREEN } from '@constants/dimensions';
+import { scale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import Animated, {
   useAnimatedStyle,
@@ -78,8 +78,8 @@ const createStyles = (colors: TColors) =>
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.second,
-      paddingHorizontal: 24,
-      paddingVertical: 8,
+      paddingHorizontal: scale(16),
+      paddingVertical: scale(8),
       borderRadius: 50,
     },
     text: {

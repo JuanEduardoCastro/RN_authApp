@@ -28,9 +28,11 @@ import { textVar } from '@constants/textVar';
 import {
   CheckIcon,
   CircleFullIcon,
+  FaceIdIcon,
   LanguageIcon,
   PowerIcon,
   ProfileIcon,
+  TouchIdIcon,
 } from '@assets/svg/icons';
 import { LogoutUserPayload } from '@store/types';
 import LanguagePicker from '@components/shared/locale/LanguagePicker';
@@ -40,6 +42,13 @@ import ModalSheet from '@components/shared/modalSheet/ModalSheet';
 import LogoutModal from '@components/shared/modalSheet/LogoutModal';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { logoutUser } from '@store/thunks';
+import {
+  disableBiometricLogin,
+  enableBiometricLogin,
+} from '@utils/biometricAuth';
+import useBiometricAuth from '@hooks/useBiometricAuth';
+import * as Keychain from 'react-native-keychain';
+import BiometricConfirmModal from '@components/shared/modalSheet/BiometricConfirmModal';
 
 const SettingsScreen = ({
   navigation,
@@ -48,9 +57,52 @@ const SettingsScreen = ({
   const { setColorTheme, themeName, toggleMode } = useMode();
   const { colors, styles } = useStyles(createStyles);
   const { t } = useTranslation();
+  const {
+    biometricType,
+    isEnabled: isBiometricEnabled,
+    isAvailable: biometricAvailable,
+    recheck,
+  } = useBiometricAuth();
+  const dispatch = useAppDispatch();
   const [isVisible, setIsVisible] = useState(false);
   const [confirmLogoutModal, setConfirmLogoutModal] = useState(false);
-  const dispatch = useAppDispatch();
+  const [biometricConfirmModal, setBiometricConfirmModal] = useState(false);
+  const [pendingBiometricAction, setPendingBiometricAction] = useState<
+    'enable' | 'disable'
+  >('enable');
+
+  const handleBiometricToggle = (value: boolean) => {
+    setPendingBiometricAction(value ? 'enable' : 'disable');
+    setBiometricConfirmModal(true);
+  };
+
+  const handleBiometricconfirm = async () => {
+    if (pendingBiometricAction === 'enable') {
+      const success = await enableBiometricLogin();
+      if (success) {
+        dispatch(
+          setNotificationMessage({
+            messageType: 'success',
+            notificationMessage: t('biometric-enabled-success'),
+          }),
+        );
+      }
+    } else {
+      await disableBiometricLogin();
+      dispatch(
+        setNotificationMessage({
+          messageType: 'information',
+          notificationMessage: t('biometric-disabled-info'),
+        }),
+      );
+    }
+    await recheck();
+    setBiometricConfirmModal(false);
+  };
+
+  const toggleBiometricConfirmModal = () => {
+    setBiometricConfirmModal(!biometricConfirmModal);
+  };
 
   const toggleSheet = () => {
     setIsVisible(!isVisible);
@@ -120,6 +172,20 @@ const SettingsScreen = ({
             onPress={() => setIsVisible(true)}
             icon={<LanguageIcon width={22} height={22} color={colors.text} />}
           />
+          {biometricAvailable && (
+            <ListCard
+              title={t('biometric-toggle-button')}
+              onPress={() => handleBiometricToggle(!isBiometricEnabled)}
+              icon={
+                biometricType === Keychain.BIOMETRY_TYPE.FACE_ID ? (
+                  <FaceIdIcon width={24} height={24} color={colors.text} />
+                ) : (
+                  <TouchIdIcon width={22} height={22} color={colors.text} />
+                )
+              }
+              checkBox={isBiometricEnabled}
+            />
+          )}
 
           <Separator height={40} />
           <Pressable onPress={toggleMode} style={styles.modeBox}>
@@ -162,6 +228,15 @@ const SettingsScreen = ({
         <LogoutModal
           toggleModalSheet={toggleModalSheet}
           handleLogut={handleLogut}
+        />
+      </ModalSheet>
+      <ModalSheet
+        modalIsVisible={biometricConfirmModal}
+        toggleSheet={toggleBiometricConfirmModal}>
+        <BiometricConfirmModal
+          action={pendingBiometricAction}
+          toggleModalSheet={toggleBiometricConfirmModal}
+          onConfirm={handleBiometricconfirm}
         />
       </ModalSheet>
     </SafeAreaView>

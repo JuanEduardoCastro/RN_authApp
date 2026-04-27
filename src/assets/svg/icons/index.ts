@@ -23,3 +23,5 @@ export { default as EyeCloseIcon } from './eyeCloseIcon.svg';
 export { default as CircleFullIcon } from './circleFullIcon.svg';
 export { default as EditIcon } from './editIcon.svg';
 export { default as LanguageIcon } from './languageIcon.svg';
+export { default as FaceIdIcon } from './faceIdIcon.svg';
+export { default as TouchIdIcon } from './touchIdIcon.svg';

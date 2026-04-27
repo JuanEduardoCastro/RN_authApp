@@ -13,7 +13,7 @@ type UserInfoCardProps = {
 };
 
 const UserInfoCard = ({ user }: UserInfoCardProps) => {
-  const { colors, styles } = useStyles(createStyles);
+  const { styles } = useStyles(createStyles);
   const { i18n } = useTranslation();
 
   const memberSinceFormat = (dateString: string | Date) => {

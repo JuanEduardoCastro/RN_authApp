@@ -7,7 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 /* Custom components */
 import InputAuthField from '@components/shared/InputAuthField';
@@ -27,6 +27,16 @@ import { useTranslation } from 'react-i18next';
 import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
 import { useAppDispatch } from '@store/hooks';
 import { loginUser } from '@store/thunks';
+import * as Keychain from 'react-native-keychain';
+import {
+  enableBiometricLogin,
+  getBiometricType,
+  hasBiometricBeenDeclined,
+  isBiometricLoginEnabled,
+  markBiometricDeclined,
+} from '@utils/biometricAuth';
+import ModalSheet from '@components/shared/modalSheet/ModalSheet';
+import BiometricOptInModal from '@components/shared/modalSheet/BiometricOptInModal';
 /* Assets */
 
 interface FormDataProps {
@@ -44,96 +54,137 @@ const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
+  const [showBiometricModal, setShowBiometricModal] = useState(false);
+  const [biometryType, setBiometryType] =
+    useState<Keychain.BIOMETRY_TYPE | null>(null);
+
+  const checkAndOfferBiometric = async () => {
+    const type = await getBiometricType();
+    const alreadyEnabled = await isBiometricLoginEnabled();
+    const declined = await hasBiometricBeenDeclined();
+    if (type && !alreadyEnabled && !declined) {
+      setBiometryType(type);
+      setShowBiometricModal(true);
+    } else {
+      navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
+    }
+  };
+
+  const handleBiometricEnable = async () => {
+    await enableBiometricLogin();
+    setShowBiometricModal(false);
+    navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
+  };
+
+  const handleBiometricDecline = async () => {
+    await markBiometricDeclined();
+    setShowBiometricModal(false);
+    navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
+  };
+
   const onSubmit = async (data: FormDataProps) => {
     Keyboard.dismiss();
     try {
       const res = await dispatch(loginUser({ ...data, t })).unwrap();
       if (res?.success) {
-        navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
+        await checkAndOfferBiometric();
+        // navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       }
     } catch (error) {
       __DEV__ &&
         console.log('XX -> LoginScreen.tsx:48 -> onSubmit -> error :', error);
     }
   };
+
   return (
-    <FormProvider {...methods}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 4 : 0}>
-        <DismissKeyboardOnClick>
-          <View>
-            <View style={styles.titleBox}>
-              <Text style={styles.subTitle}>{t('enter-email-title')}</Text>
+    <>
+      <FormProvider {...methods}>
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 4 : 0}>
+          <DismissKeyboardOnClick>
+            <View>
+              <View style={styles.titleBox}>
+                <Text style={styles.subTitle}>{t('enter-email-title')}</Text>
+              </View>
+              <View style={styles.inputBox}>
+                <Separator borderWidth={0} />
+                <InputAuthField
+                  inputStyles={styles.textinput}
+                  name="email"
+                  label={t('email-label')}
+                  control={control}
+                  rules={{
+                    required: t('email-required'),
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: t('email-invalid'),
+                    },
+                  }}
+                  placeholder={t('enter-email-placeholder')}
+                />
+                <InputAuthField
+                  inputStyles={styles.textinput}
+                  name="password"
+                  label={t('password-label')}
+                  control={control}
+                  rules={{
+                    required: t('password-required'),
+                    minLength: {
+                      value: 8,
+                      message: t('password-invalid'),
+                    },
+                    maxLength: {
+                      value: 128,
+                      message: t('info-password-max'),
+                    },
+                  }}
+                  placeholder={t('enter-password-placeholder')}
+                />
+                <CheckBoxCustom
+                  name="rememberMe"
+                  label={t('remember-me-label')}
+                  control={control}
+                />
+              </View>
+              <Separator borderWidth={0} height={16} />
+              <View style={styles.buttonBox}>
+                <Button
+                  title={t('login-button')}
+                  onPress={handleSubmit(onSubmit)}
+                  buttonStyles={styles.button}
+                  textStyles={styles.buttonText}
+                />
+              </View>
+              <View style={styles.gobackBox}>
+                <ButtonNoBorder
+                  title={t('go-back-button')}
+                  onPress={() => navigation.popToTop()}
+                />
+                <ButtonNoBorder
+                  title={t('reset-password-go-to')}
+                  onPress={() =>
+                    navigation.navigate('CheckEmailScreen', {
+                      checkMode: 'reset_password',
+                    })
+                  }
+                />
+              </View>
             </View>
-            <View style={styles.inputBox}>
-              <Separator borderWidth={0} />
-              <InputAuthField
-                inputStyles={styles.textinput}
-                name="email"
-                label={t('email-label')}
-                control={control}
-                rules={{
-                  required: t('email-required'),
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: t('email-invalid'),
-                  },
-                }}
-                placeholder={t('enter-email-placeholder')}
-              />
-              <InputAuthField
-                inputStyles={styles.textinput}
-                name="password"
-                label={t('password-label')}
-                control={control}
-                rules={{
-                  required: t('password-required'),
-                  minLength: {
-                    value: 8,
-                    message: t('password-invalid'),
-                  },
-                  maxLength: {
-                    value: 128,
-                    message: t('info-password-max'),
-                  },
-                }}
-                placeholder={t('enter-password-placeholder')}
-              />
-              <CheckBoxCustom
-                name="rememberMe"
-                label={t('remember-me-label')}
-                control={control}
-              />
-            </View>
-            <Separator borderWidth={0} height={16} />
-            <View style={styles.buttonBox}>
-              <Button
-                title={t('login-button')}
-                onPress={handleSubmit(onSubmit)}
-                buttonStyles={styles.button}
-                textStyles={styles.buttonText}
-              />
-            </View>
-            <View style={styles.gobackBox}>
-              <ButtonNoBorder
-                title={t('go-back-button')}
-                onPress={() => navigation.popToTop()}
-              />
-              <ButtonNoBorder
-                title={t('reset-password-go-to')}
-                onPress={() =>
-                  navigation.navigate('CheckEmailScreen', {
-                    checkMode: 'reset_password',
-                  })
-                }
-              />
-            </View>
-          </View>
-        </DismissKeyboardOnClick>
-      </KeyboardAvoidingView>
-    </FormProvider>
+          </DismissKeyboardOnClick>
+        </KeyboardAvoidingView>
+      </FormProvider>
+      <ModalSheet
+        modalIsVisible={showBiometricModal}
+        toggleSheet={setShowBiometricModal}>
+        <BiometricOptInModal
+          biometricType={biometryType}
+          onEnable={handleBiometricEnable}
+          onDecline={handleBiometricDecline}
+        />
+      </ModalSheet>
+    </>
   );
 };
 

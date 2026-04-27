@@ -7,6 +7,10 @@ import {
   LogoutUserPayload,
   ValidateRefreshTokenPayload,
 } from '@store/types';
+import {
+  disableBiometricLogin,
+  enableBiometricLogin,
+} from '@utils/biometricAuth';
 import { parseApiError } from '@utils/errorHandler';
 import { registerFCMToken } from '@utils/notifications/registerFCMToken';
 import { loginRateLimiter } from '@utils/persistentRateLimiter';
@@ -16,6 +20,7 @@ import {
   secureSetStorage,
 } from '@utils/secureStorage';
 import DeviceInfo from 'react-native-device-info';
+import * as Keychain from 'react-native-keychain';
 
 /**
  * Refresh token validation
@@ -207,6 +212,8 @@ export const logoutUser = createAsyncThunk(
         await secureDelete(KeychainService.REFRESH_TOKEN);
 
         await secureDelete(KeychainService.REMEMBER_ME);
+
+        await disableBiometricLogin();
 
         return {
           success: true,

@@ -6,6 +6,9 @@ export enum KeychainService {
   MODE = 'com.authdemoapp.mode',
   THEME = 'com.authdemoapp.theme',
   LANGUAGE = 'com.authdemoapp.lng',
+  BIOMETRIC_ENABLED = 'com.authdemoapp.biometricEnabled',
+  BIOMETRIC_LOGIN = 'com.authdemoapp.biometricLogin',
+  BIOMETRIC_DECLINED = 'com.authdemoapp.biometricDeclined',
 }
 
 export interface KeychainResult {

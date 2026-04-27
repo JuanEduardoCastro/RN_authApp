@@ -139,6 +139,32 @@
   "accessibility-github-login": "Iniciar sesión con GitHub",
   "accessibility-apple-login": "Iniciar sesión con Apple",
   "accessibility-register-email": "Registrarse con tu email",
+  "accessibility-faceid-login": "Iniciar sesión con Face ID",
+  "accessibility-touchid-login": "Iniciar sesión con Touch ID",
 
-  "session-expires-at": "Tu sesión expira a las"
+  "session-expires-at": "Tu sesión expira a las",
+
+  "with-face-id": "...con Face ID",
+  "with-touch-id": "...con Touch ID",
+  "biometric-prompt-title": "Iniciar sesión con biometría",
+  "biometric-cancel": "Cancelar",
+  "error-biometric-auth": "Autenticación biométrica fallida. Intenta de nuevo.",
+  "error-biometric-session": "Sesión expirada. Inicia sesión con tus credenciales.",
+  "biometric-optin-title": "Activar inicio rápido",
+  "biometric-optin-message-face-id": "¿Usar Face ID para iniciar sesión más rápido?",
+  "biometric-optin-message-touch-id": "¿Usar Touch ID para iniciar sesión más rápido?",
+  "biometric-optin-yes": "Activar",
+  "biometric-optin-no": "Ahora no",
+  "biometric-toggle-button": "Inicio con Face ID / Touch ID",
+  "error-biometric-not-available": "La autenticación biométrica no está disponible en este dispositivo.",
+
+  "biometric-confirm-enable-title": "¿Activar inicio biométrico?",
+  "biometric-confirm-enable-message": "Podrás iniciar sesión con Face ID o Touch ID en lugar de tu contraseña.",
+  "biometric-confirm-disable-title": "¿Desactivar inicio biométrico?",
+  "biometric-confirm-disable-message": "Tendrás que usar tu contraseña o proveedor para acceder a tu cuenta.",
+  "biometric-confirm-enable-button": "Activar",
+  "biometric-confirm-disable-button": "Desactivar",
+  "biometric-confirm-cancel": "Cancelar",
+  "biometric-enabled-success": "Inicio biométrico activado correctamente.",
+  "biometric-disabled-info": "El inicio biométrico ha sido desactivado."
 }

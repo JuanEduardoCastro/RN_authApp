@@ -63,6 +63,8 @@
 	<string>The app require access to your photo gallery.</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
+	<key>NSFaceIDUsageDescription</key>    
+  <string>We use Face ID to let you log in quickly and securely.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Luckiest Guy Regular.ttf</string>

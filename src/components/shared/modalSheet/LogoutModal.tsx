@@ -5,7 +5,7 @@ import useStyles from '@hooks/useStyles';
 import { TColors } from '@constants/types';
 import { textVar } from '@constants/textVar';
 import { useTranslation } from 'react-i18next';
-import { SCREEN } from '@constants/dimensions';
+import { scale, SCREEN } from '@constants/dimensions';
 
 type LogoutModalProps = {
   toggleModalSheet: () => void;
@@ -42,11 +42,11 @@ const createStyles = (colors: TColors) =>
   StyleSheet.create({
     logoutModal: {
       // backgroundColor: 'lightgray',
-      gap: 40,
-      paddingHorizontal: 26,
+      gap: scale(40),
+      paddingHorizontal: scale(26),
     },
     modalText: {
-      ...textVar.mediumBold,
+      ...textVar.baseBold,
       color: colors.text,
       textAlign: 'center',
     },

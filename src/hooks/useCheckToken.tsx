@@ -11,6 +11,10 @@ import {
 } from '@utils/secureStorage';
 import { useAppDispatch } from '@store/hooks';
 import { validateRefreshToken } from '@store/thunks';
+import {
+  authenticateWithBiometrics,
+  isBiometricLoginEnabled,
+} from '@utils/biometricAuth';
 
 export const useCheckToken = (): UseCheckTokenReturn => {
   const { t } = useTranslation();
@@ -42,6 +46,47 @@ export const useCheckToken = (): UseCheckTokenReturn => {
       };
 
       try {
+        const biometricEnabled = await isBiometricLoginEnabled();
+
+        if (biometricEnabled) {
+          const authenticated = await authenticateWithBiometrics(
+            t('biometric-prompt-title'),
+            t('biometric-cancel'),
+          );
+
+          if (authenticated) {
+            const refreshToken = await secureGetStorage(
+              KeychainService.REFRESH_TOKEN,
+            );
+
+            if (refreshToken.success && refreshToken.data) {
+              const decoded = jwtDecode<CustomJwtPayload>(
+                refreshToken.data.password,
+              );
+              const currentTime = Math.floor(Date.now() / 1000);
+
+              if (decoded.exp && currentTime < decoded.exp) {
+                await dispatch(
+                  validateRefreshToken({
+                    t,
+                    token: refreshToken.data!.password,
+                  }),
+                ).unwrap();
+
+                if (GoogleSignin.hasPreviousSignIn()) {
+                  await GoogleSignin.signInSilently();
+                }
+
+                finalRefreshTokenSaved = true;
+                finalIsExpired = false;
+                return;
+              }
+            }
+          }
+          return;
+        }
+
+        /* ------- */
         const rememberMeFlag = await secureGetStorage(
           KeychainService.REMEMBER_ME,
         );

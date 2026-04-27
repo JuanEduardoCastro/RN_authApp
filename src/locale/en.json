@@ -139,6 +139,32 @@
   "accessibility-github-login": "Sign in with GitHub",
   "accessibility-apple-login": "Sign in with Apple",
   "accessibility-register-email": "Register with your email",
+  "accessibility-faceid-login": "Sign in with Face ID",
+  "accessibility-touchid-login": "Sign in with Touch ID",
 
-  "session-expires-at": "Your session expires at"
+  "session-expires-at": "Your session expires at",
+
+  "with-face-id": "...with Face ID",
+  "with-touch-id": "...with Touch ID",
+  "biometric-prompt-title": "Log in with biometrics",
+  "biometric-cancel": "Cancel",
+  "error-biometric-auth": "Biometric authentication failed. Please try again.",
+  "error-biometric-session": "Session expired. Please log in with your credentials.",
+  "biometric-optin-title": "Enable Fast Login",
+  "biometric-optin-message-face-id": "Use Face ID to log in faster next time?",
+  "biometric-optin-message-touch-id": "Use Touch ID to log in faster next time?",
+  "biometric-optin-yes": "Enable",
+  "biometric-optin-no": "Not now",
+  "biometric-toggle-button": "Face ID / Touch ID Login",
+  "error-biometric-not-available": "Biometric authentication is not available on this device.",
+
+  "biometric-confirm-enable-title": "Enable biometric login?",
+  "biometric-confirm-enable-message": "You will be able to log in with Face ID or Touch ID next time instead of your password.",
+  "biometric-confirm-disable-title": "Disable biometric login?",
+  "biometric-confirm-disable-message": "You will need to use your password or login provider to access your account.",
+  "biometric-confirm-enable-button": "Enable",
+  "biometric-confirm-disable-button": "Disable",
+  "biometric-confirm-cancel": "Cancel",
+  "biometric-enabled-success": "Biometric login enabled successfully.",
+  "biometric-disabled-info": "Biometric login has been disabled."
 }

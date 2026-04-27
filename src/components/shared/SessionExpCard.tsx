@@ -11,7 +11,7 @@ import { jwtDecode } from 'jwt-decode';
 
 const SessionExpCard = () => {
   const { styles } = useStyles(createStyles);
-  const { token, user } = useAppSelector(userAuth);
+  const { token } = useAppSelector(userAuth);
 
   const { t, i18n } = useTranslation();
 

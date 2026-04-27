@@ -19,10 +19,31 @@ import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { GITHUB_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
 /* Assets */
-import { AppleIcon, GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
+import {
+  AppleIcon,
+  FaceIdIcon,
+  GithubIcon,
+  GoogleIcon,
+  MailIcon,
+  TouchIdIcon,
+} from '@assets/svg/icons';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '@store/hooks';
 import { setNotificationMessage } from '@store/authSlice';
+import useBiometricAuth from '@hooks/useBiometricAuth';
+import {
+  authenticateWithBiometrics,
+  enableBiometricLogin,
+  getBiometricType,
+  hasBiometricBeenDeclined,
+  isBiometricLoginEnabled,
+  markBiometricDeclined,
+} from '@utils/biometricAuth';
+import { KeychainService, secureGetStorage } from '@utils/secureStorage';
+import { validateRefreshToken } from '@store/thunks';
+import * as Keychain from 'react-native-keychain';
+import ModalSheet from '@components/shared/modalSheet/ModalSheet';
+import BiometricOptInModal from '@components/shared/modalSheet/BiometricOptInModal';
 
 if (!WEB_CLIENT_ID || !IOS_CLIENT_ID) {
   throw new Error('❌ Missing Google OAuth credentials!');
@@ -45,10 +66,39 @@ const WelcomeScreen = ({
   useBackHandler();
   const { colors, styles } = useStyles(createStyles);
   const { t } = useTranslation();
+  const { isEnabled, biometricType, recheck } = useBiometricAuth();
   const dispatch = useAppDispatch();
   const [googleButtonDisabled, setGoogleButtonDisabled] = useState(false);
   const [githubButtonDisabled, setGithubButtonDisabled] = useState(false);
   const [appleButtonDisabled, setAppleButtonDisabled] = useState(false);
+  const [showBiometricModal, setShowBiometricModal] = useState(false);
+  const [biometryType, setBiometryType] =
+    useState<Keychain.BIOMETRY_TYPE | null>(null);
+  const [biometricButtonDisabled, setBiometricButtonDisabled] = useState(false);
+
+  const checkAndOfferBiometric = async () => {
+    const type = await getBiometricType();
+    const alreadyEnabled = await isBiometricLoginEnabled();
+    const declined = await hasBiometricBeenDeclined();
+    if (type && !alreadyEnabled && !declined) {
+      setBiometryType(type);
+      setShowBiometricModal(true);
+    } else {
+      navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
+    }
+  };
+
+  const handleBiometricEnable = async () => {
+    await enableBiometricLogin();
+    setShowBiometricModal(false);
+    navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
+  };
+
+  const handleBiometricDecline = async () => {
+    await markBiometricDeclined();
+    setShowBiometricModal(false);
+    navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
+  };
 
   const handleGoogleOriginalSignin = async () => {
     setGoogleButtonDisabled(true);
@@ -83,7 +133,8 @@ const WelcomeScreen = ({
       const res = await dispatch(googleLogin(data)).unwrap();
 
       if (res?.success) {
-        navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
+        await checkAndOfferBiometric();
+        // navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       }
       setGoogleButtonDisabled(false);
     } catch (error) {
@@ -102,7 +153,8 @@ const WelcomeScreen = ({
       const data = { t };
       const res = await dispatch(githubLogin(data)).unwrap();
       if (res?.success) {
-        navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
+        await checkAndOfferBiometric();
+        // navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       }
       setGithubButtonDisabled(false);
     } catch (error) {
@@ -121,7 +173,8 @@ const WelcomeScreen = ({
       const data = { t };
       const res = await dispatch(appleLogin(data)).unwrap();
       if (res?.success) {
-        navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
+        await checkAndOfferBiometric();
+        // navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       }
       setAppleButtonDisabled(false);
     } catch (error) {
@@ -133,6 +186,58 @@ const WelcomeScreen = ({
         );
     }
   };
+
+  const handleBiometricLogin = async () => {
+    setBiometricButtonDisabled(true);
+    try {
+      const authenticated = await authenticateWithBiometrics(
+        t('biometric-prompt-title'),
+        t('biometric-cancel'),
+      );
+      if (!authenticated) {
+        dispatch(
+          setNotificationMessage({
+            messageType: 'error',
+            notificationMessage: t('error-biometric-auth'),
+          }),
+        );
+        return;
+      }
+
+      const tokenResult = await secureGetStorage(KeychainService.REFRESH_TOKEN);
+      if (!tokenResult.success || !tokenResult.data) {
+        dispatch(
+          setNotificationMessage({
+            messageType: 'error',
+            notificationMessage: t('error-biometric-session'),
+          }),
+        );
+        return;
+      }
+
+      const res = await dispatch(
+        validateRefreshToken({ t, token: tokenResult.data.password }),
+      ).unwrap();
+      if (res?.success) {
+        // await checkAndOfferBiometric();
+        navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
+      }
+    } catch (error) {
+      dispatch(
+        setNotificationMessage({
+          messageType: 'error',
+          notificationMessage: t('error-biometric-session'),
+        }),
+      );
+    } finally {
+      setBiometricButtonDisabled(false);
+    }
+  };
+
+  const biometricButtonTitle =
+    biometricType === Keychain.BIOMETRY_TYPE.FACE_ID
+      ? t('with-face-id')
+      : t('with-touch-id');
 
   return (
     <BGGradient
@@ -150,6 +255,24 @@ const WelcomeScreen = ({
           <Text style={styles.subTitle}>{t('login-message')}</Text>
         </View>
         <View style={styles.buttonBox}>
+          {isEnabled && (
+            <ButtonWithIcon
+              accessibilityLabel={t('accessibility-biometric-login')}
+              disabled={biometricButtonDisabled}
+              buttonStyles={{ backgroundColor: colors.light }}
+              title={biometricButtonTitle}
+              Icon={
+                biometricType === Keychain.BIOMETRY_TYPE.FACE_ID
+                  ? FaceIdIcon
+                  : TouchIdIcon
+              }
+              iconProps={{
+                width: SCREEN.widthFixed * 20,
+                height: SCREEN.heightFixed * 20,
+              }}
+              onPress={handleBiometricLogin}
+            />
+          )}
           <ButtonWithIcon
             accessibilityLabel={t('accessibility-email-login')}
             buttonStyles={{ backgroundColor: colors.light }}
@@ -210,6 +333,15 @@ const WelcomeScreen = ({
           />
         </View>
       </View>
+      <ModalSheet
+        modalIsVisible={showBiometricModal}
+        toggleSheet={setShowBiometricModal}>
+        <BiometricOptInModal
+          biometricType={biometryType}
+          onEnable={handleBiometricEnable}
+          onDecline={handleBiometricDecline}
+        />
+      </ModalSheet>
     </BGGradient>
   );
 };
