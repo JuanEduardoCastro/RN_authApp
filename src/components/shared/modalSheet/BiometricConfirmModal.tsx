@@ -18,7 +18,7 @@ const BiometricConfirmModal = ({
   toggleModalSheet,
   onConfirm,
 }: BiometricConfirmModalProps) => {
-  const { colors, styles } = useStyles(createStyles);
+  const { styles } = useStyles(createStyles);
   const { t } = useTranslation();
 
   const isEnable = action === 'enable';

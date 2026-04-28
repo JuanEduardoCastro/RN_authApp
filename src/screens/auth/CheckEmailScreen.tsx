@@ -77,8 +77,6 @@ const CheckEmailScreen = ({
           'XX -> CheckEmailScreen.tsx:65 -> onSubmit -> error :',
           error,
         );
-      // Errors are now handled by the rejected case in the extraReducers,
-      // which will display a notification.
     }
   };
 
@@ -87,16 +85,6 @@ const CheckEmailScreen = ({
       setCanResend(true);
     }
   };
-
-  // const handleTimerFinish = () => {
-  //   // timerRef.current.resetTimer();
-  //   // setShowFocusTimer(true);
-  // };
-
-  // const handleResendEmail = () => {
-  //   setShowFocusTimer(false);
-  //   timerRef.current.resetTimer();
-  // };
 
   return (
     <FormProvider {...method}>
@@ -192,13 +180,6 @@ const CheckEmailScreen = ({
                 title={t('go-back-button')}
                 onPress={() => navigation.popToTop()}
               />
-              {/* <Pressable
-            style={{ padding: 8 }}
-            onPress={() =>
-              navigation.navigate('NewPasswordScreen', { emailToken: null })
-            }>
-            <Text style={styles.gobackText}> justDev -- NEW PASSWPORD </Text>
-          </Pressable> */}
             </View>
           </View>
         </DismissKeyboardOnClick>
@@ -282,9 +263,5 @@ const createStyles = (colors: TColors) =>
     },
     gobackBox: {
       alignItems: 'center',
-    },
-    gobackText: {
-      ...textVar.medium,
-      color: colors.second,
     },
   });

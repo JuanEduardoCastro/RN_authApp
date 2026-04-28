@@ -232,8 +232,4 @@ const createStyles = (colors: TColors) =>
     gobackBox: {
       alignItems: 'center',
     },
-    gobackText: {
-      ...textVar.medium,
-      color: colors.second,
-    },
   });

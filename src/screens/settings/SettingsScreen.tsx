@@ -21,7 +21,7 @@ import { TColors } from '@constants/types';
 import { SettingsStackScreenProps } from 'src/navigation/types';
 /* Utilities & constants */
 import { SCREEN } from '@constants/dimensions';
-import { setNotificationMessage, userAuth } from 'src/store/authSlice';
+import { setNotificationMessage } from 'src/store/authSlice';
 import { useMode } from '@context/ModeContext';
 import { textVar } from '@constants/textVar';
 /* Assets */
@@ -34,14 +34,12 @@ import {
   ProfileIcon,
   TouchIdIcon,
 } from '@assets/svg/icons';
-import { LogoutUserPayload } from '@store/types';
 import LanguagePicker from '@components/shared/locale/LanguagePicker';
 import CustomModal from '@components/shared/bottomSheet/CustomModal';
 import { useTranslation } from 'react-i18next';
 import ModalSheet from '@components/shared/modalSheet/ModalSheet';
 import LogoutModal from '@components/shared/modalSheet/LogoutModal';
-import { useAppDispatch, useAppSelector } from '@store/hooks';
-import { logoutUser } from '@store/thunks';
+import { useAppDispatch } from '@store/hooks';
 import {
   disableBiometricLogin,
   enableBiometricLogin,
@@ -49,11 +47,13 @@ import {
 import useBiometricAuth from '@hooks/useBiometricAuth';
 import * as Keychain from 'react-native-keychain';
 import BiometricConfirmModal from '@components/shared/modalSheet/BiometricConfirmModal';
+import useLogoutUser from '@hooks/useLogoutUser';
 
 const SettingsScreen = ({
   navigation,
 }: SettingsStackScreenProps<'SettingsScreen'>) => {
-  const { user } = useAppSelector(userAuth);
+  const { handleLogout } = useLogoutUser();
+
   const { setColorTheme, themeName, toggleMode } = useMode();
   const { colors, styles } = useStyles(createStyles);
   const { t } = useTranslation();
@@ -112,24 +112,9 @@ const SettingsScreen = ({
     setConfirmLogoutModal(!confirmLogoutModal);
   };
 
-  const handleLogut = async () => {
-    try {
-      const res = await dispatch(
-        logoutUser({ email: user?.email, t } as LogoutUserPayload),
-      ).unwrap();
-      if (res?.success) {
-        navigation.navigate('AuthNavigator', { screen: 'WelcomeScreen' });
-        toggleModalSheet();
-      }
-    } catch (error) {
-      toggleModalSheet();
-      __DEV__ &&
-        console.log(
-          'XX -> SettingsScreen.tsx:74 -> handleLogut -> error :',
-          error,
-        );
-      navigation.navigate('AuthNavigator', { screen: 'WelcomeScreen' });
-    }
+  const handleConfirmLogout = async () => {
+    toggleModalSheet();
+    await handleLogout();
   };
 
   return (
@@ -227,7 +212,7 @@ const SettingsScreen = ({
         toggleSheet={toggleModalSheet}>
         <LogoutModal
           toggleModalSheet={toggleModalSheet}
-          handleLogut={handleLogut}
+          handleLogut={handleConfirmLogout}
         />
       </ModalSheet>
       <ModalSheet

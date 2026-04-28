@@ -166,5 +166,6 @@
   "biometric-confirm-disable-button": "Desactivar",
   "biometric-confirm-cancel": "Cancelar",
   "biometric-enabled-success": "Inicio biométrico activado correctamente.",
-  "biometric-disabled-info": "El inicio biométrico ha sido desactivado."
+  "biometric-disabled-info": "El inicio biométrico ha sido desactivado.",
+  "biometrics-warning-session-expired": "Tu sesión ha expirado. Por favor, inicia sesión nuevamente."
 }

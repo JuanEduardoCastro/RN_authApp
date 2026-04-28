@@ -72,7 +72,6 @@ export const setupInterceptors = (store: AppStore) => {
 
       const skipValidation =
         config.url?.includes('/login') ||
-        config.url?.includes('/validatetoken') ||
         config.url?.includes('/check-email') ||
         config.url?.includes('/reset-password') ||
         config.url?.includes('/token/refresh');

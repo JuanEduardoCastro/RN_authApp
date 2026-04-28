@@ -166,5 +166,6 @@
   "biometric-confirm-disable-button": "Disable",
   "biometric-confirm-cancel": "Cancel",
   "biometric-enabled-success": "Biometric login enabled successfully.",
-  "biometric-disabled-info": "Biometric login has been disabled."
+  "biometric-disabled-info": "Biometric login has been disabled.",
+  "biometrics-warning-session-expired": "Your session has expired. Please log in again."
 }

@@ -54,10 +54,10 @@ const NewPasswordScreen = ({
   const { styles } = useStyles(createStyles);
   const { t } = useTranslation();
   const [email, setEmail] = useState<string | null>(null);
-  const [newUser, setNewUser] = useState<boolean>(true);
+  const [isNewUser, setIsNewUser] = useState<boolean>(true);
 
   useEffect(() => {
-    if (!emailToken || emailToken == null) {
+    if (!emailToken) {
       navigation.popToTop();
       dispatch(
         setNotificationMessage({
@@ -87,7 +87,8 @@ const NewPasswordScreen = ({
       }
       const decode = jwtDecode<CustomJwtPayload>(emailToken);
       const userEmail = decode.email;
-      decode.isNew !== undefined && setNewUser(decode.isNew);
+      const newUser = decode.isNew !== undefined ? decode.isNew : true;
+      setIsNewUser(newUser);
       setEmail(userEmail);
       if (decode.exp) {
         const isExpired = Date.now() / 1000 > decode.exp;
@@ -130,6 +131,9 @@ const NewPasswordScreen = ({
         t,
       };
 
+      if (!emailToken) return;
+      const decode = jwtDecode<CustomJwtPayload>(emailToken);
+      const newUser = decode.isNew !== undefined ? decode.isNew : true;
       const actionToDispatch = newUser
         ? createUser(dataAPI as CreateUserPayload)
         : updatePassword(dataAPI as UpdatePasswordPayload);
@@ -213,7 +217,9 @@ const NewPasswordScreen = ({
             <View style={styles.buttonBox}>
               <Button
                 title={
-                  newUser ? t('register-user-button') : t('new-password-button')
+                  isNewUser
+                    ? t('register-user-button')
+                    : t('new-password-button')
                 }
                 onPress={handleSubmit(onSubmit)}
                 buttonStyles={styles.button}

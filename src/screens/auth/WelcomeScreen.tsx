@@ -66,7 +66,7 @@ const WelcomeScreen = ({
   useBackHandler();
   const { colors, styles } = useStyles(createStyles);
   const { t } = useTranslation();
-  const { isEnabled, biometricType, recheck } = useBiometricAuth();
+  const { isEnabled, biometricType } = useBiometricAuth();
   const dispatch = useAppDispatch();
   const [googleButtonDisabled, setGoogleButtonDisabled] = useState(false);
   const [githubButtonDisabled, setGithubButtonDisabled] = useState(false);

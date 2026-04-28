@@ -13,8 +13,10 @@ import { useAppDispatch } from '@store/hooks';
 import { validateRefreshToken } from '@store/thunks';
 import {
   authenticateWithBiometrics,
+  disableBiometricLogin,
   isBiometricLoginEnabled,
 } from '@utils/biometricAuth';
+import { setNotificationMessage } from '@store/authSlice';
 
 export const useCheckToken = (): UseCheckTokenReturn => {
   const { t } = useTranslation();
@@ -85,6 +87,14 @@ export const useCheckToken = (): UseCheckTokenReturn => {
           }
           return;
         }
+
+        await disableBiometricLogin();
+        dispatch(
+          setNotificationMessage({
+            messageType: 'warning',
+            notificationMessage: t('warning-biometrics-session-expired'),
+          }),
+        );
 
         /* ------- */
         const rememberMeFlag = await secureGetStorage(
