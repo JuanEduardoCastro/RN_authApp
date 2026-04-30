@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Platform } from 'react-native';
 
 // export const HOST = 'http://192.168.0.165:8080';
-// export const HOST ='https://api.authdemoapp-jec.com';
+// export const HOST = 'https://api.authdemoapp-jec.com';
 export const HOST = __DEV__
   ? Platform.OS === 'ios'
     ? 'http://localhost:8080'

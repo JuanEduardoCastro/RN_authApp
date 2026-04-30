@@ -1,5 +1,3 @@
-import { View, Text } from 'react-native';
-import React from 'react';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { userAuth } from '@store/authSlice';
 import { useTranslation } from 'react-i18next';

@@ -84,17 +84,16 @@ export const useCheckToken = (): UseCheckTokenReturn => {
                 return;
               }
             }
+            await disableBiometricLogin();
+            dispatch(
+              setNotificationMessage({
+                messageType: 'warning',
+                notificationMessage: t('biometrics-warning-session-expired'),
+              }),
+            );
           }
           return;
         }
-
-        await disableBiometricLogin();
-        dispatch(
-          setNotificationMessage({
-            messageType: 'warning',
-            notificationMessage: t('warning-biometrics-session-expired'),
-          }),
-        );
 
         /* ------- */
         const rememberMeFlag = await secureGetStorage(

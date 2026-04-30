@@ -85,5 +85,7 @@ const createStyles = (colors: TColors) =>
       color: colors.text,
     },
     yesButton: {},
-    yesButtonText: {},
+    yesButtonText: {
+      color: colors.textNgt,
+    },
   });
