@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   Alert,
   Linking,
@@ -6,19 +8,14 @@ import {
   Text,
   View,
 } from 'react-native';
-import React from 'react';
-import useStyles from '@hooks/useStyles';
-import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/dimensions';
-import { textVar } from '@constants/textVar';
+
 import { useTranslation } from 'react-i18next';
 
-/* Core libs & third parties libs */
-/* Custom components */
-/* Custom hooks */
-/* Types */
-/* Utilities & constants */
-/* Assets */
+import useStyles from '@hooks/useStyles';
+
+import { SCREEN } from '@constants/dimensions';
+import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
 
 type MailContactBoxProps = {
   title?: string;

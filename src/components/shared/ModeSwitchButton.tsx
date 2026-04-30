@@ -1,13 +1,17 @@
-import { Pressable, StyleSheet } from 'react-native';
 import React from 'react';
+
+import { Pressable, StyleSheet } from 'react-native';
+
 import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
+
 import useStyles from '@hooks/useStyles';
-import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/dimensions';
 import { useMode } from '@context/ModeContext';
+
+import { SCREEN } from '@constants/dimensions';
+import { TColors } from '@constants/types';
 
 type ModeSwitchButtonProps = {
   width?: number;

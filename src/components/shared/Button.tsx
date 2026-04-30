@@ -1,4 +1,5 @@
-/* Core libs & third parties libs */
+import React from 'react';
+
 import {
   Pressable,
   PressableProps,
@@ -7,21 +8,18 @@ import {
   TextStyle,
   ViewStyle,
 } from 'react-native';
-import React from 'react';
-/* Custom components */
-/* Custom hooks */
-import useStyles from '@hooks/useStyles';
-/* Types */
-import { TColors } from '@constants/types';
-/* Utilities & constants */
-import { scale, SCREEN } from '@constants/dimensions';
-import { textVar } from '@constants/textVar';
+
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-/* Assets */
+
+import useStyles from '@hooks/useStyles';
+
+import { scale, SCREEN } from '@constants/dimensions';
+import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
 
 type ButtonProps = {
   title?: string;
@@ -78,12 +76,12 @@ const createStyles = (colors: TColors) =>
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.second,
-      paddingHorizontal: scale(16),
+      paddingHorizontal: scale(10),
       paddingVertical: scale(8),
       borderRadius: 50,
     },
     text: {
-      ...textVar.base,
+      ...textVar.medium,
       // color: colors.text,
     },
     disabled: {

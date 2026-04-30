@@ -1,10 +1,5 @@
 import { TFunction } from 'i18next';
 
-/**
- * Validates email token format and length
- * @param token - The token string to validate
- * @returns Error message or null if valid
- */
 export const validateEmailToken = (token: string | null): string | null => {
   if (!token) {
     return 'Token is null or undefined';

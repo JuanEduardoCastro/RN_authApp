@@ -1,9 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-  AuthState,
-  NotificationMessagePayload,
-  UserCredentialsPayload,
-} from './types';
+
+import { appleLogin, githubLogin, googleLogin } from './otherAuthHooks';
+import { RootState } from './store';
 import {
   createUser,
   editUser,
@@ -11,8 +9,11 @@ import {
   logoutUser,
   validateRefreshToken,
 } from './thunks';
-import { RootState } from './store';
-import { githubLogin, googleLogin, appleLogin } from './otherAuthHooks';
+import {
+  AuthState,
+  NotificationMessagePayload,
+  UserCredentialsPayload,
+} from './types';
 
 const initialState: AuthState = {
   loader: false,

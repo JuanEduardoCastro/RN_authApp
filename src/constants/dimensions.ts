@@ -30,4 +30,4 @@ const SCREEN = {
   heightFixed: SH / 852, // THE SIZE OF THE DESIGNE
 };
 
-export { SH, SW, SCREEN };
+export { SCREEN, SH, SW };

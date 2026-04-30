@@ -1,22 +1,28 @@
 import { useEffect, useState } from 'react';
-import { jwtDecode } from 'jwt-decode';
-import { CustomJwtPayload, UseCheckTokenReturn } from './types';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
 import { Platform } from 'react-native';
+
 import { useTranslation } from 'react-i18next';
-import {
-  KeychainService,
-  secureDelete,
-  secureGetStorage,
-} from '@utils/secureStorage';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
+import { jwtDecode } from 'jwt-decode';
+
+import { setNotificationMessage } from '@store/authSlice';
 import { useAppDispatch } from '@store/hooks';
 import { validateRefreshToken } from '@store/thunks';
+
 import {
   authenticateWithBiometrics,
   disableBiometricLogin,
   isBiometricLoginEnabled,
 } from '@utils/biometricAuth';
-import { setNotificationMessage } from '@store/authSlice';
+import {
+  KeychainService,
+  secureDelete,
+  secureGetStorage,
+} from '@utils/secureStorage';
+
+import { CustomJwtPayload, UseCheckTokenReturn } from './types';
 
 export const useCheckToken = (): UseCheckTokenReturn => {
   const { t } = useTranslation();
@@ -160,6 +166,8 @@ export const useCheckToken = (): UseCheckTokenReturn => {
       }
     };
     checkLocalStorage();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   return { refreshTokenSaved, isExpired, checkCompleted };

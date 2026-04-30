@@ -1,6 +1,8 @@
-import { TColors } from '@constants/types';
-import { JwtPayload } from 'jwt-decode';
 import { StyleSheet } from 'react-native';
+
+import { JwtPayload } from 'jwt-decode';
+
+import { TColors } from '@constants/types';
 
 export interface Styles<T extends StyleSheet.NamedStyles<T>> {
   colors: TColors;

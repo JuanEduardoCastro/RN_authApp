@@ -1,6 +1,9 @@
-import { Modal, StyleSheet, View } from 'react-native';
 import React, { ReactNode } from 'react';
+
+import { Modal, StyleSheet, View } from 'react-native';
+
 import useStyles from '@hooks/useStyles';
+
 import { SCREEN } from '@constants/dimensions';
 import { TColors } from '@constants/types';
 

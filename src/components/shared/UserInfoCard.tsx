@@ -1,12 +1,18 @@
+import React from 'react';
+
+import { StyleSheet, Text, View } from 'react-native';
+
+import { useTranslation } from 'react-i18next';
+
+import { User } from '@store/types';
+
+import useStyles from '@hooks/useStyles';
+
 import { moderateScale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
-import useStyles from '@hooks/useStyles';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+
 import AvatarView from './AvatarView';
-import { User } from '@store/types';
-import { useTranslation } from 'react-i18next';
 
 type UserInfoCardProps = {
   user: User;

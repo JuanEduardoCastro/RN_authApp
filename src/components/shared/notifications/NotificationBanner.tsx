@@ -1,6 +1,7 @@
-/* Core libs & third parties libs */
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { useCallback, useEffect } from 'react';
+
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -9,23 +10,23 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BlurView } from '@react-native-community/blur';
-/* Custom components */
-/* Custom hooks */
+
+import { useAppDispatch, useAppSelector } from '@store/hooks';
+
 import useStyles from '@hooks/useStyles';
-/* Types */
-import { TColors } from '@constants/types';
-/* Utilities & constants */
-import { setNotificationMessage, userAuth } from 'src/store/authSlice';
-import { textVar } from '@constants/textVar';
-/* Assets */
+
 import {
   ErrorIcon,
   InfoIcon,
   SuccessIcon,
   WarningIcon,
 } from '@assets/svg/icons';
+
 import { SCREEN } from '@constants/dimensions';
-import { useAppDispatch, useAppSelector } from '@store/hooks';
+import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
+
+import { setNotificationMessage, userAuth } from 'src/store/authSlice';
 
 const iconMap = {
   error: { Icon: ErrorIcon, color: 'danger' as keyof TColors },

@@ -1,7 +1,11 @@
-import { TColors } from '@constants/types';
-import { useMode } from '@context/ModeContext';
 import { useMemo } from 'react';
+
 import { StyleSheet } from 'react-native';
+
+import { useMode } from '@context/ModeContext';
+
+import { TColors } from '@constants/types';
+
 import { Styles } from './types';
 
 export default function <T extends StyleSheet.NamedStyles<T>>(

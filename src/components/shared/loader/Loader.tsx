@@ -1,5 +1,7 @@
-import { StyleSheet, View } from 'react-native';
 import React, { useEffect } from 'react';
+
+import { StyleSheet, View } from 'react-native';
+
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -7,7 +9,9 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
+
 import useStyles from '@hooks/useStyles';
+
 import { TColors } from '@constants/types';
 
 const Loader = () => {
@@ -19,7 +23,7 @@ const Loader = () => {
       withTiming(360, { duration: 1200, easing: Easing.linear }),
       -1,
     );
-  }, []);
+  });
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${rotation.value}deg` }],
@@ -29,14 +33,14 @@ const Loader = () => {
     <View style={[styles.container, StyleSheet.absoluteFill]}>
       <Animated.View style={animatedStyle}>
         <View style={[styles.circleContainer, { transform: [{ scale: 0.3 }] }]}>
-          <View style={styles.dot1}></View>
-          <View style={styles.dot2}></View>
-          <View style={styles.dot3}></View>
-          <View style={styles.dot4}></View>
-          <View style={styles.dot5}></View>
-          <View style={styles.dot6}></View>
-          <View style={styles.dot7}></View>
-          <View style={styles.dot8}></View>
+          <View style={styles.dot1} />
+          <View style={styles.dot2} />
+          <View style={styles.dot3} />
+          <View style={styles.dot4} />
+          <View style={styles.dot5} />
+          <View style={styles.dot6} />
+          <View style={styles.dot7} />
+          <View style={styles.dot8} />
         </View>
       </Animated.View>
     </View>

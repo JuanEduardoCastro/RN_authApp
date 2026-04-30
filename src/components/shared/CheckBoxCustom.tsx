@@ -1,11 +1,15 @@
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import CheckBox from '@react-native-community/checkbox';
+
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+
 import { Control, useController } from 'react-hook-form';
-import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/dimensions';
+import CheckBox from '@react-native-community/checkbox';
+
 import useStyles from '@hooks/useStyles';
+
+import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
 
 type CheckBoxCustomProps = {
   name: string;

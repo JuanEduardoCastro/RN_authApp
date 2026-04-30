@@ -1,19 +1,22 @@
-import { useColorScheme } from 'react-native';
 import React, {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
 } from 'react';
+
+import { useColorScheme } from 'react-native';
+
+import { calm, gold, luxury, passion, sharedColors } from '@constants/colors';
 import {
   ColorModeProps,
   ColorNameProps,
   ColorThemeProps,
   TColors,
 } from '@constants/types';
-import { sharedColors, luxury, calm, gold, passion } from '@constants/colors';
 import {
   KeychainService,
   secureGetStorage,
@@ -61,23 +64,29 @@ export const ModeProvider = ({ children }: ThemeProviderProps) => {
         setThemeName(
           (storedTheme.data?.password as ColorThemeProps) || 'luxury',
         );
-      } catch (error) {}
+      } catch (error) {
+        __DEV__ &&
+          console.log(
+            'XX -> ModeContext.tsx:54 -> initialize -> error :',
+            error,
+          );
+      }
     };
     initialize();
   }, [systemColorScheme]);
 
-  const setColorTheme = (themeName: ColorThemeProps) => {
-    setThemeName(themeName);
-    secureSetStorage('theme', themeName, KeychainService.THEME);
-  };
+  const setColorTheme = useCallback((newTheme: ColorThemeProps) => {
+    setThemeName(newTheme);
+    secureSetStorage('theme', newTheme, KeychainService.THEME);
+  }, []);
 
-  const toggleMode = () => {
+  const toggleMode = useCallback(() => {
     setMode(prevMode => {
       const newMode = prevMode === 'light' ? 'dark' : 'light';
       secureSetStorage('mode', newMode, KeychainService.MODE);
       return newMode;
     });
-  };
+  }, []);
 
   const colors = useMemo(() => {
     const currentTheme = themes[themeName];
@@ -86,11 +95,19 @@ export const ModeProvider = ({ children }: ThemeProviderProps) => {
       : { ...currentTheme.darkMode, ...sharedColors };
   }, [mode, themeName]);
 
+  const contextValue = useMemo(
+    () => ({
+      mode,
+      colors,
+      toggleMode,
+      setColorTheme,
+      themeName,
+    }),
+    [mode, colors, toggleMode, setColorTheme, themeName],
+  );
+
   return (
-    <ModeContext.Provider
-      value={{ mode, colors, toggleMode, setColorTheme, themeName }}>
-      {children}
-    </ModeContext.Provider>
+    <ModeContext.Provider value={contextValue}>{children}</ModeContext.Provider>
   );
 };
 

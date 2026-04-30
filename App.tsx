@@ -1,38 +1,39 @@
-/* Core libs & third parties libs */
 import { useEffect, useState } from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+import { Linking } from 'react-native';
+
+import { I18nextProvider } from 'react-i18next';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import {
   configureReanimatedLogger,
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { I18nextProvider } from 'react-i18next';
-import { LinkingOptions, NavigationContainer } from '@react-navigation/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
-/* Custom components */
-import { SplashScreen } from '@components/splash/SplashScreen';
+import { LinkingOptions, NavigationContainer } from '@react-navigation/native';
+
+import { userAuth } from '@store/authSlice';
+import { useAppSelector } from '@store/hooks';
+import store from '@store/store';
+
+import RootNavigator from '@navigation/RootNavigation';
+import { RootStackParamList } from '@navigation/types';
+
 import Loader from '@components/shared/loader/Loader';
 import NotificationBanner from '@components/shared/notifications/NotificationBanner';
-import RootNavigator from '@navigation/RootNavigation';
-/* Custom hooks */
-/* Types */
-import { RootStackParamList } from '@navigation/types';
-/* Utilities & constants */
+import { SplashScreen } from '@components/splash/SplashScreen';
+
 import { ModeProvider } from '@context/ModeContext';
-import store from '@store/store';
-import { userAuth } from '@store/authSlice';
-import i18n from 'src/locale/i18next';
-import { Linking } from 'react-native';
+
 import {
   requestPermissionForNotification,
   setupMessageListener,
   setupTokenRefreshListener,
 } from '@utils/notifications/pushNotificationService';
-import { useAppSelector } from '@store/hooks';
 import { initializePinning } from '@utils/sslPinning';
 
-/* Assets */
+import i18n from 'src/locale/i18next';
 
 if (__DEV__) {
   configureReanimatedLogger({ level: ReanimatedLogLevel.warn, strict: false });

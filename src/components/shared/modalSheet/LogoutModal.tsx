@@ -1,11 +1,16 @@
 import React from 'react';
+
 import { StyleSheet, Text, View } from 'react-native';
-import Button from '../Button';
-import useStyles from '@hooks/useStyles';
-import { TColors } from '@constants/types';
-import { textVar } from '@constants/textVar';
+
 import { useTranslation } from 'react-i18next';
+
+import useStyles from '@hooks/useStyles';
+
 import { scale, SCREEN } from '@constants/dimensions';
+import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
+
+import Button from '../Button';
 
 type LogoutModalProps = {
   toggleModalSheet: () => void;

@@ -1,4 +1,5 @@
-/* Core libs & third parties libs */
+import React, { useEffect, useState } from 'react';
+
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -7,35 +8,36 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+
 import { FormProvider, useForm } from 'react-hook-form';
-import { jwtDecode } from 'jwt-decode';
-/* Custom components */
-import Button from '@components/shared/Button';
-import InputAuthField from '@components/shared/InputAuthField';
-import Separator from '@components/shared/Separator';
-import ButtonNoBorder from '@components/shared/ButtonNoBorder';
-/* Custom hooks */
-import useStyles from '@hooks/useStyles';
-/* Types */
-import { CustomJwtPayload } from '@hooks/types';
-import { TColors } from '@constants/types';
-import { AuthStackScreenProps } from '@navigation/types';
-/* Utilities & constants */
-import { SCREEN } from '@constants/dimensions';
-import { setNotificationMessage } from 'src/store/authSlice';
-import { textVar } from '@constants/textVar';
-import { CreateUserPayload, UpdatePasswordPayload } from '@store/types';
 import { useTranslation } from 'react-i18next';
+
+import { jwtDecode } from 'jwt-decode';
+
+import { useAppDispatch } from '@store/hooks';
+import { createUser, updatePassword } from '@store/thunks';
+import { CreateUserPayload, UpdatePasswordPayload } from '@store/types';
+
+import { AuthStackScreenProps } from '@navigation/types';
+
+import Button from '@components/shared/Button';
+import ButtonNoBorder from '@components/shared/ButtonNoBorder';
+import InputAuthField from '@components/shared/InputAuthField';
 import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
+import Separator from '@components/shared/Separator';
+
+import { CustomJwtPayload } from '@hooks/types';
+import useStyles from '@hooks/useStyles';
+
+import { SCREEN } from '@constants/dimensions';
+import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
 import {
   validateEmailToken,
   validatePasswordInput,
 } from '@utils/validationHelper';
-import { useAppDispatch } from '@store/hooks';
-import { createUser, updatePassword } from '@store/thunks';
 
-/* Assets */
+import { setNotificationMessage } from 'src/store/authSlice';
 
 interface FormNewDataProps {
   email: string;
@@ -112,7 +114,9 @@ const NewPasswordScreen = ({
         );
       navigation.popToTop();
     }
-  }, []);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [emailToken, navigation, dispatch]);
 
   const onSubmit = async (data: FormNewDataProps) => {
     Keyboard.dismiss();

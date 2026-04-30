@@ -1,5 +1,8 @@
+import DeviceInfo from 'react-native-device-info';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import api from '@store/apiService';
 import { RootState } from '@store/store';
 import {
@@ -7,10 +10,8 @@ import {
   LogoutUserPayload,
   ValidateRefreshTokenPayload,
 } from '@store/types';
-import {
-  disableBiometricLogin,
-  enableBiometricLogin,
-} from '@utils/biometricAuth';
+
+import { disableBiometricLogin } from '@utils/biometricAuth';
 import { parseApiError } from '@utils/errorHandler';
 import { registerFCMToken } from '@utils/notifications/registerFCMToken';
 import { loginRateLimiter } from '@utils/persistentRateLimiter';
@@ -19,13 +20,6 @@ import {
   secureDelete,
   secureSetStorage,
 } from '@utils/secureStorage';
-import DeviceInfo from 'react-native-device-info';
-import * as Keychain from 'react-native-keychain';
-
-/**
- * Refresh token validation
- * @param { token } data
- */
 
 export const validateRefreshToken = createAsyncThunk(
   'users/token/refresh',
@@ -65,11 +59,6 @@ export const validateRefreshToken = createAsyncThunk(
     }
   },
 );
-
-/**
- * User login
- * @param { email, password } data
- */
 
 export const loginUser = createAsyncThunk(
   'users/login',
@@ -178,11 +167,6 @@ export const loginUser = createAsyncThunk(
     }
   },
 );
-
-/**
- * User logout
- * @param { email } data
- */
 
 export const logoutUser = createAsyncThunk(
   'users/logout',

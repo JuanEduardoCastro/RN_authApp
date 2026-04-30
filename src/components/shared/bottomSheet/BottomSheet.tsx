@@ -1,5 +1,7 @@
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import React, { ReactNode, useEffect, useState } from 'react';
+
+import { Modal, Pressable, StyleSheet, View } from 'react-native';
+
 import Animated, {
   SharedValue,
   useAnimatedStyle,
@@ -8,9 +10,12 @@ import Animated, {
   withDelay,
   withTiming,
 } from 'react-native-reanimated';
+
 import useStyles from '@hooks/useStyles';
-import { TColors } from '@constants/types';
+
 import { SCREEN } from '@constants/dimensions';
+import { TColors } from '@constants/types';
+
 import Separator from '../Separator';
 
 type BottomSheetProps = {

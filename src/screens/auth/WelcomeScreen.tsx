@@ -1,24 +1,29 @@
-/* Core libs & third parties libs */
-import { Platform, StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
+
+import { Platform, StyleSheet, Text, View } from 'react-native';
+
+import { useTranslation } from 'react-i18next';
+import * as Keychain from 'react-native-keychain';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-/* Custom components */
-import Separator from '@components/shared/Separator';
+
+import { setNotificationMessage } from '@store/authSlice';
+import { useAppDispatch } from '@store/hooks';
+import { validateRefreshToken } from '@store/thunks';
+import { GITHUB_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
+
+import { AuthStackScreenProps } from '@navigation/types';
+
 import BGGradient from '@components/shared/BGGradient';
 import Button from '@components/shared/Button';
 import ButtonWithIcon from '@components/shared/ButtonWithIcon';
-/* Custom hooks */
-import useStyles from '@hooks/useStyles';
+import BiometricOptInModal from '@components/shared/modalSheet/BiometricOptInModal';
+import ModalSheet from '@components/shared/modalSheet/ModalSheet';
+import Separator from '@components/shared/Separator';
+
 import useBackHandler from '@hooks/useBackHandler';
-import { appleLogin, githubLogin, googleLogin } from 'src/store/otherAuthHooks';
-/* Types */
-import { TColors } from '@constants/types';
-import { AuthStackScreenProps } from '@navigation/types';
-/* Utilities & constants */
-import { SCREEN } from '@constants/dimensions';
-import { textVar } from '@constants/textVar';
-import { GITHUB_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
-/* Assets */
+import useBiometricAuth from '@hooks/useBiometricAuth';
+import useStyles from '@hooks/useStyles';
+
 import {
   AppleIcon,
   FaceIdIcon,
@@ -27,10 +32,10 @@ import {
   MailIcon,
   TouchIdIcon,
 } from '@assets/svg/icons';
-import { useTranslation } from 'react-i18next';
-import { useAppDispatch } from '@store/hooks';
-import { setNotificationMessage } from '@store/authSlice';
-import useBiometricAuth from '@hooks/useBiometricAuth';
+
+import { SCREEN } from '@constants/dimensions';
+import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
 import {
   authenticateWithBiometrics,
   enableBiometricLogin,
@@ -40,10 +45,8 @@ import {
   markBiometricDeclined,
 } from '@utils/biometricAuth';
 import { KeychainService, secureGetStorage } from '@utils/secureStorage';
-import { validateRefreshToken } from '@store/thunks';
-import * as Keychain from 'react-native-keychain';
-import ModalSheet from '@components/shared/modalSheet/ModalSheet';
-import BiometricOptInModal from '@components/shared/modalSheet/BiometricOptInModal';
+
+import { appleLogin, githubLogin, googleLogin } from 'src/store/otherAuthHooks';
 
 if (!WEB_CLIENT_ID || !IOS_CLIENT_ID) {
   throw new Error('❌ Missing Google OAuth credentials!');
@@ -223,6 +226,11 @@ const WelcomeScreen = ({
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       }
     } catch (error) {
+      __DEV__ &&
+        console.log(
+          'XX -> WelcomeScreen.tsx:193 -> handleBiometricLogin -> error :',
+          error,
+        );
       dispatch(
         setNotificationMessage({
           messageType: 'error',

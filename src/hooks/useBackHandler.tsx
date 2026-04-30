@@ -1,5 +1,7 @@
-import { BackHandler, Platform, ToastAndroid } from 'react-native';
 import { useCallback, useRef } from 'react';
+
+import { BackHandler, Platform, ToastAndroid } from 'react-native';
+
 import { useFocusEffect } from '@react-navigation/native';
 
 const useBackHandler = () => {

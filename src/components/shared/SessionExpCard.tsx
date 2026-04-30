@@ -1,13 +1,19 @@
+import React, { useMemo } from 'react';
+
+import { StyleSheet, Text, View } from 'react-native';
+
+import { useTranslation } from 'react-i18next';
+
+import { jwtDecode } from 'jwt-decode';
+
+import { userAuth } from '@store/authSlice';
+import { useAppSelector } from '@store/hooks';
+
+import useStyles from '@hooks/useStyles';
+
 import { moderateScale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
-import useStyles from '@hooks/useStyles';
-import React, { useMemo } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { useAppSelector } from '@store/hooks';
-import { userAuth } from '@store/authSlice';
-import { jwtDecode } from 'jwt-decode';
 
 const SessionExpCard = () => {
   const { styles } = useStyles(createStyles);
@@ -31,7 +37,7 @@ const SessionExpCard = () => {
       });
       return { expiresAt, isExpiringSoon: msRemaining < 5 * 60 * 1000 };
     } catch (error) {
-      return { expiresAt: '', isExpiringSoon: false };
+      return { expiresAt: '', isExpiringSoon: false, error: error };
     }
   }, [token, i18n.language]);
 

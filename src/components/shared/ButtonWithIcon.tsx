@@ -1,28 +1,26 @@
-/* Core libs & third parties libs */
+import React, { ElementType } from 'react';
+
 import {
-  View,
   Pressable,
   PressableProps,
   StyleSheet,
   Text,
   TextStyle,
+  View,
   ViewStyle,
 } from 'react-native';
-import React, { ElementType } from 'react';
-/* Custom components */
-/* Custom hooks */
-import useStyles from '@hooks/useStyles';
-/* Types */
-import { TColors } from '@constants/types';
-/* Utilities & constants */
-import { SCREEN } from '@constants/dimensions';
-import { textVar } from '@constants/textVar';
+
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-/* Assets */
+
+import useStyles from '@hooks/useStyles';
+
+import { SCREEN } from '@constants/dimensions';
+import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
 
 type ButtonWithIconProps = {
   title?: string;

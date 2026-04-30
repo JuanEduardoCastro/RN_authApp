@@ -1,8 +1,5 @@
-import { SCREEN } from '@constants/dimensions';
-import { textVar } from '@constants/textVar';
-import { TColors } from '@constants/types';
-import useStyles from '@hooks/useStyles';
 import React, { useEffect, useRef, useState } from 'react';
+
 import {
   FlatList,
   Platform,
@@ -11,15 +8,24 @@ import {
   Text,
   View,
 } from 'react-native';
-import { resources } from 'src/locale/i18next';
-import languagesList from '@constants/languagesList';
-import i18next from 'i18next';
+
 import { getLocales } from 'react-native-localize';
+
+import i18next from 'i18next';
+
+import useStyles from '@hooks/useStyles';
+
+import { SCREEN } from '@constants/dimensions';
+import languagesList from '@constants/languagesList';
+import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
 import {
   KeychainService,
   secureGetStorage,
   secureSetStorage,
 } from '@utils/secureStorage';
+
+import { resources } from 'src/locale/i18next';
 
 type LanguageInfo = {
   flag: string;

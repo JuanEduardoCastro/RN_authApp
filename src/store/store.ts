@@ -1,6 +1,7 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
-import authReducer from './authSlice';
+
 import { setupInterceptors } from './apiInterceptor';
+import authReducer from './authSlice';
 
 const store = configureStore({
   reducer: {

@@ -1,4 +1,5 @@
-/* Core libs & third parties libs */
+import React, { useState } from 'react';
+
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -7,27 +8,30 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+
 import { FormProvider, useForm } from 'react-hook-form';
-/* Custom components */
-import InputAuthField from '@components/shared/InputAuthField';
-import CheckBoxCustom from '@components/shared/CheckBoxCustom';
-import Button from '@components/shared/Button';
-import Separator from '@components/shared/Separator';
-import ButtonNoBorder from '@components/shared/ButtonNoBorder';
-/* Custom hooks */
-import useStyles from '@hooks/useStyles';
-/* Types */
-import { AuthStackScreenProps } from '@navigation/types';
-/* Utilities & constants */
-import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/dimensions';
-import { textVar } from '@constants/textVar';
 import { useTranslation } from 'react-i18next';
-import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
+import * as Keychain from 'react-native-keychain';
+
 import { useAppDispatch } from '@store/hooks';
 import { loginUser } from '@store/thunks';
-import * as Keychain from 'react-native-keychain';
+
+import { AuthStackScreenProps } from '@navigation/types';
+
+import Button from '@components/shared/Button';
+import ButtonNoBorder from '@components/shared/ButtonNoBorder';
+import CheckBoxCustom from '@components/shared/CheckBoxCustom';
+import InputAuthField from '@components/shared/InputAuthField';
+import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
+import BiometricOptInModal from '@components/shared/modalSheet/BiometricOptInModal';
+import ModalSheet from '@components/shared/modalSheet/ModalSheet';
+import Separator from '@components/shared/Separator';
+
+import useStyles from '@hooks/useStyles';
+
+import { SCREEN } from '@constants/dimensions';
+import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
 import {
   enableBiometricLogin,
   getBiometricType,
@@ -35,9 +39,6 @@ import {
   isBiometricLoginEnabled,
   markBiometricDeclined,
 } from '@utils/biometricAuth';
-import ModalSheet from '@components/shared/modalSheet/ModalSheet';
-import BiometricOptInModal from '@components/shared/modalSheet/BiometricOptInModal';
-/* Assets */
 
 interface FormDataProps {
   email: string;

@@ -1,4 +1,5 @@
-/* Core libs & third parties libs */
+import React, { useState } from 'react';
+
 import {
   Platform,
   Pressable,
@@ -7,24 +8,28 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+
+import { useTranslation } from 'react-i18next';
+import * as Keychain from 'react-native-keychain';
 import { SafeAreaView } from 'react-native-safe-area-context';
-/* Custom components */
-import Separator from '@components/shared/Separator';
+
+import { useAppDispatch } from '@store/hooks';
+
+import CustomModal from '@components/shared/bottomSheet/CustomModal';
 import ListCard from '@components/shared/ListCard';
-import ModeSwitchButton from '@components/shared/ModeSwitchButton';
+import LanguagePicker from '@components/shared/locale/LanguagePicker';
 import MailContactBox from '@components/shared/MailContactBox';
-/* Custom hooks */
+import BiometricConfirmModal from '@components/shared/modalSheet/BiometricConfirmModal';
+import LogoutModal from '@components/shared/modalSheet/LogoutModal';
+import ModalSheet from '@components/shared/modalSheet/ModalSheet';
+import ModeSwitchButton from '@components/shared/ModeSwitchButton';
+import Separator from '@components/shared/Separator';
+
+import useBiometricAuth from '@hooks/useBiometricAuth';
+import useLogoutUser from '@hooks/useLogoutUser';
 import useStyles from '@hooks/useStyles';
-/* Types */
-import { TColors } from '@constants/types';
-import { SettingsStackScreenProps } from 'src/navigation/types';
-/* Utilities & constants */
-import { SCREEN } from '@constants/dimensions';
-import { setNotificationMessage } from 'src/store/authSlice';
 import { useMode } from '@context/ModeContext';
-import { textVar } from '@constants/textVar';
-/* Assets */
+
 import {
   CheckIcon,
   CircleFullIcon,
@@ -34,20 +39,17 @@ import {
   ProfileIcon,
   TouchIdIcon,
 } from '@assets/svg/icons';
-import LanguagePicker from '@components/shared/locale/LanguagePicker';
-import CustomModal from '@components/shared/bottomSheet/CustomModal';
-import { useTranslation } from 'react-i18next';
-import ModalSheet from '@components/shared/modalSheet/ModalSheet';
-import LogoutModal from '@components/shared/modalSheet/LogoutModal';
-import { useAppDispatch } from '@store/hooks';
+
+import { SCREEN } from '@constants/dimensions';
+import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
 import {
   disableBiometricLogin,
   enableBiometricLogin,
 } from '@utils/biometricAuth';
-import useBiometricAuth from '@hooks/useBiometricAuth';
-import * as Keychain from 'react-native-keychain';
-import BiometricConfirmModal from '@components/shared/modalSheet/BiometricConfirmModal';
-import useLogoutUser from '@hooks/useLogoutUser';
+
+import { SettingsStackScreenProps } from 'src/navigation/types';
+import { setNotificationMessage } from 'src/store/authSlice';
 
 const SettingsScreen = ({
   navigation,
@@ -157,7 +159,7 @@ const SettingsScreen = ({
             onPress={() => setIsVisible(true)}
             icon={<LanguageIcon width={22} height={22} color={colors.text} />}
           />
-          {biometricAvailable && (
+          {!biometricAvailable && (
             <ListCard
               title={t('biometric-toggle-button')}
               onPress={() => handleBiometricToggle(!isBiometricEnabled)}

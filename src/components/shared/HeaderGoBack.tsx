@@ -1,10 +1,14 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+
 import useStyles from '@hooks/useStyles';
-import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/dimensions';
+
 import { ChevronIcon } from '@assets/svg/icons';
+
+import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
 
 type HeaderGoBackProps = {
   title?: string;

@@ -1,6 +1,8 @@
-import { isBiometricLoginEnabled } from '@utils/biometricAuth';
 import { useCallback, useEffect, useState } from 'react';
+
 import * as Keychain from 'react-native-keychain';
+
+import { isBiometricLoginEnabled } from '@utils/biometricAuth';
 
 interface BiometricAuthState {
   isAvailable: boolean;

@@ -1,11 +1,16 @@
-import { TColors } from '@constants/types';
-import useStyles from '@hooks/useStyles';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { StyleSheet, Text, View } from 'react-native';
-import Button from '../Button';
-import { textVar } from '@constants/textVar';
+
+import { useTranslation } from 'react-i18next';
+
+import useStyles from '@hooks/useStyles';
+
 import { scale, SCREEN } from '@constants/dimensions';
+import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
+
+import Button from '../Button';
 
 type BiometricConfirmModalProps = {
   action: 'enable' | 'disable';
@@ -88,7 +93,7 @@ const createStyles = (colors: TColors) =>
       borderColor: colors.second,
     },
     noButtonText: {
-      ...textVar.base,
+      ...textVar.medium,
       color: colors.text,
     },
     yesButton: {

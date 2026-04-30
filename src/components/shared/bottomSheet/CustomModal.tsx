@@ -1,8 +1,7 @@
-import { SCREEN } from '@constants/dimensions';
-import { TColors } from '@constants/types';
-import useStyles from '@hooks/useStyles';
 import React, { ReactNode } from 'react';
+
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+
 import Animated, {
   SlideInDown,
   SlideOutDown,
@@ -12,8 +11,14 @@ import Animated, {
   withDelay,
   withTiming,
 } from 'react-native-reanimated';
-import Separator from '../Separator';
+
+import useStyles from '@hooks/useStyles';
+
+import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
+
+import Separator from '../Separator';
 
 type CustomModalProps = {
   children: ReactNode;

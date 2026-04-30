@@ -1,4 +1,5 @@
-/* Core libs & third parties libs */
+import React, { useRef, useState } from 'react';
+
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -8,27 +9,28 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, { useRef, useState } from 'react';
+
 import { FormProvider, useForm } from 'react-hook-form';
-import CountDownTimer from 'react-native-countdown-timer-hooks';
-/* Custom components */
-import InputAuthField from '@components/shared/InputAuthField';
-import Separator from '@components/shared/Separator';
-import Button from '@components/shared/Button';
-import ButtonNoBorder from '@components/shared/ButtonNoBorder';
-/* Custom hooks */
-import useStyles from '@hooks/useStyles';
-/* Types */
-import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/dimensions';
-import { textVar } from '@constants/textVar';
-import { AuthStackScreenProps } from '@navigation/types';
-import { setNotificationMessage } from '@store/authSlice';
 import { useTranslation } from 'react-i18next';
-import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
+import CountDownTimer from 'react-native-countdown-timer-hooks';
+
+import { setNotificationMessage } from '@store/authSlice';
 import { useAppDispatch } from '@store/hooks';
 import { checkEmail, resetPassword } from '@store/thunks';
-/* Assets */
+
+import { AuthStackScreenProps } from '@navigation/types';
+
+import Button from '@components/shared/Button';
+import ButtonNoBorder from '@components/shared/ButtonNoBorder';
+import InputAuthField from '@components/shared/InputAuthField';
+import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
+import Separator from '@components/shared/Separator';
+
+import useStyles from '@hooks/useStyles';
+
+import { SCREEN } from '@constants/dimensions';
+import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
 
 interface CheckEmailProps {
   email: string;
@@ -141,6 +143,8 @@ const CheckEmailScreen = ({
               />
             </View>
             <Separator height={12} borderWidth={0} />
+
+            {/* eslint-disable react-native/no-inline-styles */}
             <View style={{ height: 40 }}>
               {isEmailSent && (
                 <Pressable
@@ -175,6 +179,8 @@ const CheckEmailScreen = ({
                 </Pressable>
               )}
             </View>
+            {/* eslint-enable react-native/no-inline-styles */}
+
             <View style={styles.gobackBox}>
               <ButtonNoBorder
                 title={t('go-back-button')}

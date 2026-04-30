@@ -1,11 +1,17 @@
-import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
+
+import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
+
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import BGGradient from '@components/shared/BGGradient';
-import { SCREEN } from '@constants/dimensions';
-import { useCheckToken } from '@hooks/useCheckToken';
-import { textVar } from '@constants/textVar';
+
 import packagejson from 'package.json';
+
+import BGGradient from '@components/shared/BGGradient';
+
+import { useCheckToken } from '@hooks/useCheckToken';
+
+import { SCREEN } from '@constants/dimensions';
+import { textVar } from '@constants/textVar';
 
 const APP_VERSION = packagejson.version;
 const APP_BUILD = packagejson.build;

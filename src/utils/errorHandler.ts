@@ -1,6 +1,7 @@
-import { ApiErrorResponse, ParsedError } from '@store/types';
 import axios, { AxiosError } from 'axios';
 import { TFunction } from 'i18next';
+
+import { ApiErrorResponse, ParsedError } from '@store/types';
 
 export const parseApiError = (
   error: unknown,

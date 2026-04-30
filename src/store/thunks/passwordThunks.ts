@@ -1,22 +1,20 @@
-import { CustomJwtPayload } from '@hooks/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { jwtDecode } from 'jwt-decode';
+
 import api from '@store/apiService';
 import {
   CheckEmailPayload,
   ResetPasswordPayload,
   UpdatePasswordPayload,
 } from '@store/types';
+
+import { CustomJwtPayload } from '@hooks/types';
+
 import { parseApiError } from '@utils/errorHandler';
 import {
   checkEmailRateLimiter,
   resetPasswordRateLimiter,
 } from '@utils/persistentRateLimiter';
-import { jwtDecode } from 'jwt-decode';
-
-/**
- * User check email for validation
- * @param { email } data
- */
 
 export const checkEmail = createAsyncThunk(
   'users/check-email',
@@ -58,11 +56,6 @@ export const checkEmail = createAsyncThunk(
     }
   },
 );
-
-/**
- * User reset password
- * @param { email } data
- */
 
 export const resetPassword = createAsyncThunk(
   'users/reset-password',
@@ -107,11 +100,6 @@ export const resetPassword = createAsyncThunk(
     }
   },
 );
-
-/**
- * User update password
- * @param { email, password, token } data
- */
 
 export const updatePassword = createAsyncThunk(
   'users/password',

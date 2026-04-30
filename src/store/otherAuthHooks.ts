@@ -1,18 +1,16 @@
+import { authorize } from 'react-native-app-auth';
+import appleAuth from '@invertase/react-native-apple-authentication';
+
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import api from './apiService';
-import { KeychainService, secureSetStorage } from '@utils/secureStorage';
+import { TFunction } from 'i18next';
+
 import { parseApiError } from '@utils/errorHandler';
 import { registerFCMToken } from '@utils/notifications/registerFCMToken';
 import { loginRateLimiter } from '@utils/persistentRateLimiter';
-import { TFunction } from 'i18next';
-import { authorize } from 'react-native-app-auth';
-import { githubAuthConfig } from './config/githubAuthConfig';
-import appleAuth from '@invertase/react-native-apple-authentication';
+import { KeychainService, secureSetStorage } from '@utils/secureStorage';
 
-/**
- * User login with Google signin and persist in time
- * @param { google token } data
- */
+import api from './apiService';
+import { githubAuthConfig } from './config/githubAuthConfig';
 
 export const googleLogin = createAsyncThunk(
   'users/googlesignin',
@@ -111,11 +109,6 @@ export const googleLogin = createAsyncThunk(
     }
   },
 );
-
-/**
- * User login with GitHub signin and persist in time
- * @param { github token } data
- */
 
 export const githubLogin = createAsyncThunk(
   'users/githubsignin',

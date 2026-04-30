@@ -1,22 +1,27 @@
+import { PermissionsAndroid, Platform } from 'react-native';
+
+import { getApp } from '@react-native-firebase/app';
 import {
-  requestPermission,
+  AuthorizationStatus,
+  getInitialNotification,
+  getMessaging,
+  getToken,
   onMessage,
   onNotificationOpenedApp,
-  getInitialNotification,
-  getToken,
-  AuthorizationStatus,
-  getMessaging,
-  setBackgroundMessageHandler,
   onTokenRefresh,
+  requestPermission,
+  setBackgroundMessageHandler,
 } from '@react-native-firebase/messaging';
-import { PermissionsAndroid, Platform } from 'react-native';
-import { getApp } from '@react-native-firebase/app';
-import { registerFCMToken } from './registerFCMToken';
-import { KeychainService, secureGetStorage } from '@utils/secureStorage';
+
 import api from '@store/apiService';
-import store from '@store/store';
 import { setNotificationMessage } from '@store/authSlice';
+import store from '@store/store';
+
 import i18n from '@locale/i18next';
+
+import { KeychainService, secureGetStorage } from '@utils/secureStorage';
+
+import { registerFCMToken } from './registerFCMToken';
 
 const MAX_RETRIES = 5;
 const RETRY_DELAY = 1000;

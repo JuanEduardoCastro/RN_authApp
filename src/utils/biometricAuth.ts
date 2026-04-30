@@ -1,4 +1,5 @@
 import * as Keychain from 'react-native-keychain';
+
 import {
   KeychainService,
   secureDelete,
@@ -51,6 +52,11 @@ export const authenticateWithBiometrics = async (
     });
     return result !== false && result.password === 'authenticated';
   } catch (error) {
+    __DEV__ &&
+      console.log(
+        'XX -> biometricAuth.ts:41 -> authenticateWithBiometrics -> error :',
+        error,
+      );
     return false;
   }
 };

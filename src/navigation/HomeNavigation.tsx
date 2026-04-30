@@ -1,12 +1,19 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import SettingsNavigator from './SettingsNavigation';
-import HomeScreen from '@screens/home/HomeScreen';
-import { HomeTabParamList } from './types';
-import { SCREEN } from '@constants/dimensions';
-import { HomeIcon, SettingsIcon } from '@assets/svg/icons';
-import { useMode } from '@context/ModeContext';
+
 import { Platform } from 'react-native';
+
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import HomeScreen from '@screens/home/HomeScreen';
+
+import { useMode } from '@context/ModeContext';
+
+import { HomeIcon, SettingsIcon } from '@assets/svg/icons';
+
+import { SCREEN } from '@constants/dimensions';
+
+import SettingsNavigator from './SettingsNavigation';
+import { HomeTabParamList } from './types';
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
 

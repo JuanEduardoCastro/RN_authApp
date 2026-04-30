@@ -1,7 +1,8 @@
+import DeviceInfo from 'react-native-device-info';
 import { getApp } from '@react-native-firebase/app';
 import { getMessaging } from '@react-native-firebase/messaging';
+
 import api from '@store/apiService';
-import DeviceInfo from 'react-native-device-info';
 
 const firebaseApp = getApp();
 const messagingInstance = getMessaging(firebaseApp);
@@ -41,7 +42,7 @@ export const registerFCMToken = async (accessToken: string) => {
       __DEV__ && console.log('FCM token registered successfully.');
     }
   } catch (error) {
-    __DEV__ && console.log('Failed to register FCM token.');
+    __DEV__ && console.log('Failed to register FCM token.', error);
   }
 };
 
@@ -56,6 +57,6 @@ export const updateDeviceLastUsed = async (accessToken: string) => {
       },
     );
   } catch (error) {
-    __DEV__ && console.log('Failed to update device last used.');
+    __DEV__ && console.log('Failed to update device last used.', error);
   }
 };

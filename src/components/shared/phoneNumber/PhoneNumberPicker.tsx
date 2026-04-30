@@ -1,4 +1,5 @@
-/* Core libs & third parties libs */
+import React, { useMemo, useState } from 'react';
+
 import {
   Platform,
   Pressable,
@@ -10,23 +11,22 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, { useMemo, useState } from 'react';
+
 import { Control, useController } from 'react-hook-form';
 import { useSharedValue } from 'react-native-reanimated';
-/* Custom components */
-import BottomSheet from '../bottomSheet/BottomSheet';
-import PhoneListContainer from './PhoneListContainer';
-/* Custom hooks */
+
 import useStyles from '@hooks/useStyles';
 import useUserData from '@hooks/useUserData';
-/* Types */
-import { TColors } from '@constants/types';
-/* Utilities & constants */
-import { SCREEN } from '@constants/dimensions';
-import { countriesList } from '@constants/countriesList';
-import { textVar } from '@constants/textVar';
-/* Assets */
+
 import { ChevronIcon } from '@assets/svg/icons';
+
+import { countriesList } from '@constants/countriesList';
+import { SCREEN } from '@constants/dimensions';
+import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
+
+import BottomSheet from '../bottomSheet/BottomSheet';
+import PhoneListContainer from './PhoneListContainer';
 
 type PhoneNumberPickerProps = {
   name: string;
@@ -42,7 +42,7 @@ const PhoneNumberPicker = ({
   name,
   control,
   rules,
-  setValue,
+  setValue: _setValue,
   label,
   labelStyles,
   inputStyles,
@@ -87,6 +87,7 @@ const PhoneNumberPicker = ({
     return country ? (
       <Text style={styles.pickerFlag}>{country.flag}</Text>
     ) : null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentFieldValue.code, defaultCountryCode]);
 
   return (

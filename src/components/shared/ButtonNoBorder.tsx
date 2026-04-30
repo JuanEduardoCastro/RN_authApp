@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   Pressable,
   PressableProps,
@@ -5,15 +7,17 @@ import {
   Text,
   TextStyle,
 } from 'react-native';
-import React from 'react';
-import useStyles from '@hooks/useStyles';
-import { TColors } from '@constants/types';
-import { textVar } from '@constants/textVar';
+
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+
+import useStyles from '@hooks/useStyles';
+
+import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
 
 type ButtonNoBorderProps = {
   title: string;

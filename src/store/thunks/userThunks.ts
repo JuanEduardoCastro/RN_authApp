@@ -1,16 +1,14 @@
-import { CustomJwtPayload } from '@hooks/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { jwtDecode } from 'jwt-decode';
+
 import api from '@store/apiService';
 import { RootState } from '@store/store';
 import { CreateUserPayload, EditUserPayload } from '@store/types';
+
+import { CustomJwtPayload } from '@hooks/types';
+
 import { cleanUserData } from '@utils/cleanUserData';
 import { parseApiError } from '@utils/errorHandler';
-import { jwtDecode } from 'jwt-decode';
-
-/**
- * User create
- * @param { email, password, token } data
- */
 
 export const createUser = createAsyncThunk(
   'users/create',
@@ -43,11 +41,6 @@ export const createUser = createAsyncThunk(
     }
   },
 );
-
-/**
- * User edit profile
- * @param { userData, token } data
- */
 
 export const editUser = createAsyncThunk(
   'users/:id',

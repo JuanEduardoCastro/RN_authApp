@@ -1,25 +1,26 @@
-/* Core libs & third parties libs */
-import { StyleSheet } from 'react-native';
 import React, { useState } from 'react';
-/* Custom components */
-import Separator from '@components/shared/Separator';
-/* Custom hooks */
-import useStyles from '@hooks/useStyles';
-import useBackHandler from '@hooks/useBackHandler';
-/* Types */
-import { TColors } from '@constants/types';
-/* Utilities & constants */
-import { userAuth } from 'src/store/authSlice';
-import { textVar } from '@constants/textVar';
-import { useAppSelector } from '@store/hooks';
-import UserInfoCard from '@components/shared/UserInfoCard';
-import HeaderHome from '@components/shared/HeaderHome';
+
+import { StyleSheet } from 'react-native';
+
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ModalSheet from '@components/shared/modalSheet/ModalSheet';
+
+import { useAppSelector } from '@store/hooks';
+
+import HeaderHome from '@components/shared/HeaderHome';
 import LogoutModal from '@components/shared/modalSheet/LogoutModal';
+import ModalSheet from '@components/shared/modalSheet/ModalSheet';
+import Separator from '@components/shared/Separator';
 import SessionExpCard from '@components/shared/SessionExpCard';
+import UserInfoCard from '@components/shared/UserInfoCard';
+
+import useBackHandler from '@hooks/useBackHandler';
 import useLogoutUser from '@hooks/useLogoutUser';
-/* Assets */
+import useStyles from '@hooks/useStyles';
+
+import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
+
+import { userAuth } from 'src/store/authSlice';
 
 const HomeScreen = () => {
   useBackHandler();

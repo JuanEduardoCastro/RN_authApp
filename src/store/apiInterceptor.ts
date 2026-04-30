@@ -1,15 +1,19 @@
 import axios, { AxiosError } from 'axios';
-import { setCredentials, setResetCredentials } from '@store/authSlice';
-import api, { HOST } from './apiService';
-import { AppStore } from './store';
 import { jwtDecode } from 'jwt-decode';
+
+import { setCredentials, setResetCredentials } from '@store/authSlice';
+
 import { CustomJwtPayload } from '@hooks/types';
+
 import {
   KeychainService,
   secureDelete,
   secureGetStorage,
   secureSetStorage,
 } from '@utils/secureStorage';
+
+import api, { HOST } from './apiService';
+import { AppStore } from './store';
 import { RetryableAxiosRequestConfig } from './types';
 
 let refreshTokenPromise: Promise<string> | null = null;

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   Image,
   Pressable,
@@ -5,15 +7,20 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import React from 'react';
+
 import { Control, useController } from 'react-hook-form';
 import ImagePicker from 'react-native-image-crop-picker';
-import useStyles from '@hooks/useStyles';
-import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/dimensions';
-import { setNotificationMessage } from 'src/store/authSlice';
-import { CameraIcon } from '@assets/svg/icons';
+
 import { useAppDispatch } from '@store/hooks';
+
+import useStyles from '@hooks/useStyles';
+
+import { CameraIcon } from '@assets/svg/icons';
+
+import { SCREEN } from '@constants/dimensions';
+import { TColors } from '@constants/types';
+
+import { setNotificationMessage } from 'src/store/authSlice';
 
 type AvatarViewButtonProps = {
   name: string;

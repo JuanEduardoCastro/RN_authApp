@@ -1,10 +1,12 @@
-import { useAppDispatch, useAppSelector } from '@store/hooks';
-import { userAuth } from '@store/authSlice';
 import { useTranslation } from 'react-i18next';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '@navigation/types';
+
+import { userAuth } from '@store/authSlice';
+import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { logoutUser } from '@store/thunks';
 import { LogoutUserPayload } from '@store/types';
+
+import { RootStackParamList } from '@navigation/types';
 
 const useLogoutUser = () => {
   const { user } = useAppSelector(userAuth);

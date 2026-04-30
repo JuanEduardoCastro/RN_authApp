@@ -1,4 +1,5 @@
-/* Core libs & third parties libs */
+import React, { useState } from 'react';
+
 import {
   Pressable,
   StyleSheet,
@@ -9,20 +10,19 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, { useState } from 'react';
+
 import { Control, useController } from 'react-hook-form';
-/* Custom components */
-/* Custom hooks */
+
 import useStyles from '@hooks/useStyles';
-/* Types */
-import { TColors } from '@constants/types';
-/* Utilities & constants */
+
+import { EyeCloseIcon, EyeOpenIcon } from '@assets/svg/icons';
+
 import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
-/* Assets */
-import { EyeCloseIcon, EyeOpenIcon } from '@assets/svg/icons';
-import ModalSheet from './modalSheet/ModalSheet';
+import { TColors } from '@constants/types';
+
 import InfoPasswordModal from './modalSheet/InfoPasswordModal';
+import ModalSheet from './modalSheet/ModalSheet';
 
 type InputAuthFieldProps = {
   name: string;
@@ -64,14 +64,7 @@ const InputAuthField = ({
             <Pressable
               style={styles.buttonInfoIcon}
               onPress={() => handleOpenInfo()}>
-              <Text
-                style={[
-                  styles.label,
-                  labelStyles,
-                  { ...textVar.smallBold, textAlign: 'center' },
-                ]}>
-                ⓘ
-              </Text>
+              <Text style={[styles.text, labelStyles]}>ⓘ</Text>
             </Pressable>
           )}
         </View>
@@ -141,6 +134,12 @@ const createStyles = (colors: TColors) =>
     },
     label: {
       ...textVar.base,
+      color: colors.text,
+      marginBottom: 5,
+    },
+    text: {
+      ...textVar.smallBold,
+      textAlign: 'center',
       color: colors.text,
       marginBottom: 5,
     },

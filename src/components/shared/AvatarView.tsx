@@ -1,16 +1,21 @@
-import { Image, PressableProps, StyleSheet, View } from 'react-native';
 import React from 'react';
-import useStyles from '@hooks/useStyles';
-import { TColors } from '@constants/types';
-import { SCREEN } from '@constants/dimensions';
-import { userAuth } from 'src/store/authSlice';
+
+import { Image, PressableProps, StyleSheet, View } from 'react-native';
+
 import { useAppSelector } from '@store/hooks';
 
+import useStyles from '@hooks/useStyles';
+
+import { SCREEN } from '@constants/dimensions';
+import { TColors } from '@constants/types';
+
+import { userAuth } from 'src/store/authSlice';
+
 type AvatarViewProps = {
-  name: string;
+  name?: string;
 } & PressableProps;
 
-const AvatarView = ({ name, ...props }: AvatarViewProps) => {
+const AvatarView = ({ name: _name, ...props }: AvatarViewProps) => {
   const { user } = useAppSelector(userAuth);
 
   const { styles } = useStyles(createStyles);

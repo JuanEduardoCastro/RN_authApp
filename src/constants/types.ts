@@ -28,4 +28,6 @@ export type ThemeProps = {
   notifications: string;
   base: string;
   darkBase: string;
+  backgroundCard: string;
+  textMuted: string;
 };

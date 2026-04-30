@@ -1,4 +1,5 @@
-/* Core libs & third parties libs */
+import React, { useRef, useState } from 'react';
+
 import {
   FlatList,
   Platform,
@@ -8,19 +9,17 @@ import {
   View,
   ViewProps,
 } from 'react-native';
-import React, { useRef, useState } from 'react';
+
 import MaskedView from '@react-native-masked-view/masked-view';
-/* Custom components */
-import BorderMaskGradient from '../borderMaskGradient/BorderMaskGradient';
-/* Custom hooks */
+
 import useStyles from '@hooks/useStyles';
-/* Types */
-import { TColors } from '@constants/types';
-/* Utilities & constants */
+
 import { countriesList } from '@constants/countriesList';
 import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
-/* Assets */
+import { TColors } from '@constants/types';
+
+import BorderMaskGradient from '../borderMaskGradient/BorderMaskGradient';
 
 type PhoneListContainerProps = {
   toggleSheet: () => void;

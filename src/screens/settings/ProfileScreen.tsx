@@ -1,4 +1,5 @@
-/* Core libs & third parties libs */
+import React, { useState } from 'react';
+
 import {
   Keyboard,
   Platform,
@@ -7,33 +8,32 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
-/* Custom components */
-import Separator from '@components/shared/Separator';
-import InputAuthField from '@components/shared/InputAuthField';
-import AvatarView from '@components/shared/AvatarView';
-import PhoneNumberPicker from '@components/shared/phoneNumber/PhoneNumberPicker';
-import KeyboardScrollView from '@components/shared/KeyboardScrollView';
+
+import { useAppDispatch, useAppSelector } from '@store/hooks';
+import { editUser } from '@store/thunks';
+import { EditUserPayload } from '@store/types';
+
+import AvatarViewButton from '@components/shared/AvatarViewButton';
 import HeaderGoBack from '@components/shared/HeaderGoBack';
-/* Custom hooks */
+import InputAuthField from '@components/shared/InputAuthField';
+import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
+import KeyboardScrollView from '@components/shared/KeyboardScrollView';
+import PhoneNumberPicker from '@components/shared/phoneNumber/PhoneNumberPicker';
+import Separator from '@components/shared/Separator';
+
 import useStyles from '@hooks/useStyles';
 import useUserData from '@hooks/useUserData';
-/* Types */
-import { TColors } from '@constants/types';
-import { SettingsStackScreenProps } from 'src/navigation/types';
-/* Utilities & constants */
-import { userAuth } from 'src/store/authSlice';
+
 import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
-import { useTranslation } from 'react-i18next';
-import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
-import { editUser } from '@store/thunks';
-import { useAppDispatch, useAppSelector } from '@store/hooks';
-import { EditUserPayload } from '@store/types';
-import AvatarViewButton from '@components/shared/AvatarViewButton';
-/* Assets */
+import { TColors } from '@constants/types';
+
+import { SettingsStackScreenProps } from 'src/navigation/types';
+import { userAuth } from 'src/store/authSlice';
 
 interface ProfileDataProps {
   firstName: string;
@@ -79,7 +79,7 @@ const ProfileScreen = ({
 
   const onSubmit = async (data: ProfileDataProps) => {
     Keyboard.dismiss();
-    const { email, ...userData } = data;
+    const { ...userData } = data;
     const dataAPI = { userData, t };
 
     try {

@@ -1,12 +1,17 @@
-import { TColors } from '@constants/types';
-import useStyles from '@hooks/useStyles';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { StyleSheet, Text, View } from 'react-native';
+
+import { useTranslation } from 'react-i18next';
 import * as Keychain from 'react-native-keychain';
-import Button from '../Button';
+
+import useStyles from '@hooks/useStyles';
+
 import { scale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
+
+import Button from '../Button';
 
 type BiometricOptInModalProps = {
   biometricType: Keychain.BIOMETRY_TYPE | null;

@@ -1,11 +1,16 @@
-import { TColors } from '@constants/types';
-import useStyles from '@hooks/useStyles';
 import React from 'react';
+
 import { StyleSheet, Text, View } from 'react-native';
-import Button from '../Button';
+
 import { useTranslation } from 'react-i18next';
-import { textVar } from '@constants/textVar';
+
+import useStyles from '@hooks/useStyles';
+
 import { SCREEN } from '@constants/dimensions';
+import { textVar } from '@constants/textVar';
+import { TColors } from '@constants/types';
+
+import Button from '../Button';
 
 type InfoPasswordModalProps = {
   toggleModalSheet: () => void;

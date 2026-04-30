@@ -1,5 +1,6 @@
-import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import React, { ReactNode } from 'react';
+
+import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 type DismissKeyboardOnClickProps = {
   children: ReactNode;

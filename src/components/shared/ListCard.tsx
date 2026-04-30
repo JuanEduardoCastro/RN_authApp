@@ -1,16 +1,14 @@
-/* Core libs & third parties libs */
-import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { ReactNode } from 'react';
-/* Custom components */
-/* Custom hooks */
+
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+
 import useStyles from '@hooks/useStyles';
-/* Types */
-import { TColors } from '@constants/types';
-/* Utilities & constants */
+
+import { CheckIcon } from '@assets/svg/icons';
+
 import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
-/* Assets */
-import { CheckIcon } from '@assets/svg/icons';
+import { TColors } from '@constants/types';
 
 type ListCardProps = {
   title: string;

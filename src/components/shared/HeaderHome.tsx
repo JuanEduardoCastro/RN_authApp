@@ -1,18 +1,25 @@
+import React from 'react';
+
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+
+import { userAuth } from '@store/authSlice';
+import { useAppSelector } from '@store/hooks';
+
+import useStyles from '@hooks/useStyles';
+
 import { AppleIcon, GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
+
 import { scale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
-import useStyles from '@hooks/useStyles';
-import { userAuth } from '@store/authSlice';
-import { useAppSelector } from '@store/hooks';
-import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 type HeaderHomeProps = {
   toggleModalSheet: () => void;
 };
 
-const HeaderHome = ({ toggleModalSheet }: HeaderHomeProps) => {
+const HeaderHome = ({
+  toggleModalSheet: _toggleModalSheet,
+}: HeaderHomeProps) => {
   const { styles } = useStyles(createStyles);
   const { user } = useAppSelector(userAuth);
 
@@ -54,7 +61,7 @@ const HeaderHome = ({ toggleModalSheet }: HeaderHomeProps) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.leftHeader}></View>
+      <View style={styles.leftHeader} />
       <View style={styles.centerHeader}>
         <Text style={styles.text}>Login from: </Text>
       </View>
