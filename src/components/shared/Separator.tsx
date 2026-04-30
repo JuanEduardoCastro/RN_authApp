@@ -32,6 +32,7 @@ const Separator = ({
         styles.separator,
         { height: height, backgroundColor: background },
       ]}>
+      {/* eslint-disable react-native/no-inline-styles */}
       <View
         style={[
           styles.line,
@@ -42,6 +43,7 @@ const Separator = ({
           },
         ]}
       />
+      {/* eslint-enable react-native/no-inline-styles */}
     </View>
   );
 };

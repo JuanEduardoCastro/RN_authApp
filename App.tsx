@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Linking } from 'react-native';
+import { Linking, StyleSheet } from 'react-native';
 
 import { I18nextProvider } from 'react-i18next';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -110,7 +110,7 @@ function App() {
   };
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={styles.container}>
       <KeyboardProvider>
         <SafeAreaProvider>
           <I18nextProvider i18n={i18n}>
@@ -133,3 +133,9 @@ function App() {
 }
 
 export default AppWrapper;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

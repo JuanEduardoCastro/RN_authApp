@@ -97,6 +97,7 @@ const NotificationBanner = () => {
           accessibilityRole="alert"
           accessibilityLabel={`Notification: ${notificationMessage}`}
           style={[styles.container, animatedStyle, { paddingTop: insets.top }]}>
+          {/* eslint-disable react-native/no-inline-styles */}
           <Pressable
             onPress={handleCloseBanner}
             style={
@@ -131,6 +132,7 @@ const NotificationBanner = () => {
               />
             )}
           </Pressable>
+          {/* eslint-enable react-native/no-inline-styles */}
         </Animated.View>
       )}
     </>

@@ -30,37 +30,44 @@ const CheckBoxCustom = ({
   const { colors, styles } = useStyles(createStyles);
 
   return (
-    <Pressable
-      style={{ alignSelf: 'flex-start' }}
-      onPress={() => field.onChange(!field.value)}>
-      <View style={styles.container}>
-        <CheckBox
-          style={[
-            { height: SCREEN.heightFixed * 24, width: SCREEN.widthFixed * 24 },
-            Platform.OS === 'android'
-              ? {
-                  transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }],
-                }
-              : {
-                  transform: [{ scaleX: 0.9 }, { scaleY: 0.9 }],
-                },
-          ]}
-          disabled={disabled}
-          value={field.value}
-          onValueChange={field.onChange}
-          boxType="square"
-          tintColor={colors.base}
-          onCheckColor={colors.light}
-          onFillColor={colors.base}
-          onTintColor={colors.base}
-          tintColors={{
-            true: colors.base,
-            false: colors.base,
-          }}
-        />
-        <Text style={styles.textRemember}>{label} </Text>
-      </View>
-    </Pressable>
+    <>
+      {/* eslint-disable react-native/no-inline-styles */}
+      <Pressable
+        style={{ alignSelf: 'flex-start' }}
+        onPress={() => field.onChange(!field.value)}>
+        <View style={styles.container}>
+          <CheckBox
+            style={[
+              {
+                height: SCREEN.heightFixed * 24,
+                width: SCREEN.widthFixed * 24,
+              },
+              Platform.OS === 'android'
+                ? {
+                    transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }],
+                  }
+                : {
+                    transform: [{ scaleX: 0.9 }, { scaleY: 0.9 }],
+                  },
+            ]}
+            disabled={disabled}
+            value={field.value}
+            onValueChange={field.onChange}
+            boxType="square"
+            tintColor={colors.base}
+            onCheckColor={colors.light}
+            onFillColor={colors.base}
+            onTintColor={colors.base}
+            tintColors={{
+              true: colors.base,
+              false: colors.base,
+            }}
+          />
+          <Text style={styles.textRemember}>{label} </Text>
+        </View>
+      </Pressable>
+      {/* eslint-enable react-native/no-inline-styles */}
+    </>
   );
 };
 

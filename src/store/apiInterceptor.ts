@@ -139,8 +139,8 @@ export const setupInterceptors = (store: AppStore) => {
               originalRequest.headers.Authorization = `Bearer ${newToken}`;
             }
             return api(originalRequest);
-          } catch (error) {
-            return Promise.reject(error);
+          } catch (refreshError) {
+            return Promise.reject(refreshError);
           }
         }
 
@@ -150,8 +150,8 @@ export const setupInterceptors = (store: AppStore) => {
             originalRequest.headers.Authorization = `Bearer ${newToken}`;
           }
           return api(originalRequest);
-        } catch (error) {
-          return Promise.reject(error);
+        } catch (refreshError) {
+          return Promise.reject(refreshError);
         }
       }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Platform } from 'react-native';
 
@@ -20,6 +20,25 @@ const Tab = createBottomTabNavigator<HomeTabParamList>();
 const HomeNavigation = () => {
   const { colors } = useMode();
 
+  const tabBarStyle = useMemo(
+    () => ({
+      elevation: 0,
+      paddingTop: 8,
+      height:
+        Platform.OS === 'ios'
+          ? SCREEN.heightFixed * 80
+          : SCREEN.heightFixed * 60,
+      backgroundColor: colors.tabBackground,
+      shadowColor: '#101014',
+      shadowOffset: { width: 0, height: 5 },
+      shadowOpacity: 0.19,
+      shadowRadius: 10,
+      position: 'absolute' as const,
+      bottom: Platform.OS === 'ios' ? 0 : 8,
+    }),
+    [colors.tabBackground],
+  );
+
   return (
     <Tab.Navigator
       // initialRouteName={'ProfileScreen'}
@@ -27,22 +46,7 @@ const HomeNavigation = () => {
         tabBarShowLabel: false,
         tabBarHideOnKeyboard: true,
         headerShown: false,
-        tabBarStyle: {
-          elevation: 0,
-          paddingTop: 8,
-          height:
-            Platform.OS === 'ios'
-              ? SCREEN.heightFixed * 80
-              : SCREEN.heightFixed * 60,
-          backgroundColor: colors.tabBackground,
-          shadowColor: '#101014',
-          shadowOffset: { width: 0, height: 5 },
-          shadowOpacity: 0.19,
-          shadowRadius: 10,
-          position: 'absolute',
-          bottom: Platform.OS === 'ios' ? 0 : 8,
-        },
-
+        tabBarStyle,
         tabBarIcon: ({ focused }) => {
           switch (route.name) {
             case 'HomeScreen':

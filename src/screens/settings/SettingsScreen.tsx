@@ -125,6 +125,7 @@ const SettingsScreen = ({
         <Text style={styles.titleText}>{t('settings-title')}</Text>
       </View>
       <Separator border={false} height={24} />
+      {/* eslint-disable react-native/no-inline-styles */}
       <View
         style={[
           styles.listBox,
@@ -206,6 +207,7 @@ const SettingsScreen = ({
         </ScrollView>
         <MailContactBox title="authorization.demo.app@gmail.com" />
       </View>
+      {/* eslint-enable react-native/no-inline-styles */}
       <CustomModal modalIsVisible={isVisible} toggleSheet={toggleSheet}>
         <LanguagePicker toggleSheet={toggleSheet} />
       </CustomModal>

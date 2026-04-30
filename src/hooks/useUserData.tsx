@@ -21,11 +21,9 @@ const useUserData = () => {
     number: string | null;
   } | null>(null);
 
-  // Effect for initializing phone data on mount, based on user profile or device locale.
   useEffect(() => {
     if (!user) return;
 
-    // If user already has a phone number saved, use that.
     if (user.phoneNumber?.number) {
       setPhoneData({
         dialCode: user.phoneNumber.dialCode,
@@ -35,7 +33,6 @@ const useUserData = () => {
       return;
     }
 
-    // Otherwise, determine the default from the device's locale.
     const deviceLocale: Locale | undefined = getLocales()[0];
     const defaultCountry = countriesList.find(
       country => country.code === deviceLocale?.countryCode,
@@ -45,9 +42,8 @@ const useUserData = () => {
       setDefaultCountryCode(defaultCountry.code);
       setDefaultDialCode(defaultCountry.dialCode);
     }
-  }, []);
+  }, [user]);
 
-  // Memoize the index to scroll to, preventing re-calculation on every render.
   const indexToScroll = useMemo(() => {
     if (!phoneData?.dialCode) return 0;
     const index = countriesList.findIndex(
@@ -56,14 +52,13 @@ const useUserData = () => {
     return index > -1 ? index : 0;
   }, [phoneData]);
 
-  // Effect to update phone data when a new country is selected from a picker.
   useEffect(() => {
     if (codeIndex !== null) {
       const selectedCountry = countriesList[codeIndex];
       setPhoneData(prevData => ({
         dialCode: selectedCountry.dialCode,
         code: selectedCountry.code,
-        number: prevData?.number || null, // Keep existing number if available
+        number: prevData?.number || null,
       }));
     }
   }, [codeIndex]);

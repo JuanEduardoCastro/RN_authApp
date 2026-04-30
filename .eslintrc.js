@@ -3,6 +3,7 @@ module.exports = {
   extends: '@react-native',
   plugins: ['simple-import-sort'],
   rules: {
+    'react/no-unstable-nested-components': ['error', { allowAsProps: true }],
     'simple-import-sort/imports': [
       'error',
       {

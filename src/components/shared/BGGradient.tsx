@@ -33,6 +33,7 @@ const BGGradient = ({
       useAngle={useAngle}
       angle={angle}
       angleCenter={angleCenter}>
+      {/* eslint-disable react-native/no-inline-styles */}
       <View
         style={{
           flex: 1,
@@ -43,6 +44,7 @@ const BGGradient = ({
         }}>
         {children}
       </View>
+      {/* eslint-enable react-native/no-inline-styles */}
     </LinearGradient>
   );
 };

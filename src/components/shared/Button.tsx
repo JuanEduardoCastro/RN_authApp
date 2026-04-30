@@ -34,20 +34,20 @@ const Button = ({
   ...props
 }: ButtonProps) => {
   const { styles } = useStyles(createStyles);
-  const scale = useSharedValue(1);
+  const sharedScale = useSharedValue(1);
 
   const animationStyles = useAnimatedStyle(() => {
     return {
-      transform: [{ scale: scale.value }],
+      transform: [{ scale: sharedScale.value }],
     };
   });
 
   const handlePressIn = () => {
-    scale.value = withTiming(0.97, { duration: 80 });
+    sharedScale.value = withTiming(0.97, { duration: 80 });
   };
 
   const handlePressOut = () => {
-    scale.value = withTiming(1, { duration: 150 });
+    sharedScale.value = withTiming(1, { duration: 150 });
   };
 
   return (
