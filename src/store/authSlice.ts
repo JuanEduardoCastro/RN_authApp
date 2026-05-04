@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { appleLogin, githubLogin, googleLogin } from './otherAuthHooks';
-import { RootState } from './store';
+import type { RootState } from './store';
 import {
   createUser,
   editUser,

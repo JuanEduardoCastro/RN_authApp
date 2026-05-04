@@ -43,6 +43,11 @@ module.exports = {
             moduleName: '@env',
             path: '.env.production',
           },
+          test: {
+            moduleName: '@env',
+            path: '.env.test',
+            allowUndefined: true,
+          },
         },
       },
     ],

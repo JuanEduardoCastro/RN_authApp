@@ -2,11 +2,6 @@
 #
 .DS_Store
 
-# Test Jest
-#
-__mock__
-__tests__
-
 # Xcode
 #
 build/
@@ -85,8 +80,10 @@ yarn-error.log
 # .env
 .env.development
 .env.production
+.env.test
 /.env.development
 /.env.production
+/.env.test
 env.d.ts
 /env.d.ts
 
