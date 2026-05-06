@@ -15,7 +15,7 @@ import MaskedView from '@react-native-masked-view/masked-view';
 import useStyles from '@hooks/useStyles';
 
 import { countriesList } from '@constants/countriesList';
-import { SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
@@ -141,7 +141,7 @@ const createStyles = (colors: TColors) =>
       width: SCREEN.width100,
       flexDirection: 'row',
       justifyContent: 'space-between',
-      paddingHorizontal: 18,
+      paddingHorizontal: moderateScale(18),
       paddingVertical: 8,
     },
     commandsText: {

@@ -40,7 +40,7 @@ import {
   TouchIdIcon,
 } from '@assets/svg/icons';
 
-import { SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 import {
@@ -160,7 +160,7 @@ const SettingsScreen = ({
             onPress={() => setIsVisible(true)}
             icon={<LanguageIcon width={22} height={22} color={colors.text} />}
           />
-          {!biometricAvailable && (
+          {biometricAvailable && (
             <ListCard
               title={t('biometric-toggle-button')}
               onPress={() => handleBiometricToggle(!isBiometricEnabled)}
@@ -264,7 +264,7 @@ const createStyles = (colors: TColors) =>
       height: SCREEN.heightFixed * 46,
       justifyContent: 'flex-start',
       alignItems: 'center',
-      gap: 10,
+      gap: moderateScale(10),
       paddingHorizontal: 8,
     },
     modeText: {

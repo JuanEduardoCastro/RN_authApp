@@ -15,7 +15,7 @@ import i18next from 'i18next';
 
 import useStyles from '@hooks/useStyles';
 
-import { SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN } from '@constants/dimensions';
 import languagesList from '@constants/languagesList';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
@@ -114,7 +114,7 @@ const createStyles = (colors: TColors) =>
     commandsBox: {
       width: SCREEN.width100,
       justifyContent: 'space-between',
-      paddingHorizontal: 18,
+      paddingHorizontal: moderateScale(18),
       paddingVertical: 8,
     },
     commandsText: {

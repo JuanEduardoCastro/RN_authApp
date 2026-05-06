@@ -28,7 +28,7 @@ import Separator from '@components/shared/Separator';
 import useStyles from '@hooks/useStyles';
 import useUserData from '@hooks/useUserData';
 
-import { SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
@@ -86,7 +86,8 @@ const ProfileScreen = ({
       const res = await dispatch(editUser(dataAPI as EditUserPayload)).unwrap();
 
       if (res?.success) {
-        navigation.goBack();
+        // navigation.goBack();
+        setEditEnable(false);
       }
     } catch (error) {
       __DEV__ &&
@@ -193,6 +194,7 @@ const createStyles = (colors: TColors) =>
     titleBox: {
       justifyContent: 'center',
       alignItems: 'center',
+      paddingHorizontal: moderateScale(16),
     },
     title: {
       ...textVar.xlargeBold,
@@ -207,11 +209,11 @@ const createStyles = (colors: TColors) =>
       flexDirection: 'row',
       alignItems: 'flex-end',
       justifyContent: 'space-between',
-      paddingHorizontal: 32,
+      paddingHorizontal: moderateScale(32),
     },
     editButton: {
       flexDirection: 'row',
-      gap: 16,
+      gap: moderateScale(16),
     },
     editButtonText: {
       ...textVar.baseBold,
@@ -224,7 +226,7 @@ const createStyles = (colors: TColors) =>
     inputBox: {
       width: SCREEN.width100,
       flex: 1,
-      paddingHorizontal: 16,
+      paddingHorizontal: moderateScale(16),
     },
     textinput: {
       borderColor: colors.second,

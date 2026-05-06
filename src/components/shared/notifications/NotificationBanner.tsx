@@ -22,7 +22,7 @@ import {
   WarningIcon,
 } from '@assets/svg/icons';
 
-import { SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
@@ -149,8 +149,8 @@ const createStyles = (colors: TColors) =>
       height: SCREEN.heightFixed * 150,
       backgroundColor: colors.transparent,
       zIndex: 100,
-      marginTop: 12,
-      paddingHorizontal: 16,
+      marginTop: moderateScale(12),
+      paddingHorizontal: moderateScale(16),
     },
     bannerBox: {
       backgroundColor: colors.notifications,
@@ -160,7 +160,7 @@ const createStyles = (colors: TColors) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       borderRadius: 24,
-      paddingHorizontal: 16,
+      paddingHorizontal: moderateScale(16),
       paddingVertical: 8,
       zIndex: 9,
     },

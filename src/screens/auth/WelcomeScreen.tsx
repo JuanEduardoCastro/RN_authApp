@@ -33,7 +33,7 @@ import {
   TouchIdIcon,
 } from '@assets/svg/icons';
 
-import { SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 import {
@@ -380,8 +380,8 @@ const createStyles = (colors: TColors) =>
     },
     buttonBox: {
       width: SCREEN.width75,
-      paddingVertical: 12,
+      paddingVertical: verticalScale(12),
       marginVertical: 8,
-      gap: 18,
+      gap: moderateScale(18),
     },
   });

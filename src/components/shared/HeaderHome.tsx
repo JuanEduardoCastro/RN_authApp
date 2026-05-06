@@ -9,7 +9,7 @@ import useStyles from '@hooks/useStyles';
 
 import { AppleIcon, GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
 
-import { scale, SCREEN, verticalScale } from '@constants/dimensions';
+import { moderateScale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
@@ -84,7 +84,7 @@ const createStyles = (colors: TColors) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      paddingHorizontal: scale(16),
+      paddingHorizontal: moderateScale(16),
     },
     leftHeader: {
       flexGrow: 1,

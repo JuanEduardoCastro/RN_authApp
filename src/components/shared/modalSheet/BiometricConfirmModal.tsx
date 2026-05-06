@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import useStyles from '@hooks/useStyles';
 
-import { scale, SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
@@ -68,8 +68,8 @@ const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
       alignItems: 'center',
-      paddingHorizontal: scale(26),
-      gap: scale(24),
+      paddingHorizontal: moderateScale(26),
+      gap: moderateScale(24),
     },
     title: {
       ...textVar.largeBold,

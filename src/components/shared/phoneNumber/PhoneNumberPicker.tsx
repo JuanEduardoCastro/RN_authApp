@@ -21,7 +21,7 @@ import useUserData from '@hooks/useUserData';
 import { ChevronIcon } from '@assets/svg/icons';
 
 import { countriesList } from '@constants/countriesList';
-import { SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
@@ -163,7 +163,7 @@ export default PhoneNumberPicker;
 const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
-      marginBottom: 10,
+      marginBottom: moderateScale(10),
     },
     label: {
       ...textVar.base,
@@ -208,7 +208,7 @@ const createStyles = (colors: TColors) =>
       height: SCREEN.heightFixed * 40,
       flexGrow: 1,
       width: 'auto',
-      paddingVertical: 10,
+      paddingVertical: verticalScale(10),
       paddingHorizontal: 8,
       fontSize: 16,
       color: colors.text,

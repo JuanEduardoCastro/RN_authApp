@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import useStyles from '@hooks/useStyles';
 
-import { SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
@@ -49,8 +49,8 @@ const createStyles = (colors: TColors) =>
     container: {
       width: SCREEN.widthFixed * 280,
       // backgroundColor: 'lightgray',
-      gap: 20,
-      paddingHorizontal: 10,
+      gap: moderateScale(20),
+      paddingHorizontal: moderateScale(10),
     },
     modalTitle: {
       ...textVar.baseBold,

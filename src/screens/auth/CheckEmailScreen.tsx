@@ -28,7 +28,7 @@ import Separator from '@components/shared/Separator';
 
 import useStyles from '@hooks/useStyles';
 
-import { SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
@@ -145,7 +145,11 @@ const CheckEmailScreen = ({
             <Separator height={12} borderWidth={0} />
 
             {/* eslint-disable react-native/no-inline-styles */}
-            <View style={{ height: 40 }}>
+            <View
+              style={{
+                height: 40,
+                alignItems: 'center',
+              }}>
               {isEmailSent && (
                 <Pressable
                   disabled={!canResend}
@@ -203,13 +207,14 @@ const createStyles = (colors: TColors) =>
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      padding: 20,
+      padding: moderateScale(20),
     },
     titleBox: {
       justifyContent: 'center',
       alignItems: 'center',
-      gap: 12,
-      marginBottom: -10,
+      paddingHorizontal: moderateScale(16),
+      gap: moderateScale(12),
+      marginBottom: moderateScale(-10),
     },
     subTitle: {
       ...textVar.largeBold,
@@ -229,7 +234,7 @@ const createStyles = (colors: TColors) =>
       alignItems: 'center',
       justifyContent: 'space-between',
       paddingVertical: 8,
-      paddingHorizontal: 16,
+      paddingHorizontal: moderateScale(16),
     },
     resetBoxOnFocus: {
       width: SCREEN.widthFixed * 280,
@@ -239,8 +244,8 @@ const createStyles = (colors: TColors) =>
       borderWidth: 1,
       borderColor: colors.second,
       borderRadius: 12,
-      paddingVertical: 10,
-      paddingHorizontal: 16,
+      paddingVertical: verticalScale(10),
+      paddingHorizontal: moderateScale(16),
     },
     resendText: {
       ...textVar.mediumBold,
@@ -249,7 +254,7 @@ const createStyles = (colors: TColors) =>
     },
     inputBox: {
       width: SCREEN.width100,
-      paddingHorizontal: 16,
+      paddingHorizontal: moderateScale(16),
     },
     textinput: {
       borderColor: colors.second,
@@ -257,7 +262,7 @@ const createStyles = (colors: TColors) =>
     buttonBox: {
       width: SCREEN.width100,
       alignItems: 'center',
-      paddingVertical: 12,
+      paddingVertical: verticalScale(12),
     },
     button: {
       backgroundColor: colors.second,

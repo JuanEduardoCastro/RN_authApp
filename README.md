@@ -1,97 +1,241 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Auth.Jc
 
-# Getting Started
+> Secure. Fast. Seamless.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+A full-featured authentication app for iOS and Android built with React Native. Google, GitHub, and Apple Sign-In, biometric login (Face ID / Touch ID), JWT token management with silent refresh, push notifications, deep linking, and a multi-theme UI — all backed by a live REST API.
 
-## Step 1: Start Metro
+---
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Screenshots
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+<table>
+  <tr>
+    <td align="center"><img src="assets/screenshots/Welcome screen - dark.png" width="200"/><br/><sub>Welcome — dark</sub></td>
+    <td align="center"><img src="assets/screenshots/Welcome screen - light.png" width="200"/><br/><sub>Welcome — light</sub></td>
+    <td align="center"><img src="assets/screenshots/Login screen.png" width="200"/><br/><sub>Login</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/screenshots/Sign up screen.png" width="200"/><br/><sub>Sign up</sub></td>
+    <td align="center"><img src="assets/screenshots/Home screen - dark.png" width="200"/><br/><sub>Home — dark</sub></td>
+    <td align="center"><img src="assets/screenshots/Home screen - light.png" width="200"/><br/><sub>Home — light</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/screenshots/Settings screen.png" width="200"/><br/><sub>Settings</sub></td>
+    <td align="center"><img src="assets/screenshots/Biometric login.png" width="200"/><br/><sub>Biometric login</sub></td>
+    <td align="center"><img src="assets/screenshots/Profile screen.png" width="200"/><br/><sub>Profile</sub></td>
+  </tr>
+</table>
 
-```sh
-# Using npm
-npm start
+---
 
-# OR using Yarn
-yarn start
+## Features
+
+- **Google Sign-In** — OAuth 2.0 via `@react-native-google-signin/google-signin`
+- **GitHub Sign-In** — OAuth 2.0 with PKCE via `react-native-app-auth` (no client secret stored)
+- **Apple Sign-In** — Sign in with Apple (iOS only) via `@invertase/react-native-apple-authentication`
+- **Biometric login** — Face ID / Touch ID opt-in flow; access-controlled Keychain entry invalidated on new biometric enrollment
+- **JWT token management** — access + refresh token pair; silent proactive refresh when token expires within 5 minutes
+- **Auto token refresh interceptor** — Axios request/response interceptor with deduplication; all concurrent requests share a single refresh call
+- **Rate limiting** — persistent rate limiter (AsyncStorage-backed) on login, sign-up, and password reset; exponential backoff up to 15 min lockout
+- **SSL pinning** — public-key pinning via `react-native-ssl-public-key-pinning` initialised at app startup
+- **Push notifications** — Firebase Cloud Messaging; handles foreground, background, and quit-state messages
+- **Deep linking** — custom scheme (`authapp://`) and HTTPS universal links for password reset flow
+- **Multi-theme UI** — 4 color themes (luxury, calm, gold, passion) × dark/light mode; persisted to Keychain
+- **Responsive layout** — pixel-perfect scaling system based on 393×852 design reference; portrait-locked on all platforms
+- **Input sanitisation** — XSS prevention on all user-provided data before API calls
+- **i18n** — internationalisation via `react-i18next`
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | React Native 0.82 (bare CLI) |
+| Language | TypeScript 5.8 (strict mode) |
+| Navigation | React Navigation 7 — Stack + Bottom Tab |
+| State | Redux Toolkit 2 + Redux Thunk |
+| HTTP | Axios + custom interceptor |
+| Auth (OAuth) | Google Sign-In, react-native-app-auth (GitHub PKCE), Apple Authentication |
+| Secure storage | react-native-keychain (Keychain / Android Keystore) |
+| Push notifications | Firebase Cloud Messaging (`@react-native-firebase`) |
+| Animations | React Native Reanimated 4 |
+| Gestures | React Native Gesture Handler |
+| i18n | react-i18next |
+| Testing | Jest 29 + React Native Testing Library 13 |
+
+---
+
+## Architecture
+
+### Authentication flow
+
+```
+App launch
+  └─ SplashScreen
+       ├─ Biometric enabled? → Face ID / Touch ID prompt → validateRefreshToken → Home
+       ├─ Remember Me set?   → validateRefreshToken → Home
+       └─ Neither            → WelcomeScreen → manual login
+
+Login success
+  └─ checkAndOfferBiometric()
+       ├─ Device has biometrics + not enabled + not declined? → BiometricOptInModal
+       │     ├─ Enable  → enableBiometricLogin() → Home
+       │     └─ Not Now → markBiometricDeclined() → Home (never asked again)
+       └─ Otherwise → Home directly
 ```
 
-## Step 2: Build and run your app
+### Token refresh interceptor
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+The Axios interceptor in `src/store/apiInterceptor.ts` handles two cases:
 
-### Android
+- **Request interceptor** — proactively refreshes the access token if it expires within 5 minutes. Skips auth endpoints (`/login`, `/token/refresh`, etc.) to prevent loops.
+- **Response interceptor** — catches 401 responses and retries the original request once with a freshly refreshed token.
+- **Deduplication** — a shared `refreshTokenPromise` ensures concurrent requests all await the same single refresh call rather than triggering multiple refreshes.
+- **Logout on failure** — if the refresh token is missing or the refresh call fails, Keychain is cleared and the user is returned to WelcomeScreen.
 
-```sh
-# Using npm
-npm run android
+### Secure storage
 
-# OR using Yarn
-yarn android
+All sensitive data is stored via `react-native-keychain` using named service keys (`KeychainService` enum). Key entries:
+
+| Service | Accessibility | Notes |
+|---|---|---|
+| `REFRESH_TOKEN` | `WHEN_UNLOCKED_THIS_DEVICE_ONLY` | Cleared on logout |
+| `BIOMETRIC_LOGIN` | `BIOMETRY_CURRENT_SET` + access control | Invalidated on new biometric enrollment |
+| `BIOMETRIC_DECLINED` | `AFTER_FIRST_UNLOCK` | Never cleared on logout — respects permanent opt-out |
+| `MODE` / `THEME` / `LANGUAGE` | `AFTER_FIRST_UNLOCK` | UI preferences, survive logout |
+
+### State management
+
+Single Redux slice (`authSlice`) with async thunks split by domain:
+
+```
+src/store/
+  authSlice.ts          # isAuthorized, token, user, loader, notifications
+  thunks/
+    authThunks.ts       # validateRefreshToken, loginUser, createUser, logoutUser
+    userThunks.ts       # editUser
+    passwordThunks.ts   # reset password flow
+  otherAuthHooks.ts     # Google, GitHub, Apple Sign-In thunks
+  apiService.ts         # Axios instance
+  apiInterceptor.ts     # Token refresh logic
 ```
 
-### iOS
+---
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+## Project structure
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+```
+src/
+  assets/         # Images, SVG icons, fonts
+  components/     # Reusable UI — buttons, inputs, modals, splash, notifications
+  constants/      # Colors (4 themes), dimensions, scaling utilities
+  context/        # ModeContext — theme + dark/light mode provider
+  hooks/          # useBiometricAuth, useCheckToken, useLogoutUser
+  locale/         # i18n translations
+  navigation/     # RootNavigation, AuthNavigator, HomeNavigator, types
+  screens/
+    auth/         # WelcomeScreen, LoginScreen, CheckEmailScreen, NewPasswordScreen
+    home/         # HomeScreen
+    settings/     # SettingsScreen, ProfileScreen
+  store/          # Redux store, slices, thunks, API layer
+  utils/          # secureStorage, biometricAuth, errorHandler, validationHelper,
+                  # cleanUserData, persistentRateLimiter, sslPinning, notifications
+```
 
-```sh
+---
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 20+
+- Ruby + Bundler (iOS)
+- Xcode 15+ (iOS)
+- Android Studio + JDK 17 (Android)
+- `GoogleService-Info.plist` (iOS) and `google-services.json` (Android) from Firebase Console
+
+### Install
+
+```bash
+npm install
+```
+
+### iOS setup
+
+```bash
+cd ios
 bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
 bundle exec pod install
+cd ..
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+### Run
 
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+```bash
+npm start                  # Metro bundler
+npm run ios                # iOS Simulator
+npm run android            # Android Emulator
+npm run start-cache        # Metro with cache reset
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+### Test
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+```bash
+npm test
+```
 
-## Step 3: Modify your app
+### Lint
 
-Now that you have successfully run the app, let's make changes!
+```bash
+npm run lint
+```
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+---
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+## Security highlights
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+- **No client secrets in the app** — GitHub OAuth uses PKCE; no `clientSecret` is stored anywhere in the codebase
+- **SSL pinning** — active on all API calls via `react-native-ssl-public-key-pinning`
+- **Biometric entry invalidation** — `BIOMETRY_CURRENT_SET` access control means a new fingerprint or face enrollment automatically invalidates the stored credential
+- **XSS prevention** — `sanitizeUserInput()` and `cleanUserData()` applied to all user input before API calls
+- **Rate limiting** — brute-force protection on login (5 attempts, exponential backoff, max 15 min lockout)
+- **Token storage** — refresh token stored with `WHEN_UNLOCKED_THIS_DEVICE_ONLY`; never in AsyncStorage or plain files
 
-## Congratulations! :tada:
+---
 
-You've successfully run and modified your React Native App. :partying_face:
+## Platform support
 
-### Now what?
+| Platform | Minimum version |
+|---|---|
+| iOS | 15.1 |
+| Android | 7.0 (API 24) |
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+---
 
-# Troubleshooting
+## Backend
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+The REST API powering this app is a separate project built with **Node.js + TypeScript + Express 5**.
 
-# Learn More
+- **Repo:** [RN_authApp_BE](https://github.com/JuanEduardoCastro/RN_authApp_BE)
+- **Live API:** `https://api.authdemoapp-jec.com`
+- **Stack:** Node.js · TypeScript · Express 5 · MongoDB + Mongoose · JWT · bcrypt
+- **Handles:**
+  - JWT issuance + refresh token rotation (`/token/refresh`)
+  - Google, GitHub, and Apple OAuth token exchange
+  - User management (create, edit, password reset)
+  - Transactional email via SendGrid (password reset flow)
+  - FCM device token management + push notification dispatch via Firebase Admin
 
-To learn more about React Native, take a look at the following resources:
+---
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+## Privacy & Legal
+
+- [Privacy Policy](docs/app-privacy-policy.html)
+- [Terms & Conditions](docs/app-terms-&-conditions.html)
+
+---
+
+## License
+
+MIT

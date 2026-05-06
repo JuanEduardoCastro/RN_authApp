@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import useStyles from '@hooks/useStyles';
 
-import { scale, SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
@@ -47,8 +47,8 @@ const createStyles = (colors: TColors) =>
   StyleSheet.create({
     logoutModal: {
       // backgroundColor: 'lightgray',
-      gap: scale(40),
-      paddingHorizontal: scale(26),
+      gap: moderateScale(40),
+      paddingHorizontal: moderateScale(26),
     },
     modalText: {
       ...textVar.baseBold,

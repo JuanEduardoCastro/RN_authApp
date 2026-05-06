@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>RN_authApp</string>
+	<string>Auth.Jc</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -55,6 +55,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>The app require access to your phone camera.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>We use Face ID to let you log in quickly and securely.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app require access to your phone location</string>
 	<key>NSMicrophoneUsageDescription</key>
@@ -63,8 +65,6 @@
 	<string>The app require access to your photo gallery.</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
-	<key>NSFaceIDUsageDescription</key>    
-  <string>We use Face ID to let you log in quickly and securely.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Luckiest Guy Regular.ttf</string>

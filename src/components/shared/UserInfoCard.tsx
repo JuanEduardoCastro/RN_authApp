@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
@@ -16,11 +16,17 @@ import AvatarView from './AvatarView';
 
 type UserInfoCardProps = {
   user: User;
+  onPress?: () => void;
 };
 
-const UserInfoCard = ({ user }: UserInfoCardProps) => {
+const UserInfoCard = ({ user, onPress }: UserInfoCardProps) => {
+  console.log(
+    'XX -> UserInfoCard.tsx:22 -> UserInfoCard -> user :',
+    user.firstName.length,
+  );
+
   const { styles } = useStyles(createStyles);
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   const memberSinceFormat = (dateString: string | Date) => {
     if (!dateString) return '';
@@ -37,18 +43,25 @@ const UserInfoCard = ({ user }: UserInfoCardProps) => {
   };
 
   return (
-    <View style={styles.userCard}>
+    <Pressable onPress={onPress} style={styles.userCard}>
       <View style={styles.avatarBox}>
         <AvatarView name="avatarURL" />
       </View>
       <View style={styles.infoBox}>
         <View style={styles.userNameBox}>
-          <Text style={styles.userNameText}>
-            {user?.firstName + ' ' + user?.lastName}
+          <Text
+            style={styles.userNameText}
+            ellipsizeMode="tail"
+            numberOfLines={1}>
+            {user?.firstName.length > 0
+              ? user?.firstName + ' ' + user?.lastName
+              : t('default-user-name')}
           </Text>
         </View>
         <View style={styles.emaileBox}>
-          <Text style={styles.emailText}>{user?.email}</Text>
+          <Text style={styles.emailText} ellipsizeMode="tail" numberOfLines={1}>
+            {user?.email}
+          </Text>
         </View>
         <View style={styles.memberSinceBox}>
           <Text style={styles.memberSinceText}>
@@ -56,7 +69,7 @@ const UserInfoCard = ({ user }: UserInfoCardProps) => {
           </Text>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -74,6 +87,7 @@ const createStyles = (colors: TColors) =>
       borderWidth: 1,
       borderColor: colors.second + 66,
       gap: moderateScale(24),
+      overflow: 'hidden',
     },
     avatarBox: {
       justifyContent: 'center',
@@ -81,6 +95,7 @@ const createStyles = (colors: TColors) =>
       // padding: moderateScale(8),
     },
     infoBox: {
+      flex: 1,
       // padding: moderateScale(8),
       gap: 4,
     },

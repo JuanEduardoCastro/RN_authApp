@@ -18,6 +18,10 @@ export const cleanUserData = (
     if (key === '_id') {
       continue;
     }
+    if (key === 'avatarURL') {
+      sanitized[key] = value;
+      continue;
+    }
     if (typeof value === 'string') {
       sanitized[key] = sanitizeUserInput(value);
     } else if (

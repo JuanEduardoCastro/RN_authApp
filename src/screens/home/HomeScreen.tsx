@@ -6,6 +6,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAppSelector } from '@store/hooks';
 
+import { HomeTabScreenProps } from '@navigation/types';
+
 import HeaderHome from '@components/shared/HeaderHome';
 import LogoutModal from '@components/shared/modalSheet/LogoutModal';
 import ModalSheet from '@components/shared/modalSheet/ModalSheet';
@@ -22,7 +24,9 @@ import { TColors } from '@constants/types';
 
 import { userAuth } from 'src/store/authSlice';
 
-const HomeScreen = () => {
+const HomeScreen = ({
+  navigation,
+}: HomeTabScreenProps<'SettingsNavigator'>) => {
   useBackHandler();
   const { user } = useAppSelector(userAuth);
   const { handleLogout } = useLogoutUser();
@@ -39,12 +43,16 @@ const HomeScreen = () => {
     await handleLogout();
   };
 
+  const handlePressToProfile = () => {
+    navigation.navigate('SettingsNavigator', { screen: 'ProfileScreen' });
+  };
+
   return (
     <>
       <SafeAreaView style={styles.container}>
         <HeaderHome toggleModalSheet={toggleModalSheet} />
         <Separator border={false} />
-        <UserInfoCard user={user!} />
+        <UserInfoCard user={user!} onPress={handlePressToProfile} />
         <Separator border={false} />
         <SessionExpCard />
       </SafeAreaView>

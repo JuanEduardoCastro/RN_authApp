@@ -1,4 +1,4 @@
-package com.rn_authapp
+package com.juancastro.authapp
 
 import android.content.Intent
 import android.app.NotificationChannel

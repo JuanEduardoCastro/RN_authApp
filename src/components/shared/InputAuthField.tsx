@@ -17,7 +17,7 @@ import useStyles from '@hooks/useStyles';
 
 import { EyeCloseIcon, EyeOpenIcon } from '@assets/svg/icons';
 
-import { SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
@@ -154,7 +154,7 @@ const createStyles = (colors: TColors) =>
       alignItems: 'center',
       borderWidth: 1,
       borderColor: '#ccc',
-      paddingHorizontal: 10,
+      paddingHorizontal: moderateScale(10),
       borderRadius: 12,
     },
     input: {
@@ -162,7 +162,7 @@ const createStyles = (colors: TColors) =>
       height: SCREEN.heightFixed * 48,
       flexGrow: 1,
       width: 'auto',
-      paddingVertical: 10,
+      paddingVertical: verticalScale(10),
       paddingHorizontal: 8,
       color: colors.text,
     },

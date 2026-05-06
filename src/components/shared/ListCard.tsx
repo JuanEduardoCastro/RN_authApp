@@ -6,7 +6,7 @@ import useStyles from '@hooks/useStyles';
 
 import { CheckIcon } from '@assets/svg/icons';
 
-import { SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
@@ -47,7 +47,7 @@ const createStyles = (colors: TColors) =>
       height: SCREEN.heightFixed * 46,
       justifyContent: 'space-between',
       alignItems: 'center',
-      paddingHorizontal: 10,
+      paddingHorizontal: moderateScale(10),
       marginVertical: 4,
     },
     iconBox: {
@@ -55,7 +55,7 @@ const createStyles = (colors: TColors) =>
       height: SCREEN.heightFixed * 24,
       justifyContent: 'center',
       alignItems: 'center',
-      marginRight: 12,
+      marginRight: moderateScale(12),
     },
     text: {
       ...textVar.base,

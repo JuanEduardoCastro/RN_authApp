@@ -17,7 +17,7 @@ import Animated, {
 
 import useStyles from '@hooks/useStyles';
 
-import { scale, SCREEN } from '@constants/dimensions';
+import { moderateScale, scale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
@@ -76,7 +76,7 @@ const createStyles = (colors: TColors) =>
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.second,
-      paddingHorizontal: scale(10),
+      paddingHorizontal: moderateScale(10),
       paddingVertical: scale(8),
       borderRadius: 50,
     },

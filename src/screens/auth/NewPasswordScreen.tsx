@@ -29,7 +29,7 @@ import Separator from '@components/shared/Separator';
 import { CustomJwtPayload } from '@hooks/types';
 import useStyles from '@hooks/useStyles';
 
-import { SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 import {
@@ -257,7 +257,8 @@ const createStyles = (colors: TColors) =>
     titleBox: {
       justifyContent: 'center',
       alignItems: 'center',
-      gap: 12,
+      paddingHorizontal: moderateScale(16),
+      gap: moderateScale(12),
     },
     subTitle: {
       ...textVar.largeBold,
@@ -266,14 +267,15 @@ const createStyles = (colors: TColors) =>
     },
     inputBox: {
       width: SCREEN.width100,
-      paddingHorizontal: 16,
+      paddingHorizontal: moderateScale(16),
     },
     textinput: {
       borderColor: colors.second,
     },
     buttonBox: {
+      alignItems: 'center',
       width: SCREEN.width100,
-      paddingVertical: 12,
+      paddingVertical: verticalScale(12),
     },
     button: {
       backgroundColor: colors.second,

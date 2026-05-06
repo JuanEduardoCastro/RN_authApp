@@ -14,7 +14,7 @@ import Animated, {
 
 import useStyles from '@hooks/useStyles';
 
-import { SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
@@ -133,7 +133,7 @@ const createStyles = (colors: TColors) =>
       width: SCREEN.width100,
       flexDirection: 'row',
       justifyContent: 'space-between',
-      paddingHorizontal: 24,
+      paddingHorizontal: moderateScale(24),
       paddingVertical: 6,
       marginBottom: 8,
     },

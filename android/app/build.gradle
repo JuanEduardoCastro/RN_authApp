@@ -84,9 +84,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.rn_authapp"
+    namespace "com.juancastro.authapp"
     defaultConfig {
-        applicationId "com.rn_authapp"
+        applicationId "com.juancastro.authapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         // versionCode 5

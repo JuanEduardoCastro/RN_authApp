@@ -29,7 +29,7 @@ import Separator from '@components/shared/Separator';
 
 import useStyles from '@hooks/useStyles';
 
-import { SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 import {
@@ -198,12 +198,14 @@ const createStyles = (colors: TColors) =>
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      padding: 20,
+      paddingVertical: verticalScale(20),
+      paddingHorizontal: moderateScale(16),
     },
     titleBox: {
       justifyContent: 'center',
       alignItems: 'center',
-      gap: 12,
+      paddingHorizontal: moderateScale(16),
+      gap: moderateScale(12),
     },
     subTitle: {
       ...textVar.largeBold,
@@ -212,7 +214,7 @@ const createStyles = (colors: TColors) =>
     },
     inputBox: {
       width: SCREEN.width100,
-      paddingHorizontal: 16,
+      paddingHorizontal: moderateScale(16),
     },
     textinput: {
       borderColor: colors.second,
@@ -220,7 +222,7 @@ const createStyles = (colors: TColors) =>
     buttonBox: {
       width: SCREEN.width100,
       alignItems: 'center',
-      paddingVertical: 12,
+      paddingVertical: verticalScale(12),
     },
     button: {
       backgroundColor: colors.second,

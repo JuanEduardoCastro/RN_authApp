@@ -6,7 +6,7 @@ import useStyles from '@hooks/useStyles';
 
 import { ChevronIcon } from '@assets/svg/icons';
 
-import { SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
@@ -41,9 +41,9 @@ const createStyles = (colors: TColors) =>
       height: SCREEN.heightFixed * 30,
       flexDirection: 'row',
       alignItems: 'center',
-      paddingHorizontal: 12,
+      paddingHorizontal: moderateScale(12),
       paddingVertical: 2,
-      gap: 12,
+      gap: moderateScale(12),
     },
     backIconBox: {
       transform: [{ rotate: '90deg' }],
