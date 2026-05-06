@@ -2,6 +2,8 @@ import React from 'react';
 
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { useTranslation } from 'react-i18next';
+
 import { userAuth } from '@store/authSlice';
 import { useAppSelector } from '@store/hooks';
 
@@ -22,6 +24,7 @@ const HeaderHome = ({
 }: HeaderHomeProps) => {
   const { styles } = useStyles(createStyles);
   const { user } = useAppSelector(userAuth);
+  const { t } = useTranslation();
 
   const selectUserProvider = () => {
     if (user !== null) {
@@ -51,8 +54,8 @@ const HeaderHome = ({
         default:
           return (
             <MailIcon
-              width={SCREEN.widthFixed * 20}
-              height={SCREEN.heightFixed * 20}
+              width={SCREEN.widthFixed * 22}
+              height={SCREEN.heightFixed * 22}
             />
           );
       }
@@ -61,9 +64,10 @@ const HeaderHome = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.leftHeader} />
       <View style={styles.centerHeader}>
-        <Text style={styles.text}>Login from: </Text>
+        <Text style={styles.text}>
+          {t('login-from')} {user?.provider ?? 'email'}{' '}
+        </Text>
       </View>
       <Pressable
         // onPress={() => console.log('hizo click')}
@@ -87,22 +91,19 @@ const createStyles = (colors: TColors) =>
       paddingHorizontal: moderateScale(16),
     },
     leftHeader: {
-      flexGrow: 1,
       alignItems: 'flex-start',
       padding: 8,
     },
     centerHeader: {
-      flexGrow: 2,
       alignItems: 'flex-end',
       padding: 8,
     },
     rightHeader: {
-      flexGrow: 1,
       alignItems: 'flex-start',
       padding: 8,
     },
     text: {
-      ...textVar.base,
+      ...textVar.baseBold,
       color: colors.text,
     },
   });

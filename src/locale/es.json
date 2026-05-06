@@ -169,5 +169,11 @@
   "biometric-disabled-info": "El inicio biométrico ha sido desactivado.",
   "biometrics-warning-session-expired": "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.",
 
-  "default-user-name": "Usuario"
+  "got-to-profile-message": "Por favor, ingresa un nombre de usuario para tu perfil.",
+  "go-later": "Después",
+  "go-to-profile": "Perfil",
+
+  "default-user-name": "Usuario",
+
+  "login-from": "Ingresaste desde tu"
 }

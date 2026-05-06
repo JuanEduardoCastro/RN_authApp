@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { StyleSheet } from 'react-native';
 
@@ -9,6 +9,7 @@ import { useAppSelector } from '@store/hooks';
 import { HomeTabScreenProps } from '@navigation/types';
 
 import HeaderHome from '@components/shared/HeaderHome';
+import CompleteProfileModal from '@components/shared/modalSheet/CompleteProfileModal';
 import LogoutModal from '@components/shared/modalSheet/LogoutModal';
 import ModalSheet from '@components/shared/modalSheet/ModalSheet';
 import Separator from '@components/shared/Separator';
@@ -33,6 +34,16 @@ const HomeScreen = ({
   const { styles } = useStyles(createStyles);
 
   const [confirmLogoutModal, setConfirmLogoutModal] = useState(false);
+  const [completeProfileModal, setCompleteProfileModal] = useState(false);
+
+  useEffect(() => {
+    if (user !== null) {
+      if (user!.firstName.length < 1) {
+        setCompleteProfileModal(true);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggleModalSheet = () => {
     setConfirmLogoutModal(!confirmLogoutModal);
@@ -45,6 +56,7 @@ const HomeScreen = ({
 
   const handlePressToProfile = () => {
     navigation.navigate('SettingsNavigator', { screen: 'ProfileScreen' });
+    setCompleteProfileModal(false);
   };
 
   return (
@@ -62,6 +74,14 @@ const HomeScreen = ({
         <LogoutModal
           toggleModalSheet={toggleModalSheet}
           handleLogut={handleConfirmLogout}
+        />
+      </ModalSheet>
+      <ModalSheet
+        modalIsVisible={completeProfileModal}
+        toggleSheet={setCompleteProfileModal}>
+        <CompleteProfileModal
+          toggleModalSheet={() => setCompleteProfileModal(false)}
+          handleGoToProfile={handlePressToProfile}
         />
       </ModalSheet>
     </>

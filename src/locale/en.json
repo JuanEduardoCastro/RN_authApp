@@ -169,5 +169,11 @@
   "biometric-disabled-info": "Biometric login has been disabled.",
   "biometrics-warning-session-expired": "Your session has expired. Please log in again.",
 
-  "default-user-name": "User"
+  "got-to-profile-message": "Please, enter a user name for your profile.",
+  "go-later": "Later",
+  "go-to-profile": "Profile",
+
+  "default-user-name": "User",
+
+  "login-from": "Login from your"
 }
