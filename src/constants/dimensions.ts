@@ -26,8 +26,8 @@ const SCREEN = {
   height50: SH * 0.5,
   width25: SW * 0.25,
   height25: SH * 0.25,
-  widthFixed: SW / 393, // THE SIZE OF THE DESIGNE
-  heightFixed: SH / 852, // THE SIZE OF THE DESIGNE
+  widthFixed: SW / BASE_WIDTH, // THE SIZE OF THE DESIGNE
+  heightFixed: SH / BASE_HEIGHT, // THE SIZE OF THE DESIGNE
 };
 
 export { SCREEN, SH, SW };

@@ -20,14 +20,11 @@ import useBackHandler from '@hooks/useBackHandler';
 import useLogoutUser from '@hooks/useLogoutUser';
 import useStyles from '@hooks/useStyles';
 
-import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
 import { userAuth } from 'src/store/authSlice';
 
-const HomeScreen = ({
-  navigation,
-}: HomeTabScreenProps<'SettingsNavigator'>) => {
+const HomeScreen = ({ navigation }: HomeTabScreenProps<'HomeScreen'>) => {
   useBackHandler();
   const { user } = useAppSelector(userAuth);
   const { handleLogout } = useLogoutUser();
@@ -78,7 +75,7 @@ const HomeScreen = ({
       </ModalSheet>
       <ModalSheet
         modalIsVisible={completeProfileModal}
-        toggleSheet={setCompleteProfileModal}>
+        toggleSheet={() => setCompleteProfileModal(false)}>
         <CompleteProfileModal
           toggleModalSheet={() => setCompleteProfileModal(false)}
           handleGoToProfile={handlePressToProfile}
@@ -97,9 +94,5 @@ const createStyles = (colors: TColors) =>
       backgroundColor: colors.background,
       justifyContent: 'flex-start',
       alignItems: 'center',
-    },
-    text: {
-      ...textVar.xlargeBold,
-      color: colors.text,
     },
   });

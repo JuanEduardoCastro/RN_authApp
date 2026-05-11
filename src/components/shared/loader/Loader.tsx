@@ -23,7 +23,9 @@ const Loader = () => {
       withTiming(360, { duration: 1200, easing: Easing.linear }),
       -1,
     );
-  });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${rotation.value}deg` }],

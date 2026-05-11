@@ -169,7 +169,7 @@
   "biometric-disabled-info": "Biometric login has been disabled.",
   "biometrics-warning-session-expired": "Your session has expired. Please log in again.",
 
-  "got-to-profile-message": "Please, enter a user name for your profile.",
+  "go-to-profile-message": "Please, enter a user name for your profile.",
   "go-later": "Later",
   "go-to-profile": "Profile",
 

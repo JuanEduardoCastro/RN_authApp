@@ -56,13 +56,6 @@ const NotificationBanner = () => {
     [translateY],
   );
 
-  // const startAnimation = (val: number) => {
-  //   translateY.value = withTiming(val, {
-  //     duration: 400,
-  //     easing: Easing.out(Easing.ease),
-  //   });
-  // };
-
   useEffect(() => {
     if (messageType) {
       startAnimation(0);

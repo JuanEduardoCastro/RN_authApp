@@ -20,11 +20,6 @@ type UserInfoCardProps = {
 };
 
 const UserInfoCard = ({ user, onPress }: UserInfoCardProps) => {
-  console.log(
-    'XX -> UserInfoCard.tsx:22 -> UserInfoCard -> user :',
-    user.firstName.length,
-  );
-
   const { styles } = useStyles(createStyles);
   const { i18n, t } = useTranslation();
 
@@ -53,7 +48,7 @@ const UserInfoCard = ({ user, onPress }: UserInfoCardProps) => {
             style={styles.userNameText}
             ellipsizeMode="tail"
             numberOfLines={1}>
-            {user?.firstName.length > 0
+            {(user?.firstName.length ?? 0) > 0
               ? user?.firstName + ' ' + user?.lastName
               : t('default-user-name')}
           </Text>

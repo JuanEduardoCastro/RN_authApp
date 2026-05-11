@@ -4,13 +4,13 @@ import { Modal, StyleSheet, View } from 'react-native';
 
 import useStyles from '@hooks/useStyles';
 
-import { SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN } from '@constants/dimensions';
 import { TColors } from '@constants/types';
 
 type ModalSheetProps = {
   children: ReactNode;
   modalIsVisible: boolean;
-  toggleSheet: (prev: boolean) => void;
+  toggleSheet: () => void;
 };
 
 const ModalSheet = ({
@@ -21,7 +21,7 @@ const ModalSheet = ({
   const { styles } = useStyles(createStyles);
 
   const handleCloseModal = () => {
-    toggleSheet(false);
+    toggleSheet();
   };
 
   return (
@@ -53,19 +53,12 @@ const createStyles = (colors: TColors) =>
     },
     sheet: {
       backgroundColor: colors.background,
-      padding: 8,
+      padding: moderateScale(24),
       height: SCREEN.heightFixed * 280,
-      width: SCREEN.width80,
+      width: SCREEN.width90,
       borderRadius: 20,
       zIndex: 2,
       alignItems: 'center',
       justifyContent: 'center',
-    },
-    modalHeader: {
-      flex: 1,
-      width: SCREEN.widthFixed,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      gap: 8,
     },
   });

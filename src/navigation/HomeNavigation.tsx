@@ -66,7 +66,7 @@ const HomeNavigation = () => {
                 />
               );
             default:
-              break;
+              return null;
           }
         },
       })}>

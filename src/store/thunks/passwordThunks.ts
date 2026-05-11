@@ -35,7 +35,7 @@ export const checkEmail = createAsyncThunk(
       const response = await api.post('/users/check-email', data);
       // Status 200 means the email was sent successfully
       if (response.status === 200) {
-        checkEmailRateLimiter.recordSuccessfulAttempt();
+        await checkEmailRateLimiter.recordSuccessfulAttempt();
         return { success: true, error: null };
       }
 
@@ -46,7 +46,7 @@ export const checkEmail = createAsyncThunk(
     } catch (error: any) {
       __DEV__ && console.log('XX -> passwordThunks.ts:45 -> error :', error);
 
-      checkEmailRateLimiter.recordFailedAttempt();
+      await checkEmailRateLimiter.recordFailedAttempt();
 
       const parsedError = parseApiError(error, t, 'error-email-check');
       return rejectWithValue({
@@ -75,7 +75,7 @@ export const resetPassword = createAsyncThunk(
     try {
       const response = await api.post('/users/reset-password', data);
       if (response.status === 200) {
-        resetPasswordRateLimiter.recordSuccessfulAttempt();
+        await resetPasswordRateLimiter.recordSuccessfulAttempt();
         return { success: true, error: null };
       } else if (response.status === 204) {
         return rejectWithValue({
@@ -89,7 +89,7 @@ export const resetPassword = createAsyncThunk(
       });
     } catch (error: any) {
       __DEV__ && console.log('XX -> passwordThunks.ts:94 -> error :', error);
-      resetPasswordRateLimiter.recordFailedAttempt();
+      await resetPasswordRateLimiter.recordFailedAttempt();
 
       const parsedError = parseApiError(error, t, 'error-password-reset');
 

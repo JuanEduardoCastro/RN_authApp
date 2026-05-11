@@ -48,7 +48,6 @@ const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
       width: SCREEN.widthFixed * 280,
-      // backgroundColor: 'lightgray',
       gap: moderateScale(20),
       paddingHorizontal: moderateScale(10),
     },

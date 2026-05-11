@@ -40,7 +40,8 @@ const BottomSheet = ({
   }, [isOpen.value]);
 
   const handleCloseModal = () => {
-    setIsVisible(false);
+    // setIsVisible(false);
+    toggleSheet();
   };
 
   const progress = useDerivedValue(() =>

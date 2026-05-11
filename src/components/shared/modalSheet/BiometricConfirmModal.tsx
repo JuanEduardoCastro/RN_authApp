@@ -6,11 +6,12 @@ import { useTranslation } from 'react-i18next';
 
 import useStyles from '@hooks/useStyles';
 
-import { moderateScale, SCREEN } from '@constants/dimensions';
+import { moderateScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
 import Button from '../Button';
+import Separator from '../Separator';
 
 type BiometricConfirmModalProps = {
   action: 'enable' | 'disable';
@@ -29,7 +30,7 @@ const BiometricConfirmModal = ({
   const isEnable = action === 'enable';
 
   return (
-    <View style={styles.container}>
+    <View style={styles.containerModal}>
       <Text style={styles.title}>
         {isEnable
           ? t('biometric-confirm-enable-title')
@@ -40,10 +41,12 @@ const BiometricConfirmModal = ({
           ? t('biometric-confirm-enable-message')
           : t('biometric-confirm-disable-message')}
       </Text>
+      <Separator border={false} height={40} />
       <View style={styles.buttonBox}>
         <Button
           title={t('biometric-confirm-cancel')}
           onPress={toggleModalSheet}
+          style={styles.buttonSize}
           buttonStyles={styles.noButton}
           textStyles={styles.noButtonText}
         />
@@ -54,6 +57,7 @@ const BiometricConfirmModal = ({
               : t('biometric-confirm-disable-button')
           }
           onPress={onConfirm}
+          style={styles.buttonSize}
           buttonStyles={styles.yesButton}
           textStyles={styles.yesButtonText}
         />
@@ -66,10 +70,11 @@ export default BiometricConfirmModal;
 
 const createStyles = (colors: TColors) =>
   StyleSheet.create({
-    container: {
+    containerModal: {
+      flex: 1,
+      width: '100%',
+      justifyContent: 'center',
       alignItems: 'center',
-      paddingHorizontal: moderateScale(26),
-      gap: moderateScale(24),
     },
     title: {
       ...textVar.largeBold,
@@ -80,15 +85,22 @@ const createStyles = (colors: TColors) =>
       ...textVar.base,
       color: colors.textMuted,
       textAlign: 'center',
+      lineHeight: moderateScale(28),
     },
     buttonBox: {
       width: '100%',
       flexDirection: 'row',
       justifyContent: 'space-around',
+      alignItems: 'center',
+      gap: moderateScale(22),
+      paddingHorizontal: moderateScale(20),
+    },
+    buttonSize: {
+      flex: 1,
     },
     noButton: {
-      backgroundColor: colors.background,
-      width: SCREEN.widthFixed * 85,
+      width: '100%',
+      backgroundColor: 'transparent',
       borderWidth: 1,
       borderColor: colors.second,
     },
@@ -97,10 +109,12 @@ const createStyles = (colors: TColors) =>
       color: colors.text,
     },
     yesButton: {
+      width: '100%',
+      borderWidth: 0,
       backgroundColor: colors.second,
-      width: SCREEN.widthFixed * 85,
     },
     yesButtonText: {
+      ...textVar.medium,
       color: colors.textNgt,
     },
   });

@@ -53,7 +53,7 @@ export default Separator;
 const createStyles = (colors: TColors) =>
   StyleSheet.create({
     separator: {
-      width: SCREEN.width100,
+      width: '100%',
       justifyContent: 'center',
     },
     line: {

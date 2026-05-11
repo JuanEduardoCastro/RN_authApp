@@ -17,7 +17,7 @@ import Animated, {
 
 import useStyles from '@hooks/useStyles';
 
-import { moderateScale, scale, SCREEN } from '@constants/dimensions';
+import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
@@ -57,8 +57,8 @@ const Button = ({
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       testID="button"
-      style={[props.disabled && styles.disabled]}
-      {...props}>
+      {...props}
+      style={[props.disabled && styles.disabled]}>
       <Animated.View style={[styles.button, animationStyles, buttonStyles]}>
         <Text style={[styles.text, textStyles]}>{title}</Text>
       </Animated.View>
@@ -71,13 +71,13 @@ export default Button;
 const createStyles = (colors: TColors) =>
   StyleSheet.create({
     button: {
-      maxWidth: SCREEN.width100,
+      width: '100%',
       height: SCREEN.heightFixed * 46,
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.second,
-      paddingHorizontal: moderateScale(10),
-      paddingVertical: scale(8),
+      // paddingHorizontal: moderateScale(10),
+      // paddingVertical: moderateScale(8),
       borderRadius: 50,
     },
     text: {

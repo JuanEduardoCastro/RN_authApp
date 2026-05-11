@@ -79,8 +79,8 @@ const ProfileScreen = ({
 
   const onSubmit = async (data: ProfileDataProps) => {
     Keyboard.dismiss();
-    const { ...userData } = data;
-    const dataAPI = { userData, t };
+
+    const dataAPI = { userData: data, t };
 
     try {
       const res = await dispatch(editUser(dataAPI as EditUserPayload)).unwrap();
@@ -93,7 +93,7 @@ const ProfileScreen = ({
       __DEV__ &&
         console.log('XX -> ProfileScreen.tsx:83 -> onSubmit -> error :', error);
     }
-    setEditEnable(false);
+    // setEditEnable(false);
   };
 
   return (

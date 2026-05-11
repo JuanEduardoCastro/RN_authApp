@@ -6,11 +6,12 @@ import { useTranslation } from 'react-i18next';
 
 import useStyles from '@hooks/useStyles';
 
-import { moderateScale, SCREEN } from '@constants/dimensions';
+import { moderateScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
 import Button from '../Button';
+import Separator from '../Separator';
 
 type LogoutModalProps = {
   toggleModalSheet: () => void;
@@ -22,19 +23,23 @@ const LogoutModal = ({ toggleModalSheet, handleLogut }: LogoutModalProps) => {
   const { t } = useTranslation();
 
   return (
-    <View style={styles.logoutModal}>
+    <View style={styles.containerModal}>
       <Text style={styles.modalText}>{t('logout-message')}</Text>
+      <Separator border={false} height={60} />
       <View style={styles.buttonBox}>
         <Button
           title={t('logout-cancel')}
           onPress={toggleModalSheet}
+          style={styles.buttonSize}
           buttonStyles={styles.noButton}
-          textStyles={styles.textButton}
+          textStyles={styles.noTextButton}
         />
         <Button
           title={t('logout-confirmation')}
           onPress={handleLogut}
+          style={styles.buttonSize}
           buttonStyles={styles.yesButton}
+          textStyles={styles.yesTextButton}
         />
       </View>
     </View>
@@ -45,31 +50,46 @@ export default LogoutModal;
 
 const createStyles = (colors: TColors) =>
   StyleSheet.create({
-    logoutModal: {
-      // backgroundColor: 'lightgray',
-      gap: moderateScale(40),
-      paddingHorizontal: moderateScale(26),
+    containerModal: {
+      flex: 1,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     modalText: {
       ...textVar.baseBold,
       color: colors.text,
       textAlign: 'center',
+      lineHeight: moderateScale(28),
     },
     buttonBox: {
+      width: '100%',
       flexDirection: 'row',
       justifyContent: 'space-around',
+      alignItems: 'center',
+      gap: moderateScale(22),
+      paddingHorizontal: moderateScale(20),
+    },
+    buttonSize: {
+      flex: 1,
     },
     noButton: {
-      width: SCREEN.widthFixed * 85,
-      backgroundColor: colors.background,
+      width: '100%',
+      backgroundColor: 'transparent',
       borderWidth: 1,
       borderColor: colors.second,
     },
-    yesButton: {
-      width: SCREEN.widthFixed * 85,
-    },
-    textButton: {
+    noTextButton: {
       ...textVar.base,
       color: colors.text,
+    },
+    yesButton: {
+      width: '100%',
+      borderWidth: 0,
+      backgroundColor: colors.second,
+    },
+    yesTextButton: {
+      ...textVar.base,
+      color: colors.textNgt,
     },
   });

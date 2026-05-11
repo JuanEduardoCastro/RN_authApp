@@ -70,7 +70,7 @@ export interface CreateUserPayload {
 
 export interface EditUserPayload {
   t: TFunction;
-  userData: Record<string, string>;
+  userData: Record<string, any>;
 }
 
 export interface CheckEmailPayload {
