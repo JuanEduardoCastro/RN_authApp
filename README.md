@@ -16,16 +16,26 @@ A full-featured authentication demo for iOS and Android built with React Native.
   <tr>
     <td align="center"><img src="src/assets/screenshots/welcome-screen-eng.png" width="200"/><br/><sub>Welcome — English</sub></td>
     <td align="center"><img src="src/assets/screenshots/welcome-screen-esp.png" width="200"/><br/><sub>Welcome — Español</sub></td>
-    <td align="center"><img src="src/assets/screenshots/home-screen.png" width="200"/><br/><sub>Home</sub></td>
+    <td align="center"><img src="src/assets/screenshots/login-screen.png" width="200"/><br/><sub>Login</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="src/assets/screenshots/profile-screen.png" width="200"/><br/><sub>Profile</sub></td>
-    <td align="center"><img src="src/assets/screenshots/settings-screen.png" width="200"/><br/><sub>Settings — Luxury theme</sub></td>
+    <td align="center"><img src="src/assets/screenshots/checkemail-screen.png" width="200"/><br/><sub>Check email</sub></td>
+    <td align="center"><img src="src/assets/screenshots/home-screen.png" width="200"/><br/><sub>Home — dark</sub></td>
+    <td align="center"><img src="src/assets/screenshots/home-screen-light.png" width="200"/><br/><sub>Home — light</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="src/assets/screenshots/profile-screen.png" width="200"/><br/><sub>Profile — dark</sub></td>
+    <td align="center"><img src="src/assets/screenshots/profile-screen-light.png" width="200"/><br/><sub>Profile — light</sub></td>
+    <td align="center"><img src="src/assets/screenshots/settings-screen.png" width="200"/><br/><sub>Settings — dark</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="src/assets/screenshots/settings-screen-light.png" width="200"/><br/><sub>Settings — light</sub></td>
     <td align="center"><img src="src/assets/screenshots/settings-screen-calm.png" width="200"/><br/><sub>Settings — Calm theme</sub></td>
+    <td align="center"><img src="src/assets/screenshots/language-selector.png" width="200"/><br/><sub>Language selector</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="src/assets/screenshots/language-selector.png" width="200"/><br/><sub>Language selector</sub></td>
     <td align="center"><img src="src/assets/screenshots/notification-banner.png" width="200"/><br/><sub>Notification banner</sub></td>
+    <td></td>
     <td></td>
   </tr>
 </table>
