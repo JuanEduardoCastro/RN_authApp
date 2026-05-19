@@ -1,8 +1,12 @@
-# Auth.Jc
+<div align="center">
+  <img src="src/assets/screenshots/banner.png" width="100%" alt="Auth App banner"/>
+</div>
+
+# Auth App
 
 > Secure. Fast. Seamless.
 
-A full-featured authentication app for iOS and Android built with React Native. Google, GitHub, and Apple Sign-In, biometric login (Face ID / Touch ID), JWT token management with silent refresh, push notifications, deep linking, and a multi-theme UI — all backed by a live REST API.
+A full-featured authentication demo for iOS and Android built with React Native. Google, GitHub, and Apple Sign-In, biometric login (Face ID / Touch ID), JWT token management with silent refresh, push notifications, deep linking, and a multi-theme UI — all backed by a live REST API.
 
 ---
 
@@ -10,19 +14,19 @@ A full-featured authentication app for iOS and Android built with React Native. 
 
 <table>
   <tr>
-    <td align="center"><img src="assets/screenshots/Welcome screen - dark.png" width="200"/><br/><sub>Welcome — dark</sub></td>
-    <td align="center"><img src="assets/screenshots/Welcome screen - light.png" width="200"/><br/><sub>Welcome — light</sub></td>
-    <td align="center"><img src="assets/screenshots/Login screen.png" width="200"/><br/><sub>Login</sub></td>
+    <td align="center"><img src="src/assets/screenshots/welcome-screen-eng.png" width="200"/><br/><sub>Welcome — English</sub></td>
+    <td align="center"><img src="src/assets/screenshots/welcome-screen-esp.png" width="200"/><br/><sub>Welcome — Español</sub></td>
+    <td align="center"><img src="src/assets/screenshots/home-screen.png" width="200"/><br/><sub>Home</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="assets/screenshots/Sign up screen.png" width="200"/><br/><sub>Sign up</sub></td>
-    <td align="center"><img src="assets/screenshots/Home screen - dark.png" width="200"/><br/><sub>Home — dark</sub></td>
-    <td align="center"><img src="assets/screenshots/Home screen - light.png" width="200"/><br/><sub>Home — light</sub></td>
+    <td align="center"><img src="src/assets/screenshots/profile-screen.png" width="200"/><br/><sub>Profile</sub></td>
+    <td align="center"><img src="src/assets/screenshots/settings-screen.png" width="200"/><br/><sub>Settings — Luxury theme</sub></td>
+    <td align="center"><img src="src/assets/screenshots/settings-screen-calm.png" width="200"/><br/><sub>Settings — Calm theme</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="assets/screenshots/Settings screen.png" width="200"/><br/><sub>Settings</sub></td>
-    <td align="center"><img src="assets/screenshots/Biometric login.png" width="200"/><br/><sub>Biometric login</sub></td>
-    <td align="center"><img src="assets/screenshots/Profile screen.png" width="200"/><br/><sub>Profile</sub></td>
+    <td align="center"><img src="src/assets/screenshots/language-selector.png" width="200"/><br/><sub>Language selector</sub></td>
+    <td align="center"><img src="src/assets/screenshots/notification-banner.png" width="200"/><br/><sub>Notification banner</sub></td>
+    <td></td>
   </tr>
 </table>
 
@@ -40,10 +44,10 @@ A full-featured authentication app for iOS and Android built with React Native. 
 - **SSL pinning** — public-key pinning via `react-native-ssl-public-key-pinning` initialised at app startup
 - **Push notifications** — Firebase Cloud Messaging; handles foreground, background, and quit-state messages
 - **Deep linking** — custom scheme (`authapp://`) and HTTPS universal links for password reset flow
-- **Multi-theme UI** — 4 color themes (luxury, calm, gold, passion) × dark/light mode; persisted to Keychain
-- **Responsive layout** — pixel-perfect scaling system based on 393×852 design reference; portrait-locked on all platforms
+- **Multi-theme UI** — 4 color themes (Luxury, Calm, Gold, Passion) × dark/light mode; persisted to Keychain
+- **i18n** — English and Spanish via `react-i18next`; language preference persisted to Keychain
+- **Responsive layout** — pixel-perfect scaling based on 393×852 design reference; portrait-locked on all platforms
 - **Input sanitisation** — XSS prevention on all user-provided data before API calls
-- **i18n** — internationalisation via `react-i18next`
 
 ---
 
@@ -127,12 +131,12 @@ src/store/
 
 ```
 src/
-  assets/         # Images, SVG icons, fonts
+  assets/         # Images, SVG icons, fonts, screenshots
   components/     # Reusable UI — buttons, inputs, modals, splash, notifications
   constants/      # Colors (4 themes), dimensions, scaling utilities
   context/        # ModeContext — theme + dark/light mode provider
   hooks/          # useBiometricAuth, useCheckToken, useLogoutUser
-  locale/         # i18n translations
+  locale/         # i18n translations (en, es)
   navigation/     # RootNavigation, AuthNavigator, HomeNavigator, types
   screens/
     auth/         # WelcomeScreen, LoginScreen, CheckEmailScreen, NewPasswordScreen

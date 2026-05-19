@@ -31,6 +31,7 @@ const Button = ({
   title = 'Go to',
   buttonStyles,
   textStyles,
+  style,
   ...props
 }: ButtonProps) => {
   const { styles } = useStyles(createStyles);
@@ -58,7 +59,7 @@ const Button = ({
       onPressOut={handlePressOut}
       testID="button"
       {...props}
-      style={[props.disabled && styles.disabled]}>
+      style={[style as ViewStyle, props.disabled && styles.disabled]}>
       <Animated.View style={[styles.button, animationStyles, buttonStyles]}>
         <Text style={[styles.text, textStyles]}>{title}</Text>
       </Animated.View>
@@ -71,7 +72,7 @@ export default Button;
 const createStyles = (colors: TColors) =>
   StyleSheet.create({
     button: {
-      width: '100%',
+      alignSelf: 'stretch',
       height: SCREEN.heightFixed * 46,
       alignItems: 'center',
       justifyContent: 'center',

@@ -30,7 +30,7 @@ const AvatarView = ({ name: _name, ...props }: AvatarViewProps) => {
         {...props}>
         <Image
           source={
-            user !== null
+            user !== null && user.avatarURL
               ? { uri: user.avatarURL }
               : require('@assets/images/default_user_profile_pic.png')
           }

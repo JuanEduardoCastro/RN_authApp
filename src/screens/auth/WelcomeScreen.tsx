@@ -289,6 +289,7 @@ const WelcomeScreen = ({
             iconProps={{
               width: SCREEN.widthFixed * 20,
               height: SCREEN.heightFixed * 20,
+              color: colors.dark,
             }}
             onPress={() => navigation.navigate('LoginScreen')}
           />
@@ -310,7 +311,11 @@ const WelcomeScreen = ({
             buttonStyles={{ backgroundColor: colors.light }}
             title={t('with-github')}
             Icon={GithubIcon}
-            iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
+            iconProps={{
+              width: SCREEN.widthFixed * 20,
+              height: 20,
+              color: colors.dark,
+            }}
             onPress={handleGitHubLogin}
           />
           {Platform.OS === 'ios' && (
@@ -320,7 +325,11 @@ const WelcomeScreen = ({
               buttonStyles={{ backgroundColor: colors.light }}
               title={t('with-apple')}
               Icon={AppleIcon}
-              iconProps={{ width: SCREEN.widthFixed * 20, height: 20 }}
+              iconProps={{
+                width: SCREEN.widthFixed * 20,
+                height: 20,
+                color: colors.dark,
+              }}
               onPress={handleAppleLogin}
             />
           )}

@@ -36,6 +36,7 @@ export const checkEmail = createAsyncThunk(
       // Status 200 means the email was sent successfully
       if (response.status === 200) {
         await checkEmailRateLimiter.recordSuccessfulAttempt();
+        // console.log('****------->', response.data.data);
         return { success: true, error: null };
       }
 

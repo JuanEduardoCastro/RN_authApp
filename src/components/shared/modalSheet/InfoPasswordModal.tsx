@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import useStyles from '@hooks/useStyles';
 
-import { moderateScale, SCREEN } from '@constants/dimensions';
+import { moderateScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
@@ -21,7 +21,7 @@ const InfoPasswordModal = ({ toggleModalSheet }: InfoPasswordModalProps) => {
   const { t } = useTranslation();
 
   return (
-    <View style={styles.container}>
+    <View style={styles.containerModal}>
       <View style={styles.modalTextBox}>
         <Text style={styles.modalTitle}>{t('info-password-message')}</Text>
         <Text style={styles.modalText}>{t('info-password-length')}</Text>
@@ -34,8 +34,9 @@ const InfoPasswordModal = ({ toggleModalSheet }: InfoPasswordModalProps) => {
         <Button
           title={t('info-accept')}
           onPress={toggleModalSheet}
-          buttonStyles={styles.acceptButton}
-          textStyles={styles.textButton}
+          style={styles.buttonSize}
+          buttonStyles={styles.yesButton}
+          textStyles={styles.yesTextButton}
         />
       </View>
     </View>
@@ -46,16 +47,11 @@ export default InfoPasswordModal;
 
 const createStyles = (colors: TColors) =>
   StyleSheet.create({
-    container: {
-      width: SCREEN.widthFixed * 280,
-      gap: moderateScale(20),
-      paddingHorizontal: moderateScale(10),
-    },
-    modalTitle: {
-      ...textVar.baseBold,
-      color: colors.text,
-      textAlign: 'center',
-      paddingBottom: 8,
+    containerModal: {
+      flex: 1,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     modalTextBox: {
       // backgroundColor: 'blue',
@@ -63,23 +59,35 @@ const createStyles = (colors: TColors) =>
       alignItems: 'flex-start',
       gap: 2,
     },
+    modalTitle: {
+      ...textVar.baseBold,
+      color: colors.text,
+      textAlign: 'center',
+      paddingBottom: 8,
+    },
     modalText: {
       ...textVar.medium,
       color: colors.text,
       textAlign: 'center',
     },
     buttonBox: {
+      width: '100%',
       flexDirection: 'row',
       justifyContent: 'space-around',
+      alignItems: 'center',
+      gap: moderateScale(22),
+      paddingHorizontal: moderateScale(20),
     },
-    acceptButton: {
-      width: SCREEN.width75 / 2,
-      backgroundColor: colors.background,
-      borderWidth: 1,
-      borderColor: colors.second,
+    buttonSize: {
+      flex: 1,
     },
-    textButton: {
+    yesButton: {
+      width: '100%',
+      borderWidth: 0,
+      backgroundColor: colors.second,
+    },
+    yesTextButton: {
       ...textVar.base,
-      color: colors.text,
+      color: colors.textNgt,
     },
   });

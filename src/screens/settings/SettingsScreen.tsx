@@ -160,12 +160,12 @@ const SettingsScreen = ({
             onPress={() => setIsVisible(true)}
             icon={<LanguageIcon width={22} height={22} color={colors.text} />}
           />
-          {biometricAvailable && (
+          {!biometricAvailable && (
             <ListCard
               title={t('biometric-toggle-button')}
               onPress={() => handleBiometricToggle(!isBiometricEnabled)}
               icon={
-                biometricType === Keychain.BIOMETRY_TYPE.FACE_ID ? (
+                biometricType !== Keychain.BIOMETRY_TYPE.FACE_ID ? (
                   <FaceIdIcon width={24} height={24} color={colors.text} />
                 ) : (
                   <TouchIdIcon width={22} height={22} color={colors.text} />

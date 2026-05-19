@@ -22,7 +22,7 @@ type HeaderHomeProps = {
 const HeaderHome = ({
   toggleModalSheet: _toggleModalSheet,
 }: HeaderHomeProps) => {
-  const { styles } = useStyles(createStyles);
+  const { colors, styles } = useStyles(createStyles);
   const { user } = useAppSelector(userAuth);
   const { t } = useTranslation();
 
@@ -41,6 +41,7 @@ const HeaderHome = ({
             <GithubIcon
               width={SCREEN.widthFixed * 20}
               height={SCREEN.heightFixed * 20}
+              color={colors.second}
             />
           );
         case 'apple':
@@ -48,6 +49,7 @@ const HeaderHome = ({
             <AppleIcon
               width={SCREEN.widthFixed * 20}
               height={SCREEN.heightFixed * 20}
+              color={colors.second}
             />
           );
 
@@ -56,6 +58,7 @@ const HeaderHome = ({
             <MailIcon
               width={SCREEN.widthFixed * 22}
               height={SCREEN.heightFixed * 22}
+              color={colors.second}
             />
           );
       }
