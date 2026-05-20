@@ -102,7 +102,7 @@ old-version/
 
 
 #AWS S3 
-index.html
+/index.html
 assetlinks.json
 apple-app-site-association
 update-ios-version.sh
