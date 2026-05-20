@@ -54,15 +54,13 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>The app require access to your phone camera.</string>
+	<string>The app requires access to your phone camera.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>We use Face ID to let you log in quickly and securely.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app require access to your phone location</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>The app require access to your phone microphone.</string>
+	<string>This app requires access to your phone location</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>The app require access to your photo gallery.</string>
+	<string>The app requires access to your photo gallery.</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UIAppFonts</key>
