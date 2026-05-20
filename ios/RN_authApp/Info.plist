@@ -32,7 +32,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>authapp</string>
-				<string>com.googleusercontent.apps.851060951342-uhu25rpaq0brova5bjn44hcs7pmrie1e</string>
+				<string>com.googleusercontent.apps.201898828104-g7551r1agtj7lopi0ea2uafov6llnmn0</string>
 				<string>com.authdemoapp.github</string>
 			</array>
 		</dict>
@@ -41,9 +41,9 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>GIDClientID</key>
-	<string>851060951342-uhu25rpaq0brova5bjn44hcs7pmrie1e.apps.googleusercontent.com</string>
+	<string>201898828104-g7551r1agtj7lopi0ea2uafov6llnmn0.apps.googleusercontent.com</string>
 	<key>GIDRedirectURI</key>
-	<string>com.googleusercontent.apps.851060951342-uhu25rpaq0brova5bjn44hcs7pmrie1e:/oauth2redirect/google</string>
+	<string>com.googleusercontent.apps.201898828104-g7551r1agtj7lopi0ea2uafov6llnmn0:/oauth2redirect/google</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
