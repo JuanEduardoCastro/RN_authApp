@@ -352,7 +352,7 @@ const WelcomeScreen = ({
       </View>
       <ModalSheet
         modalIsVisible={showBiometricModal}
-        toggleSheet={setShowBiometricModal}>
+        toggleSheet={() => setShowBiometricModal(false)}>
         <BiometricOptInModal
           biometricType={biometryType}
           onEnable={handleBiometricEnable}
