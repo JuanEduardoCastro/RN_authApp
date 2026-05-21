@@ -149,6 +149,7 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+				AD2815BC2FBE3CBB0009AA73 /* ShellScript */,
 				67B303BD29F25445DE532C6E /* [CP] Embed Pods Frameworks */,
 				2F676C3B765678D6B7022DBE /* [CP] Copy Pods Resources */,
 				56C49D81E8EDBDCAE7D82E67 /* [CP-User] [RNFB] Core Configuration */,
@@ -312,6 +313,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		AD2815BC2FBE3CBB0009AA73 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "HERMES_FRAMEWORK_DSYM=\"${PODS_ROOT}/hermes-engine/destroot/Library/Frameworks/unive\n  rsal/hermes.xcframework/ios-arm64/hermes.framework.dSYM\"\n\n  if [ -f \"${HERMES_FRAMEWORK_DSYM}/Contents/Resources/DWARF/hermes\" ]; then\n    cp -r \"${HERMES_FRAMEWORK_DSYM}\" \"${DWARF_DSYM_FOLDER_PATH}\"\n  fi\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -333,7 +352,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = RN_authApp/RN_authApp.entitlements;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 40;
 				DEVELOPMENT_TEAM = NL2RPNDPCB;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RN_authApp/Info.plist;
@@ -366,7 +385,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = RN_authApp/RN_authApp.entitlements;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 40;
 				DEVELOPMENT_TEAM = NL2RPNDPCB;
 				INFOPLIST_FILE = RN_authApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Auth.Jc;
