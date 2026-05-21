@@ -101,7 +101,7 @@ android {
     }
     signingConfigs {
         release {
-            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+            if (keystoreProperties.getProperty('MYAPP_UPLOAD_STORE_FILE') != null) { 
                 storeFile file(keystoreProperties['MYAPP_UPLOAD_STORE_FILE'])
                 storePassword keystoreProperties['MYAPP_UPLOAD_STORE_PASSWORD']  
                 keyAlias keystoreProperties['MYAPP_UPLOAD_KEY_ALIAS']  
