@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 
 import { renderHook } from '@testing-library/react-native';
 
-import useUserData from '@hooks/useUserData';
+import useUserPhoneNumber from '@hooks/useUserPhoneNumber';
 
 import { createTestStore, defaultAuthState } from 'src/__test__/test-utils';
 
@@ -27,9 +27,9 @@ const makeWrapper = (user: any) => {
   );
 };
 
-describe('useUserData', () => {
+describe('useUserPhoneNumber', () => {
   it('sets phoneData from user.phoneNumber when present', () => {
-    const { result } = renderHook(() => useUserData(), {
+    const { result } = renderHook(() => useUserPhoneNumber(), {
       wrapper: makeWrapper(userWithPhone),
     });
 
@@ -42,7 +42,7 @@ describe('useUserData', () => {
 
   it('falls back to device locale when no phone number', () => {
     // react-native-localize mock returns 'en-US' / 'US' from jest.setup.js
-    const { result } = renderHook(() => useUserData(), {
+    const { result } = renderHook(() => useUserPhoneNumber(), {
       wrapper: makeWrapper(userWithoutPhone),
     });
     // defaultCountryCode will be set if 'US' matches a country in countriesList
@@ -50,14 +50,14 @@ describe('useUserData', () => {
   });
 
   it('returns zero indexToScroll when no phoneData dialCode', () => {
-    const { result } = renderHook(() => useUserData(), {
+    const { result } = renderHook(() => useUserPhoneNumber(), {
       wrapper: makeWrapper(userWithoutPhone),
     });
     expect(result.current.indexToScroll).toBe(0);
   });
 
   it('returns null values when user is null', () => {
-    const { result } = renderHook(() => useUserData(), {
+    const { result } = renderHook(() => useUserPhoneNumber(), {
       wrapper: makeWrapper(null),
     });
     expect(result.current.phoneData).toBeNull();

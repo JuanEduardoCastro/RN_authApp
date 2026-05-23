@@ -16,7 +16,7 @@ import { Control, useController } from 'react-hook-form';
 import { useSharedValue } from 'react-native-reanimated';
 
 import useStyles from '@hooks/useStyles';
-import useUserData from '@hooks/useUserData';
+import useUserPhoneNumber from '@hooks/useUserPhoneNumber';
 
 import { ChevronIcon } from '@assets/svg/icons';
 
@@ -48,7 +48,8 @@ const PhoneNumberPicker = ({
   inputStyles,
   ...props
 }: PhoneNumberPickerProps) => {
-  const { indexToScroll, defaultCountryCode, defaultDialCode } = useUserData();
+  const { indexToScroll, defaultCountryCode, defaultDialCode } =
+    useUserPhoneNumber();
   const { field, fieldState } = useController({ name, control, rules });
   const { colors, styles } = useStyles(createStyles);
   const isOpen = useSharedValue(false);

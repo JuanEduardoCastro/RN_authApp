@@ -70,7 +70,6 @@ const createStyles = (colors: TColors) =>
     sessionExpBox: {
       justifyContent: 'center',
       alignItems: 'center',
-      flexDirection: 'row',
       gap: 4,
       // padding: moderateScale(8),
     },

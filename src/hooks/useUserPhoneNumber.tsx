@@ -8,7 +8,7 @@ import { countriesList } from '@constants/countriesList';
 
 import { userAuth } from 'src/store/authSlice';
 
-const useUserData = () => {
+const useUserPhoneNumber = () => {
   const { user } = useAppSelector(userAuth);
   const [defaultCountryCode, setDefaultCountryCode] = useState<string | null>(
     null,
@@ -74,4 +74,4 @@ const useUserData = () => {
   };
 };
 
-export default useUserData;
+export default useUserPhoneNumber;

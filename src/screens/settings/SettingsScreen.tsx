@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import * as Keychain from 'react-native-keychain';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useAppDispatch } from '@store/hooks';
+import { useAppDispatch, useAppSelector } from '@store/hooks';
 
 import CustomModal from '@components/shared/bottomSheet/CustomModal';
 import ListCard from '@components/shared/ListCard';
@@ -35,6 +35,7 @@ import {
   CircleFullIcon,
   FaceIdIcon,
   LanguageIcon,
+  MessageIcon,
   PowerIcon,
   ProfileIcon,
   TouchIdIcon,
@@ -49,13 +50,13 @@ import {
 } from '@utils/biometricAuth';
 
 import { SettingsStackScreenProps } from 'src/navigation/types';
-import { setNotificationMessage } from 'src/store/authSlice';
+import { setNotificationMessage, userAuth } from 'src/store/authSlice';
 
 const SettingsScreen = ({
   navigation,
 }: SettingsStackScreenProps<'SettingsScreen'>) => {
+  const { user } = useAppSelector(userAuth);
   const { handleLogout } = useLogoutUser();
-
   const { setColorTheme, themeName, toggleMode } = useMode();
   const { colors, styles } = useStyles(createStyles);
   const { t } = useTranslation();
@@ -65,6 +66,7 @@ const SettingsScreen = ({
     isAvailable: biometricAvailable,
     recheck,
   } = useBiometricAuth();
+
   const dispatch = useAppDispatch();
   const [isVisible, setIsVisible] = useState(false);
   const [confirmLogoutModal, setConfirmLogoutModal] = useState(false);
@@ -155,6 +157,13 @@ const SettingsScreen = ({
             }
             icon={<CheckIcon width={20} height={20} color={colors.text} />}
           />
+          {user?.roles === 'superadmin' && (
+            <ListCard
+              title={t('admin-button')}
+              onPress={() => navigation.navigate('AdminScreen')}
+              icon={<MessageIcon width={20} height={20} color={colors.text} />}
+            />
+          )}
           <ListCard
             title={t('language-button')}
             onPress={() => setIsVisible(true)}

@@ -2,6 +2,7 @@ import React from 'react';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import AdminScreen from '@screens/settings/AdminScreen';
 import ProfileScreen from '@screens/settings/ProfileScreen';
 import SettingsScreen from '@screens/settings/SettingsScreen';
 
@@ -18,6 +19,7 @@ const SettingsNavigation = () => {
       }}>
       <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Stack.Screen name="AdminScreen" component={AdminScreen} />
     </Stack.Navigator>
   );
 };

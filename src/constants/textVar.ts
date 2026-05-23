@@ -28,15 +28,15 @@ export const textVar = {
   },
 
   baseLight: {
-    fontSize: moderateScale(16),
+    fontSize: moderateScale(15),
     fontFamily: manrope.LIGHT,
   },
   base: {
-    fontSize: moderateScale(16),
+    fontSize: moderateScale(15),
     fontFamily: manrope.REGULAR,
   },
   baseBold: {
-    fontSize: moderateScale(16),
+    fontSize: moderateScale(15),
     fontFamily: manrope.BOLD,
   },
   largeLight: {
@@ -52,39 +52,39 @@ export const textVar = {
     fontFamily: manrope.SEMIBOLD,
   },
   xlargeLight: {
-    fontSize: moderateScale(22),
+    fontSize: moderateScale(20),
     fontFamily: manrope.LIGHT,
   },
   xlarge: {
-    fontSize: moderateScale(22),
+    fontSize: moderateScale(20),
     fontFamily: manrope.REGULAR,
   },
   xlargeBold: {
-    fontSize: moderateScale(22),
+    fontSize: moderateScale(20),
     fontFamily: manrope.SEMIBOLD,
   },
   xxlargeLight: {
-    fontSize: moderateScale(24),
+    fontSize: moderateScale(22),
     fontFamily: manrope.LIGHT,
   },
   xxlarge: {
-    fontSize: moderateScale(24),
+    fontSize: moderateScale(22),
     fontFamily: manrope.REGULAR,
   },
   xxlargeBold: {
-    fontSize: moderateScale(24),
+    fontSize: moderateScale(22),
     fontFamily: manrope.SEMIBOLD,
   },
   titleLight: {
-    fontSize: moderateScale(30),
+    fontSize: moderateScale(28),
     fontFamily: manrope.LIGHT,
   },
   title: {
-    fontSize: moderateScale(30),
+    fontSize: moderateScale(28),
     fontFamily: manrope.REGULAR,
   },
   titleBold: {
-    fontSize: moderateScale(30),
+    fontSize: moderateScale(28),
     fontFamily: manrope.SEMIBOLD,
   },
 };

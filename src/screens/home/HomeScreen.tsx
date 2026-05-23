@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 import { StyleSheet } from 'react-native';
 
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useAppSelector } from '@store/hooks';
+import { useAppDispatch, useAppSelector } from '@store/hooks';
+import { fetchUnreadCount } from '@store/thunks';
 
 import { HomeTabScreenProps } from '@navigation/types';
 
@@ -27,11 +29,19 @@ import { userAuth } from 'src/store/authSlice';
 const HomeScreen = ({ navigation }: HomeTabScreenProps<'HomeScreen'>) => {
   useBackHandler();
   const { user } = useAppSelector(userAuth);
+  const { t } = useTranslation();
   const { handleLogout } = useLogoutUser();
   const { styles } = useStyles(createStyles);
+  const dispatch = useAppDispatch();
 
   const [confirmLogoutModal, setConfirmLogoutModal] = useState(false);
   const [completeProfileModal, setCompleteProfileModal] = useState(false);
+
+  useEffect(() => {
+    dispatch(fetchUnreadCount({ t }));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (user !== null) {
@@ -52,7 +62,10 @@ const HomeScreen = ({ navigation }: HomeTabScreenProps<'HomeScreen'>) => {
   };
 
   const handlePressToProfile = () => {
-    navigation.navigate('SettingsNavigator', { screen: 'ProfileScreen' });
+    navigation.navigate('SettingsNavigator', {
+      screen: 'ProfileScreen',
+      initial: false,
+    });
     setCompleteProfileModal(false);
   };
 

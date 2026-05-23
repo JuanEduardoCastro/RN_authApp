@@ -35,6 +35,7 @@ export interface User {
   provider: 'google' | 'github' | 'apple' | null;
   avatarURL: string;
   avatarBuffer: string;
+  roles: 'user' | 'admin' | 'superadmin';
   createdAt: string | Date;
   updatedAt: string | Date;
 }
@@ -90,6 +91,33 @@ export interface UpdatePasswordPayload {
   token: string;
 }
 
+export interface FetchUsersPayload {
+  t: TFunction;
+  page?: number;
+  search?: string;
+}
+
+export interface SendAdminMessagePayload {
+  t: TFunction;
+  recipientIds: string[];
+  title: string;
+  body: string;
+  type: 'push' | 'in_app' | 'both';
+}
+
+export interface FetchMessagesPayload {
+  t: TFunction;
+  unreadOnly?: boolean;
+}
+export interface FetchUnreadCountPayload {
+  t: TFunction;
+}
+
+export interface MarkMessageReadPayload {
+  t: TFunction;
+  messageId: string;
+}
+
 export type ErrorType = 'timeout' | 'network' | 'unknown' | 'server' | 'client';
 
 export interface ParsedError {
@@ -107,4 +135,33 @@ export interface ApiErrorResponse {
 
 export interface RetryableAxiosRequestConfig extends AxiosRequestConfig {
   _retry?: boolean;
+}
+
+export interface AdminState {
+  users: UserSummary[];
+  messages: InboxMessage[];
+  unreadCount: number;
+  loader: boolean;
+  usersPage: number;
+  usersHasMore: boolean;
+}
+
+export interface UserSummary {
+  _id: string;
+  firstName: string;
+  email: string;
+  lastName: string;
+  avatarURL: string | null;
+  roles: 'user' | 'admin' | 'superadmin';
+}
+
+export interface InboxMessage {
+  _id: string;
+  sender: UserSummary | null;
+  title: string;
+  body: string;
+  type: 'push' | 'in_app' | 'both';
+  isRead: boolean;
+  isSystemMessage: boolean;
+  createdAt: string;
 }

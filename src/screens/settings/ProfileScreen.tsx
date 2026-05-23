@@ -26,7 +26,7 @@ import PhoneNumberPicker from '@components/shared/phoneNumber/PhoneNumberPicker'
 import Separator from '@components/shared/Separator';
 
 import useStyles from '@hooks/useStyles';
-import useUserData from '@hooks/useUserData';
+import useUserPhoneNumber from '@hooks/useUserPhoneNumber';
 
 import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
@@ -58,7 +58,7 @@ const ProfileScreen = ({
       avatarURL: user?.avatarURL,
     },
   });
-  const { setCodeIndex } = useUserData();
+  const { setCodeIndex } = useUserPhoneNumber();
   const { handleSubmit, control, reset } = method;
   const { styles } = useStyles(createStyles);
   const { t } = useTranslation();

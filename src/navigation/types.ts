@@ -30,12 +30,14 @@ export type AuthStackParamList = {
 
 export type HomeTabParamList = {
   HomeScreen: undefined;
+  InboxScreen: undefined;
   SettingsNavigator: NavigatorScreenParams<SettingsParamList>;
 };
 
 export type SettingsParamList = {
   SettingsScreen: undefined;
   ProfileScreen: undefined;
+  AdminScreen: undefined;
 };
 
 /* Props for navigators & screens (extends of param list) */

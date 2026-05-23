@@ -71,6 +71,7 @@ export const useCheckToken = (): UseCheckTokenReturn => {
               const decoded = jwtDecode<CustomJwtPayload>(
                 refreshToken.data.password,
               );
+
               const currentTime = Math.floor(Date.now() / 1000);
 
               if (decoded.exp && currentTime < decoded.exp) {
@@ -127,6 +128,7 @@ export const useCheckToken = (): UseCheckTokenReturn => {
         const decodedToken = jwtDecode<CustomJwtPayload>(
           refreshToken.data.password,
         );
+
         const currentTime = Math.floor(Date.now() / 1000);
 
         if (!decodedToken.exp || currentTime > decodedToken.exp) {

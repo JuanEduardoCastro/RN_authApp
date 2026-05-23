@@ -175,5 +175,22 @@
 
   "default-user-name": "User",
 
-  "login-from": "Login from your"
+  "login-from": "Login from your",
+
+  "admin-button": "Messages center",
+  "admin-panel-button": "Admin Panel",
+  "admin-send-button": "Send to {{count}} users",
+  "search-placeholder": "Find user...",
+  "admin-select-all": "Select all",
+  "admin-deselect-all": "Deselect all",
+  "admin-type-push": "Push",
+  "admin-type-in-app": "In-app",
+  "admin-type-both": "Both",
+  "admin-title-placeholder": "Message title",
+  "admin-body-placeholder": "Message body",
+  "inbox-title": "Inbox",
+  "inbox-empty": "No messages yet",
+  "inbox-mark-read": "Mark as read",
+  "welcome-message-title": "Welcome to Auth.Jc! 👋",
+  "welcome-message-body": "Hi {{name}}, glad to have you here. Complete your profile to get the most out of the app."
 }

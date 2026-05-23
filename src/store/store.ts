@@ -1,11 +1,13 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 
+import adminReducer from './adminSlice';
 import { setupInterceptors } from './apiInterceptor';
 import authReducer from './authSlice';
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
+    admin: adminReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -20,6 +22,11 @@ const store = configureStore({
           'users/check-email',
           'users/reset-password',
           'users/password',
+          'admin/fetchUsers',
+          'admin/sendMessage',
+          'admin/fetchMessages',
+          'admin/unreadCount',
+          'admin/markRead',
         ],
         ignoredActionPaths: ['payload.t', 'meta.arg.t'],
       },

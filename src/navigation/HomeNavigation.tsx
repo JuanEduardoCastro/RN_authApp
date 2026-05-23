@@ -4,11 +4,15 @@ import { Platform } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import { userAdmin } from '@store/adminSlice';
+import { useAppSelector } from '@store/hooks';
+
 import HomeScreen from '@screens/home/HomeScreen';
+import InboxScreen from '@screens/home/InboxScreen';
 
 import { useMode } from '@context/ModeContext';
 
-import { HomeIcon, SettingsIcon } from '@assets/svg/icons';
+import { EnvelopIcon, HomeIcon, SettingsIcon } from '@assets/svg/icons';
 
 import { SCREEN } from '@constants/dimensions';
 
@@ -19,11 +23,14 @@ const Tab = createBottomTabNavigator<HomeTabParamList>();
 
 const HomeNavigation = () => {
   const { colors } = useMode();
+  const { unreadCount } = useAppSelector(userAdmin);
 
   const tabBarStyle = useMemo(
     () => ({
       elevation: 0,
       paddingTop: 8,
+      paddingLeft: 16,
+      paddingRight: 16,
       height:
         Platform.OS === 'ios'
           ? SCREEN.heightFixed * 80
@@ -52,6 +59,14 @@ const HomeNavigation = () => {
             case 'HomeScreen':
               return (
                 <HomeIcon
+                  width={25}
+                  height={25}
+                  color={focused ? colors.second : colors.text}
+                />
+              );
+            case 'InboxScreen':
+              return (
+                <EnvelopIcon
                   width={26}
                   height={26}
                   color={focused ? colors.second : colors.text}
@@ -71,6 +86,11 @@ const HomeNavigation = () => {
         },
       })}>
       <Tab.Screen name="HomeScreen" component={HomeScreen} />
+      <Tab.Screen
+        name="InboxScreen"
+        component={InboxScreen}
+        options={{ tabBarBadge: unreadCount > 0 ? unreadCount : undefined }}
+      />
       <Tab.Screen name="SettingsNavigator" component={SettingsNavigator} />
     </Tab.Navigator>
   );
