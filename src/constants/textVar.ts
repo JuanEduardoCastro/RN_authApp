@@ -15,15 +15,15 @@ export const textVar = {
     fontFamily: manrope.SEMIBOLD,
   },
   mediumLight: {
-    fontSize: moderateScale(14),
+    fontSize: moderateScale(13),
     fontFamily: manrope.LIGHT,
   },
   medium: {
-    fontSize: moderateScale(14),
+    fontSize: moderateScale(13),
     fontFamily: manrope.REGULAR,
   },
   mediumBold: {
-    fontSize: moderateScale(14),
+    fontSize: moderateScale(13),
     fontFamily: manrope.SEMIBOLD,
   },
 

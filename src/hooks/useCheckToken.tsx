@@ -23,9 +23,11 @@ import {
 } from '@utils/secureStorage';
 
 import { CustomJwtPayload, UseCheckTokenReturn } from './types';
+import { useBadgeCount } from './useBadgeCount';
 
 export const useCheckToken = (): UseCheckTokenReturn => {
   const { t } = useTranslation();
+  const { syncBadge } = useBadgeCount();
   const [refreshTokenSaved, setRefreshTokenSaved] = useState<boolean>(false);
   const [checkCompleted, setCheckCompleted] = useState<boolean>(false);
   const [isExpired, setIsExpired] = useState<boolean>(true);
@@ -81,6 +83,7 @@ export const useCheckToken = (): UseCheckTokenReturn => {
                     token: refreshToken.data!.password,
                   }),
                 ).unwrap();
+                await syncBadge();
 
                 if (GoogleSignin.hasPreviousSignIn()) {
                   await GoogleSignin.signInSilently();
@@ -142,6 +145,7 @@ export const useCheckToken = (): UseCheckTokenReturn => {
             token: refreshToken.data.password,
           }),
         ).unwrap();
+        await syncBadge();
 
         if (GoogleSignin.hasPreviousSignIn()) {
           await GoogleSignin.signInSilently();

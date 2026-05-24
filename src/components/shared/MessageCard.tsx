@@ -116,7 +116,7 @@ const createStyles = (colors: TColors) =>
       backgroundColor: colors.second,
     },
     bodyText: {
-      ...textVar.small,
+      ...textVar.medium,
       color: colors.textMuted,
     },
   });

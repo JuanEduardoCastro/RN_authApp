@@ -1,5 +1,6 @@
 import { PermissionsAndroid, Platform } from 'react-native';
 
+import DeviceInfo from 'react-native-device-info';
 import { getApp } from '@react-native-firebase/app';
 import {
   AuthorizationStatus,
@@ -13,9 +14,12 @@ import {
   setBackgroundMessageHandler,
 } from '@react-native-firebase/messaging';
 
+import notifee from '@notifee/react-native';
+
 import api from '@store/apiService';
 import { setNotificationMessage } from '@store/authSlice';
 import store from '@store/store';
+import { fetchUnreadCount } from '@store/thunks';
 
 import i18n from '@locale/i18next';
 
@@ -38,6 +42,10 @@ setBackgroundMessageHandler(messagingInstance, async remoteMessage => {
 });
 
 export const requestPermissionForNotification = async () => {
+  /* skip FCM registration on simulator/emulator */
+  const isEmulator = await DeviceInfo.isEmulator();
+  if (isEmulator) return;
+
   /* Request permission */
   if (Platform.OS === 'android' && Platform.Version >= 33) {
     const granted = await PermissionsAndroid.request(
@@ -149,6 +157,12 @@ export const setupMessageListener = () => {
             i18n.t('information-another-screen'),
         }),
       );
+
+      store
+        .dispatch(fetchUnreadCount({ t: i18n.t }))
+        .unwrap()
+        .then(result => notifee.setBadgeCount(result.count))
+        .catch(() => {});
     },
   );
 

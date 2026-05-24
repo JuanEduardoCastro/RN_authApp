@@ -10,6 +10,7 @@ import {
 
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { userAdmin } from '@store/adminSlice';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
@@ -22,6 +23,7 @@ import HeaderGoBack from '@components/shared/HeaderGoBack';
 import MessageCard from '@components/shared/MessageCard';
 import Separator from '@components/shared/Separator';
 
+import { useBadgeCount } from '@hooks/useBadgeCount';
 import useStyles from '@hooks/useStyles';
 
 import { moderateScale, SCREEN } from '@constants/dimensions';
@@ -32,9 +34,18 @@ const InboxScreen = ({ navigation }: HomeTabScreenProps<'InboxScreen'>) => {
   const { colors, styles } = useStyles(createStyles);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const { clearBadge, syncBadge } = useBadgeCount();
+
   const { messages, loader } = useAppSelector(userAdmin);
 
   const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      clearBadge();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []),
+  );
 
   useEffect(() => {
     dispatch(fetchMessages({ t }));
@@ -46,9 +57,10 @@ const InboxScreen = ({ navigation }: HomeTabScreenProps<'InboxScreen'>) => {
       setExpandedId(prev => (prev === item._id ? null : item._id));
       if (!item.isRead) {
         dispatch(markMessageRead({ t, messageId: item._id }));
+        syncBadge();
       }
     },
-    [dispatch, t],
+    [dispatch, t, syncBadge],
   );
 
   const renderItem = useCallback(

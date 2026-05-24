@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Linking, StatusBar, StyleSheet } from 'react-native';
+import { AppState, Linking, StatusBar, StyleSheet } from 'react-native';
 
 import { I18nextProvider } from 'react-i18next';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -24,6 +24,7 @@ import Loader from '@components/shared/loader/Loader';
 import NotificationBanner from '@components/shared/notifications/NotificationBanner';
 import { SplashScreen } from '@components/splash/SplashScreen';
 
+import { useBadgeCount } from '@hooks/useBadgeCount';
 import { ModeProvider } from '@context/ModeContext';
 
 import {
@@ -92,6 +93,7 @@ const linking: LinkingOptions<RootStackParamList> = {
 
 function App() {
   const { loader } = useAppSelector(userAuth);
+  const { syncBadge } = useBadgeCount();
   const [isAppReady, setIsAppReady] = useState(false);
 
   useEffect(() => {
@@ -99,10 +101,21 @@ function App() {
     const unsubscribe = setupMessageListener();
     const unsubscribeTokenRefresh = setupTokenRefreshListener();
 
+    const appStateSubcription = AppState.addEventListener(
+      'change',
+      nextState => {
+        if (nextState === 'active') {
+          syncBadge();
+        }
+      },
+    );
+
     return () => {
       unsubscribe();
       unsubscribeTokenRefresh();
+      appStateSubcription.remove();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleAppIsReady = () => {
