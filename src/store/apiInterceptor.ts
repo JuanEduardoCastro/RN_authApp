@@ -26,7 +26,11 @@ export const refreshAccessToken = async (store: AppStore): Promise<string> => {
   refreshTokenPromise = (async () => {
     try {
       const credentials = await secureGetStorage(KeychainService.REFRESH_TOKEN);
-      if (!credentials.success || !credentials.data) {
+      if (
+        !credentials.success ||
+        !credentials.data?.password ||
+        credentials.data.password === 'null'
+      ) {
         store.dispatch(setResetCredentials());
         throw new Error('No refresh token available');
       }
