@@ -2,8 +2,9 @@ import DeviceInfo from 'react-native-device-info';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
-import api from '@store/apiService';
+import api, { HOST } from '@store/apiService';
 import { RootState } from '@store/store';
 import {
   LoginUserPayload,
@@ -27,8 +28,8 @@ export const validateRefreshToken = createAsyncThunk(
     const { t } = data;
 
     try {
-      const response = await api.post(
-        '/users/token/refresh',
+      const response = await axios.post(
+        `${HOST}/users/token/refresh`,
         {},
         {
           headers: { Authorization: `Bearer ${data.token}` },

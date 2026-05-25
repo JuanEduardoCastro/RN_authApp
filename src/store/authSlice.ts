@@ -156,6 +156,9 @@ const authSlice = createSlice({
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.loader = false;
+        state.token = null;
+        state.user = null;
+        state.isAuthorized = false;
         const payload = action.payload as Partial<NotificationMessagePayload>;
         state.messageType = payload.messageType ?? 'error';
         state.notificationMessage =

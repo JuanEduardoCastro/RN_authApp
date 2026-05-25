@@ -34,7 +34,6 @@ export const useCheckToken = (): UseCheckTokenReturn => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    // resetAutoLogin(); // This is in case of hard reset
     const checkLocalStorage = async () => {
       let finalRefreshTokenSaved = false;
       let finalIsExpired = true;

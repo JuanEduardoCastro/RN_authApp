@@ -41,14 +41,16 @@ export const refreshAccessToken = async (store: AppStore): Promise<string> => {
 
       const { accessToken, user, refreshToken } = validateToken.data.data;
 
-      const saveCredentials = await secureSetStorage(
-        'refreshToken',
-        refreshToken,
-        KeychainService.REFRESH_TOKEN,
-      );
+      if (refreshToken) {
+        const saveCredentials = await secureSetStorage(
+          'refreshToken',
+          refreshToken,
+          KeychainService.REFRESH_TOKEN,
+        );
 
-      if (!saveCredentials.success) {
-        __DEV__ && console.warn('Failed to save new refresh token');
+        if (!saveCredentials.success) {
+          __DEV__ && console.warn('Failed to save new refresh token');
+        }
       }
 
       store.dispatch(setCredentials({ token: accessToken, user }));
@@ -76,12 +78,20 @@ export const setupInterceptors = (store: AppStore) => {
 
       const skipValidation =
         config.url?.includes('/login') ||
+        config.url?.includes('-login') ||
+        config.url?.includes('/logout') ||
         config.url?.includes('/check-email') ||
         config.url?.includes('/reset-password') ||
         config.url?.includes('/token/refresh');
 
-      if (skipValidation || !token) {
+      if (skipValidation) {
         return config;
+      }
+
+      if (!token) {
+        return Promise.reject(
+          new Error('Requeste cancelled: no access token.'),
+        );
       }
 
       try {
@@ -101,6 +111,7 @@ export const setupInterceptors = (store: AppStore) => {
           }
 
           const newToken = await refreshAccessToken(store);
+
           if (config.headers) {
             config.headers.Authorization = `Bearer ${newToken}`;
           }
@@ -146,6 +157,7 @@ export const setupInterceptors = (store: AppStore) => {
 
         try {
           const newToken = await refreshAccessToken(store);
+
           if (originalRequest.headers) {
             originalRequest.headers.Authorization = `Bearer ${newToken}`;
           }
