@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import axios from 'axios';
 import { TFunction } from 'i18next';
 
 import api from '@store/apiService';
@@ -6,7 +7,22 @@ import authReducer from '@store/authSlice';
 import { loginUser, logoutUser, validateRefreshToken } from '@store/thunks';
 
 // Mock the API instance — responses are controlled per test
-jest.mock('@store/apiService');
+jest.mock('axios');
+jest.mock('@store/apiService', () => ({
+  __esModule: true,
+  default: {
+    post: jest.fn(),
+    get: jest.fn(),
+    delete: jest.fn(),
+    patch: jest.fn(),
+    interceptors: {
+      request: { use: jest.fn() },
+      response: { use: jest.fn() },
+    },
+  },
+  HOST: 'http://localhost:8080',
+}));
+
 jest.mock('@utils/secureStorage', () => ({
   secureSetStorage: jest.fn(() => Promise.resolve({ success: true })),
   secureDelete: jest.fn(() => Promise.resolve()),
@@ -21,13 +37,14 @@ jest.mock('@utils/notifications/registerFCMToken', () => ({
 }));
 
 const mockApi = api as jest.Mocked<typeof api>;
+const mockAxios = axios as jest.Mocked<typeof axios>;
 const t = ((key: string) => key) as unknown as TFunction;
 
 const makeStore = () => configureStore({ reducer: { auth: authReducer } });
 
 describe('validateRefreshToken', () => {
   it('fulfills and sets isAuthorized on 200', async () => {
-    mockApi.post.mockResolvedValueOnce({
+    mockAxios.post.mockResolvedValueOnce({
       status: 200,
       data: { data: { user: { firstName: 'Juan' }, accessToken: 'token123' } },
     });
@@ -44,7 +61,7 @@ describe('validateRefreshToken', () => {
   });
 
   it('rejects and clears auth on API error', async () => {
-    mockApi.post.mockRejectedValueOnce({ response: { status: 401 } });
+    mockAxios.post.mockRejectedValueOnce({ response: { status: 401 } });
 
     const store = makeStore();
     await store.dispatch(

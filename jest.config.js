@@ -18,7 +18,7 @@ module.exports = {
     '^src/(.*)$': '<rootDir>/src/$1',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|react-native-gesture-handler|react-native-reanimated|react-native-keychain|react-native-device-info|react-native-localize|react-native-app-auth|react-native-ssl-public-key-pinning|@invertase|jwt-decode|react-native-keyboard-controller|react-native-worklets|react-native-screens|react-native-safe-area-context|react-native-svg|react-native-image-crop-picker|@react-navigation|@react-native-google-signin|@react-native-firebase|@react-native-async-storage|immer|react-redux)/)',
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|react-native-gesture-handler|react-native-reanimated|react-native-keychain|react-native-device-info|react-native-localize|react-native-app-auth|react-native-ssl-public-key-pinning|@invertase|jwt-decode|react-native-keyboard-controller|react-native-worklets|react-native-screens|react-native-safe-area-context|react-native-svg|react-native-image-crop-picker|@react-navigation|@react-native-google-signin|@react-native-firebase|@react-native-async-storage|immer|react-redux|@notifee)/)',
   ],
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',

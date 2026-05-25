@@ -222,3 +222,18 @@ jest.mock('react-native-safe-area-context', () => {
     initialWindowMetrics: { insets, frame },
   };
 });
+
+jest.mock('@notifee/react-native', () => ({
+  __esModule: true,
+  default: {
+    setBadgeCount: jest.fn(() => Promise.resolve()),
+    getBadgeCount: jest.fn(() => Promise.resolve(0)),
+    cancelAllNotifications: jest.fn(() => Promise.resolve()),
+    cancelNotification: jest.fn(() => Promise.resolve()),
+    displayNotification: jest.fn(() => Promise.resolve()),
+    requestPermission: jest.fn(() =>
+      Promise.resolve({ authorizationStatus: 1 }),
+    ),
+    createChannel: jest.fn(() => Promise.resolve()),
+  },
+}));
