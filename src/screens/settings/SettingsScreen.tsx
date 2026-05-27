@@ -133,7 +133,9 @@ const SettingsScreen = ({
           styles.listBox,
           { paddingBottom: Platform.OS === 'ios' ? 60 : 80 },
         ]}>
-        <ScrollView style={styles.listScroll}>
+        <ScrollView
+          style={styles.listScroll}
+          showsVerticalScrollIndicator={false}>
           <ListCard
             title={t('logout-button')}
             onPress={toggleModalSheet}

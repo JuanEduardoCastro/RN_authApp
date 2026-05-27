@@ -144,7 +144,7 @@ const WelcomeScreen = ({
       setGoogleButtonDisabled(false);
       __DEV__ &&
         console.log(
-          'XX -> WelcomeScreen.tsx:87 -> handleGoogleOriginalSignin -> error :',
+          'XX -> WelcomeScreen.tsx:143 -> handleGoogleOriginalSignin -> error :',
           error,
         );
     }

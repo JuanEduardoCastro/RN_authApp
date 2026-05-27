@@ -86,7 +86,9 @@ export const setupInterceptors = (store: AppStore) => {
         config.url?.includes('/logout') ||
         config.url?.includes('/check-email') ||
         config.url?.includes('/reset-password') ||
-        config.url?.includes('/token/refresh');
+        config.url?.includes('/token/refresh') ||
+        config.url?.includes('/create') ||
+        config.url?.endsWith('/password');
 
       if (skipValidation) {
         return config;

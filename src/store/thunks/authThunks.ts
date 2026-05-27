@@ -36,10 +36,18 @@ export const validateRefreshToken = createAsyncThunk(
         },
       );
       if (response.status === 200) {
+        const { accessToken, refreshToken, user } = response.data.data;
+        if (refreshToken) {
+          await secureSetStorage(
+            'refreshToken',
+            refreshToken,
+            KeychainService.REFRESH_TOKEN,
+          );
+        }
         return {
           success: true,
-          user: response.data.data.user,
-          token: response.data.data.accessToken,
+          user,
+          token: accessToken,
           messageType: 'success',
           notificationMessage: `${t('success-welcome-back')}${
             response.data.data.user.firstName

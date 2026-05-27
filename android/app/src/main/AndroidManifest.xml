@@ -29,30 +29,44 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
+
+        <!-- HTTPS App Link — verified -->
         <intent-filter android:autoVerify="true">
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="https"
               android:host="app.authdemoapp-jec.com"
-              android:pathPrefix="/app/new-password" /> 
-            <data android:scheme="authapp" android:host="app" />  
+              android:pathPrefix="/app/new-password" />
         </intent-filter>
-        <intent-filter android:autoVerify="true">
+
+       <!-- Custom scheme — no autoVerify -->
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="authapp" android:host="app" />
+        </intent-filter>
+
+        <!-- Custom scheme — no autoVerify -->
+        <intent-filter>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="authapp"
               android:host="app"
-              android:pathPrefix="/new-password" /> 
+              android:pathPrefix="/new-password" />
         </intent-filter>
-        <intent-filter android:autoVerify="true">
+
+        <!-- GitHub OAuth callback — no autoVerify -->
+        <intent-filter>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="com.authdemoapp.github"
-            android:host="callback" />
+              android:host="callback" />
         </intent-filter>
+        
       </activity>
     </application>
 </manifest>

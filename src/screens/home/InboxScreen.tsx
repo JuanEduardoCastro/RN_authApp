@@ -39,6 +39,7 @@ const InboxScreen = ({ navigation }: HomeTabScreenProps<'InboxScreen'>) => {
   const { messages, loader } = useAppSelector(userAdmin);
 
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -62,6 +63,12 @@ const InboxScreen = ({ navigation }: HomeTabScreenProps<'InboxScreen'>) => {
     },
     [dispatch, t, syncBadge],
   );
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await dispatch(fetchMessages({ t }));
+    setRefreshing(false);
+  }, [dispatch, t]);
 
   const renderItem = useCallback(
     ({ item }: { item: InboxMessage }) => (
@@ -95,7 +102,8 @@ const InboxScreen = ({ navigation }: HomeTabScreenProps<'InboxScreen'>) => {
         }
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
-        bounces={false}
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
       />
     </SafeAreaView>
   );
