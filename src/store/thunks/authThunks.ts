@@ -199,13 +199,16 @@ export const logoutUser = createAsyncThunk(
       );
 
       if (response.status === 200) {
-        await api.delete(`/users/device-token/${deviceId}`, {
-          headers: { Authorization: `Bearer ${auth.token}` },
-        });
+        try {
+          await api.delete(`/users/device-token/${deviceId}`, {
+            headers: { Authorization: `Bearer ${auth.token}` },
+          });
+        } catch {
+          // non-critical — proceed with logout regardless
+        }
+
         await secureDelete(KeychainService.REFRESH_TOKEN);
-
         await secureDelete(KeychainService.REMEMBER_ME);
-
         await disableBiometricLogin();
 
         return {

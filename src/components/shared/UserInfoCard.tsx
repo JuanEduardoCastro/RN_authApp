@@ -24,6 +24,7 @@ const UserInfoCard = ({ user, onPress }: UserInfoCardProps) => {
   const { i18n, t } = useTranslation();
 
   const memberSinceFormat = (dateString: string | Date) => {
+    console.log('----------> ENTRO AL FORMAT <----------');
     if (!dateString) return '';
     const localeMap: Record<string, string> = {
       en: 'en-US',
@@ -48,7 +49,7 @@ const UserInfoCard = ({ user, onPress }: UserInfoCardProps) => {
             style={styles.userNameText}
             ellipsizeMode="tail"
             numberOfLines={1}>
-            {(user?.firstName.length ?? 0) > 0
+            {(user?.firstName?.length ?? 0) > 0
               ? user?.firstName + ' ' + user?.lastName
               : t('default-user-name')}
           </Text>

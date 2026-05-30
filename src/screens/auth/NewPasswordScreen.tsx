@@ -153,6 +153,12 @@ const NewPasswordScreen = ({
             'XX -> NewPasswordScreen.tsx:118 -> onSubmit -> error :',
             error,
           );
+        dispatch(
+          setNotificationMessage({
+            messageType: 'error',
+            notificationMessage: t('error-new-password'),
+          }),
+        );
       }
     }
   };

@@ -45,7 +45,7 @@ const HomeScreen = ({ navigation }: HomeTabScreenProps<'HomeScreen'>) => {
 
   useEffect(() => {
     if (user !== null) {
-      if (user!.firstName.length < 1) {
+      if (user?.firstName?.length < 1) {
         setCompleteProfileModal(true);
       }
     }

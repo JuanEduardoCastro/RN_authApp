@@ -31,13 +31,16 @@ const SessionExpCard = () => {
         es: 'es-ES',
       };
       const locale = localeMap[i18n.language] || 'en-US';
-      const expiresAt = new Date(exp * 1000).toLocaleDateString(locale, {
+      const date = new Date(exp * 1000);
+      const dateStr = date.toLocaleDateString(locale);
+      const timeStr = date.toLocaleTimeString(locale, {
         hour: '2-digit',
         minute: '2-digit',
       });
-      return { expiresAt, isExpiringSoon: msRemaining < 5 * 60 * 1000 };
+      const expiresAt = `${timeStr} · ${dateStr}`;
+      return { isExpiringSoon: msRemaining < 5 * 60 * 1000, expiresAt };
     } catch (error) {
-      return { expiresAt: '', isExpiringSoon: false, error: error };
+      return { isExpiringSoon: false, error: error, expiresAt: '' };
     }
   }, [token, i18n.language]);
 

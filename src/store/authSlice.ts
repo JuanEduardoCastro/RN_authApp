@@ -7,6 +7,7 @@ import {
   editUser,
   loginUser,
   logoutUser,
+  updatePassword,
   validateRefreshToken,
 } from './thunks';
 import {
@@ -139,6 +140,23 @@ const authSlice = createSlice({
         state.messageType = action.payload
           .messageType as NotificationMessagePayload['messageType'];
         state.notificationMessage = action.payload.notificationMessage;
+      })
+
+      /* update password */
+      .addCase(updatePassword.pending, state => {
+        state.loader = true;
+      })
+      .addCase(updatePassword.fulfilled, (state, action) => {
+        state.loader = false;
+        state.notificationMessage = action.payload.notificationMessage;
+        state.messageType = action.payload
+          .messageType as NotificationMessagePayload['messageType'];
+      })
+      .addCase(updatePassword.rejected, (state, action) => {
+        state.loader = false;
+        const payload = action.payload as any;
+        state.notificationMessage = payload.notificationMessage ?? 'error';
+        state.messageType = payload?.messageType ?? 'An error ocurred';
       })
 
       /* logout user */

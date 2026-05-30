@@ -190,6 +190,10 @@ export const githubLogin = createAsyncThunk(
       });
     } catch (error) {
       __DEV__ && console.log('XX -> otherAuthHooks.ts:195 -> error :', error);
+      console.log(
+        'XX -> github error response:',
+        (error as any)?.response?.data,
+      );
 
       const parsedError = parseApiError(error, t, 'error-github-signin');
       await loginRateLimiter.recordFailedAttempt();
