@@ -10,7 +10,7 @@ import { TColors } from '@constants/types';
 type ModalSheetProps = {
   children: ReactNode;
   modalIsVisible: boolean;
-  toggleSheet: () => void;
+  toggleSheet: (value: boolean) => void;
 };
 
 const ModalSheet = ({
@@ -21,7 +21,7 @@ const ModalSheet = ({
   const { styles } = useStyles(createStyles);
 
   const handleCloseModal = () => {
-    toggleSheet();
+    toggleSheet(!modalIsVisible);
   };
 
   return (

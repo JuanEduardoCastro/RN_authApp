@@ -200,6 +200,7 @@ const NewPasswordScreen = ({
                 placeholder={t('new-password-label-placeholder')}
               />
               <InputAuthField
+                contextMenuHidden={true}
                 inputStyles={styles.textinput}
                 name="confirm_password"
                 label={t('confirm-password-label')}

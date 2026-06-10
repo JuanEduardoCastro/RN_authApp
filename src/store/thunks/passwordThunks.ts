@@ -77,6 +77,7 @@ export const resetPassword = createAsyncThunk(
       const response = await api.post('/users/reset-password', data);
       if (response.status === 200) {
         await resetPasswordRateLimiter.recordSuccessfulAttempt();
+        console.log('****------->', response.data);
         return { success: true, error: null };
       } else if (response.status === 204) {
         return rejectWithValue({

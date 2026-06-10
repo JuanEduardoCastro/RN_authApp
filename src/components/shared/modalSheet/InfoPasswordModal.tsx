@@ -11,6 +11,7 @@ import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
 import Button from '../Button';
+import Separator from '../Separator';
 
 type InfoPasswordModalProps = {
   toggleModalSheet: () => void;
@@ -30,6 +31,7 @@ const InfoPasswordModal = ({ toggleModalSheet }: InfoPasswordModalProps) => {
         <Text style={styles.modalText}>{t('info-password-number')}</Text>
         <Text style={styles.modalText}>{t('info-password-symbol')}</Text>
       </View>
+      <Separator border={false} height={30} />
       <View style={styles.buttonBox}>
         <Button
           title={t('info-accept')}
@@ -71,7 +73,7 @@ const createStyles = (colors: TColors) =>
       textAlign: 'center',
     },
     buttonBox: {
-      width: '100%',
+      width: '50%',
       flexDirection: 'row',
       justifyContent: 'space-around',
       alignItems: 'center',

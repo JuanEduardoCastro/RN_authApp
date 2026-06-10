@@ -102,15 +102,15 @@ const NotificationBanner = () => {
             }>
             <View style={styles.bannerBox}>
               <View style={styles.bannerTextBox}>
-                <Text style={styles.bannerText}>
+                <Text style={styles.bannerText} numberOfLines={3}>
                   {notificationMessage as string}
                 </Text>
               </View>
               <View style={styles.bannerIconBox}>
                 {IconComponent && (
                   <IconComponent.Icon
-                    width={32}
-                    height={32}
+                    width={34}
+                    height={34}
                     color={colors[IconComponent.color]}
                   />
                 )}
@@ -120,7 +120,7 @@ const NotificationBanner = () => {
               <BlurView
                 style={styles.blurView}
                 blurType={'dark'}
-                blurAmount={4}
+                blurAmount={8}
                 overlayColor={colors.transparent}
               />
             )}
@@ -148,7 +148,7 @@ const createStyles = (colors: TColors) =>
     bannerBox: {
       backgroundColor: colors.notifications,
       opacity: 0.86,
-      height: SCREEN.heightFixed * 70,
+      height: SCREEN.heightFixed * 73,
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -159,13 +159,17 @@ const createStyles = (colors: TColors) =>
     },
     bannerTextBox: {
       flexShrink: 1,
+      flex: 1,
+      alignItems: 'flex-start',
+      justifyContent: 'center',
     },
     bannerText: {
       ...textVar.baseBold,
       color: colors.veryLightGray,
     },
     bannerIconBox: {
-      width: 32,
+      // width: 46,
+      padding: 6,
     },
     blurView: {
       height: SCREEN.heightFixed * 70,

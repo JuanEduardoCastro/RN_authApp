@@ -148,8 +148,28 @@ export const loginUser = createAsyncThunk(
     } catch (error: any) {
       __DEV__ && console.log('XX -> authThunks.ts:142 -> error :', error);
 
-      await loginRateLimiter.recordFailedAttempt();
       const parsedError = parseApiError(error, t, 'error-credentials');
+
+      if (parsedError.statusCode === 429) {
+        const retryAfter = axios.isAxiosError(error)
+          ? Number(error.response?.headers?.['retry-after'] ?? 300)
+          : 300;
+
+        const min = Math.floor(retryAfter / 60)
+          .toString()
+          .padStart(2, '0');
+        const sec = (retryAfter % 60).toString().padStart(2, '0');
+        const formatted = `${min}:${sec}`;
+
+        return rejectWithValue({
+          messageType: 'error',
+          notificationMessage: t('error-rate-limit-login-server', {
+            seconds: formatted,
+          }),
+        });
+      }
+
+      await loginRateLimiter.recordFailedAttempt();
       const newRateLimit = await loginRateLimiter.checkRateLimit();
 
       if (newRateLimit.isLocked) {

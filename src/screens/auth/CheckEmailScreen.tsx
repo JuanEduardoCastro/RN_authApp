@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
+  AppState,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -12,7 +13,6 @@ import {
 
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import CountDownTimer from 'react-native-countdown-timer-hooks';
 
 import { setNotificationMessage } from '@store/authSlice';
 import { useAppDispatch } from '@store/hooks';
@@ -40,22 +40,74 @@ const CheckEmailScreen = ({
   navigation,
   route,
 }: AuthStackScreenProps<'CheckEmailScreen'>) => {
-  const timerRef = useRef<any>(null);
   const { checkMode } = route.params;
   const method = useForm<CheckEmailProps>();
   const { handleSubmit, control } = method;
-  const { colors, styles } = useStyles(createStyles);
+  const { styles } = useStyles(createStyles);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [isEmailSent, setIsEmailSent] = useState<boolean>(false);
   const [canResend, setCanResend] = useState<boolean>(false);
+
+  const [timeLeft, setTimeLeft] = useState<number>(180);
+  const timerStartedAt = useRef<number | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, '0');
+    const remainingSeconds = (seconds % 60).toString().padStart(2, '0');
+    return `${minutes}:${remainingSeconds}`;
+  };
+
+  const startTimer = () => {
+    timerStartedAt.current = Date.now();
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - timerStartedAt.current!) / 1000);
+      const remaining = Math.max(0, 180 - elapsed);
+      setTimeLeft(remaining);
+      if (remaining === 0) {
+        clearInterval(intervalRef.current!);
+        setCanResend(true);
+      }
+    });
+  };
+
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', nextState => {
+      if (
+        nextState === 'active' &&
+        timerStartedAt.current !== null &&
+        !canResend
+      ) {
+        const elapsed = Math.floor(
+          (Date.now() - timerStartedAt.current) / 1000,
+        );
+        const remaining = Math.max(0, 180 - elapsed);
+        setTimeLeft(remaining);
+        if (remaining === 0) {
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          setCanResend(true);
+        }
+      }
+    });
+
+    return () => sub.remove();
+  }, [canResend]);
+
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, []);
 
   const onSubmit = async (data: CheckEmailProps) => {
     Keyboard.dismiss();
     try {
       if (canResend) {
         setCanResend(false);
-        timerRef.current.resetTimer();
       }
 
       const actionToDispatch = checkMode.includes('new')
@@ -66,6 +118,8 @@ const CheckEmailScreen = ({
 
       if (res?.success) {
         setIsEmailSent(true);
+        setTimeLeft(180);
+        startTimer();
         dispatch(
           setNotificationMessage({
             messageType: 'success',
@@ -79,12 +133,6 @@ const CheckEmailScreen = ({
           'XX -> CheckEmailScreen.tsx:65 -> onSubmit -> error :',
           error,
         );
-    }
-  };
-
-  const handleTimerProgress = (val: any) => {
-    if (val === 0) {
-      setCanResend(true);
     }
   };
 
@@ -162,24 +210,9 @@ const CheckEmailScreen = ({
                   <Text style={styles.resendText}>
                     {t('resend-email-button')}
                   </Text>
-                  <CountDownTimer
-                    ref={timerRef}
-                    timestamp={180}
-                    timerOnProgress={handleTimerProgress}
-                    timerCallback={() => setCanResend(true)}
-                    containerStyle={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      display: canResend ? 'none' : 'flex',
-                    }}
-                    textStyle={{
-                      ...textVar.mediumBold,
-                      color: colors.text,
-                      opacity: 0.5,
-                      letterSpacing: 0.8,
-                    }}
-                  />
-                  {canResend && <Text style={[styles.resendText]}>00:00</Text>}
+                  <Text style={styles.resendText}>
+                    {canResend ? '00:00' : formatTime(timeLeft)}
+                  </Text>
                 </Pressable>
               )}
             </View>
@@ -251,6 +284,7 @@ const createStyles = (colors: TColors) =>
       ...textVar.mediumBold,
       color: colors.text,
       opacity: 0.5,
+      letterSpacing: 0.8,
     },
     inputBox: {
       width: SCREEN.width100,
