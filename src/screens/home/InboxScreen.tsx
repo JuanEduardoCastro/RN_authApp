@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import {
   ActivityIndicator,
@@ -44,14 +44,10 @@ const InboxScreen = ({ navigation }: HomeTabScreenProps<'InboxScreen'>) => {
   useFocusEffect(
     useCallback(() => {
       clearBadge();
+      dispatch(fetchMessages({ t }));
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
   );
-
-  useEffect(() => {
-    dispatch(fetchMessages({ t }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handlePressMessage = useCallback(
     (item: InboxMessage) => {

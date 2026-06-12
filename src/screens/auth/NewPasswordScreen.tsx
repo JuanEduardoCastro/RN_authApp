@@ -11,6 +11,7 @@ import {
 
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { jwtDecode } from 'jwt-decode';
 
@@ -22,6 +23,7 @@ import { AuthStackScreenProps } from '@navigation/types';
 
 import Button from '@components/shared/Button';
 import ButtonNoBorder from '@components/shared/ButtonNoBorder';
+import HeaderGoBack from '@components/shared/HeaderGoBack';
 import InputAuthField from '@components/shared/InputAuthField';
 import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
 import Separator from '@components/shared/Separator';
@@ -169,82 +171,86 @@ const NewPasswordScreen = ({
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}>
-        <DismissKeyboardOnClick>
-          <View>
-            <View style={styles.titleBox}>
-              <Text style={styles.subTitle}>
-                {t('new-password-label-placeholder')}
-              </Text>
+        <SafeAreaView>
+          <HeaderGoBack onPress={() => navigation.goBack()} />
+          <Separator border={false} height={140} />
+          <DismissKeyboardOnClick>
+            <View>
+              <View style={styles.titleBox}>
+                <Text style={styles.subTitle}>
+                  {t('new-password-label-placeholder')}
+                </Text>
+              </View>
+              <View style={styles.inputBox}>
+                <Separator borderWidth={0} />
+                <InputAuthField
+                  inputStyles={styles.textinput}
+                  name="new_password"
+                  label={t('new-password-label')}
+                  control={control}
+                  rules={{
+                    required: t('password-required'),
+                    minLength: {
+                      value: 8,
+                      message: t('password-invalid'),
+                    },
+                    maxLength: {
+                      value: 128,
+                      message: t('info-password-max'),
+                    },
+                    validate: (value: string) => {
+                      return validatePasswordInput(value, t);
+                    },
+                  }}
+                  placeholder={t('new-password-label-placeholder')}
+                />
+                <InputAuthField
+                  contextMenuHidden={true}
+                  inputStyles={styles.textinput}
+                  name="confirm_password"
+                  label={t('confirm-password-label')}
+                  control={control}
+                  rules={{
+                    required: t('password-required'),
+                    minLength: {
+                      value: 8,
+                      message: t('password-invalid'),
+                    },
+                    maxLength: {
+                      value: 128,
+                      message: t('info-password-max'),
+                    },
+                    validate: (value: string) => {
+                      if (value !== watch('new_password')) {
+                        return t('warning-two-passwords');
+                      }
+                      return validatePasswordInput(value, t);
+                    },
+                  }}
+                  placeholder={t('confirm-password-label-placeholder')}
+                />
+              </View>
+              <View style={styles.buttonBox}>
+                <Button
+                  title={
+                    isNewUser
+                      ? t('register-user-button')
+                      : t('new-password-button')
+                  }
+                  onPress={handleSubmit(onSubmit)}
+                  buttonStyles={styles.button}
+                  textStyles={styles.buttonText}
+                />
+              </View>
+              <View style={styles.gobackBox}>
+                <ButtonNoBorder
+                  title={t('go-back-button')}
+                  onPress={() => navigation.popToTop()}
+                />
+              </View>
             </View>
-            <View style={styles.inputBox}>
-              <Separator borderWidth={0} />
-              <InputAuthField
-                inputStyles={styles.textinput}
-                name="new_password"
-                label={t('new-password-label')}
-                control={control}
-                rules={{
-                  required: t('password-required'),
-                  minLength: {
-                    value: 8,
-                    message: t('password-invalid'),
-                  },
-                  maxLength: {
-                    value: 128,
-                    message: t('info-password-max'),
-                  },
-                  validate: (value: string) => {
-                    return validatePasswordInput(value, t);
-                  },
-                }}
-                placeholder={t('new-password-label-placeholder')}
-              />
-              <InputAuthField
-                contextMenuHidden={true}
-                inputStyles={styles.textinput}
-                name="confirm_password"
-                label={t('confirm-password-label')}
-                control={control}
-                rules={{
-                  required: t('password-required'),
-                  minLength: {
-                    value: 8,
-                    message: t('password-invalid'),
-                  },
-                  maxLength: {
-                    value: 128,
-                    message: t('info-password-max'),
-                  },
-                  validate: (value: string) => {
-                    if (value !== watch('new_password')) {
-                      return t('warning-two-passwords');
-                    }
-                    return validatePasswordInput(value, t);
-                  },
-                }}
-                placeholder={t('confirm-password-label-placeholder')}
-              />
-            </View>
-            <View style={styles.buttonBox}>
-              <Button
-                title={
-                  isNewUser
-                    ? t('register-user-button')
-                    : t('new-password-button')
-                }
-                onPress={handleSubmit(onSubmit)}
-                buttonStyles={styles.button}
-                textStyles={styles.buttonText}
-              />
-            </View>
-            <View style={styles.gobackBox}>
-              <ButtonNoBorder
-                title={t('go-back-button')}
-                onPress={() => navigation.popToTop()}
-              />
-            </View>
-          </View>
-        </DismissKeyboardOnClick>
+          </DismissKeyboardOnClick>
+        </SafeAreaView>
       </KeyboardAvoidingView>
     </FormProvider>
   );
@@ -257,7 +263,7 @@ const createStyles = (colors: TColors) =>
     container: {
       backgroundColor: colors.background,
       flex: 1,
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
       alignItems: 'center',
       padding: 20,
     },

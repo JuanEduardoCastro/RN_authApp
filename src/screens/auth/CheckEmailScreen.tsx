@@ -13,6 +13,7 @@ import {
 
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { setNotificationMessage } from '@store/authSlice';
 import { useAppDispatch } from '@store/hooks';
@@ -22,6 +23,7 @@ import { AuthStackScreenProps } from '@navigation/types';
 
 import Button from '@components/shared/Button';
 import ButtonNoBorder from '@components/shared/ButtonNoBorder';
+import HeaderGoBack from '@components/shared/HeaderGoBack';
 import InputAuthField from '@components/shared/InputAuthField';
 import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
 import Separator from '@components/shared/Separator';
@@ -142,90 +144,94 @@ const CheckEmailScreen = ({
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}>
-        <DismissKeyboardOnClick>
-          <View>
-            <View style={styles.titleBox}>
-              <Text style={styles.subTitle}>
-                {checkMode.includes('new')
-                  ? t('check-email-title')
-                  : t('reset-password-title')}
-              </Text>
-              <Text style={styles.subTitle2}>
-                {isEmailSent &&
-                  `${t('check-inbox')} ${
+        <SafeAreaView>
+          <HeaderGoBack onPress={() => navigation.goBack()} />
+          <Separator border={false} height={140} />
+          <DismissKeyboardOnClick>
+            <View>
+              <View style={styles.titleBox}>
+                <Text style={styles.subTitle}>
+                  {checkMode.includes('new')
+                    ? t('check-email-title')
+                    : t('reset-password-title')}
+                </Text>
+                <Text style={styles.subTitle2}>
+                  {isEmailSent &&
+                    `${t('check-inbox')} ${
+                      checkMode.includes('new')
+                        ? t('create-account')
+                        : t('reset-password')
+                    }`}
+                </Text>
+              </View>
+              <View style={styles.inputBox}>
+                <Separator borderWidth={0} />
+                <InputAuthField
+                  editable={!isEmailSent}
+                  inputStyles={styles.textinput}
+                  name="email"
+                  label={t('email-label')}
+                  control={control}
+                  rules={{
+                    required: t('email-required'),
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: t('email-invalid'),
+                    },
+                  }}
+                  placeholder={t('enter-email-placeholder')}
+                />
+              </View>
+              <View style={styles.buttonBox}>
+                <Button
+                  disabled={isEmailSent}
+                  title={
                     checkMode.includes('new')
-                      ? t('create-account')
-                      : t('reset-password')
-                  }`}
-              </Text>
-            </View>
-            <View style={styles.inputBox}>
-              <Separator borderWidth={0} />
-              <InputAuthField
-                editable={!isEmailSent}
-                inputStyles={styles.textinput}
-                name="email"
-                label={t('email-label')}
-                control={control}
-                rules={{
-                  required: t('email-required'),
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: t('email-invalid'),
-                  },
-                }}
-                placeholder={t('enter-email-placeholder')}
-              />
-            </View>
-            <View style={styles.buttonBox}>
-              <Button
-                disabled={isEmailSent}
-                title={
-                  checkMode.includes('new')
-                    ? t('check-email-button')
-                    : t('reset-password-button')
-                }
-                onPress={handleSubmit(onSubmit)}
-                buttonStyles={styles.button}
-                textStyles={styles.buttonText}
-              />
-            </View>
-            <Separator height={12} borderWidth={0} />
+                      ? t('check-email-button')
+                      : t('reset-password-button')
+                  }
+                  onPress={handleSubmit(onSubmit)}
+                  buttonStyles={styles.button}
+                  textStyles={styles.buttonText}
+                />
+              </View>
+              <Separator height={12} borderWidth={0} />
 
-            {/* eslint-disable react-native/no-inline-styles */}
-            <View
-              style={{
-                height: 40,
-                alignItems: 'center',
-              }}>
-              {isEmailSent && (
-                <Pressable
-                  disabled={!canResend}
-                  style={[
-                    { flexDirection: 'row' },
-                    styles.resendBox,
-                    canResend && styles.resetBoxOnFocus,
-                  ]}
-                  onPress={handleSubmit(onSubmit)}>
-                  <Text style={styles.resendText}>
-                    {t('resend-email-button')}
-                  </Text>
-                  <Text style={styles.resendText}>
-                    {canResend ? '00:00' : formatTime(timeLeft)}
-                  </Text>
-                </Pressable>
-              )}
-            </View>
-            {/* eslint-enable react-native/no-inline-styles */}
+              {/* eslint-disable react-native/no-inline-styles */}
+              <View
+                style={{
+                  height: 40,
+                  alignItems: 'center',
+                }}>
+                {isEmailSent && (
+                  <Pressable
+                    disabled={!canResend}
+                    style={[
+                      { flexDirection: 'row' },
+                      styles.resendBox,
+                      canResend && styles.resetBoxOnFocus,
+                    ]}
+                    onPress={handleSubmit(onSubmit)}>
+                    <Text style={styles.resendText}>
+                      {t('resend-email-button')}
+                    </Text>
+                    <Text style={styles.resendText}>
+                      {canResend ? '00:00' : formatTime(timeLeft)}
+                    </Text>
+                  </Pressable>
+                )}
+              </View>
+              {/* eslint-enable react-native/no-inline-styles */}
 
-            <View style={styles.gobackBox}>
-              <ButtonNoBorder
-                title={t('go-back-button')}
-                onPress={() => navigation.popToTop()}
-              />
+              <View style={styles.gobackBox}>
+                <ButtonNoBorder
+                  title={t('go-back-button')}
+                  onPress={() => navigation.popToTop()}
+                />
+              </View>
             </View>
-          </View>
-        </DismissKeyboardOnClick>
+          </DismissKeyboardOnClick>
+        </SafeAreaView>
       </KeyboardAvoidingView>
     </FormProvider>
   );
@@ -238,7 +244,7 @@ const createStyles = (colors: TColors) =>
     container: {
       backgroundColor: colors.background,
       flex: 1,
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
       alignItems: 'center',
       padding: moderateScale(20),
     },

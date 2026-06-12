@@ -17,6 +17,7 @@ import { userAuth } from '@store/authSlice';
 import { useAppSelector } from '@store/hooks';
 import store from '@store/store';
 
+import { navigationRef } from '@navigation/navigationRef';
 import RootNavigator from '@navigation/RootNavigation';
 import { RootStackParamList } from '@navigation/types';
 
@@ -134,7 +135,7 @@ function App() {
               <ModeProvider>
                 {loader && <Loader />}
                 <NotificationBanner />
-                <NavigationContainer linking={linking}>
+                <NavigationContainer ref={navigationRef} linking={linking}>
                   <RootNavigator />
                 </NavigationContainer>
               </ModeProvider>

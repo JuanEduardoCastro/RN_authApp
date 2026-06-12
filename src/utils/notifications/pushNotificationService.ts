@@ -14,12 +14,14 @@ import {
   setBackgroundMessageHandler,
 } from '@react-native-firebase/messaging';
 
-import notifee from '@notifee/react-native';
+import notifee, { AndroidImportance } from '@notifee/react-native';
 
 import api from '@store/apiService';
 import { setNotificationMessage } from '@store/authSlice';
 import store from '@store/store';
-import { fetchUnreadCount } from '@store/thunks';
+import { fetchMessages, fetchUnreadCount } from '@store/thunks';
+
+import { navigationRef } from '@navigation/navigationRef';
 
 import i18n from '@locale/i18next';
 
@@ -45,6 +47,15 @@ export const requestPermissionForNotification = async () => {
   /* skip FCM registration on simulator/emulator */
   const isEmulator = await DeviceInfo.isEmulator();
   if (isEmulator) return;
+
+  /* Request channelId */
+  if (Platform.OS === 'android') {
+    await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+      importance: AndroidImportance.HIGH,
+    });
+  }
 
   /* Request permission */
   if (Platform.OS === 'android' && Platform.Version >= 33) {
@@ -149,14 +160,15 @@ export const setupMessageListener = () => {
 
       store.dispatch(
         setNotificationMessage({
-          messageType: 'warning',
+          messageType: 'information',
           notificationMessage:
             remoteMessage.notification?.body ||
             remoteMessage.notification?.title ||
-            'New Message' ||
             i18n.t('information-another-screen'),
         }),
       );
+
+      store.dispatch(fetchMessages({ t: i18n.t }));
 
       store
         .dispatch(fetchUnreadCount({ t: i18n.t }))
@@ -168,6 +180,12 @@ export const setupMessageListener = () => {
 
   /* Notification tap when app is in background */
   onNotificationOpenedApp(messagingInstance, remoteMessage => {
+    if (navigationRef.isReady()) {
+      navigationRef.navigate('HomeNavigator', {
+        screen: 'InboxScreen',
+      });
+    }
+
     __DEV__ &&
       console.log(
         'Notification caused app to open from background (iOS/Android):',
@@ -178,7 +196,11 @@ export const setupMessageListener = () => {
 
   /* Notification tap when the app is close or terminated */
   getInitialNotification(messagingInstance).then(remoteMessage => {
-    if (remoteMessage) {
+    if (remoteMessage && navigationRef.isReady()) {
+      navigationRef.navigate('HomeNavigator', {
+        screen: 'InboxScreen',
+      });
+
       __DEV__ &&
         console.log(
           'Notification caused app to open from quit state (iOS/Android):',

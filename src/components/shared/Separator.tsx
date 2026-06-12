@@ -4,7 +4,7 @@ import { ColorValue, StyleSheet, View } from 'react-native';
 
 import useStyles from '@hooks/useStyles';
 
-import { SCREEN } from '@constants/dimensions';
+import { moderateScale, SCREEN } from '@constants/dimensions';
 import { TColors } from '@constants/types';
 
 type SeparatorProps = {
@@ -30,7 +30,7 @@ const Separator = ({
     <View
       style={[
         styles.separator,
-        { height: height, backgroundColor: background },
+        { height: moderateScale(height), backgroundColor: background },
       ]}>
       {/* eslint-disable react-native/no-inline-styles */}
       <View

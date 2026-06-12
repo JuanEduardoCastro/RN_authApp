@@ -12,6 +12,7 @@ import {
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as Keychain from 'react-native-keychain';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAppDispatch } from '@store/hooks';
 import { loginUser } from '@store/thunks';
@@ -21,6 +22,7 @@ import { AuthStackScreenProps } from '@navigation/types';
 import Button from '@components/shared/Button';
 import ButtonNoBorder from '@components/shared/ButtonNoBorder';
 import CheckBoxCustom from '@components/shared/CheckBoxCustom';
+import HeaderGoBack from '@components/shared/HeaderGoBack';
 import InputAuthField from '@components/shared/InputAuthField';
 import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
 import BiometricOptInModal from '@components/shared/modalSheet/BiometricOptInModal';
@@ -104,76 +106,80 @@ const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
           style={styles.container}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 4 : 0}>
-          <DismissKeyboardOnClick>
-            <View>
-              <View style={styles.titleBox}>
-                <Text style={styles.subTitle}>{t('enter-email-title')}</Text>
+          <SafeAreaView>
+            <HeaderGoBack onPress={() => navigation.goBack()} />
+            <Separator border={false} height={140} />
+            <DismissKeyboardOnClick>
+              <View>
+                <View style={styles.titleBox}>
+                  <Text style={styles.subTitle}>{t('enter-email-title')}</Text>
+                </View>
+                <View style={styles.inputBox}>
+                  <Separator borderWidth={0} />
+                  <InputAuthField
+                    inputStyles={styles.textinput}
+                    name="email"
+                    label={t('email-label')}
+                    control={control}
+                    rules={{
+                      required: t('email-required'),
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: t('email-invalid'),
+                      },
+                    }}
+                    placeholder={t('enter-email-placeholder')}
+                  />
+                  <InputAuthField
+                    inputStyles={styles.textinput}
+                    name="password"
+                    label={t('password-label')}
+                    control={control}
+                    rules={{
+                      required: t('password-required'),
+                      minLength: {
+                        value: 8,
+                        message: t('password-invalid'),
+                      },
+                      maxLength: {
+                        value: 128,
+                        message: t('info-password-max'),
+                      },
+                    }}
+                    placeholder={t('enter-password-placeholder')}
+                  />
+                  <CheckBoxCustom
+                    name="rememberMe"
+                    label={t('remember-me-label')}
+                    control={control}
+                  />
+                </View>
+                <Separator borderWidth={0} height={16} />
+                <View style={styles.buttonBox}>
+                  <Button
+                    title={t('login-button')}
+                    onPress={handleSubmit(onSubmit)}
+                    buttonStyles={styles.button}
+                    textStyles={styles.buttonText}
+                  />
+                </View>
+                <View style={styles.gobackBox}>
+                  <ButtonNoBorder
+                    title={t('go-back-button')}
+                    onPress={() => navigation.popToTop()}
+                  />
+                  <ButtonNoBorder
+                    title={t('reset-password-go-to')}
+                    onPress={() =>
+                      navigation.navigate('CheckEmailScreen', {
+                        checkMode: 'reset_password',
+                      })
+                    }
+                  />
+                </View>
               </View>
-              <View style={styles.inputBox}>
-                <Separator borderWidth={0} />
-                <InputAuthField
-                  inputStyles={styles.textinput}
-                  name="email"
-                  label={t('email-label')}
-                  control={control}
-                  rules={{
-                    required: t('email-required'),
-                    pattern: {
-                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                      message: t('email-invalid'),
-                    },
-                  }}
-                  placeholder={t('enter-email-placeholder')}
-                />
-                <InputAuthField
-                  inputStyles={styles.textinput}
-                  name="password"
-                  label={t('password-label')}
-                  control={control}
-                  rules={{
-                    required: t('password-required'),
-                    minLength: {
-                      value: 8,
-                      message: t('password-invalid'),
-                    },
-                    maxLength: {
-                      value: 128,
-                      message: t('info-password-max'),
-                    },
-                  }}
-                  placeholder={t('enter-password-placeholder')}
-                />
-                <CheckBoxCustom
-                  name="rememberMe"
-                  label={t('remember-me-label')}
-                  control={control}
-                />
-              </View>
-              <Separator borderWidth={0} height={16} />
-              <View style={styles.buttonBox}>
-                <Button
-                  title={t('login-button')}
-                  onPress={handleSubmit(onSubmit)}
-                  buttonStyles={styles.button}
-                  textStyles={styles.buttonText}
-                />
-              </View>
-              <View style={styles.gobackBox}>
-                <ButtonNoBorder
-                  title={t('go-back-button')}
-                  onPress={() => navigation.popToTop()}
-                />
-                <ButtonNoBorder
-                  title={t('reset-password-go-to')}
-                  onPress={() =>
-                    navigation.navigate('CheckEmailScreen', {
-                      checkMode: 'reset_password',
-                    })
-                  }
-                />
-              </View>
-            </View>
-          </DismissKeyboardOnClick>
+            </DismissKeyboardOnClick>
+          </SafeAreaView>
         </KeyboardAvoidingView>
       </FormProvider>
       <ModalSheet
@@ -196,7 +202,7 @@ const createStyles = (colors: TColors) =>
     container: {
       backgroundColor: colors.background,
       flex: 1,
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
       alignItems: 'center',
       paddingVertical: verticalScale(20),
       paddingHorizontal: moderateScale(16),
