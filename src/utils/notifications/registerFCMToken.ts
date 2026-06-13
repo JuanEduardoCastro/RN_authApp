@@ -1,6 +1,6 @@
 import DeviceInfo from 'react-native-device-info';
 import { getApp } from '@react-native-firebase/app';
-import { getMessaging } from '@react-native-firebase/messaging';
+import { getMessaging, getToken } from '@react-native-firebase/messaging';
 
 import api from '@store/apiService';
 
@@ -9,7 +9,7 @@ const messagingInstance = getMessaging(firebaseApp);
 
 export const registerFCMToken = async (accessToken: string) => {
   try {
-    const fcmToken = await messagingInstance.getToken();
+    const fcmToken = await getToken(messagingInstance);
     if (fcmToken) {
       __DEV__ && console.log('FCM Token got it.');
     }

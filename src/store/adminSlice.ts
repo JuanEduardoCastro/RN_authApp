@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from './store';
 import {
+  deleteMessage,
   fetchMessages,
   fetchUnreadCount,
   fetchUsers,
@@ -86,6 +87,19 @@ const adminSlice = createSlice({
           msg.isRead = true;
           if (state.unreadCount > 0) state.unreadCount -= 1;
         }
+      })
+
+      /* delete message - optimistic, no loader */
+      .addCase(deleteMessage.fulfilled, (state, action) => {
+        const msg = state.messages.find(
+          m => m._id === action.payload.messageId,
+        );
+        if (msg && !msg.isRead && state.unreadCount > 0) {
+          state.unreadCount -= 1;
+        }
+        state.messages = state.messages.filter(
+          m => m._id !== action.payload.messageId,
+        );
       });
   },
 });

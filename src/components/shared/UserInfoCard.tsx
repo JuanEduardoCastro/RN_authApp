@@ -24,7 +24,6 @@ const UserInfoCard = ({ user, onPress }: UserInfoCardProps) => {
   const { i18n, t } = useTranslation();
 
   const memberSinceFormat = (dateString: string | Date) => {
-    console.log('----------> ENTRO AL FORMAT <----------');
     if (!dateString) return '';
     const localeMap: Record<string, string> = {
       en: 'en-US',

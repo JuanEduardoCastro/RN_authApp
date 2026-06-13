@@ -198,6 +198,13 @@
   "inbox-title": "Buzón de entrada",
   "inbox-empty": "No hay mensajes aún",
   "inbox-mark-read": "Marcado como leído",
+
+  "inbox-system-sender": "Sistema",
+  "delete-message-action": "Eliminar",
+  "delete-message-confirm": "¿Estás seguro de que deseas\neliminar este mensaje?",
+  "delete-message-button": "Eliminar",
+  "delete-message-cancel": "Cancelar",
+
   "welcome-message-title": "Bienvenido a Auth.Jc! 👋",
   "welcome-message-body": "Hola {{name}}, me alegro que estés acá. Completa tu perfil de usuario para que veas todo lo que hace la app."
 }

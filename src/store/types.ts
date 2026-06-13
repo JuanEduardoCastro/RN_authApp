@@ -118,6 +118,11 @@ export interface MarkMessageReadPayload {
   messageId: string;
 }
 
+export interface DeleteMessagePayload {
+  t: TFunction;
+  messageId: string;
+}
+
 export type ErrorType = 'timeout' | 'network' | 'unknown' | 'server' | 'client';
 
 export interface ParsedError {

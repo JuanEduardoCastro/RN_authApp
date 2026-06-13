@@ -88,6 +88,7 @@ export const setupInterceptors = (store: AppStore) => {
         config.url?.includes('/reset-password') ||
         config.url?.includes('/token/refresh') ||
         config.url?.includes('/create') ||
+        config.url?.includes('/device-token') ||
         config.url?.endsWith('/password');
 
       if (skipValidation) {

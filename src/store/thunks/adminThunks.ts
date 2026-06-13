@@ -3,6 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '@store/apiService';
 import { RootState } from '@store/store';
 import {
+  DeleteMessagePayload,
   FetchMessagesPayload,
   FetchUnreadCountPayload,
   FetchUsersPayload,
@@ -181,6 +182,36 @@ export const markMessageRead = createAsyncThunk(
     } catch (error: any) {
       __DEV__ && console.log('XX -> adminThunks.ts:155 -> error :', error);
       const parsedError = parseApiError(error, t, 'error-mark-read');
+      return rejectWithValue({
+        messageType: 'error',
+        notificationMessage: parsedError.message,
+      });
+    }
+  },
+);
+
+export const deleteMessage = createAsyncThunk(
+  'admin/deleteMessage',
+  async (data: DeleteMessagePayload, { rejectWithValue, getState }) => {
+    const { t, messageId } = data;
+    const { auth } = getState() as RootState;
+
+    try {
+      const response = await api.delete(`/messages/${messageId}/delete`, {
+        headers: { Authorization: `Bearer ${auth.token}` },
+      });
+      if (response.status === 200) {
+        return { messageId };
+      }
+
+      return rejectWithValue({
+        messageType: 'error',
+        notificationMessage: t('error-unknown'),
+      });
+    } catch (error: any) {
+      __DEV__ && console.log('XX -> adminThunks.ts:212 -> error :', error);
+
+      const parsedError = parseApiError(error, t, 'error-delete-message');
       return rejectWithValue({
         messageType: 'error',
         notificationMessage: parsedError.message,

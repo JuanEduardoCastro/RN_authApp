@@ -15,12 +15,15 @@ import { useFocusEffect } from '@react-navigation/native';
 import { userAdmin } from '@store/adminSlice';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { fetchMessages, markMessageRead } from '@store/thunks';
+import { deleteMessage } from '@store/thunks/adminThunks';
 import { InboxMessage } from '@store/types';
 
 import { HomeTabScreenProps } from '@navigation/types';
 
 import HeaderGoBack from '@components/shared/HeaderGoBack';
 import MessageCard from '@components/shared/MessageCard';
+import DeleteMessageModal from '@components/shared/modalSheet/DeleteMessageModal';
+import ModalSheet from '@components/shared/modalSheet/ModalSheet';
 import Separator from '@components/shared/Separator';
 
 import { useBadgeCount } from '@hooks/useBadgeCount';
@@ -40,6 +43,8 @@ const InboxScreen = ({ navigation }: HomeTabScreenProps<'InboxScreen'>) => {
 
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState<boolean>(false);
+
+  const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -66,42 +71,67 @@ const InboxScreen = ({ navigation }: HomeTabScreenProps<'InboxScreen'>) => {
     setRefreshing(false);
   }, [dispatch, t]);
 
+  const handleDeleteMessage = useCallback((messageId: string) => {
+    setMessageToDelete(messageId);
+  }, []);
+
+  const handleConfirmDelete = useCallback(async () => {
+    if (!messageToDelete) return;
+    await dispatch(deleteMessage({ t, messageId: messageToDelete }));
+    setMessageToDelete(null);
+  }, [dispatch, t, messageToDelete]);
+
+  const handleCancelDelete = useCallback(() => {
+    setMessageToDelete(null);
+  }, []);
+
   const renderItem = useCallback(
     ({ item }: { item: InboxMessage }) => (
       <MessageCard
         item={item}
         isExpanded={expandedId === item._id}
         onPress={() => handlePressMessage(item)}
+        onDeletePress={() => handleDeleteMessage(item._id)}
       />
     ),
-    [expandedId, handlePressMessage],
+    [expandedId, handlePressMessage, handleDeleteMessage],
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <HeaderGoBack onPress={() => navigation.goBack()} />
-      <View style={styles.titleBox}>
-        <Text style={styles.titleText}>{t('inbox-title')}</Text>
-      </View>
-      <Separator border={false} height={8} />
-      <FlatList
-        data={messages}
-        keyExtractor={item => item._id}
-        renderItem={renderItem}
-        ItemSeparatorComponent={() => <Separator border height={0} />}
-        ListEmptyComponent={
-          loader ? (
-            <ActivityIndicator color={colors.second} style={styles.loader} />
-          ) : (
-            <Text style={styles.emptyText}>{t('inbox-empty')}</Text>
-          )
-        }
-        contentContainerStyle={styles.listContent}
-        showsVerticalScrollIndicator={false}
-        refreshing={refreshing}
-        onRefresh={handleRefresh}
-      />
-    </SafeAreaView>
+    <>
+      <SafeAreaView style={styles.container}>
+        <HeaderGoBack onPress={() => navigation.goBack()} />
+        <View style={styles.titleBox}>
+          <Text style={styles.titleText}>{t('inbox-title')}</Text>
+        </View>
+        <Separator border={false} height={8} />
+        <FlatList
+          data={messages}
+          keyExtractor={item => item._id}
+          renderItem={renderItem}
+          ItemSeparatorComponent={() => <Separator border height={0} />}
+          ListEmptyComponent={
+            loader ? (
+              <ActivityIndicator color={colors.second} style={styles.loader} />
+            ) : (
+              <Text style={styles.emptyText}>{t('inbox-empty')}</Text>
+            )
+          }
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+        />
+      </SafeAreaView>
+      <ModalSheet
+        modalIsVisible={messageToDelete !== null}
+        toggleSheet={handleCancelDelete}>
+        <DeleteMessageModal
+          toggleModalSheet={handleCancelDelete}
+          handleDelete={handleConfirmDelete}
+        />
+      </ModalSheet>
+    </>
   );
 };
 
@@ -125,7 +155,7 @@ const createStyles = (colors: TColors) =>
     },
     listContent: {
       width: SCREEN.width100,
-      paddingHorizontal: moderateScale(16),
+      paddingHorizontal: moderateScale(8),
       paddingBottom: moderateScale(80),
     },
     messageRow: {
