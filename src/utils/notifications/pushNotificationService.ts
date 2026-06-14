@@ -14,7 +14,7 @@ import {
   setBackgroundMessageHandler,
 } from '@react-native-firebase/messaging';
 
-import notifee, { AndroidImportance } from '@notifee/react-native';
+import notifee, { AndroidImportance, EventType } from '@notifee/react-native';
 
 import api from '@store/apiService';
 import { setNotificationMessage } from '@store/authSlice';
@@ -151,19 +151,20 @@ const getTokenWithRetry = async (
 };
 
 export const setupMessageListener = () => {
-  /* Foreground message listener */
+  /* Foreground message listener - fires on Android (all messages) and
+  iOS (data-only messages). Notification messages on iOS are intercepted
+  by notifee's UNUserNotificationCenter delegate and handle below */
   const unsubscribeOnMessage = onMessage(
     messagingInstance,
     async remoteMessage => {
-      __DEV__ &&
-        console.log('Foreground Message Received (Android):', remoteMessage);
+      __DEV__ && console.log('Foreground Message Received:', remoteMessage);
 
       store.dispatch(
         setNotificationMessage({
           messageType: 'information',
           notificationMessage:
-            remoteMessage.notification?.body ||
             remoteMessage.notification?.title ||
+            remoteMessage.notification?.body ||
             i18n.t('information-another-screen'),
         }),
       );
@@ -175,8 +176,63 @@ export const setupMessageListener = () => {
         .unwrap()
         .then(result => notifee.setBadgeCount(result.count))
         .catch(() => {});
+
+      await notifee.displayNotification({
+        title: remoteMessage.notification?.title,
+        body: remoteMessage.notification?.body,
+        data: { ...remoteMessage.data, _local: 'true' },
+        android: {
+          channelId: 'default',
+          pressAction: {
+            id: 'default',
+          },
+        },
+      });
     },
   );
+
+  /* iOS only: when notifee is the UNUserNotificationCenter delegate,
+      onMessage. EventType.DELIVERED catches them so Redux state and
+      the tab badge stay in sync.
+      The _local flag prevents re-processing the local copy we display. */
+  const unsubscribeNotifee =
+    Platform.OS === 'ios'
+      ? notifee.onForegroundEvent(async ({ type, detail }) => {
+          if (
+            type === EventType.DELIVERED &&
+            !detail.notification?.data?._local
+          ) {
+            store.dispatch(
+              setNotificationMessage({
+                messageType: 'information',
+                notificationMessage:
+                  detail.notification?.body ||
+                  detail.notification?.title ||
+                  i18n.t('information-another-screen'),
+              }),
+            );
+            store.dispatch(fetchMessages({ t: i18n.t }));
+            store
+              .dispatch(fetchUnreadCount({ t: i18n.t }))
+              .unwrap()
+              .then(result => notifee.setBadgeCount(result.count))
+              .catch(() => {});
+
+            await notifee.displayNotification({
+              title: detail.notification?.title,
+              body: detail.notification?.body,
+              data: { ...detail.notification?.data, _local: 'true' },
+              ios: {
+                foregroundPresentationOptions: {
+                  alert: true,
+                  badge: true,
+                  sound: true,
+                },
+              },
+            });
+          }
+        })
+      : () => {};
 
   /* Notification tap when app is in background */
   onNotificationOpenedApp(messagingInstance, remoteMessage => {
@@ -210,7 +266,10 @@ export const setupMessageListener = () => {
     }
   });
 
-  return unsubscribeOnMessage;
+  return () => {
+    unsubscribeOnMessage();
+    unsubscribeNotifee();
+  };
 };
 
 export const setupTokenRefreshListener = () => {

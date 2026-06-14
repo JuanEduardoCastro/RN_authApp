@@ -29,6 +29,8 @@ import HeaderGoBack from '@components/shared/HeaderGoBack';
 
 import useStyles from '@hooks/useStyles';
 
+import { CheckIcon } from '@assets/svg/icons';
+
 import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
@@ -157,12 +159,13 @@ const AdminScreen = ({
             <Text style={styles.userEmail}>{item.email}</Text>
           </View>
           <View
-            style={[styles.checkbox, isSelected && styles.checkboxSelected]}
-          />
+            style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
+            <CheckIcon width={16} height={16} color={colors.textNgt} />
+          </View>
         </Pressable>
       );
     },
-    [selectedIds, styles],
+    [selectedIds, styles, colors],
   );
 
   return (
@@ -251,6 +254,8 @@ const createStyles = (colors: TColors) =>
       color: colors.textMuted,
     },
     checkbox: {
+      justifyContent: 'center',
+      alignItems: 'center',
       width: SCREEN.widthFixed * 20,
       height: SCREEN.widthFixed * 20,
       borderRadius: 4,

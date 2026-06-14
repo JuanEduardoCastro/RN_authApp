@@ -210,6 +210,14 @@ export const logoutUser = createAsyncThunk(
         await GoogleSignin.signOut();
       }
 
+      try {
+        await api.delete(`/users/device-token/${deviceId}`, {
+          headers: { Authorization: `Bearer ${auth.token}` },
+        });
+      } catch {
+        // non-critical — proceed with logout regardless
+      }
+
       const response = await api.post(
         '/users/logout',
         { email: email },
@@ -219,14 +227,6 @@ export const logoutUser = createAsyncThunk(
       );
 
       if (response.status === 200) {
-        try {
-          await api.delete(`/users/device-token/${deviceId}`, {
-            headers: { Authorization: `Bearer ${auth.token}` },
-          });
-        } catch {
-          // non-critical — proceed with logout regardless
-        }
-
         await secureDelete(KeychainService.REFRESH_TOKEN);
         await secureDelete(KeychainService.REMEMBER_ME);
         await disableBiometricLogin();

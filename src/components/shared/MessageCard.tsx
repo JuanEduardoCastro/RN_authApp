@@ -25,7 +25,7 @@ type MessageCardProps = {
   item: InboxMessage;
   isExpanded: boolean;
   onPress: () => void;
-  onDeletePress: () => void;
+  onDeletePress?: () => void;
 };
 
 const formatDate = (dateString: string): string => {
@@ -55,6 +55,7 @@ const MessageCard = ({
       : `${item.sender.firstName} ${item.sender.lastName}`;
 
   const pan = Gesture.Pan()
+    .enabled(!!onDeletePress)
     .activeOffsetX([-10, 10])
     .failOffsetY([-20, 20])
     .onBegin(() => {
@@ -80,16 +81,18 @@ const MessageCard = ({
 
   const handleDeletePress = () => {
     translateX.value = withSpring(0);
-    onDeletePress();
+    onDeletePress?.();
   };
 
   return (
     <View style={styles.swipeableContainer}>
-      <Animated.View style={[styles.deleteAction, actionStyle]}>
-        <Pressable onPress={handleDeletePress} style={styles.deleteButton}>
-          <Text style={styles.deleteText}>{t('delete-message-action')}</Text>
-        </Pressable>
-      </Animated.View>
+      {onDeletePress && (
+        <Animated.View style={[styles.deleteAction, actionStyle]}>
+          <Pressable onPress={handleDeletePress} style={styles.deleteButton}>
+            <Text style={styles.deleteText}>{t('delete-message-action')}</Text>
+          </Pressable>
+        </Animated.View>
+      )}
       <GestureDetector gesture={pan}>
         <Animated.View style={[styles.card, cardStyle]}>
           <Pressable

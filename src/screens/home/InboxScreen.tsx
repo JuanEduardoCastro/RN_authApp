@@ -91,7 +91,9 @@ const InboxScreen = ({ navigation }: HomeTabScreenProps<'InboxScreen'>) => {
         item={item}
         isExpanded={expandedId === item._id}
         onPress={() => handlePressMessage(item)}
-        onDeletePress={() => handleDeleteMessage(item._id)}
+        onDeletePress={
+          item.isRead ? () => handleDeleteMessage(item._id) : undefined
+        }
       />
     ),
     [expandedId, handlePressMessage, handleDeleteMessage],
