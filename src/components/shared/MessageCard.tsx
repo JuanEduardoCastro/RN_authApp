@@ -15,6 +15,8 @@ import { InboxMessage } from '@store/types';
 
 import useStyles from '@hooks/useStyles';
 
+import { TrashCanIcon } from '@assets/svg/icons';
+
 import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
@@ -43,7 +45,7 @@ const MessageCard = ({
   onPress,
   onDeletePress,
 }: MessageCardProps) => {
-  const { styles } = useStyles(createStyles);
+  const { colors, styles } = useStyles(createStyles);
   const { t } = useTranslation();
 
   const translateX = useSharedValue(0);
@@ -90,6 +92,7 @@ const MessageCard = ({
         <Animated.View style={[styles.deleteAction, actionStyle]}>
           <Pressable onPress={handleDeletePress} style={styles.deleteButton}>
             <Text style={styles.deleteText}>{t('delete-message-action')}</Text>
+            <TrashCanIcon width={17} height={17} color={colors.almostWhite} />
           </Pressable>
         </Animated.View>
       )}
@@ -204,15 +207,20 @@ const createStyles = (colors: TColors) =>
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: colors.danger,
+      borderRadius: 2,
+      // boxShadow: 'inset 2px 1px 8px rgba(0, 0, 0, 0.6)',
     },
     deleteButton: {
       flex: 1,
+      flexDirection: 'row',
       width: '100%',
       justifyContent: 'center',
       alignItems: 'center',
+      gap: moderateScale(6),
     },
     deleteText: {
-      ...textVar.smallBold,
-      color: colors.textNgt,
+      ...textVar.mediumBold,
+      color: colors.almostWhite,
+      letterSpacing: 0.6,
     },
   });

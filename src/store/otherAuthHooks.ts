@@ -245,8 +245,8 @@ export const appleLogin = createAsyncThunk(
       const validateAppleResponse = await api.post(
         '/users/apple-login',
         {
-          firstName: fullName?.givenName || '',
-          lastName: fullName?.familyName || '',
+          ...(fullName?.givenName ? { firstName: fullName.givenName } : {}),
+          ...(fullName?.familyName ? { lastName: fullName.familyName } : {}),
         },
         {
           headers: { Authorization: `Bearer ${identityToken}` },

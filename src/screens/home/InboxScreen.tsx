@@ -55,10 +55,10 @@ const InboxScreen = ({ navigation }: HomeTabScreenProps<'InboxScreen'>) => {
   );
 
   const handlePressMessage = useCallback(
-    (item: InboxMessage) => {
+    async (item: InboxMessage) => {
       setExpandedId(prev => (prev === item._id ? null : item._id));
       if (!item.isRead) {
-        dispatch(markMessageRead({ t, messageId: item._id }));
+        await dispatch(markMessageRead({ t, messageId: item._id }));
         syncBadge();
       }
     },

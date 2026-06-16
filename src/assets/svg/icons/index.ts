@@ -26,4 +26,5 @@ export { default as ProfileIcon } from './profileIcon.svg';
 export { default as SettingsIcon } from './settingsIcon.svg';
 export { default as SuccessIcon } from './successIcon.svg';
 export { default as TouchIdIcon } from './touchIdIcon.svg';
+export { default as TrashCanIcon } from './trashIcon.svg';
 export { default as WarningIcon } from './warningIcon.svg';

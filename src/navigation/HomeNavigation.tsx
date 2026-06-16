@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { Platform } from 'react-native';
 
@@ -10,6 +10,7 @@ import { useAppSelector } from '@store/hooks';
 import HomeScreen from '@screens/home/HomeScreen';
 import InboxScreen from '@screens/home/InboxScreen';
 
+import { useBadgeCount } from '@hooks/useBadgeCount';
 import { useMode } from '@context/ModeContext';
 
 import { EnvelopIcon, HomeIcon, SettingsIcon } from '@assets/svg/icons';
@@ -24,6 +25,13 @@ const Tab = createBottomTabNavigator<HomeTabParamList>();
 const HomeNavigation = () => {
   const { colors } = useMode();
   const { unreadCount } = useAppSelector(userAdmin);
+  const { syncBadge } = useBadgeCount();
+
+  useEffect(() => {
+    const interval = setInterval(syncBadge, 30000);
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const tabBarStyle = useMemo(
     () => ({

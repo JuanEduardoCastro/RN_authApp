@@ -159,15 +159,17 @@ export const setupMessageListener = () => {
     async remoteMessage => {
       __DEV__ && console.log('Foreground Message Received:', remoteMessage);
 
-      store.dispatch(
-        setNotificationMessage({
-          messageType: 'information',
-          notificationMessage:
-            remoteMessage.notification?.title ||
-            remoteMessage.notification?.body ||
-            i18n.t('information-another-screen'),
-        }),
-      );
+      if (remoteMessage.notification) {
+        store.dispatch(
+          setNotificationMessage({
+            messageType: 'information',
+            notificationMessage:
+              remoteMessage.notification?.title ||
+              remoteMessage.notification?.body ||
+              i18n.t('information-another-screen'),
+          }),
+        );
+      }
 
       store.dispatch(fetchMessages({ t: i18n.t }));
 
@@ -198,16 +200,13 @@ export const setupMessageListener = () => {
   const unsubscribeNotifee =
     Platform.OS === 'ios'
       ? notifee.onForegroundEvent(async ({ type, detail }) => {
-          if (
-            type === EventType.DELIVERED &&
-            !detail.notification?.data?._local
-          ) {
+          if (type === EventType.DELIVERED) {
             store.dispatch(
               setNotificationMessage({
                 messageType: 'information',
                 notificationMessage:
-                  detail.notification?.body ||
                   detail.notification?.title ||
+                  detail.notification?.body ||
                   i18n.t('information-another-screen'),
               }),
             );

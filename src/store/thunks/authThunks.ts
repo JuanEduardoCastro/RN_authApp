@@ -49,9 +49,11 @@ export const validateRefreshToken = createAsyncThunk(
           user,
           token: accessToken,
           messageType: 'success',
-          notificationMessage: `${t('success-welcome-back')}${
-            response.data.data.user.firstName
-          }!`,
+          notificationMessage: user.firstName
+            ? `${t('success-welcome-back')}${
+                response.data.data.user.firstName
+              }!`
+            : t('success-welcome'),
         };
       }
       return rejectWithValue({
