@@ -44,6 +44,9 @@ export const validateRefreshToken = createAsyncThunk(
             KeychainService.REFRESH_TOKEN,
           );
         }
+
+        await registerFCMToken(accessToken);
+
         return {
           success: true,
           user,
