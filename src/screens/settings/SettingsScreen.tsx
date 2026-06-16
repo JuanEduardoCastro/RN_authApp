@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Platform,
@@ -22,6 +22,7 @@ import MailContactBox from '@components/shared/MailContactBox';
 import BiometricConfirmModal from '@components/shared/modalSheet/BiometricConfirmModal';
 import LogoutModal from '@components/shared/modalSheet/LogoutModal';
 import ModalSheet from '@components/shared/modalSheet/ModalSheet';
+import NotificationConfirmModal from '@components/shared/modalSheet/NotificationConfirmModal';
 import ModeSwitchButton from '@components/shared/ModeSwitchButton';
 import Separator from '@components/shared/Separator';
 
@@ -31,6 +32,7 @@ import useStyles from '@hooks/useStyles';
 import { useMode } from '@context/ModeContext';
 
 import {
+  BellIcon,
   CheckIcon,
   CircleFullIcon,
   FaceIdIcon,
@@ -48,6 +50,10 @@ import {
   disableBiometricLogin,
   enableBiometricLogin,
 } from '@utils/biometricAuth';
+import {
+  enableNotifications,
+  getNotificationsEnabled,
+} from '@utils/notifications/notificationPreferences';
 
 import { SettingsStackScreenProps } from 'src/navigation/types';
 import { setNotificationMessage, userAuth } from 'src/store/authSlice';
@@ -55,7 +61,7 @@ import { setNotificationMessage, userAuth } from 'src/store/authSlice';
 const SettingsScreen = ({
   navigation,
 }: SettingsStackScreenProps<'SettingsScreen'>) => {
-  const { user } = useAppSelector(userAuth);
+  const { user, token } = useAppSelector(userAuth);
   const { handleLogout } = useLogoutUser();
   const { setColorTheme, themeName, toggleMode } = useMode();
   const { colors, styles } = useStyles(createStyles);
@@ -74,6 +80,49 @@ const SettingsScreen = ({
   const [pendingBiometricAction, setPendingBiometricAction] = useState<
     'enable' | 'disable'
   >('enable');
+
+  const [notifEnabled, setNotifEnabled] = useState(true);
+  const [notifConfirmModal, setNotifConfirmModal] = useState(false);
+  const [pendingNotifAction, setPendingNotifAction] = useState<
+    'enable' | 'disable'
+  >('enable');
+
+  useEffect(() => {
+    getNotificationsEnabled().then(setNotifEnabled);
+  }, []);
+
+  const handleNotifToggle = (value: boolean) => {
+    setPendingNotifAction(value ? 'enable' : 'disable');
+    setNotifConfirmModal(true);
+  };
+
+  const handleNotifConfirm = async () => {
+    if (!token) return;
+    if (pendingNotifAction === 'enable') {
+      await enableNotifications(token);
+      setNotifEnabled(true);
+      dispatch(
+        setNotificationMessage({
+          messageType: 'success',
+          notificationMessage: t('notifications-enabled-success'),
+        }),
+      );
+    } else {
+      await enableNotifications(token);
+      setNotifEnabled(false);
+      dispatch(
+        setNotificationMessage({
+          messageType: 'information',
+          notificationMessage: t('notifications-disabled-info'),
+        }),
+      );
+    }
+    setNotifConfirmModal(false);
+  };
+
+  const toggleNotifConfirmModal = () => {
+    setNotifConfirmModal(!notifConfirmModal);
+  };
 
   const handleBiometricToggle = (value: boolean) => {
     setPendingBiometricAction(value ? 'enable' : 'disable');
@@ -186,6 +235,13 @@ const SettingsScreen = ({
             />
           )}
 
+          <ListCard
+            title={t('notifications-toggle-button')}
+            onPress={() => handleNotifToggle(!notifEnabled)}
+            icon={<BellIcon width={22} height={22} color={colors.text} />}
+            checkBox={notifEnabled}
+          />
+
           <Separator height={40} />
           <Pressable onPress={toggleMode} style={styles.modeBox}>
             <ModeSwitchButton />
@@ -237,6 +293,15 @@ const SettingsScreen = ({
           action={pendingBiometricAction}
           toggleModalSheet={toggleBiometricConfirmModal}
           onConfirm={handleBiometricconfirm}
+        />
+      </ModalSheet>
+      <ModalSheet
+        modalIsVisible={notifConfirmModal}
+        toggleSheet={toggleNotifConfirmModal}>
+        <NotificationConfirmModal
+          action={pendingNotifAction}
+          toggleModalSheet={toggleNotifConfirmModal}
+          onConfirm={handleNotifConfirm}
         />
       </ModalSheet>
     </SafeAreaView>

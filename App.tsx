@@ -28,6 +28,7 @@ import { SplashScreen } from '@components/splash/SplashScreen';
 import { useBadgeCount } from '@hooks/useBadgeCount';
 import { ModeProvider } from '@context/ModeContext';
 
+import { getNotificationsEnabled } from '@utils/notifications/notificationPreferences';
 import {
   requestPermissionForNotification,
   setupMessageListener,
@@ -98,9 +99,20 @@ function App() {
   const [isAppReady, setIsAppReady] = useState(false);
 
   useEffect(() => {
-    requestPermissionForNotification();
-    const unsubscribe = setupMessageListener();
-    const unsubscribeTokenRefresh = setupTokenRefreshListener();
+    let unsubscribe = () => {};
+    let unsubscribeTokenRefresh = () => {};
+
+    getNotificationsEnabled().then(enabled => {
+      if (enabled) {
+        requestPermissionForNotification();
+        unsubscribe = setupMessageListener();
+        unsubscribeTokenRefresh = setupTokenRefreshListener();
+      }
+    });
+
+    // requestPermissionForNotification();
+    // const unsubscribe = setupMessageListener();
+    // const unsubscribeTokenRefresh = setupTokenRefreshListener();
 
     const appStateSubcription = AppState.addEventListener(
       'change',

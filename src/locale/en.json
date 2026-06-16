@@ -205,5 +205,16 @@
   "delete-message-cancel": "Cancel",
 
   "welcome-message-title": "Welcome to Auth.Jc! 👋",
-  "welcome-message-body": "Hi {{name}}, glad to have you here. Complete your profile to get the most out of the app."
+  "welcome-message-body": "Hi {{name}}, glad to have you here. Complete your profile to get the most out of the app.",
+
+  "notifications-toggle-button": "Push Notifications",
+  "notifications-enabled-success": "Push notifications enabled.",
+  "notifications-disabled-info": "Push notifications disabled.",
+  "notifications-confirm-enable-title": "Enable notifications?",
+  "notifications-confirm-enable-message": "You will receive push notifications and messages in your inbox.",
+  "notifications-confirm-disable-title": "Disable notifications?",
+  "notifications-confirm-disable-message": "You will no longer receive push notifications. You can re-enable this at any time.",
+  "notifications-confirm-enable-button": "Enable",
+  "notifications-confirm-disable-button": "Disable",
+  "notifications-confirm-cancel": "Cancel"
 }

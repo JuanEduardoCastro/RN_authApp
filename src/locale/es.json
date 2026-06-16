@@ -206,5 +206,16 @@
   "delete-message-cancel": "Cancelar",
 
   "welcome-message-title": "Bienvenido a Auth.Jc! 👋",
-  "welcome-message-body": "Hola {{name}}, me alegro que estés acá. Completa tu perfil de usuario para que veas todo lo que hace la app."
+  "welcome-message-body": "Hola {{name}}, me alegro que estés acá. Completa tu perfil de usuario para que veas todo lo que hace la app.",
+
+  "notifications-toggle-button": "Notificaciones push",
+  "notifications-enabled-success": "Notificaciones push activadas.",
+  "notifications-disabled-info": "Notificaciones push desactivadas.",
+  "notifications-confirm-enable-title": "¿Activar notificaciones?",
+  "notifications-confirm-enable-message": "Recibirás notificaciones push y mensajes en tu bandeja de entrada.",
+  "notifications-confirm-disable-title": "¿Desactivar notificaciones?",
+  "notifications-confirm-disable-message": "Ya no recibirás notificaciones push. Puedes reactivarlas en cualquier momento.",
+  "notifications-confirm-enable-button": "Activar",
+  "notifications-confirm-disable-button": "Desactivar",
+  "notifications-confirm-cancel": "Cancelar"
 }

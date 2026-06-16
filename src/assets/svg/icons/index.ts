@@ -1,5 +1,6 @@
 export { default as AppleIcon } from './appleIcon.svg';
 export { default as ArrowIcon } from './arrowIcon.svg';
+export { default as BellIcon } from './bellIcon.svg';
 export { default as CameraIcon } from './cameraIcon.svg';
 export { default as CheckIcon } from './checkIcon.svg';
 export { default as ChevronIcon } from './chevronIcon.svg';

@@ -9,6 +9,7 @@ export enum KeychainService {
   BIOMETRIC_ENABLED = 'com.authdemoapp.biometricEnabled',
   BIOMETRIC_LOGIN = 'com.authdemoapp.biometricLogin',
   BIOMETRIC_DECLINED = 'com.authdemoapp.biometricDeclined',
+  NOTIFICATIONS_ENABLED = 'com.authdemoapp.notificationsEnabled',
 }
 
 export interface KeychainResult {
