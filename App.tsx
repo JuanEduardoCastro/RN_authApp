@@ -15,7 +15,8 @@ import { LinkingOptions, NavigationContainer } from '@react-navigation/native';
 
 import { userAuth } from '@store/authSlice';
 import { useAppSelector } from '@store/hooks';
-import store from '@store/store';
+import store, { RootState } from '@store/store';
+import { fetchMessages } from '@store/thunks';
 
 import { navigationRef } from '@navigation/navigationRef';
 import RootNavigator from '@navigation/RootNavigation';
@@ -119,6 +120,10 @@ function App() {
       nextState => {
         if (nextState === 'active') {
           syncBadge();
+          const { auth } = store.getState() as RootState;
+          if (auth.isAuthorized) {
+            store.dispatch(fetchMessages({ t: i18n.t }));
+          }
         }
       },
     );

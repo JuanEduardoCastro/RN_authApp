@@ -2,10 +2,12 @@ import React, { useEffect, useMemo } from 'react';
 
 import { Platform } from 'react-native';
 
+import { useTranslation } from 'react-i18next';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { userAdmin } from '@store/adminSlice';
-import { useAppSelector } from '@store/hooks';
+import { useAppDispatch, useAppSelector } from '@store/hooks';
+import { fetchMessages } from '@store/thunks';
 
 import HomeScreen from '@screens/home/HomeScreen';
 import InboxScreen from '@screens/home/InboxScreen';
@@ -24,11 +26,17 @@ const Tab = createBottomTabNavigator<HomeTabParamList>();
 
 const HomeNavigation = () => {
   const { colors } = useMode();
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const { unreadCount } = useAppSelector(userAdmin);
   const { syncBadge } = useBadgeCount();
 
   useEffect(() => {
-    const interval = setInterval(syncBadge, 30000);
+    const interval = setInterval(() => {
+      syncBadge();
+      dispatch(fetchMessages({ t }));
+    }, 30000);
+
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

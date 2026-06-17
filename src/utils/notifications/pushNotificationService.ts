@@ -179,17 +179,17 @@ export const setupMessageListener = () => {
         .then(result => notifee.setBadgeCount(result.count))
         .catch(() => {});
 
-      await notifee.displayNotification({
-        title: remoteMessage.notification?.title,
-        body: remoteMessage.notification?.body,
-        data: { ...remoteMessage.data, _local: 'true' },
-        android: {
-          channelId: 'default',
-          pressAction: {
-            id: 'default',
-          },
-        },
-      });
+      // await notifee.displayNotification({
+      //   title: remoteMessage.notification?.title,
+      //   body: remoteMessage.notification?.body,
+      //   data: { ...remoteMessage.data, _local: 'true' },
+      //   android: {
+      //     channelId: 'default',
+      //     pressAction: {
+      //       id: 'default',
+      //     },
+      //   },
+      // });
     },
   );
 
@@ -217,18 +217,18 @@ export const setupMessageListener = () => {
               .then(result => notifee.setBadgeCount(result.count))
               .catch(() => {});
 
-            await notifee.displayNotification({
-              title: detail.notification?.title,
-              body: detail.notification?.body,
-              data: { ...detail.notification?.data, _local: 'true' },
-              ios: {
-                foregroundPresentationOptions: {
-                  alert: true,
-                  badge: true,
-                  sound: true,
-                },
-              },
-            });
+            // await notifee.displayNotification({
+            //   title: detail.notification?.title,
+            //   body: detail.notification?.body,
+            //   data: { ...detail.notification?.data, _local: 'true' },
+            //   ios: {
+            //     foregroundPresentationOptions: {
+            //       alert: true,
+            //       badge: true,
+            //       sound: true,
+            //     },
+            //   },
+            // });
           }
         })
       : () => {};

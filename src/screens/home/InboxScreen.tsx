@@ -12,6 +12,8 @@ import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 
+import notifee from '@notifee/react-native';
+
 import { userAdmin } from '@store/adminSlice';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { fetchMessages, markMessageRead } from '@store/thunks';
@@ -49,6 +51,7 @@ const InboxScreen = ({ navigation }: HomeTabScreenProps<'InboxScreen'>) => {
   useFocusEffect(
     useCallback(() => {
       clearBadge();
+      notifee.cancelAllNotifications();
       dispatch(fetchMessages({ t }));
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
@@ -58,7 +61,7 @@ const InboxScreen = ({ navigation }: HomeTabScreenProps<'InboxScreen'>) => {
     async (item: InboxMessage) => {
       setExpandedId(prev => (prev === item._id ? null : item._id));
       if (!item.isRead) {
-        await dispatch(markMessageRead({ t, messageId: item._id }));
+        await dispatch(markMessageRead({ t, messageId: item._id })).unwrap();
         syncBadge();
       }
     },
