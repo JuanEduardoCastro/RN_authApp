@@ -173,97 +173,156 @@
     </style>
   </head>
   <body>
-      <nav>
-        <a href="./index.html" class="nav-logo">
-          <span class="dot"></span>
-          Auth<span class="accent">.Jc</span>
-        </a>
-        <a href="./index.html" class="nav-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-          Back
-        </a>
-      </nav>
-      <main>
-        <h1 class="page-title">Privacy Policy</h1>
-        <p class="page-date">Effective as of 2026-05-20</p>
-        <p>
-          This privacy policy applies to the Auth App (hereby referred to as "Application") for mobile devices, created by Juan Castro (hereby referred to as "Service Provider") as a free service. This service is intended for use "AS IS".
-        </p>
-        <br /><strong>Information Collection and Use</strong>
-          <p>
-            The Application collects information you provide when creating an account or updating your profile. This includes:
-          </p>
-          <ul>
-            <li>Email address</li>
-            <li>First and last name (optional)</li>
-            <li>Phone number (optional)</li>
-            <li>Occupation (optional)</li>
-            <li>Profile photo (optional)</li>
-          </ul>
-          <p>
-            This information is stored securely on the Service Provider's servers and is used solely to provide and maintain your account and the Application's features.
-          </p>
+    <nav>
+      <a href="./index.html" class="nav-logo">
+        <span class="dot"></span>
+        Auth<span class="accent">.Jc</span>
+      </a>
+      <a href="./index.html" class="nav-link">
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M19 12H5M12 5l-7 7 7 7" />
+        </svg>
+        Back
+      </a>
+    </nav>
+    <main>
+      <h1 class="page-title">Privacy Policy</h1>
+      <p class="page-date">Effective as of 2026-05-20</p>
+      <p>
+        This privacy policy applies to the Auth App (hereby referred to as
+        "Application") for mobile devices, created by Juan Castro (hereby
+        referred to as "Service Provider") as a free service. This service is
+        intended for use "AS IS".
+      </p>
+      <br /><strong>Information Collection and Use</strong>
+      <p>
+        The Application collects information you provide when creating an
+        account or updating your profile. This includes:
+      </p>
+      <ul>
+        <li>Email address</li>
+        <li>First and last name (optional)</li>
+        <li>Phone number (optional)</li>
+        <li>Occupation (optional)</li>
+        <li>Profile photo (optional)</li>
+      </ul>
+      <p>
+        This information is stored securely on the Service Provider's servers
+        and is used solely to provide and maintain your account and the
+        Application's features.
+      </p>
 
-          <br /><strong>Authentication &amp; Token Storage</strong>
-          <p>
-            The Application uses JSON Web Tokens (JWT) for authentication. Access tokens and refresh tokens are issued by the Service Provider's backend server. The refresh token is stored exclusively on your device using the operating system's secure storage (iOS Keychain / Android Keystore). It is never stored in plain text or in shared storage.
-          </p>
+      <br /><strong>Authentication &amp; Token Storage</strong>
+      <p>
+        The Application uses JSON Web Tokens (JWT) for authentication. Access
+        tokens and refresh tokens are issued by the Service Provider's backend
+        server. The refresh token is stored exclusively on your device using the
+        operating system's secure storage (iOS Keychain / Android Keystore). It
+        is never stored in plain text or in shared storage.
+      </p>
 
-          <br /><strong>Third-Party Authentication Providers</strong>
-          <p>
-            The Application offers optional sign-in via third-party providers. When you choose to sign in with a provider, their SDK handles the authentication flow and the Application receives only a verification token. The following providers may be used:
-          </p>
-          <ul>
-            <li>Google Sign-In (Google LLC) — subject to Google's Privacy Policy</li>
-            <li>GitHub Sign-In (GitHub Inc.) — subject to GitHub's Privacy Policy</li>
-            <li>
-              Sign in with Apple (Apple Inc., iOS only) — subject to Apple's Privacy Policy
-            </li>
-          </ul>
-          <p>
-            The Service Provider does not receive your passwords from any of these providers.
-          </p>
+      <br /><strong>Third-Party Authentication Providers</strong>
+      <p>
+        The Application offers optional sign-in via third-party providers. When
+        you choose to sign in with a provider, their SDK handles the
+        authentication flow and the Application receives only a verification
+        token. The following providers may be used:
+      </p>
+      <ul>
+        <li>
+          Google Sign-In (Google LLC) — subject to Google's Privacy Policy
+        </li>
+        <li>
+          GitHub Sign-In (GitHub Inc.) — subject to GitHub's Privacy Policy
+        </li>
+        <li>
+          Sign in with Apple (Apple Inc., iOS only) — subject to Apple's Privacy
+          Policy
+        </li>
+      </ul>
+      <p>
+        The Service Provider does not receive your passwords from any of these
+        providers.
+      </p>
 
-          <br /><strong>Push Notifications</strong>
-          <p>
-            The Application uses Firebase Cloud Messaging (FCM), a service provided by Google LLC, to deliver push notifications. When you grant notification permission, a device token is generated by FCM and sent to the Service Provider's backend server. This token is used solely to route push notifications to your device and is not shared with third parties.
-          </p>
+      <br /><strong>Push Notifications</strong>
+      <p>
+        The Application uses Firebase Cloud Messaging (FCM), a service provided
+        by Google LLC, to deliver push notifications. When you grant
+        notification permission, a device token is generated by FCM and sent to
+        the Service Provider's backend server. This token is used solely to
+        route push notifications to your device and is not shared with third
+        parties.
+      </p>
 
-          <br /><strong>Biometric Data</strong>
-          <p>
-            The Application offers an optional biometric login (Face ID / Touch ID). Biometric data is processed entirely by the operating system and is never accessed, stored, or transmitted by the Application or the Service Provider. The Application only receives a success or failure response from the OS.
-          </p>
+      <br /><strong>Biometric Data</strong>
+      <p>
+        The Application offers an optional biometric login (Face ID / Touch ID).
+        Biometric data is processed entirely by the operating system and is
+        never accessed, stored, or transmitted by the Application or the Service
+        Provider. The Application only receives a success or failure response
+        from the OS.
+      </p>
 
-          <br /><strong>Data Sharing</strong>
-          <p>
-            The Service Provider does not sell, trade, or share your personal
-            information with third parties, except as required to provide the services described in this policy (authentication providers, push notification delivery) or as required by law.
-          </p>
+      <br /><strong>Data Sharing</strong>
+      <p>
+        The Service Provider does not sell, trade, or share your personal
+        information with third parties, except as required to provide the
+        services described in this policy (authentication providers, push
+        notification delivery) or as required by law.
+      </p>
 
-          <br /><strong>Data Retention &amp; Deletion</strong>
-          <p>
-            Your account data is retained for as long as your account is active. You may request deletion of your account and all associated data by contacting the Service Provider at the email address below. Upon request, your data will be permanently deleted from the server within a reasonable timeframe.
-          </p>
+      <br /><strong>Data Retention &amp; Deletion</strong>
+      <p>
+        Your account data is retained for as long as your account is active. You
+        may request deletion of your account and all associated data by
+        contacting the Service Provider at the email address below. Upon
+        request, your data will be permanently deleted from the server within a
+        reasonable timeframe.
+      </p>
 
-          <br /><strong>Children</strong>
-          <p>
-            The Application is not directed at children under the age of 13. The Service Provider does not knowingly collect personal information from children under 13. If you believe your child has provided personal information, please contact the Service Provider to have it removed.
-          </p>
+      <br /><strong>Children</strong>
+      <p>
+        The Application is not directed at children under the age of 13. The
+        Service Provider does not knowingly collect personal information from
+        children under 13. If you believe your child has provided personal
+        information, please contact the Service Provider to have it removed.
+      </p>
 
-          <br /><strong>Security</strong>
-          <p>
-            The Service Provider takes reasonable measures to protect your information, including HTTPS encryption for all data in transit, secure token storage on-device, and SSL certificate pinning within the Application. However, no method of transmission over the internet is 100% secure.
-          </p>
+      <br /><strong>Security</strong>
+      <p>
+        The Service Provider takes reasonable measures to protect your
+        information, including HTTPS encryption for all data in transit, secure
+        token storage on-device, and SSL certificate pinning within the
+        Application. However, no method of transmission over the internet is
+        100% secure.
+      </p>
 
-          <br /><strong>Changes</strong>
-          <p>
-            This Privacy Policy may be updated from time to time. The Service Provider will notify you of any changes by updating this page. Continued use of the Application after any changes constitutes your acceptance of the new policy.
-          </p>
-          <p>This privacy policy is effective as of 2026-05-20</p>
-      
-          <br /><strong>Contact Us</strong>
-          <p>
-            If you have any questions regarding this Privacy Policy or wish to request data deletion, please contact the Service Provider at <a href="mailto:authorization.demo.app@gmail.com">authorization.demo.app@gmail.com</a>.
-          </p>
-    </body>
+      <br /><strong>Changes</strong>
+      <p>
+        This Privacy Policy may be updated from time to time. The Service
+        Provider will notify you of any changes by updating this page. Continued
+        use of the Application after any changes constitutes your acceptance of
+        the new policy.
+      </p>
+      <p>This privacy policy is effective as of 2026-05-20</p>
+
+      <br /><strong>Contact Us</strong>
+      <p>
+        If you have any questions regarding this Privacy Policy or wish to
+        request data deletion, please contact the Service Provider at
+        <a href="mailto:authorization.demo.app@gmail.com"
+          >authorization.demo.app@gmail.com</a
+        >.
+      </p>
+    </main>
+  </body>
 </html>
