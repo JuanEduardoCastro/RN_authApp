@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
   Keyboard,
@@ -11,7 +11,6 @@ import {
 
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import * as Keychain from 'react-native-keychain';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAppDispatch } from '@store/hooks';
@@ -25,8 +24,6 @@ import CheckBoxCustom from '@components/shared/CheckBoxCustom';
 import HeaderGoBack from '@components/shared/HeaderGoBack';
 import InputAuthField from '@components/shared/InputAuthField';
 import DismissKeyboardOnClick from '@components/shared/keyboard/DismissKeyboardOnClick';
-import BiometricOptInModal from '@components/shared/modalSheet/BiometricOptInModal';
-import ModalSheet from '@components/shared/modalSheet/ModalSheet';
 import Separator from '@components/shared/Separator';
 
 import useStyles from '@hooks/useStyles';
@@ -34,13 +31,6 @@ import useStyles from '@hooks/useStyles';
 import { moderateScale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
-import {
-  enableBiometricLogin,
-  getBiometricType,
-  hasBiometricBeenDeclined,
-  isBiometricLoginEnabled,
-  markBiometricDeclined,
-} from '@utils/biometricAuth';
 
 interface FormDataProps {
   email: string;
@@ -57,42 +47,12 @@ const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const [showBiometricModal, setShowBiometricModal] = useState(false);
-  const [biometryType, setBiometryType] =
-    useState<Keychain.BIOMETRY_TYPE | null>(null);
-
-  const checkAndOfferBiometric = async () => {
-    const type = await getBiometricType();
-    const alreadyEnabled = await isBiometricLoginEnabled();
-    const declined = await hasBiometricBeenDeclined();
-    if (type && !alreadyEnabled && !declined) {
-      setBiometryType(type);
-      setShowBiometricModal(true);
-    } else {
-      navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
-    }
-  };
-
-  const handleBiometricEnable = async () => {
-    await enableBiometricLogin();
-    setShowBiometricModal(false);
-    navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
-  };
-
-  const handleBiometricDecline = async () => {
-    await markBiometricDeclined();
-    setShowBiometricModal(false);
-    navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
-  };
-
   const onSubmit = async (data: FormDataProps) => {
     Keyboard.dismiss();
     try {
-      const res = await dispatch(loginUser({ ...data, t })).unwrap();
-      if (res?.success) {
-        await checkAndOfferBiometric();
-        // navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
-      }
+      await dispatch(loginUser({ ...data, t })).unwrap();
+
+      // navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
     } catch (error) {
       __DEV__ &&
         console.log('XX -> LoginScreen.tsx:48 -> onSubmit -> error :', error);
@@ -182,15 +142,6 @@ const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
           </SafeAreaView>
         </KeyboardAvoidingView>
       </FormProvider>
-      <ModalSheet
-        modalIsVisible={showBiometricModal}
-        toggleSheet={setShowBiometricModal}>
-        <BiometricOptInModal
-          biometricType={biometryType}
-          onEnable={handleBiometricEnable}
-          onDecline={handleBiometricDecline}
-        />
-      </ModalSheet>
     </>
   );
 };

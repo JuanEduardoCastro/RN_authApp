@@ -208,7 +208,7 @@
   "welcome-message-title": "Bienvenido a Auth.Jc! 👋",
   "welcome-message-body": "Hola {{name}}, me alegro que estés acá. Completa tu perfil de usuario para que veas todo lo que hace la app.",
 
-  "notifications-toggle-button": "Notificaciones push",
+  "notifications-toggle-button": "Notificaciones",
   "notifications-enabled-success": "Notificaciones push activadas.",
   "notifications-disabled-info": "Notificaciones push desactivadas.",
   "notifications-confirm-enable-title": "¿Activar notificaciones?",

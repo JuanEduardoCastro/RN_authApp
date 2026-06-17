@@ -21,6 +21,7 @@ const initialState: AuthState = {
   token: null,
   user: null,
   isAuthorized: false,
+  pendingBiometricOffer: false,
   messageType: null,
   notificationMessage: null,
 };
@@ -57,6 +58,9 @@ const authSlice = createSlice({
       state.notificationMessage = action.payload.notificationMessage;
       state.messageType = action.payload.messageType;
       state.loader = false;
+    },
+    clearBiometricOffer: state => {
+      state.pendingBiometricOffer = false;
     },
   },
   extraReducers(builder) {
@@ -95,6 +99,7 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.user = action.payload.user;
         state.isAuthorized = true;
+        state.pendingBiometricOffer = true;
         state.messageType = action.payload
           .messageType as NotificationMessagePayload['messageType'];
         state.notificationMessage = action.payload.notificationMessage;
@@ -192,6 +197,7 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.user = action.payload.user;
         state.isAuthorized = true;
+        state.pendingBiometricOffer = true;
         state.messageType = action.payload
           .messageType as NotificationMessagePayload['messageType'];
         state.notificationMessage = action.payload.notificationMessage;
@@ -216,6 +222,7 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.user = action.payload.user;
         state.isAuthorized = true;
+        state.pendingBiometricOffer = true;
         state.messageType = action.payload
           .messageType as NotificationMessagePayload['messageType'];
         state.notificationMessage = action.payload.notificationMessage;
@@ -240,6 +247,7 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.user = action.payload.user;
         state.isAuthorized = true;
+        state.pendingBiometricOffer = true;
         state.messageType = action.payload
           .messageType as NotificationMessagePayload['messageType'];
         state.notificationMessage = action.payload.notificationMessage;
@@ -264,5 +272,6 @@ export const {
   setCredentials,
   setResetCredentials,
   setNotificationMessage,
+  clearBiometricOffer,
 } = authSlice.actions;
 export const userAuth = (state: RootState) => state.auth;

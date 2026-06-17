@@ -16,8 +16,6 @@ import { AuthStackScreenProps } from '@navigation/types';
 import BGGradient from '@components/shared/BGGradient';
 import Button from '@components/shared/Button';
 import ButtonWithIcon from '@components/shared/ButtonWithIcon';
-import BiometricOptInModal from '@components/shared/modalSheet/BiometricOptInModal';
-import ModalSheet from '@components/shared/modalSheet/ModalSheet';
 import Separator from '@components/shared/Separator';
 
 import useBackHandler from '@hooks/useBackHandler';
@@ -36,14 +34,7 @@ import {
 import { moderateScale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
-import {
-  authenticateWithBiometrics,
-  enableBiometricLogin,
-  getBiometricType,
-  hasBiometricBeenDeclined,
-  isBiometricLoginEnabled,
-  markBiometricDeclined,
-} from '@utils/biometricAuth';
+import { authenticateWithBiometrics } from '@utils/biometricAuth';
 import { KeychainService, secureGetStorage } from '@utils/secureStorage';
 
 import { appleLogin, githubLogin, googleLogin } from 'src/store/otherAuthHooks';
@@ -74,34 +65,7 @@ const WelcomeScreen = ({
   const [googleButtonDisabled, setGoogleButtonDisabled] = useState(false);
   const [githubButtonDisabled, setGithubButtonDisabled] = useState(false);
   const [appleButtonDisabled, setAppleButtonDisabled] = useState(false);
-  const [showBiometricModal, setShowBiometricModal] = useState(false);
-  const [biometryType, setBiometryType] =
-    useState<Keychain.BIOMETRY_TYPE | null>(null);
   const [biometricButtonDisabled, setBiometricButtonDisabled] = useState(false);
-
-  const checkAndOfferBiometric = async () => {
-    const type = await getBiometricType();
-    const alreadyEnabled = await isBiometricLoginEnabled();
-    const declined = await hasBiometricBeenDeclined();
-    if (type && !alreadyEnabled && !declined) {
-      setBiometryType(type);
-      setShowBiometricModal(true);
-    } else {
-      navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
-    }
-  };
-
-  const handleBiometricEnable = async () => {
-    await enableBiometricLogin();
-    setShowBiometricModal(false);
-    navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
-  };
-
-  const handleBiometricDecline = async () => {
-    await markBiometricDeclined();
-    setShowBiometricModal(false);
-    navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
-  };
 
   const handleGoogleOriginalSignin = async () => {
     setGoogleButtonDisabled(true);
@@ -133,12 +97,8 @@ const WelcomeScreen = ({
       const { idToken } = await GoogleSignin.getTokens();
 
       const data = { idToken, t };
-      const res = await dispatch(googleLogin(data)).unwrap();
+      await dispatch(googleLogin(data)).unwrap();
 
-      if (res?.success) {
-        await checkAndOfferBiometric();
-        // navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
-      }
       setGoogleButtonDisabled(false);
     } catch (error) {
       setGoogleButtonDisabled(false);
@@ -154,11 +114,7 @@ const WelcomeScreen = ({
     setGithubButtonDisabled(true);
     try {
       const data = { t };
-      const res = await dispatch(githubLogin(data)).unwrap();
-      if (res?.success) {
-        await checkAndOfferBiometric();
-        // navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
-      }
+      await dispatch(githubLogin(data)).unwrap();
       setGithubButtonDisabled(false);
     } catch (error) {
       setGithubButtonDisabled(false);
@@ -174,11 +130,7 @@ const WelcomeScreen = ({
     setAppleButtonDisabled(true);
     try {
       const data = { t };
-      const res = await dispatch(appleLogin(data)).unwrap();
-      if (res?.success) {
-        await checkAndOfferBiometric();
-        // navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
-      }
+      await dispatch(appleLogin(data)).unwrap();
       setAppleButtonDisabled(false);
     } catch (error) {
       setAppleButtonDisabled(false);
@@ -222,7 +174,6 @@ const WelcomeScreen = ({
         validateRefreshToken({ t, token: tokenResult.data.password }),
       ).unwrap();
       if (res?.success) {
-        // await checkAndOfferBiometric();
         navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
       }
     } catch (error) {
@@ -350,15 +301,6 @@ const WelcomeScreen = ({
           />
         </View>
       </View>
-      <ModalSheet
-        modalIsVisible={showBiometricModal}
-        toggleSheet={() => setShowBiometricModal(false)}>
-        <BiometricOptInModal
-          biometricType={biometryType}
-          onEnable={handleBiometricEnable}
-          onDecline={handleBiometricDecline}
-        />
-      </ModalSheet>
     </BGGradient>
   );
 };

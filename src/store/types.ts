@@ -6,6 +6,7 @@ export interface AuthState {
   token: string | null;
   user: User | null;
   isAuthorized: boolean;
+  pendingBiometricOffer: boolean;
   messageType: 'error' | 'success' | 'warning' | 'information' | null;
   notificationMessage: string | null | unknown;
 }

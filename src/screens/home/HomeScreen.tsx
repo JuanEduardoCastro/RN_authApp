@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
+import * as Keychain from 'react-native-keychain';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAppDispatch, useAppSelector } from '@store/hooks';
@@ -11,6 +12,7 @@ import { fetchUnreadCount } from '@store/thunks';
 import { HomeTabScreenProps } from '@navigation/types';
 
 import HeaderHome from '@components/shared/HeaderHome';
+import BiometricOptInModal from '@components/shared/modalSheet/BiometricOptInModal';
 import CompleteProfileModal from '@components/shared/modalSheet/CompleteProfileModal';
 import LogoutModal from '@components/shared/modalSheet/LogoutModal';
 import ModalSheet from '@components/shared/modalSheet/ModalSheet';
@@ -23,12 +25,19 @@ import useLogoutUser from '@hooks/useLogoutUser';
 import useStyles from '@hooks/useStyles';
 
 import { TColors } from '@constants/types';
+import {
+  enableBiometricLogin,
+  getBiometricType,
+  hasBiometricBeenDeclined,
+  isBiometricLoginEnabled,
+  markBiometricDeclined,
+} from '@utils/biometricAuth';
 
-import { userAuth } from 'src/store/authSlice';
+import { clearBiometricOffer, userAuth } from 'src/store/authSlice';
 
 const HomeScreen = ({ navigation }: HomeTabScreenProps<'HomeScreen'>) => {
   useBackHandler();
-  const { user } = useAppSelector(userAuth);
+  const { user, pendingBiometricOffer } = useAppSelector(userAuth);
   const { t } = useTranslation();
   const { handleLogout } = useLogoutUser();
   const { styles } = useStyles(createStyles);
@@ -36,10 +45,12 @@ const HomeScreen = ({ navigation }: HomeTabScreenProps<'HomeScreen'>) => {
 
   const [confirmLogoutModal, setConfirmLogoutModal] = useState(false);
   const [completeProfileModal, setCompleteProfileModal] = useState(false);
+  const [showBiometricModal, setShowBiometricModal] = useState(false);
+  const [biometryType, setBiometryType] =
+    useState<Keychain.BIOMETRY_TYPE | null>(null);
 
   useEffect(() => {
     dispatch(fetchUnreadCount({ t }));
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -49,6 +60,22 @@ const HomeScreen = ({ navigation }: HomeTabScreenProps<'HomeScreen'>) => {
         setCompleteProfileModal(true);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!pendingBiometricOffer) return;
+    dispatch(clearBiometricOffer());
+    const checkAndOffer = async () => {
+      const type = await getBiometricType();
+      const alreadyEnabled = await isBiometricLoginEnabled();
+      const declined = await hasBiometricBeenDeclined();
+      if (type && !alreadyEnabled && !declined) {
+        setBiometryType(type);
+        setShowBiometricModal(true);
+      }
+    };
+    checkAndOffer();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -67,6 +94,16 @@ const HomeScreen = ({ navigation }: HomeTabScreenProps<'HomeScreen'>) => {
       initial: false,
     });
     setCompleteProfileModal(false);
+  };
+
+  const handleBiometricEnabled = async () => {
+    await enableBiometricLogin();
+    setShowBiometricModal(false);
+  };
+
+  const handleBiometricDeclined = async () => {
+    await markBiometricDeclined();
+    setShowBiometricModal(false);
   };
 
   return (
@@ -92,6 +129,15 @@ const HomeScreen = ({ navigation }: HomeTabScreenProps<'HomeScreen'>) => {
         <CompleteProfileModal
           toggleModalSheet={() => setCompleteProfileModal(false)}
           handleGoToProfile={handlePressToProfile}
+        />
+      </ModalSheet>
+      <ModalSheet
+        modalIsVisible={showBiometricModal}
+        toggleSheet={() => setShowBiometricModal(false)}>
+        <BiometricOptInModal
+          biometricType={biometryType}
+          onEnable={handleBiometricEnabled}
+          onDecline={handleBiometricDeclined}
         />
       </ModalSheet>
     </>
