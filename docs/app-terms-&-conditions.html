@@ -1,105 +1,307 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Terms &amp; Conditions — Auth App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700
+  &display=swap"
+      rel="stylesheet" />
     <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --purple: #7646c9;
+        --purple-light: #9e60a3;
+        --purple-border: #7646c940;
+        --bg: #171717;
+        --text: #f5f5f5;
+        --text-muted: #858484;
+      }
+
       body {
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        padding: 1em;
-        max-width: 800px;
-        margin: auto;
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 100;
+        background: rgba(23, 23, 23, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--purple-border);
+        padding: 0 2rem;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .nav-logo {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--text);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .nav-logo .dot {
+        width: 8px;
+        height: 8px;
+        background: var(--purple);
+        border-radius: 50%;
+      }
+
+      .nav-logo .accent {
+        color: var(--purple);
+      }
+
+      .nav-link {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        transition: color 0.2s;
+      }
+      .nav-link:hover {
+        color: var(--text);
+      }
+
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 6rem 2rem 4rem;
+      }
+
+      .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.5rem;
+        color: var(--text);
+      }
+
+      .page-date {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-bottom: 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #ffffff0d;
+      }
+
+      strong {
+        display: block;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text);
+        margin-top: 2rem;
+        margin-bottom: 0.6rem;
+      }
+
+      p {
+        font-size: 0.925rem;
+        color: var(--text-muted);
+        margin-bottom: 0.75rem;
+      }
+
+      ul {
+        padding-left: 1.25rem;
+        margin-bottom: 0.75rem;
+      }
+
+      li {
+        font-size: 0.925rem;
+        color: var(--text-muted);
+        margin-bottom: 0.3rem;
+      }
+
+      a {
+        color: var(--purple-light);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      a:hover {
+        color: var(--text);
+      }
+
+      footer {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 2.5rem 2rem;
+        text-align: center;
+        border-top: 1px solid #ffffff0d;
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.2rem;
+      }
+
+      .footer-links a {
+        color: var(--text-muted);
+        font-size: 0.875rem;
+      }
+
+      .footer-copy {
+        font-size: 0.78rem;
+        color: #444;
       }
     </style>
   </head>
   <body>
-    <strong>Terms &amp; Conditions</strong>
-    <p>
-      These terms and conditions apply to the Auth App (hereby referred to as "Application") for
-      mobile devices, created by Juan Castro (hereby referred to as "Service Provider") as a free
-      service.
-    </p>
-    <p>
-      Upon downloading or utilizing the Application, you are automatically agreeing to the following
-      terms. It is strongly advised that you thoroughly read and understand these terms prior to
-      using the Application.
-    </p>
+    <nav>
+      <a href="./index.html" class="nav-logo">
+        <span class="dot"></span>
+        Auth<span class="accent">.Jc</span>
+      </a>
+      <a href="./index.html" class="nav-link">
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M19 12H5M12 5l-7 7 7 7" />
+        </svg>
+        Back
+      </a>
+    </nav>
+    <main>
+      <h1 class="page-title">Terms &amp; Conditions</h1>
+      <p class="page-date">Effective as of 2026-05-20</p>
 
-    <br /><strong>Account Responsibility</strong>
-    <p>
-      You are responsible for maintaining the confidentiality of your account credentials and for all
-      activity that occurs under your account. You agree to notify the Service Provider immediately
-      of any unauthorized use of your account.
-    </p>
+      <p>
+        These terms and conditions apply to the Auth App (hereby referred to as
+        "Application") for mobile devices, created by Juan Castro (hereby
+        referred to as "Service Provider") as a free service.
+      </p>
+      <p>
+        Upon downloading or utilizing the Application, you are automatically
+        agreeing to the following terms. It is strongly advised that you
+        thoroughly read and understand these terms prior to using the
+        Application.
+      </p>
 
-    <br /><strong>Acceptable Use</strong>
-    <p>
-      You agree not to use the Application for any unlawful purpose or in any way that could damage,
-      disable, or impair the Application or its associated services. Automated access, scraping, or
-      abuse of the API is strictly prohibited.
-    </p>
+      <br /><strong>Account Responsibility</strong>
+      <p>
+        You are responsible for maintaining the confidentiality of your account
+        credentials and for all activity that occurs under your account. You
+        agree to notify the Service Provider immediately of any unauthorized use
+        of your account.
+      </p>
 
-    <br /><strong>Intellectual Property</strong>
-    <p>
-      Unauthorized copying or modification of the Application, any part of the Application, or its
-      trademarks is strictly prohibited. Any attempts to extract the source code of the Application,
-      translate it into other languages, or create derivative versions are not permitted. All
-      trademarks, copyrights, database rights, and other intellectual property rights related to the
-      Application remain the property of the Service Provider.
-    </p>
+      <br /><strong>Acceptable Use</strong>
+      <p>
+        You agree not to use the Application for any unlawful purpose or in any
+        way that could damage, disable, or impair the Application or its
+        associated services. Automated access, scraping, or abuse of the API is
+        strictly prohibited.
+      </p>
 
-    <br /><strong>Third-Party Services</strong>
-    <p>
-      The Application uses third-party services for authentication (Google, GitHub, Apple) and push
-      notifications (Firebase Cloud Messaging). Your use of these features is also subject to the
-      respective terms of service of those providers. The Service Provider is not responsible for
-      the practices of these third parties.
-    </p>
+      <br /><strong>Intellectual Property</strong>
+      <p>
+        Unauthorized copying or modification of the Application, any part of the
+        Application, or its trademarks is strictly prohibited. Any attempts to
+        extract the source code of the Application, translate it into other
+        languages, or create derivative versions are not permitted. All
+        trademarks, copyrights, database rights, and other intellectual property
+        rights related to the Application remain the property of the Service
+        Provider.
+      </p>
 
-    <br /><strong>Service Availability</strong>
-    <p>
-      The Service Provider is dedicated to ensuring that the Application is as beneficial and
-      efficient as possible. They reserve the right to modify or discontinue the Application at any
-      time and for any reason without notice. The Service Provider shall not be liable for any
-      modification, suspension, or discontinuation of the service.
-    </p>
+      <br /><strong>Third-Party Services</strong>
+      <p>
+        The Application uses third-party services for authentication (Google,
+        GitHub, Apple) and push notifications (Firebase Cloud Messaging). Your
+        use of these features is also subject to the respective terms of service
+        of those providers. The Service Provider is not responsible for the
+        practices of these third parties.
+      </p>
 
-    <br /><strong>Device Security</strong>
-    <p>
-      The Service Provider strongly advises against jailbreaking or rooting your phone. Such actions
-      could compromise your device's security features, expose your stored credentials, and may
-      result in the Application not functioning correctly. Biometric login depends on the integrity
-      of the device's secure enclave and will not function on compromised devices.
-    </p>
+      <br /><strong>Service Availability</strong>
+      <p>
+        The Service Provider is dedicated to ensuring that the Application is as
+        beneficial and efficient as possible. They reserve the right to modify
+        ordiscontinue the Application at any time and for any reason without
+        notice. The Service Provider shall not be liable for any modification,
+        suspension, or discontinuation of the service.
+      </p>
 
-    <br /><strong>Disclaimer of Warranties</strong>
-    <p>
-      The Application is provided "AS IS" without warranties of any kind, either express or implied.
-      The Service Provider does not warrant that the Application will be uninterrupted, error-free,
-      or free of viruses or other harmful components.
-    </p>
+      <br /><strong>Device Security</strong>
+      <p>
+        The Service Provider strongly advises against jailbreaking or rooting
+        your phone. Such actions could compromise your device's security
+        features, expose your stored credentials, and may result in the
+        Application not functioning correctly. Biometric login depends on the
+        integrity of the device's secure enclave and will not function on
+        compromised devices.
+      </p>
 
-    <br /><strong>Limitation of Liability</strong>
-    <p>
-      To the maximum extent permitted by applicable law, the Service Provider shall not be liable for
-      any indirect, incidental, special, or consequential damages arising out of or in connection
-      with your use of the Application.
-    </p>
+      <br /><strong>Disclaimer of Warranties</strong>
+      <p>
+        The Application is provided "AS IS" without warranties of any kind,
+        either express or implied. The Service Provider does not warrant that
+        the Application will be uninterrupted, error-free, or free of viruses or
+        other harmful components.
+      </p>
 
-    <br /><strong>Changes to These Terms and Conditions</strong>
-    <p>
-      The Service Provider may periodically update these Terms and Conditions. You are advised to
-      review this page regularly for any changes. Continued use of the Application after changes are
-      posted constitutes your acceptance of the revised terms.
-    </p>
-    <p>These terms and conditions are effective as of 2026-05-20</p>
+      <br /><strong>Limitation of Liability</strong>
+      <p>
+        To the maximum extent permitted by applicable law, the Service Provider
+        shall not be liable for any indirect, incidental, special, or
+        consequential damages arising out of or in connection with your use of
+        the Application.
+      </p>
 
-    <br /><strong>Contact Us</strong>
-    <p>
-      If you have any questions or suggestions about these Terms and Conditions, please contact the
-      Service Provider at
-      <a href="mailto:authorization.demo.app@gmail.com">authorization.demo.app@gmail.com</a>.
-    </p>
+      <br /><strong>Changes to These Terms and Conditions</strong>
+      <p>
+        The Service Provider may periodically update these Terms and Conditions.
+        You are advised to review this page regularly for any changes. Continued
+        use of the Application after changes are posted constitutes your
+        acceptance of the revised terms.
+      </p>
+
+      <br /><strong>Contact Us</strong>
+      <p>
+        If you have any questions or suggestions about these Terms and
+        Conditions, please contact the Service Provider at
+        <a href="mailto:authorization.demo.app@gmail.com"
+          >authorization.demo.app@gmail.com</a
+        >.
+      </p>
+    </main>
+    <footer>
+      <div class="footer-links">
+        <a href="./index.html">Home</a>
+        <a href="./app-privacy-policy.html">Privacy Policy</a>
+      </div>
+      <p class="footer-copy">&copy; 2026 Auth.Jc &mdash; Juan Eduardo Castro</p>
+    </footer>
   </body>
 </html>
