@@ -146,6 +146,13 @@ const authSlice = createSlice({
           .messageType as NotificationMessagePayload['messageType'];
         state.notificationMessage = action.payload.notificationMessage;
       })
+      .addCase(editUser.rejected, (state, action) => {
+        state.loader = false;
+        const payload = action.payload as Partial<NotificationMessagePayload>;
+        state.messageType = payload.messageType ?? 'error';
+        state.notificationMessage =
+          payload.notificationMessage ?? 'An error occurred';
+      })
 
       /* update password */
       .addCase(updatePassword.pending, state => {

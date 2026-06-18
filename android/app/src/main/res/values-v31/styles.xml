@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <resources>
+      <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+          <item 
+  name="android:editTextBackground">@drawable/rn_edit_text_material</item>
+          <item name="android:windowBackground">#171717</item>
+          <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+          <item name="android:statusBarColor">@android:color/transparent</item>
+          <item name="android:navigationBarColor">@android:color/transparent</item>
+          <!-- Android 12+ splash screen overrides -->
+          <item name="android:windowSplashScreenBackground">#171717</item>
+          <item 
+  name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+          <item name="android:windowSplashScreenIconBackgroundColor">#171717</item>
+      </style>
+  </resources>

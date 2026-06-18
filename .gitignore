@@ -108,6 +108,7 @@ apple-app-site-association
 update-ios-version.sh
 
 #Cluade code
+claude/
 *.md
 CLAUDE.md
 
