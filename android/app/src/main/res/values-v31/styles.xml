@@ -10,7 +10,7 @@
           <!-- Android 12+ splash screen overrides -->
           <item name="android:windowSplashScreenBackground">#171717</item>
           <item 
-  name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+  name="android:windowSplashScreenAnimatedIcon">@drawable/ic_splash_blank</item>
           <item name="android:windowSplashScreenIconBackgroundColor">#171717</item>
       </style>
   </resources>
