@@ -151,3 +151,42 @@ describe('logoutUser', () => {
     expect(token).toBeNull();
   });
 });
+
+describe('loginUser — backend 429 rate limit', () => {
+  beforeEach(() => {
+    (mockAxios.isAxiosError as jest.Mock).mockReturnValue(true);
+  });
+
+  afterEach(() => {
+    (mockAxios.isAxiosError as jest.Mock).mockReset();
+  });
+
+  it('rejects with server rate-limit message and does not record a failed attempt', async () => {
+    const error = {
+      response: {
+        status: 429,
+        headers: { 'retry-after': '120' },
+        data: {},
+      },
+      message: '',
+    };
+    mockApi.post.mockRejectedValueOnce(error);
+
+    const store = makeStore();
+    const result = await store.dispatch(
+      loginUser({
+        t,
+        email: 'test@test.com',
+        password: 'Pass1!',
+        rememberMe: false,
+      }) as any,
+    );
+
+    expect(result.type).toBe('users/login/rejected');
+
+    expect(result.payload.notificationMessage).toBe(
+      'error-rate-limit-login-server',
+    );
+    expect(result.payload.messageType).toBe('error');
+  });
+});

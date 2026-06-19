@@ -1,9 +1,11 @@
 import authReducer, {
+  clearBiometricOffer,
   setCredentials,
   setLoader,
   setNotificationMessage,
   setResetCredentials,
 } from '@store/authSlice';
+import { editUser, loginUser } from '@store/thunks';
 import { AuthState } from '@store/types';
 
 const initialState: AuthState = {
@@ -11,6 +13,7 @@ const initialState: AuthState = {
   token: null,
   user: null,
   isAuthorized: false,
+  pendingBiometricOffer: false,
   messageType: null,
   notificationMessage: null,
 };
@@ -78,5 +81,72 @@ describe('authSlice reducers', () => {
     expect(state.notificationMessage).toBe('Done');
     expect(state.messageType).toBe('success');
     expect(state.loader).toBe(false);
+  });
+});
+
+describe('authSlice - clearBiometricOffer', () => {
+  it('sets pendingBiometricOffer to false', () => {
+    const state = authReducer(
+      { ...initialState, pendingBiometricOffer: true },
+      clearBiometricOffer(),
+    );
+
+    expect(state.pendingBiometricOffer).toBe(false);
+  });
+});
+
+describe('authSlice - loginUser.fullfilled', () => {
+  it('sets pendingBiometricOffer to true', () => {
+    const payload = {
+      success: true,
+      error: null,
+      user: { firstName: 'Juan' } as any,
+      token: 'tok',
+      messageType: 'success' as const,
+      notificationMessage: 'success-welcome',
+    };
+    const state = authReducer(
+      initialState,
+      loginUser.fulfilled(payload, '', {
+        t: (k: string) => k,
+        email: 'a@b.com',
+        password: 'P1!',
+        rememberMe: false,
+      } as any),
+    );
+    expect(state.pendingBiometricOffer).toBe(true);
+    expect(state.isAuthorized).toBe(true);
+  });
+});
+
+describe('authSlice - editUser.rejected', () => {
+  it('clears loader and sets error notification', () => {
+    const state = authReducer(
+      { ...initialState, loader: true },
+      editUser.rejected(
+        new Error(),
+        '',
+        { t: (k: string) => k, userData: {} } as any,
+        { messageType: 'error', notificationMessage: 'error-network' },
+      ),
+    );
+    expect(state.loader).toBe(false);
+    expect(state.messageType).toBe('error');
+    expect(state.notificationMessage).toBe('error-network');
+  });
+
+  it('falls back to default message when payload is empty', () => {
+    const state = authReducer(
+      { ...initialState, loader: true },
+      editUser.rejected(
+        new Error(),
+        '',
+        { t: (k: string) => k, userData: {} } as any,
+        {},
+      ),
+    );
+    expect(state.loader).toBe(false);
+    expect(state.messageType).toBe('error');
+    expect(state.notificationMessage).toBe('An error occurred');
   });
 });
