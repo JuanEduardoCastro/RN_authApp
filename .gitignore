@@ -111,6 +111,7 @@ update-ios-version.sh
 claude/
 *.md
 CLAUDE.md
+!docs/ARCHITECTURE.md
 
 #SSL Certificate
 api_cert.pem

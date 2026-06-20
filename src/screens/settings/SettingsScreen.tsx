@@ -272,7 +272,7 @@ const SettingsScreen = ({
             checkBox={themeName === 'passion'}
           />
         </ScrollView>
-        <MailContactBox title="authorization.demo.app@gmail.com" />
+        <MailContactBox title="contact@authdemoapp-jec.com" />
       </View>
       {/* eslint-enable react-native/no-inline-styles */}
       <CustomModal modalIsVisible={isVisible} toggleSheet={toggleSheet}>

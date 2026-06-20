@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import { AppState, Linking, StatusBar, StyleSheet } from 'react-native';
+import {
+  AppState,
+  Linking,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+} from 'react-native';
 
 import { I18nextProvider } from 'react-i18next';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -38,6 +45,12 @@ import {
 import { initializePinning } from '@utils/sslPinning';
 
 import i18n from 'src/locale/i18next';
+
+(Text as any).defaultProps = (Text as any).defaultProps ?? {};
+(Text as any).defaultProps.allowFontScaling = false;
+
+(TextInput as any).defaultProps = (TextInput as any).defaultProps ?? {};
+(TextInput as any).defaultProps.allowFontScaling = false;
 
 if (__DEV__) {
   configureReanimatedLogger({ level: ReanimatedLogLevel.warn, strict: false });
