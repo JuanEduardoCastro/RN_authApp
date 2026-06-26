@@ -52,7 +52,10 @@ A full-featured authentication demo for iOS and Android built with React Native.
 - **Auto token refresh interceptor** — Axios request/response interceptor with deduplication; all concurrent requests share a single refresh call
 - **Rate limiting** — persistent rate limiter (AsyncStorage-backed) on login, sign-up, and password reset; exponential backoff up to 15 min lockout
 - **SSL pinning** — public-key pinning via `react-native-ssl-public-key-pinning` initialised at app startup
-- **Push notifications** — Firebase Cloud Messaging; handles foreground, background, and quit-state messages
+- **Push notifications** — Firebase Cloud Messaging; foreground in-app banner + background/quit-state system notifications; per-platform strategy (no redundant heads-up when app is active)
+- **Inbox** — per-user in-app message inbox with swipe-to-delete, unread badge count, and read tracking
+- **Admin messaging** — admin panel to send push, in-app, or combined messages to selected users with debounced search and multi-select
+- **Account deletion** — GDPR-compliant hard delete with in-app typed-email confirmation and goodbye email
 - **Deep linking** — custom scheme (`authapp://`) and HTTPS universal links for password reset flow
 - **Multi-theme UI** — 4 color themes (Luxury, Calm, Gold, Passion) × dark/light mode; persisted to Keychain
 - **i18n** — English and Spanish via `react-i18next`; language preference persisted to Keychain
@@ -91,13 +94,16 @@ App launch
        ├─ Remember Me set?   → validateRefreshToken → Home
        └─ Neither            → WelcomeScreen → manual login
 
-Login success
-  └─ checkAndOfferBiometric()
-       ├─ Device has biometrics + not enabled + not declined? → BiometricOptInModal
-       │     ├─ Enable  → enableBiometricLogin() → Home
-       │     └─ Not Now → markBiometricDeclined() → Home (never asked again)
-       └─ Otherwise → Home directly
+Login success (email / Google / GitHub / Apple)
+  └─ authSlice sets pendingBiometricOffer: true
+       └─ HomeScreen mounts → reads flag → clears flag → async check
+            ├─ Device has biometrics + not enabled + not declined? → BiometricOptInModal
+            │     ├─ Enable  → enableBiometricLogin() → dismiss
+            │     └─ Not Now → markBiometricDeclined() → dismiss (never asked again)
+            └─ Otherwise → no modal
 ```
+
+> The biometric offer runs in HomeScreen (not LoginScreen) because React 19 automatic batching unmounts the auth screen in the same render cycle that sets `isAuthorized: true`, before the modal can render. The Redux flag bridges the navigation boundary.
 
 ### Token refresh interceptor
 
@@ -121,18 +127,45 @@ All sensitive data is stored via `react-native-keychain` using named service key
 
 ### State management
 
-Single Redux slice (`authSlice`) with async thunks split by domain:
+Two Redux slices with async thunks split by domain:
 
 ```
 src/store/
-  authSlice.ts          # isAuthorized, token, user, loader, notifications
+  authSlice.ts          # isAuthorized, token, user, loader, notifications, pendingBiometricOffer
+  adminSlice.ts         # users (paginated), messages (inbox), unreadCount
   thunks/
     authThunks.ts       # validateRefreshToken, loginUser, createUser, logoutUser
-    userThunks.ts       # editUser
+    userThunks.ts       # editUser, deleteAccount
     passwordThunks.ts   # reset password flow
+    adminThunks.ts      # fetchUsers, sendAdminMessage, fetchMessages,
+                        # fetchUnreadCount, markMessageRead, deleteMessage
   otherAuthHooks.ts     # Google, GitHub, Apple Sign-In thunks
-  apiService.ts         # Axios instance
-  apiInterceptor.ts     # Token refresh logic
+  apiService.ts         # Axios instance (no default auth header — every thunk passes it manually)
+  apiInterceptor.ts     # Token refresh logic with deduplication
+```
+
+### Inbox & Admin messaging
+
+Admins send messages of three types: `push` (FCM only), `in_app` (inbox only), or `both`.
+
+- **AdminScreen** — debounced user search, multi-select with checkboxes, compose form (`MessageBlock` component). Superadmin-only.
+- **InboxScreen** — paginated message list with expand-to-read and swipe-to-delete (custom `Gesture.Pan()` + Reanimated v4). Only read messages can be deleted to prevent `unreadCount` desyncs.
+- **Badge count** — `HomeNavigation` polls `fetchUnreadCount` every 30 seconds for `in_app` messages (no FCM signal); push messages update the badge immediately via the FCM handler.
+- **iOS badge** — `markMessageRead` is `await`ed before calling `syncBadge()` to prevent a race where `fetchUnreadCount` resolves before the server processes the read.
+
+### Account deletion
+
+```
+Settings → Delete Account
+  └─ DeleteAccountModal — type email to confirm
+       └─ deleteAccount thunk
+            ├─ Deregister device token (while session valid)
+            ├─ Sign out Google (if applicable)
+            ├─ DELETE /users/account
+            │     └─ Backend: delete messages → delete user →
+            │                 increment AppStats counter → send goodbye email
+            ├─ Clear Keychain (refresh token, remember me, biometrics)
+            └─ isAuthorized: false → WelcomeScreen
 ```
 
 ---
@@ -142,17 +175,18 @@ src/store/
 ```
 src/
   assets/         # Images, SVG icons, fonts, screenshots
-  components/     # Reusable UI — buttons, inputs, modals, splash, notifications
-  constants/      # Colors (4 themes), dimensions, scaling utilities
+  components/     # Reusable UI — buttons, inputs, modals, splash, notifications,
+                  # MessageCard (swipe-to-delete), MessageBlock (admin compose)
+  constants/      # Colors (4 themes + shared), dimensions, scaling utilities
   context/        # ModeContext — theme + dark/light mode provider
-  hooks/          # useBiometricAuth, useCheckToken, useLogoutUser
+  hooks/          # useBiometricAuth, useCheckToken, useLogoutUser, useBadgeCount
   locale/         # i18n translations (en, es)
   navigation/     # RootNavigation, AuthNavigator, HomeNavigator, types
   screens/
     auth/         # WelcomeScreen, LoginScreen, CheckEmailScreen, NewPasswordScreen
-    home/         # HomeScreen
-    settings/     # SettingsScreen, ProfileScreen
-  store/          # Redux store, slices, thunks, API layer
+    home/         # HomeScreen, InboxScreen
+    settings/     # SettingsScreen, ProfileScreen, AdminScreen
+  store/          # Redux store, authSlice, adminSlice, thunks, API layer
   utils/          # secureStorage, biometricAuth, errorHandler, validationHelper,
                   # cleanUserData, persistentRateLimiter, sslPinning, notifications
 ```
@@ -237,9 +271,11 @@ The REST API powering this app is a separate project built with **Node.js + Type
 - **Handles:**
   - JWT issuance + refresh token rotation (`/token/refresh`)
   - Google, GitHub, and Apple OAuth token exchange
-  - User management (create, edit, password reset)
-  - Transactional email via SendGrid (password reset flow)
+  - User management (create, edit, password reset, account deletion)
+  - Transactional email via AWS SES (verification, password reset, welcome, goodbye)
+  - Admin messaging — send push / in-app / combined messages to selected users
   - FCM device token management + push notification dispatch via Firebase Admin
+  - Soft-delete inbox messages per user; hard-delete account on request
 
 ---
 
