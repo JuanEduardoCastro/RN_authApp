@@ -117,7 +117,7 @@ export default DeleteAccountModal;
 const createStyles = (colors: TColors) =>
   StyleSheet.create({
     containerModal: {
-      flex: 1,
+      // flex: 1,
       width: '100%',
       alignItems: 'center',
       paddingHorizontal: moderateScale(2),

@@ -54,7 +54,7 @@ const createStyles = (colors: TColors) =>
     sheet: {
       backgroundColor: colors.background,
       padding: moderateScale(24),
-      height: SCREEN.heightFixed * 280,
+      minHeight: SCREEN.heightFixed * 280,
       width: SCREEN.width90,
       borderRadius: 20,
       zIndex: 2,
