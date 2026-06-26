@@ -6,7 +6,7 @@ export const luxury = {
     tabBackground: '#f5f5f5a6',
     backgroundCard: '#eeedf3',
     text: '#0f172a',
-    textMuted: '#22242a',
+    textMuted: '#22242a60',
     textNgt: '#f5f5f5',
     second: '#9e60a3',
     base: '#7646c9',

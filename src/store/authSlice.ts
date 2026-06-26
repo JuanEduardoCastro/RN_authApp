@@ -4,6 +4,7 @@ import { appleLogin, githubLogin, googleLogin } from './otherAuthHooks';
 import type { RootState } from './store';
 import {
   createUser,
+  deleteAccount,
   editUser,
   loginUser,
   logoutUser,
@@ -147,6 +148,27 @@ const authSlice = createSlice({
         state.notificationMessage = action.payload.notificationMessage;
       })
       .addCase(editUser.rejected, (state, action) => {
+        state.loader = false;
+        const payload = action.payload as Partial<NotificationMessagePayload>;
+        state.messageType = payload.messageType ?? 'error';
+        state.notificationMessage =
+          payload.notificationMessage ?? 'An error occurred';
+      })
+
+      /* delete user account */
+      .addCase(deleteAccount.pending, state => {
+        state.loader = true;
+      })
+      .addCase(deleteAccount.fulfilled, (state, action) => {
+        state.loader = false;
+        state.token = null;
+        state.user = null;
+        state.isAuthorized = false;
+        state.messageType = action.payload
+          .messageType as NotificationMessagePayload['messageType'];
+        state.notificationMessage = action.payload.notificationMessage;
+      })
+      .addCase(deleteAccount.rejected, (state, action) => {
         state.loader = false;
         const payload = action.payload as Partial<NotificationMessagePayload>;
         state.messageType = payload.messageType ?? 'error';

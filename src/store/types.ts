@@ -124,6 +124,10 @@ export interface DeleteMessagePayload {
   messageId: string;
 }
 
+export type DeleteAccountPayload = {
+  t: TFunction;
+};
+
 export type ErrorType = 'timeout' | 'network' | 'unknown' | 'server' | 'client';
 
 export interface ParsedError {

@@ -1,14 +1,23 @@
+import { DeviceInfo } from 'react-native-device-info';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { jwtDecode } from 'jwt-decode';
 
 import api from '@store/apiService';
 import { RootState } from '@store/store';
-import { CreateUserPayload, EditUserPayload } from '@store/types';
+import {
+  CreateUserPayload,
+  DeleteAccountPayload,
+  EditUserPayload,
+} from '@store/types';
 
 import { CustomJwtPayload } from '@hooks/types';
 
+import { disableBiometricLogin } from '@utils/biometricAuth';
 import { cleanUserData } from '@utils/cleanUserData';
 import { parseApiError } from '@utils/errorHandler';
+import { KeychainService, secureDelete } from '@utils/secureStorage';
 
 export const createUser = createAsyncThunk(
   'users/create',
@@ -82,6 +91,56 @@ export const editUser = createAsyncThunk(
       __DEV__ && console.log('XX -> userThunks.ts:87 -> error :', error);
 
       const parsedError = parseApiError(error, t, 'error-update');
+      return rejectWithValue({
+        messageType: 'error',
+        notificationMessage: parsedError.message,
+      });
+    }
+  },
+);
+
+export const deleteAccount = createAsyncThunk(
+  'user/deleteAccount',
+  async (data: DeleteAccountPayload, { getState, rejectWithValue }) => {
+    const { t } = data;
+    const { auth } = getState() as RootState;
+    try {
+      try {
+        const deviceId = await DeviceInfo.getUniqueId();
+        await api.delete(`/users/device-token/${deviceId}`, {
+          headers: { Authorization: `Bearer ${auth.token}` },
+        });
+      } catch {
+        // non-critical error, we can ignore it
+      }
+
+      if (GoogleSignin.hasPreviousSignIn()) {
+        await GoogleSignin.signOut();
+      }
+
+      const response = await api.delete('users/deleteAccount', {
+        headers: { Authorization: `Bearer ${auth.token}` },
+      });
+      if (response.status === 200) {
+        await secureDelete(KeychainService.REFRESH_TOKEN);
+        await secureDelete(KeychainService.REMEMBER_ME);
+        await disableBiometricLogin();
+
+        return {
+          success: true,
+          messageType: 'success',
+          notificationMessage: t('success-account-deleted'),
+        };
+      }
+
+      return rejectWithValue({
+        messageType: 'error',
+        notificationMessage: t('error-account-delete'),
+      });
+    } catch (error: any) {
+      __DEV__ && console.log('XX -> userThunks.ts:139 -> error :', error);
+
+      const parsedError = parseApiError(error, t, 'error-account-delete');
       return rejectWithValue({
         messageType: 'error',
         notificationMessage: parsedError.message,

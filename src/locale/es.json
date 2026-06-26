@@ -217,5 +217,15 @@
   "notifications-confirm-disable-message": "Ya no recibirás notificaciones push. Puedes reactivarlas en cualquier momento.",
   "notifications-confirm-enable-button": "Activar",
   "notifications-confirm-disable-button": "Desactivar",
-  "notifications-confirm-cancel": "Cancelar"
+  "notifications-confirm-cancel": "Cancelar",
+
+  "delete-account-button": "Eliminar cuenta",
+  "delete-account-title": "Eliminar cuenta",
+  "delete-account-warning": "Esta acción es permanente y no se puede deshacer. Todos tus datos serán eliminados permanentemente de nuestros servidores.",
+  "delete-account-email-label": "Escribe tu correo para confirmar",
+  "delete-account-email-placeholder": "tu@correo.com",
+  "delete-account-confirm-button": "Eliminar mi cuenta",
+  "delete-account-cancel": "Cancelar",
+  "success-account-deleted": "Tu cuenta ha sido eliminada. ¡Hasta pronto!",
+  "error-account-delete": "No se pudo eliminar la cuenta. Por favor intenta de nuevo."
 }

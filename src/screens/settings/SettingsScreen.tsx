@@ -14,12 +14,14 @@ import * as Keychain from 'react-native-keychain';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAppDispatch, useAppSelector } from '@store/hooks';
+import { deleteAccount } from '@store/thunks';
 
 import CustomModal from '@components/shared/bottomSheet/CustomModal';
 import ListCard from '@components/shared/ListCard';
 import LanguagePicker from '@components/shared/locale/LanguagePicker';
 import MailContactBox from '@components/shared/MailContactBox';
 import BiometricConfirmModal from '@components/shared/modalSheet/BiometricConfirmModal';
+import DeleteAccountModal from '@components/shared/modalSheet/DeleteAccountModal';
 import LogoutModal from '@components/shared/modalSheet/LogoutModal';
 import ModalSheet from '@components/shared/modalSheet/ModalSheet';
 import NotificationConfirmModal from '@components/shared/modalSheet/NotificationConfirmModal';
@@ -35,6 +37,7 @@ import {
   BellIcon,
   CheckIcon,
   CircleFullIcon,
+  ClosedCircleIcon,
   FaceIdIcon,
   LanguageIcon,
   MessageIcon,
@@ -83,6 +86,7 @@ const SettingsScreen = ({
 
   const [notifEnabled, setNotifEnabled] = useState(true);
   const [notifConfirmModal, setNotifConfirmModal] = useState(false);
+  const [deleteAccountModal, setDeleteAccountModal] = useState(false);
   const [pendingNotifAction, setPendingNotifAction] = useState<
     'enable' | 'disable'
   >('enable');
@@ -168,6 +172,15 @@ const SettingsScreen = ({
   const handleConfirmLogout = async () => {
     toggleModalSheet();
     await handleLogout();
+  };
+
+  const toggleDeleteAccountModal = () => {
+    setDeleteAccountModal(prev => !prev);
+  };
+
+  const handleConfirmDeleteAccount = async () => {
+    toggleDeleteAccountModal();
+    await dispatch(deleteAccount({ t }));
   };
 
   return (
@@ -271,6 +284,14 @@ const SettingsScreen = ({
             icon={<CircleFullIcon width={14} height={14} color={'#CD6D94'} />}
             checkBox={themeName === 'passion'}
           />
+          <Separator height={40} />
+          <ListCard
+            title={t('delete-account-button')}
+            onPress={toggleDeleteAccountModal}
+            icon={
+              <ClosedCircleIcon width={20} height={20} color={colors.danger} />
+            }
+          />
         </ScrollView>
         <MailContactBox title="contact@authdemoapp-jec.com" />
       </View>
@@ -302,6 +323,15 @@ const SettingsScreen = ({
           action={pendingNotifAction}
           toggleModalSheet={toggleNotifConfirmModal}
           onConfirm={handleNotifConfirm}
+        />
+      </ModalSheet>
+      <ModalSheet
+        modalIsVisible={deleteAccountModal}
+        toggleSheet={toggleDeleteAccountModal}>
+        <DeleteAccountModal
+          userEmail={user?.email ?? ''}
+          toggleModalSheet={toggleDeleteAccountModal}
+          handleDelete={handleConfirmDeleteAccount}
         />
       </ModalSheet>
     </SafeAreaView>

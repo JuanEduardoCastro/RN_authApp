@@ -8,4 +8,4 @@ export {
 } from './adminThunks';
 export { loginUser, logoutUser, validateRefreshToken } from './authThunks';
 export { checkEmail, resetPassword, updatePassword } from './passwordThunks';
-export { createUser, editUser } from './userThunks';
+export { createUser, deleteAccount, editUser } from './userThunks';
