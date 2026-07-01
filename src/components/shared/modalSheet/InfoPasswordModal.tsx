@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
@@ -10,7 +10,8 @@ import { moderateScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
-import Button from '../Button';
+import Button from '../appsComps/AppButton';
+import AppText from '../appsComps/AppText';
 import Separator from '../Separator';
 
 type InfoPasswordModalProps = {
@@ -24,12 +25,18 @@ const InfoPasswordModal = ({ toggleModalSheet }: InfoPasswordModalProps) => {
   return (
     <View style={styles.containerModal}>
       <View style={styles.modalTextBox}>
-        <Text style={styles.modalTitle}>{t('info-password-message')}</Text>
-        <Text style={styles.modalText}>{t('info-password-length')}</Text>
-        <Text style={styles.modalText}>{t('info-password-uppercase')}</Text>
-        <Text style={styles.modalText}>{t('info-password-lowercase')}</Text>
-        <Text style={styles.modalText}>{t('info-password-number')}</Text>
-        <Text style={styles.modalText}>{t('info-password-symbol')}</Text>
+        <AppText style={styles.modalTitle}>
+          {t('info-password-message')}
+        </AppText>
+        <AppText style={styles.modalText}>{t('info-password-length')}</AppText>
+        <AppText style={styles.modalText}>
+          {t('info-password-uppercase')}
+        </AppText>
+        <AppText style={styles.modalText}>
+          {t('info-password-lowercase')}
+        </AppText>
+        <AppText style={styles.modalText}>{t('info-password-number')}</AppText>
+        <AppText style={styles.modalText}>{t('info-password-symbol')}</AppText>
       </View>
       <Separator border={false} height={30} />
       <View style={styles.buttonBox}>

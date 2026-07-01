@@ -6,7 +6,6 @@ import {
   Keyboard,
   Pressable,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 
@@ -25,6 +24,7 @@ import MessageBlock, {
   MessageType,
 } from '@components/adminMessages/MessageBlock';
 import SearchBox from '@components/adminMessages/SearchBox';
+import AppText from '@components/shared/appsComps/AppText';
 import HeaderGoBack from '@components/shared/HeaderGoBack';
 
 import useStyles from '@hooks/useStyles';
@@ -153,10 +153,10 @@ const AdminScreen = ({
           accessibilityRole="checkbox"
           accessibilityState={{ checked: isSelected }}>
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>
+            <AppText style={styles.userName}>
               {item.firstName} {item.lastName}
-            </Text>
-            <Text style={styles.userEmail}>{item.email}</Text>
+            </AppText>
+            <AppText style={styles.userEmail}>{item.email}</AppText>
           </View>
           <View
             style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
@@ -184,7 +184,7 @@ const AdminScreen = ({
         renderItem={renderItem}
         ListEmptyComponent={
           !loader ? (
-            <Text style={styles.emptyText}>{t('no-users-found')}</Text>
+            <AppText style={styles.emptyText}>{t('no-users-found')}</AppText>
           ) : (
             <ActivityIndicator
               color={colors.second}

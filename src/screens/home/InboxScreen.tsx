@@ -1,12 +1,6 @@
 import React, { useCallback, useState } from 'react';
 
-import {
-  ActivityIndicator,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -22,6 +16,7 @@ import { InboxMessage } from '@store/types';
 
 import { HomeTabScreenProps } from '@navigation/types';
 
+import AppText from '@components/shared/appsComps/AppText';
 import HeaderGoBack from '@components/shared/HeaderGoBack';
 import MessageCard from '@components/shared/MessageCard';
 import ConfirmModal from '@components/shared/modalSheet/ConfirmModal';
@@ -107,7 +102,7 @@ const InboxScreen = ({ navigation }: HomeTabScreenProps<'InboxScreen'>) => {
       <SafeAreaView style={styles.container}>
         <HeaderGoBack onPress={() => navigation.goBack()} />
         <View style={styles.titleBox}>
-          <Text style={styles.titleText}>{t('inbox-title')}</Text>
+          <AppText style={styles.titleText}>{t('inbox-title')}</AppText>
         </View>
         <Separator border={false} height={8} />
         <FlatList
@@ -119,7 +114,7 @@ const InboxScreen = ({ navigation }: HomeTabScreenProps<'InboxScreen'>) => {
             loader ? (
               <ActivityIndicator color={colors.second} style={styles.loader} />
             ) : (
-              <Text style={styles.emptyText}>{t('inbox-empty')}</Text>
+              <AppText style={styles.emptyText}>{t('inbox-empty')}</AppText>
             )
           }
           contentContainerStyle={styles.listContent}

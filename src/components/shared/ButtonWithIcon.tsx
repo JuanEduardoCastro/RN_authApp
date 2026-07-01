@@ -4,7 +4,6 @@ import {
   Pressable,
   PressableProps,
   StyleSheet,
-  Text,
   TextStyle,
   View,
   ViewStyle,
@@ -21,6 +20,8 @@ import useStyles from '@hooks/useStyles';
 import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
+
+import AppText from './appsComps/AppText';
 
 type ButtonWithIconProps = {
   title?: string;
@@ -77,7 +78,7 @@ const ButtonWithIcon = ({
             <Icon {...iconProps} />
           </View>
         )}
-        <Text style={[styles.text, textStyles]}>{title}</Text>
+        <AppText style={[styles.text, textStyles]}>{title}</AppText>
       </Animated.View>
     </Pressable>
   );

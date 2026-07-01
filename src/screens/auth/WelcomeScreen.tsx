@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 import * as Keychain from 'react-native-keychain';
@@ -13,8 +13,9 @@ import { GITHUB_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
 
 import { AuthStackScreenProps } from '@navigation/types';
 
+import Button from '@components/shared/appsComps/AppButton';
+import AppText from '@components/shared/appsComps/AppText';
 import BGGradient from '@components/shared/BGGradient';
-import Button from '@components/shared/Button';
 import ButtonWithIcon from '@components/shared/ButtonWithIcon';
 import Separator from '@components/shared/Separator';
 
@@ -206,12 +207,12 @@ const WelcomeScreen = ({
       angleCenter={{ x: 0.7, y: 0.9 }}>
       <View style={styles.container}>
         <View style={styles.titleBox}>
-          <Text style={styles.title}>{t('welcome-title')} </Text>
-          <Text style={styles.subTitle}>{t('welcome-subtitle')}</Text>
+          <AppText style={styles.title}>{t('welcome-title')} </AppText>
+          <AppText style={styles.subTitle}>{t('welcome-subtitle')}</AppText>
           <Separator border={false} height={60} />
         </View>
         <View style={styles.titleBox}>
-          <Text style={styles.subTitle}>{t('login-message')}</Text>
+          <AppText style={styles.subTitle}>{t('login-message')}</AppText>
         </View>
         <View style={styles.buttonBox}>
           {isEnabled && (
@@ -286,7 +287,7 @@ const WelcomeScreen = ({
           )}
         </View>
         <View style={styles.titleBox}>
-          <Text style={styles.subTitle}>{t('or')}</Text>
+          <AppText style={styles.subTitle}>{t('or')}</AppText>
         </View>
         <View style={styles.buttonBox}>
           <Button

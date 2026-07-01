@@ -4,8 +4,6 @@ import {
   Platform,
   Pressable,
   StyleSheet,
-  Text,
-  TextInput,
   TextInputProps,
   TextStyle,
   View,
@@ -25,6 +23,8 @@ import { moderateScale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
+import AppText from '../appsComps/AppText';
+import AppTextInput from '../appsComps/AppTextInput';
 import BottomSheet from '../bottomSheet/BottomSheet';
 import PhoneListContainer from './PhoneListContainer';
 
@@ -86,7 +86,7 @@ const PhoneNumberPicker = ({
     const countryCode = currentFieldValue.code || defaultCountryCode;
     const country = countriesList.find(c => c.code === countryCode);
     return country ? (
-      <Text style={styles.pickerFlag}>{country.flag}</Text>
+      <AppText style={styles.pickerFlag}>{country.flag}</AppText>
     ) : null;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentFieldValue.code, defaultCountryCode]);
@@ -94,7 +94,9 @@ const PhoneNumberPicker = ({
   return (
     <>
       <View style={styles.container}>
-        {label && <Text style={[styles.label, labelStyles]}>{label}</Text>}
+        {label && (
+          <AppText style={[styles.label, labelStyles]}>{label}</AppText>
+        )}
         <View
           style={[
             styles.inputBox,
@@ -112,7 +114,7 @@ const PhoneNumberPicker = ({
             </Pressable>
             <View style={styles.pickerCodeView}>
               <View style={styles.vertSeparator} />
-              <TextInput
+              <AppTextInput
                 style={styles.pickerCode}
                 editable={false}
                 value={currentFieldValue.dialCode || defaultDialCode || ''}
@@ -120,7 +122,7 @@ const PhoneNumberPicker = ({
               <View style={styles.vertSeparator} />
             </View>
           </View>
-          <TextInput
+          <AppTextInput
             style={[
               styles.input,
               props.editable === false && {
@@ -141,7 +143,9 @@ const PhoneNumberPicker = ({
         </View>
         <View style={styles.errorBox}>
           {fieldState.error && (
-            <Text style={styles.errorText}>{fieldState.error.message}</Text>
+            <AppText style={styles.errorText}>
+              {fieldState.error.message}
+            </AppText>
           )}
         </View>
       </View>

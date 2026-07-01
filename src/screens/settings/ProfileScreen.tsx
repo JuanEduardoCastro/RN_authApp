@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 
-import {
-  Keyboard,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Keyboard, Platform, Pressable, StyleSheet, View } from 'react-native';
 
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { editUser } from '@store/thunks';
 import { EditUserPayload } from '@store/types';
 
+import AppText from '@components/shared/appsComps/AppText';
 import AvatarViewButton from '@components/shared/AvatarViewButton';
 import HeaderGoBack from '@components/shared/HeaderGoBack';
 import InputAuthField from '@components/shared/InputAuthField';
@@ -100,9 +94,9 @@ const ProfileScreen = ({
     <SafeAreaView style={styles.container}>
       <HeaderGoBack onPress={() => navigation.goBack()} />
       <View style={styles.titleBox}>
-        <Text style={styles.title}>{t('profile-title')}</Text>
+        <AppText style={styles.title}>{t('profile-title')}</AppText>
         <Separator border={false} height={12} />
-        <Text style={styles.subTitle}>{t('profile-subtitle')}</Text>
+        <AppText style={styles.subTitle}>{t('profile-subtitle')}</AppText>
       </View>
       <Separator border={false} height={32} />
       <View style={styles.buttonBox}>
@@ -114,15 +108,15 @@ const ProfileScreen = ({
         <View style={styles.editButton}>
           <Pressable
             onPress={editEnable ? handleSubmit(onSubmit) : handleEditInfo}>
-            <Text style={styles.editButtonText}>
+            <AppText style={styles.editButtonText}>
               {editEnable ? t('save-profile-button') : t('edit-profile-button')}
-            </Text>
+            </AppText>
           </Pressable>
           {editEnable && (
             <Pressable onPress={handleCancelEditInfo}>
-              <Text style={styles.cancelButtonText}>
+              <AppText style={styles.cancelButtonText}>
                 {t('cancel-profile-button')}
-              </Text>
+              </AppText>
             </Pressable>
           )}
         </View>

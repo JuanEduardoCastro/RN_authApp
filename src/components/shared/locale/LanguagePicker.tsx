@@ -1,13 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import {
-  FlatList,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { FlatList, Platform, Pressable, StyleSheet, View } from 'react-native';
 
 import { getLocales } from 'react-native-localize';
 
@@ -25,6 +18,7 @@ import {
   secureSetStorage,
 } from '@utils/secureStorage';
 
+import AppText from '../appsComps/AppText';
 import { resources } from 'src/locale/i18next';
 
 type LanguageInfo = {
@@ -82,18 +76,18 @@ const LanguagePicker = ({ toggleSheet }: LanguagePickerProps) => {
               },
             ]}
             onPress={() => handleSelectLanguage(item)}>
-            <Text style={styles.textFlag}>
+            <AppText style={styles.textFlag}>
               {
                 (languagesList as unknown as Record<string, LanguageInfo>)[item]
                   .flag
               }
-            </Text>
-            <Text style={styles.textName}>
+            </AppText>
+            <AppText style={styles.textName}>
               {
                 (languagesList as unknown as Record<string, LanguageInfo>)[item]
                   .nativeName
               }
-            </Text>
+            </AppText>
           </Pressable>
         )}
       />

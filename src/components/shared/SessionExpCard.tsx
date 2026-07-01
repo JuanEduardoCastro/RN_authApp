@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
@@ -14,6 +14,8 @@ import useStyles from '@hooks/useStyles';
 import { moderateScale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
+
+import AppText from './appsComps/AppText';
 
 const SessionExpCard = () => {
   const { styles } = useStyles(createStyles);
@@ -48,8 +50,10 @@ const SessionExpCard = () => {
     <View style={styles.container}>
       <View style={styles.infoBox}>
         <View style={styles.sessionExpBox}>
-          <Text style={styles.titleText}>{t('session-expires-at')}: </Text>
-          <Text style={styles.timeText}>{sessionInfo?.expiresAt}</Text>
+          <AppText style={styles.titleText}>
+            {t('session-expires-at')}:{' '}
+          </AppText>
+          <AppText style={styles.timeText}>{sessionInfo?.expiresAt}</AppText>
         </View>
       </View>
     </View>

@@ -1,13 +1,6 @@
 import React from 'react';
 
-import {
-  Alert,
-  Linking,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Alert, Linking, Pressable, StyleSheet, View } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
@@ -16,6 +9,8 @@ import useStyles from '@hooks/useStyles';
 import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
+
+import AppText from './appsComps/AppText';
 
 type MailContactBoxProps = {
   title?: string;
@@ -52,13 +47,13 @@ const MailContactBox = ({ title }: MailContactBoxProps) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>{t('contact-title')}...</Text>
+      <AppText style={styles.titleText}>{t('contact-title')}...</AppText>
       <Pressable
         onPress={handleOpenMailApp}
         style={({ pressed }) => [styles.mailBox, pressed && styles.pressed]}
         accessibilityLabel={`Contact by email: ${title}`}
         accessibilityRole="button">
-        <Text style={styles.mailText}>{title}</Text>
+        <AppText style={styles.mailText}>{title}</AppText>
       </Pressable>
     </View>
   );

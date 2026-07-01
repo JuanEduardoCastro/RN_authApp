@@ -7,7 +7,6 @@ import {
   Platform,
   Pressable,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 
@@ -21,7 +20,8 @@ import { checkEmail, resetPassword } from '@store/thunks';
 
 import { AuthStackScreenProps } from '@navigation/types';
 
-import Button from '@components/shared/Button';
+import Button from '@components/shared/appsComps/AppButton';
+import AppText from '@components/shared/appsComps/AppText';
 import ButtonNoBorder from '@components/shared/ButtonNoBorder';
 import HeaderGoBack from '@components/shared/HeaderGoBack';
 import InputAuthField from '@components/shared/InputAuthField';
@@ -150,19 +150,19 @@ const CheckEmailScreen = ({
           <DismissKeyboardOnClick>
             <View>
               <View style={styles.titleBox}>
-                <Text style={styles.subTitle}>
+                <AppText style={styles.subTitle}>
                   {checkMode.includes('new')
                     ? t('check-email-title')
                     : t('reset-password-title')}
-                </Text>
-                <Text style={styles.subTitle2}>
+                </AppText>
+                <AppText style={styles.subTitle2}>
                   {isEmailSent &&
                     `${t('check-inbox')} ${
                       checkMode.includes('new')
                         ? t('create-account')
                         : t('reset-password')
                     }`}
-                </Text>
+                </AppText>
               </View>
               <View style={styles.inputBox}>
                 <Separator borderWidth={0} />
@@ -212,12 +212,12 @@ const CheckEmailScreen = ({
                       canResend && styles.resetBoxOnFocus,
                     ]}
                     onPress={handleSubmit(onSubmit)}>
-                    <Text style={styles.resendText}>
+                    <AppText style={styles.resendText}>
                       {t('resend-email-button')}
-                    </Text>
-                    <Text style={styles.resendText}>
+                    </AppText>
+                    <AppText style={styles.resendText}>
                       {canResend ? '00:00' : formatTime(timeLeft)}
-                    </Text>
+                    </AppText>
                   </Pressable>
                 )}
               </View>

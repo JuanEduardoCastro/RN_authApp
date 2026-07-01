@@ -1,11 +1,12 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 
-import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
+import { Animated, Platform, StyleSheet, View } from 'react-native';
 
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import packagejson from 'package.json';
 
+import AppText from '@components/shared/appsComps/AppText';
 import BGGradient from '@components/shared/BGGradient';
 
 import { useCheckToken } from '@hooks/useCheckToken';
@@ -105,9 +106,9 @@ export const Splash = ({ handleAppIsReady, isAppReady }: SplashProps) => {
             onLoad={() => setImageState(IMG_STATE.FADE_IN_IMAGE)}
           />
           <View style={styles.versionContainer}>
-            <Text style={styles.versionText}>
+            <AppText style={styles.versionText}>
               Version {APP_VERSION}, build ({JSON.stringify(APP_BUILD)})
-            </Text>
+            </AppText>
           </View>
         </BGGradient>
       </SafeAreaProvider>

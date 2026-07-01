@@ -5,7 +5,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 
@@ -18,7 +17,8 @@ import { loginUser } from '@store/thunks';
 
 import { AuthStackScreenProps } from '@navigation/types';
 
-import Button from '@components/shared/Button';
+import Button from '@components/shared/appsComps/AppButton';
+import AppText from '@components/shared/appsComps/AppText';
 import ButtonNoBorder from '@components/shared/ButtonNoBorder';
 import CheckBoxCustom from '@components/shared/CheckBoxCustom';
 import HeaderGoBack from '@components/shared/HeaderGoBack';
@@ -72,7 +72,9 @@ const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
             <DismissKeyboardOnClick>
               <View>
                 <View style={styles.titleBox}>
-                  <Text style={styles.subTitle}>{t('enter-email-title')}</Text>
+                  <AppText style={styles.subTitle}>
+                    {t('enter-email-title')}
+                  </AppText>
                 </View>
                 <View style={styles.inputBox}>
                   <Separator borderWidth={0} />

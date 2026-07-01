@@ -5,7 +5,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 
@@ -21,7 +20,8 @@ import { CreateUserPayload, UpdatePasswordPayload } from '@store/types';
 
 import { AuthStackScreenProps } from '@navigation/types';
 
-import Button from '@components/shared/Button';
+import Button from '@components/shared/appsComps/AppButton';
+import AppText from '@components/shared/appsComps/AppText';
 import ButtonNoBorder from '@components/shared/ButtonNoBorder';
 import HeaderGoBack from '@components/shared/HeaderGoBack';
 import InputAuthField from '@components/shared/InputAuthField';
@@ -177,9 +177,9 @@ const NewPasswordScreen = ({
           <DismissKeyboardOnClick>
             <View>
               <View style={styles.titleBox}>
-                <Text style={styles.subTitle}>
+                <AppText style={styles.subTitle}>
                   {t('new-password-label-placeholder')}
-                </Text>
+                </AppText>
               </View>
               <View style={styles.inputBox}>
                 <Separator borderWidth={0} />

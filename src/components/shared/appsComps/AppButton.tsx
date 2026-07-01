@@ -4,7 +4,6 @@ import {
   Pressable,
   PressableProps,
   StyleSheet,
-  Text,
   TextStyle,
   ViewStyle,
 } from 'react-native';
@@ -21,19 +20,21 @@ import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
-type ButtonProps = {
+import AppText from './AppText';
+
+type AppButtonProps = {
   title?: string;
   buttonStyles?: ViewStyle;
   textStyles?: TextStyle;
 } & PressableProps;
 
-const Button = ({
+const AppButton = ({
   title = 'Go to',
   buttonStyles,
   textStyles,
   style,
   ...props
-}: ButtonProps) => {
+}: AppButtonProps) => {
   const { styles } = useStyles(createStyles);
   const sharedScale = useSharedValue(1);
 
@@ -61,13 +62,13 @@ const Button = ({
       {...props}
       style={[style as ViewStyle, props.disabled && styles.disabled]}>
       <Animated.View style={[styles.button, animationStyles, buttonStyles]}>
-        <Text style={[styles.text, textStyles]}>{title}</Text>
+        <AppText style={[styles.text, textStyles]}>{title}</AppText>
       </Animated.View>
     </Pressable>
   );
 };
 
-export default Button;
+export default AppButton;
 
 const createStyles = (colors: TColors) =>
   StyleSheet.create({

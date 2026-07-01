@@ -5,7 +5,6 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 
@@ -16,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { deleteAccount } from '@store/thunks';
 
+import AppText from '@components/shared/appsComps/AppText';
 import CustomModal from '@components/shared/bottomSheet/CustomModal';
 import ListCard from '@components/shared/ListCard';
 import LanguagePicker from '@components/shared/locale/LanguagePicker';
@@ -184,7 +184,7 @@ const SettingsScreen = ({
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.titlebox}>
-        <Text style={styles.titleText}>{t('settings-title')}</Text>
+        <AppText style={styles.titleText}>{t('settings-title')}</AppText>
       </View>
       <Separator border={false} height={24} />
       {/* eslint-disable react-native/no-inline-styles */}
@@ -256,7 +256,7 @@ const SettingsScreen = ({
           <Separator height={40} />
           <Pressable onPress={toggleMode} style={styles.modeBox}>
             <ModeSwitchButton />
-            <Text style={styles.modeText}>{t('mode-switch-button')}</Text>
+            <AppText style={styles.modeText}>{t('mode-switch-button')}</AppText>
           </Pressable>
           <ListCard
             title={t('luxury-button')}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import useStyles from '@hooks/useStyles';
 
@@ -9,6 +9,8 @@ import { ChevronIcon } from '@assets/svg/icons';
 import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
+
+import AppText from './appsComps/AppText';
 
 type HeaderGoBackProps = {
   title?: string;
@@ -27,7 +29,7 @@ const HeaderGoBack = ({ title = '', onPress }: HeaderGoBackProps) => {
         accessibilityRole="button">
         <ChevronIcon width={20} height={20} color={colors.text} />
       </Pressable>
-      <Text style={styles.text}>{title}</Text>
+      <AppText style={styles.text}>{title}</AppText>
     </View>
   );
 };

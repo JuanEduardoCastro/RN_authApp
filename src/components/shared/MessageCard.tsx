@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -20,6 +20,8 @@ import { TrashCanIcon } from '@assets/svg/icons';
 import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
+
+import AppText from './appsComps/AppText';
 
 const DELETE_ACTION_WIDTH = 160;
 
@@ -91,7 +93,9 @@ const MessageCard = ({
       {onDeletePress && (
         <Animated.View style={[styles.deleteAction, actionStyle]}>
           <Pressable onPress={handleDeletePress} style={styles.deleteButton}>
-            <Text style={styles.deleteText}>{t('delete-message-action')}</Text>
+            <AppText style={styles.deleteText}>
+              {t('delete-message-action')}
+            </AppText>
             <TrashCanIcon width={17} height={17} color={colors.almostWhite} />
           </Pressable>
         </Animated.View>
@@ -108,30 +112,32 @@ const MessageCard = ({
             accessibilityState={{ checked: isExpanded }}>
             {/* row 1: sender + date */}
             <View style={styles.headerRow}>
-              <Text style={styles.senderText} numberOfLines={1}>
+              <AppText style={styles.senderText} numberOfLines={1}>
                 {senderName}
-              </Text>
-              <Text style={styles.dateText}>{formatDate(item.createdAt)}</Text>
+              </AppText>
+              <AppText style={styles.dateText}>
+                {formatDate(item.createdAt)}
+              </AppText>
             </View>
 
             {/* row 2: title + unread dot */}
             <View style={styles.titleRow}>
-              <Text
+              <AppText
                 style={[styles.titleText, !item.isRead && styles.titleUnread]}
                 numberOfLines={1}>
                 {item.title}
-              </Text>
+              </AppText>
               {!item.isRead && <View style={styles.unreadDot} />}
             </View>
 
             {/* row 3: body preview */}
 
             {/* <View style={styles.bodyRow}> */}
-            <Text
+            <AppText
               style={styles.bodyText}
               numberOfLines={isExpanded ? undefined : 2}>
               {item.body}
-            </Text>
+            </AppText>
             {/* </View> */}
           </Pressable>
         </Animated.View>

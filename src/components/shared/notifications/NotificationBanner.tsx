@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, View } from 'react-native';
 
 import Animated, {
   Easing,
@@ -26,6 +26,7 @@ import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
+import AppText from '../appsComps/AppText';
 import { setNotificationMessage, userAuth } from 'src/store/authSlice';
 
 const iconMap = {
@@ -102,9 +103,9 @@ const NotificationBanner = () => {
             }>
             <View style={styles.bannerBox}>
               <View style={styles.bannerTextBox}>
-                <Text style={styles.bannerText} numberOfLines={3}>
+                <AppText style={styles.bannerText} numberOfLines={3}>
                   {notificationMessage as string}
-                </Text>
+                </AppText>
               </View>
               <View style={styles.bannerIconBox}>
                 {IconComponent && (

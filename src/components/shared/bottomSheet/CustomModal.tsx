@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Modal, Pressable, StyleSheet, View } from 'react-native';
 
 import Animated, {
   SlideInDown,
@@ -18,6 +18,7 @@ import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
+import AppText from '../appsComps/AppText';
 import Separator from '../Separator';
 
 type CustomModalProps = {
@@ -77,10 +78,10 @@ const CustomModal = ({
           </View>
           <View style={styles.commandsBox}>
             <Pressable onPress={handleCancelButton}>
-              <Text style={styles.commandsText}>Cancel</Text>
+              <AppText style={styles.commandsText}>Cancel</AppText>
             </Pressable>
             <Pressable onPress={handleDoneButton}>
-              <Text style={styles.commandsText}>Done</Text>
+              <AppText style={styles.commandsText}>Done</AppText>
             </Pressable>
           </View>
         </View>

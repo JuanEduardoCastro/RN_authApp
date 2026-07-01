@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
@@ -12,6 +12,7 @@ import { moderateScale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
+import AppText from './appsComps/AppText';
 import AvatarView from './AvatarView';
 
 type UserInfoCardProps = {
@@ -44,24 +45,27 @@ const UserInfoCard = ({ user, onPress }: UserInfoCardProps) => {
       </View>
       <View style={styles.infoBox}>
         <View style={styles.userNameBox}>
-          <Text
+          <AppText
             style={styles.userNameText}
             ellipsizeMode="tail"
             numberOfLines={1}>
             {(user?.firstName?.length ?? 0) > 0
               ? user?.firstName + ' ' + user?.lastName
               : t('default-user-name')}
-          </Text>
+          </AppText>
         </View>
         <View style={styles.emaileBox}>
-          <Text style={styles.emailText} ellipsizeMode="tail" numberOfLines={1}>
+          <AppText
+            style={styles.emailText}
+            ellipsizeMode="tail"
+            numberOfLines={1}>
             {user?.email}
-          </Text>
+          </AppText>
         </View>
         <View style={styles.memberSinceBox}>
-          <Text style={styles.memberSinceText}>
+          <AppText style={styles.memberSinceText}>
             {memberSinceFormat(user!.createdAt)}
-          </Text>
+          </AppText>
         </View>
       </View>
     </Pressable>

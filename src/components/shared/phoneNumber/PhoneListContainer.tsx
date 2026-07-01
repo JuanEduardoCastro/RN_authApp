@@ -5,7 +5,6 @@ import {
   Platform,
   Pressable,
   StyleSheet,
-  Text,
   View,
   ViewProps,
 } from 'react-native';
@@ -19,6 +18,7 @@ import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
+import AppText from '../appsComps/AppText';
 import BorderMaskGradient from '../borderMaskGradient/BorderMaskGradient';
 
 type PhoneListContainerProps = {
@@ -78,10 +78,10 @@ const PhoneListContainer = ({
     <View style={styles.container}>
       <View style={styles.commandsBox}>
         <Pressable onPress={handleCancelButton}>
-          <Text style={styles.commandsText}>Cancel</Text>
+          <AppText style={styles.commandsText}>Cancel</AppText>
         </Pressable>
         <Pressable onPress={handleDoneButton}>
-          <Text style={styles.commandsText}>Done</Text>
+          <AppText style={styles.commandsText}>Done</AppText>
         </Pressable>
       </View>
       <MaskedView
@@ -109,14 +109,14 @@ const PhoneListContainer = ({
                     marginBottom: SCREEN.heightFixed * 35 * 2,
                   },
                 ]}>
-                <Text style={styles.textFlag}>{item.flag}</Text>
-                <Text style={styles.textCode}>{item.dialCode}</Text>
-                <Text
+                <AppText style={styles.textFlag}>{item.flag}</AppText>
+                <AppText style={styles.textCode}>{item.dialCode}</AppText>
+                <AppText
                   style={styles.textName}
                   numberOfLines={1}
                   ellipsizeMode="tail">
                   {item.name}
-                </Text>
+                </AppText>
               </View>
             </Pressable>
           )}

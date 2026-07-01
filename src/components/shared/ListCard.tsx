@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import useStyles from '@hooks/useStyles';
 
@@ -9,6 +9,8 @@ import { CheckIcon } from '@assets/svg/icons';
 import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
+
+import AppText from './appsComps/AppText';
 
 type ListCardProps = {
   title: string;
@@ -30,7 +32,7 @@ const ListCard = ({
       style={({ pressed }) => [styles.container, pressed && styles.pressed]}
       accessibilityRole="button">
       <View style={styles.iconBox}>{icon}</View>
-      <Text style={styles.text}>{title}</Text>
+      <AppText style={styles.text}>{title}</AppText>
       <View style={styles.checkBox}>
         {checkBox && <CheckIcon width={14} height={14} color={colors.second} />}
       </View>

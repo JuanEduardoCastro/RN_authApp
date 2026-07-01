@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
@@ -14,6 +14,8 @@ import { AppleIcon, GithubIcon, GoogleIcon, MailIcon } from '@assets/svg/icons';
 import { moderateScale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
+
+import AppText from './appsComps/AppText';
 
 type HeaderHomeProps = {
   toggleModalSheet: () => void;
@@ -68,9 +70,9 @@ const HeaderHome = ({
   return (
     <View style={styles.container}>
       <View style={styles.centerHeader}>
-        <Text style={styles.text}>
+        <AppText style={styles.text}>
           {t('login-from')} {user?.provider ?? 'email'}{' '}
-        </Text>
+        </AppText>
       </View>
       <View style={styles.rightHeader}>{selectUserProvider()}</View>
     </View>

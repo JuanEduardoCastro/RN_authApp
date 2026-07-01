@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, View } from 'react-native';
 
 import { Control, useController } from 'react-hook-form';
 import CheckBox from '@react-native-community/checkbox';
@@ -10,6 +10,8 @@ import useStyles from '@hooks/useStyles';
 import { SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
+
+import AppText from './appsComps/AppText';
 
 type CheckBoxCustomProps = {
   name: string;
@@ -63,7 +65,7 @@ const CheckBoxCustom = ({
               false: colors.base,
             }}
           />
-          <Text style={styles.textRemember}>{label} </Text>
+          <AppText style={styles.textRemember}>{label} </AppText>
         </View>
       </Pressable>
       {/* eslint-enable react-native/no-inline-styles */}

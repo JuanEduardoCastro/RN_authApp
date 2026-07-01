@@ -1,12 +1,6 @@
 import React from 'react';
 
-import {
-  Pressable,
-  PressableProps,
-  StyleSheet,
-  Text,
-  TextStyle,
-} from 'react-native';
+import { Pressable, PressableProps, StyleSheet, TextStyle } from 'react-native';
 
 import Animated, {
   useAnimatedStyle,
@@ -18,6 +12,8 @@ import useStyles from '@hooks/useStyles';
 
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
+
+import AppText from './appsComps/AppText';
 
 type ButtonNoBorderProps = {
   title: string;
@@ -55,7 +51,7 @@ const ButtonNoBorder = ({
       style={[props.disabled && styles.disabled]}
       {...props}>
       <Animated.View style={[styles.button, animationStyles]}>
-        <Text style={[styles.gobackText, textStyles]}>{title}</Text>
+        <AppText style={[styles.gobackText, textStyles]}>{title}</AppText>
       </Animated.View>
     </Pressable>
   );

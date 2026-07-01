@@ -1,9 +1,11 @@
 import React from 'react';
 
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
+import AppText from '@components/shared/appsComps/AppText';
+import AppTextInput from '@components/shared/appsComps/AppTextInput';
 import Separator from '@components/shared/Separator';
 
 import useStyles from '@hooks/useStyles';
@@ -35,12 +37,12 @@ const SearchBox = ({
   return (
     <View style={styles.container}>
       <View style={styles.titleBox}>
-        <Text style={styles.titleText}>{t('admin-panel-button')}</Text>
+        <AppText style={styles.titleText}>{t('admin-panel-button')}</AppText>
       </View>
       <Separator border={false} height={12} />
       <View style={styles.searchRow}>
         <GlassIcon width={16} height={16} color={colors.text} />
-        <TextInput
+        <AppTextInput
           style={styles.searchInput}
           value={search}
           onChangeText={handleSearch}
@@ -57,14 +59,14 @@ const SearchBox = ({
           onPress={handleSelectAll}
           hitSlop={8}
           style={({ pressed }) => pressed && styles.pressed}>
-          <Text style={styles.selectAllText}>
+          <AppText style={styles.selectAllText}>
             {allSelected ? t('admin-deselect-all') : t('admin-select-all')}
-          </Text>
+          </AppText>
         </Pressable>
         {selectedIds.size > 0 && (
-          <Text style={styles.selectionCount}>
+          <AppText style={styles.selectionCount}>
             {selectedIds.size} {t('selected')}
-          </Text>
+          </AppText>
         )}
       </View>
       <Separator border={false} height={4} />

@@ -1,19 +1,14 @@
 import React from 'react';
 
-import {
-  ActivityIndicator,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
 import { UserSummary } from '@store/types';
 
-import Button from '@components/shared/Button';
+import AppText from '@components/shared/appsComps/AppText';
+import AppTextInput from '@components/shared/appsComps/AppTextInput';
+import Button from '@components/shared/appsComps/AppButton';
 import Separator from '@components/shared/Separator';
 
 import useStyles from '@hooks/useStyles';
@@ -68,7 +63,7 @@ const MessageBlock = ({
       {/* compose form */}
       <View style={styles.formSection}>
         <View style={styles.inputBlock}>
-          <TextInput
+          <AppTextInput
             style={styles.inputField}
             value={title}
             onChangeText={setTitle}
@@ -77,10 +72,10 @@ const MessageBlock = ({
             maxLength={100}
             autoCapitalize="sentences"
           />
-          <Text style={styles.charCount}>{title.length}/100</Text>
+          <AppText style={styles.charCount}>{title.length}/100</AppText>
         </View>
         <View style={styles.inputBlock}>
-          <TextInput
+          <AppTextInput
             style={[styles.inputField, styles.bodyField]}
             value={body}
             onChangeText={setBody}
@@ -93,7 +88,7 @@ const MessageBlock = ({
             textAlignVertical="top"
           />
 
-          <Text style={styles.charCount}>{body.length}/1000</Text>
+          <AppText style={styles.charCount}>{body.length}/1000</AppText>
         </View>
 
         {/* message type selector */}
@@ -106,13 +101,13 @@ const MessageBlock = ({
                 styles.typeButton,
                 messageType === key && styles.typeButtonActive,
               ]}>
-              <Text
+              <AppText
                 style={[
                   styles.typeButtonText,
                   messageType === key && styles.typeButtonTextActive,
                 ]}>
                 {t(i18nKey)}{' '}
-              </Text>
+              </AppText>
             </Pressable>
           ))}
         </View>

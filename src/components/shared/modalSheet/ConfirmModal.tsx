@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import useStyles from '@hooks/useStyles';
 
@@ -8,7 +8,8 @@ import { moderateScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
-import Button from '../Button';
+import Button from '../appsComps/AppButton';
+import AppText from '../appsComps/AppText';
 import Separator from '../Separator';
 
 type ConfirmModalProps = {
@@ -34,9 +35,9 @@ const ConfirmModal = ({
 
   return (
     <View style={styles.containerModal}>
-      {title && <Text style={styles.title}>{title}</Text>}
+      {title && <AppText style={styles.title}>{title}</AppText>}
       <Separator border={false} height={12} />
-      <Text style={styles.message}>{message}</Text>
+      <AppText style={styles.message}>{message}</AppText>
       <Separator border={false} height={60} />
       <View style={styles.buttonBox}>
         <Button

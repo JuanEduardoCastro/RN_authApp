@@ -43,7 +43,7 @@ const HomeScreen = ({ navigation }: HomeTabScreenProps<'HomeScreen'>) => {
 
   const [confirmLogoutModal, setConfirmLogoutModal] = useState(false);
   const [completeProfileModal, setCompleteProfileModal] = useState(false);
-  const [showBiometricModal, setShowBiometricModal] = useState(true);
+  const [showBiometricModal, setShowBiometricModal] = useState(false);
   const [biometryType, setBiometryType] =
     useState<Keychain.BIOMETRY_TYPE | null>(null);
 

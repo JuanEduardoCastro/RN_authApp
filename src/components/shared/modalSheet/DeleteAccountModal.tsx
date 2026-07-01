@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
@@ -12,7 +12,9 @@ import { moderateScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
-import Button from '../Button';
+import Button from '../appsComps/AppButton';
+import AppText from '../appsComps/AppText';
+import AppTextInput from '../appsComps/AppTextInput';
 import Separator from '../Separator';
 
 type DeleteAccountModalProps = {
@@ -43,14 +45,16 @@ const DeleteAccountModal = ({
     <View style={styles.containerModal}>
       {firstConfirmation ? (
         <>
-          {/* <Text style={styles.title}>{t('delete-account-title')}</Text> */}
+          {/* <AppText style={styles.title}>{t('delete-account-title')}</AppText> */}
           <QuestionMarkIcon width={54} height={54} color={colors.danger} />
           <Separator border={false} height={6} />
-          <Text style={styles.warning}>{t('delete-account-warning')}</Text>
+          <AppText style={styles.warning}>
+            {t('delete-account-warning')}
+          </AppText>
           <Separator border={false} height={24} />
-          <Text style={styles.warning}>
+          <AppText style={styles.warning}>
             {t('delete-account-warning-message')}
-          </Text>
+          </AppText>
           <Separator border={false} height={32} />
           <View style={styles.buttonBox}>
             <Button
@@ -71,13 +75,17 @@ const DeleteAccountModal = ({
         </>
       ) : (
         <>
-          <Text style={styles.title}>{t('delete-account-title')}</Text>
+          <AppText style={styles.title}>{t('delete-account-title')}</AppText>
           <Separator border={false} height={12} />
-          <Text style={styles.warning}>{t('delete-account-instruction')}</Text>
+          <AppText style={styles.warning}>
+            {t('delete-account-instruction')}
+          </AppText>
           <Separator border={false} height={24} />
-          <Text style={styles.label}>{t('delete-account-email-label')}</Text>
+          <AppText style={styles.label}>
+            {t('delete-account-email-label')}
+          </AppText>
           <Separator border={false} height={8} />
-          <TextInput
+          <AppTextInput
             style={styles.input}
             value={typedEmail}
             onChangeText={setTypedEmail}

@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 import {
   Pressable,
   StyleSheet,
-  Text,
-  TextInput,
   TextInputProps,
   TextStyle,
   View,
@@ -21,6 +19,8 @@ import { moderateScale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
+import AppText from './appsComps/AppText';
+import AppTextInput from './appsComps/AppTextInput';
 import InfoPasswordModal from './modalSheet/InfoPasswordModal';
 import ModalSheet from './modalSheet/ModalSheet';
 
@@ -59,12 +59,12 @@ const InputAuthField = ({
     <View style={styles.container}>
       {label && (
         <View style={styles.labelBox}>
-          <Text style={[styles.label, labelStyles]}>{label}</Text>
+          <AppText style={[styles.label, labelStyles]}>{label}</AppText>
           {name.includes('password') && (
             <Pressable
               style={styles.buttonInfoIcon}
               onPress={() => handleOpenInfo()}>
-              <Text style={[styles.text, labelStyles]}>ⓘ</Text>
+              <AppText style={[styles.text, labelStyles]}>ⓘ</AppText>
             </Pressable>
           )}
         </View>
@@ -76,7 +76,7 @@ const InputAuthField = ({
           fieldState.error && styles.errorInput,
           !props.editable && styles.completeInput,
         ]}>
-        <TextInput
+        <AppTextInput
           style={[
             styles.input,
             props.editable === false && {
@@ -109,7 +109,7 @@ const InputAuthField = ({
       </View>
       <View style={styles.errorBox}>
         {fieldState.error && (
-          <Text style={styles.errorText}>{fieldState.error.message}</Text>
+          <AppText style={styles.errorText}>{fieldState.error.message}</AppText>
         )}
       </View>
       <ModalSheet modalIsVisible={openInfo} toggleSheet={handleOpenInfo}>
