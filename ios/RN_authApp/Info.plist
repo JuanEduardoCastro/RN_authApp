@@ -54,13 +54,11 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>The app requires access to your phone camera.</string>
+	<string>This app requires access to your camera to take a profile photo. When you tap your avatar in the Profile screen, you can capture a new image to upload as your profile picture.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>We use Face ID to let you log in quickly and securely.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app requires access to your phone location</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>The app requires access to your photo gallery.</string>
+	<string>This app requires access to your photo gallery so you can select a profile photo. When you tap your avatar in the Profile screen, you can choose an image from your gallery to upload as your profile picture.</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UIAppFonts</key>
