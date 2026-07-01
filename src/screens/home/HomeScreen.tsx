@@ -12,9 +12,7 @@ import { fetchUnreadCount } from '@store/thunks';
 import { HomeTabScreenProps } from '@navigation/types';
 
 import HeaderHome from '@components/shared/HeaderHome';
-import BiometricOptInModal from '@components/shared/modalSheet/BiometricOptInModal';
-import CompleteProfileModal from '@components/shared/modalSheet/CompleteProfileModal';
-import LogoutModal from '@components/shared/modalSheet/LogoutModal';
+import ConfirmModal from '@components/shared/modalSheet/ConfirmModal';
 import ModalSheet from '@components/shared/modalSheet/ModalSheet';
 import Separator from '@components/shared/Separator';
 import SessionExpCard from '@components/shared/SessionExpCard';
@@ -45,9 +43,11 @@ const HomeScreen = ({ navigation }: HomeTabScreenProps<'HomeScreen'>) => {
 
   const [confirmLogoutModal, setConfirmLogoutModal] = useState(false);
   const [completeProfileModal, setCompleteProfileModal] = useState(false);
-  const [showBiometricModal, setShowBiometricModal] = useState(false);
+  const [showBiometricModal, setShowBiometricModal] = useState(true);
   const [biometryType, setBiometryType] =
     useState<Keychain.BIOMETRY_TYPE | null>(null);
+
+  const isFaceId = biometryType === Keychain.BIOMETRY_TYPE.FACE_ID;
 
   useEffect(() => {
     dispatch(fetchUnreadCount({ t }));
@@ -115,29 +115,45 @@ const HomeScreen = ({ navigation }: HomeTabScreenProps<'HomeScreen'>) => {
         <Separator border={false} />
         <SessionExpCard />
       </SafeAreaView>
+      {/* Logout confirmation modal */}
       <ModalSheet
         modalIsVisible={confirmLogoutModal}
         toggleSheet={toggleModalSheet}>
-        <LogoutModal
-          toggleModalSheet={toggleModalSheet}
-          handleLogut={handleConfirmLogout}
+        <ConfirmModal
+          message={t('logout-message')}
+          cancelLabel={t('logout-cancel')}
+          onCancel={toggleModalSheet}
+          confirmLabel={t('logout-confirmation')}
+          onConfirm={handleConfirmLogout}
         />
       </ModalSheet>
+      {/* Complete profile modal */}
       <ModalSheet
         modalIsVisible={completeProfileModal}
         toggleSheet={() => setCompleteProfileModal(false)}>
-        <CompleteProfileModal
-          toggleModalSheet={() => setCompleteProfileModal(false)}
-          handleGoToProfile={handlePressToProfile}
+        <ConfirmModal
+          message={t('go-to-profile-message')}
+          cancelLabel={t('go-later')}
+          onCancel={() => setCompleteProfileModal(false)}
+          confirmLabel={t('go-to-profile')}
+          onConfirm={handlePressToProfile}
         />
       </ModalSheet>
+      {/* Biometric opt-in modal */}
       <ModalSheet
         modalIsVisible={showBiometricModal}
         toggleSheet={() => setShowBiometricModal(false)}>
-        <BiometricOptInModal
-          biometricType={biometryType}
-          onEnable={handleBiometricEnabled}
-          onDecline={handleBiometricDeclined}
+        <ConfirmModal
+          title={t('biometric-optin-title')}
+          message={
+            isFaceId
+              ? t('biometric-optin-message-face-id')
+              : t('biometric-optin-message-touch-id')
+          }
+          cancelLabel={t('biometric-optin-no')}
+          onCancel={handleBiometricDeclined}
+          confirmLabel={t('biometric-optin-yes')}
+          onConfirm={handleBiometricEnabled}
         />
       </ModalSheet>
     </>

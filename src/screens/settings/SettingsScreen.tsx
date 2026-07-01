@@ -20,11 +20,9 @@ import CustomModal from '@components/shared/bottomSheet/CustomModal';
 import ListCard from '@components/shared/ListCard';
 import LanguagePicker from '@components/shared/locale/LanguagePicker';
 import MailContactBox from '@components/shared/MailContactBox';
-import BiometricConfirmModal from '@components/shared/modalSheet/BiometricConfirmModal';
+import ConfirmModal from '@components/shared/modalSheet/ConfirmModal';
 import DeleteAccountModal from '@components/shared/modalSheet/DeleteAccountModal';
-import LogoutModal from '@components/shared/modalSheet/LogoutModal';
 import ModalSheet from '@components/shared/modalSheet/ModalSheet';
-import NotificationConfirmModal from '@components/shared/modalSheet/NotificationConfirmModal';
 import ModeSwitchButton from '@components/shared/ModeSwitchButton';
 import Separator from '@components/shared/Separator';
 
@@ -299,29 +297,65 @@ const SettingsScreen = ({
       <CustomModal modalIsVisible={isVisible} toggleSheet={toggleSheet}>
         <LanguagePicker toggleSheet={toggleSheet} />
       </CustomModal>
+      {/* Logout confirmation modal */}
       <ModalSheet
         modalIsVisible={confirmLogoutModal}
         toggleSheet={toggleModalSheet}>
-        <LogoutModal
-          toggleModalSheet={toggleModalSheet}
-          handleLogut={handleConfirmLogout}
+        <ConfirmModal
+          message={t('logout-message')}
+          cancelLabel={t('logout-cancel')}
+          onCancel={toggleModalSheet}
+          confirmLabel={t('logout-confirmation')}
+          onConfirm={handleConfirmLogout}
         />
       </ModalSheet>
+      {/* Biometric confirmation modal */}
       <ModalSheet
         modalIsVisible={biometricConfirmModal}
         toggleSheet={toggleBiometricConfirmModal}>
-        <BiometricConfirmModal
-          action={pendingBiometricAction}
-          toggleModalSheet={toggleBiometricConfirmModal}
+        <ConfirmModal
+          title={
+            pendingBiometricAction === 'enable'
+              ? t('biometric-confirm-enable-title')
+              : t('biometric-confirm-disable-title')
+          }
+          message={
+            pendingBiometricAction === 'enable'
+              ? t('biometric-confirm-enable-message')
+              : t('biometric-confirm-disable-message')
+          }
+          cancelLabel={t('biometric-confirm-cancel')}
+          onCancel={toggleBiometricConfirmModal}
+          confirmLabel={
+            pendingBiometricAction === 'enable'
+              ? t('biometric-confirm-enable-button')
+              : t('biometric-confirm-disable-button')
+          }
           onConfirm={handleBiometricconfirm}
         />
       </ModalSheet>
+      {/* Notifications confirmation modal */}
       <ModalSheet
         modalIsVisible={notifConfirmModal}
         toggleSheet={toggleNotifConfirmModal}>
-        <NotificationConfirmModal
-          action={pendingNotifAction}
-          toggleModalSheet={toggleNotifConfirmModal}
+        <ConfirmModal
+          title={
+            pendingNotifAction === 'enable'
+              ? t('notifications-confirm-enable-title')
+              : t('notifications-confirm-disable-title')
+          }
+          message={
+            pendingNotifAction === 'enable'
+              ? t('notifications-confirm-enable-message')
+              : t('notifications-confirm-disable-message')
+          }
+          cancelLabel={t('notifications-confirm-cancel')}
+          onCancel={toggleNotifConfirmModal}
+          confirmLabel={
+            pendingNotifAction === 'enable'
+              ? t('notifications-confirm-enable-button')
+              : t('notifications-confirm-disable-button')
+          }
           onConfirm={handleNotifConfirm}
         />
       </ModalSheet>

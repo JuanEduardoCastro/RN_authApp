@@ -24,7 +24,7 @@ import { HomeTabScreenProps } from '@navigation/types';
 
 import HeaderGoBack from '@components/shared/HeaderGoBack';
 import MessageCard from '@components/shared/MessageCard';
-import DeleteMessageModal from '@components/shared/modalSheet/DeleteMessageModal';
+import ConfirmModal from '@components/shared/modalSheet/ConfirmModal';
 import ModalSheet from '@components/shared/modalSheet/ModalSheet';
 import Separator from '@components/shared/Separator';
 
@@ -128,12 +128,17 @@ const InboxScreen = ({ navigation }: HomeTabScreenProps<'InboxScreen'>) => {
           onRefresh={handleRefresh}
         />
       </SafeAreaView>
+      {/* Delete message confirmation modal */}
       <ModalSheet
         modalIsVisible={messageToDelete !== null}
         toggleSheet={handleCancelDelete}>
-        <DeleteMessageModal
-          toggleModalSheet={handleCancelDelete}
-          handleDelete={handleConfirmDelete}
+        <ConfirmModal
+          message={t('delete-message-confirm')}
+          cancelLabel={t('delete-message-cancel')}
+          onCancel={handleCancelDelete}
+          confirmLabel={t('delete-message-button')}
+          onConfirm={handleConfirmDelete}
+          confirmDanger
         />
       </ModalSheet>
     </>

@@ -2,8 +2,6 @@ import React from 'react';
 
 import { StyleSheet, Text, View } from 'react-native';
 
-import { useTranslation } from 'react-i18next';
-
 import useStyles from '@hooks/useStyles';
 
 import { moderateScale } from '@constants/dimensions';
@@ -13,60 +11,56 @@ import { TColors } from '@constants/types';
 import Button from '../Button';
 import Separator from '../Separator';
 
-type NotificationConfirmModalProps = {
-  action: 'enable' | 'disable';
-  toggleModalSheet: () => void;
+type ConfirmModalProps = {
+  title?: string;
+  message: string;
+  cancelLabel: string;
+  confirmLabel: string;
+  onCancel: () => void;
   onConfirm: () => void;
+  confirmDanger?: boolean;
 };
 
-const NotificationConfirmModal = ({
-  action,
-  toggleModalSheet,
+const ConfirmModal = ({
+  title,
+  message,
+  cancelLabel,
+  confirmLabel,
+  onCancel,
   onConfirm,
-}: NotificationConfirmModalProps) => {
+  confirmDanger,
+}: ConfirmModalProps) => {
   const { styles } = useStyles(createStyles);
-  const { t } = useTranslation();
-
-  const isEnable = action === 'enable';
 
   return (
     <View style={styles.containerModal}>
-      <Text style={styles.title}>
-        {isEnable
-          ? t('notifications-confirm-enable-title')
-          : t('notifications-confirm-disable-title')}
-      </Text>
-      <Text style={styles.message}>
-        {isEnable
-          ? t('notifications-confirm-enable-message')
-          : t('notifications-confirm-disable-message')}
-      </Text>
-      <Separator border={false} height={40} />
+      {title && <Text style={styles.title}>{title}</Text>}
+      <Separator border={false} height={12} />
+      <Text style={styles.message}>{message}</Text>
+      <Separator border={false} height={60} />
       <View style={styles.buttonBox}>
         <Button
-          title={t('notifications-confirm-cancel')}
-          onPress={toggleModalSheet}
+          title={cancelLabel}
+          onPress={onCancel}
           style={styles.buttonSize}
           buttonStyles={styles.noButton}
-          textStyles={styles.noButtonText}
+          textStyles={styles.noTextButton}
         />
         <Button
-          title={
-            isEnable
-              ? t('notifications-confirm-enable-button')
-              : t('notifications-confirm-disable-button')
-          }
+          title={confirmLabel}
           onPress={onConfirm}
           style={styles.buttonSize}
-          buttonStyles={styles.yesButton}
-          textStyles={styles.yesButtonText}
+          buttonStyles={
+            confirmDanger ? styles.yesDangerButton : styles.yesButton
+          }
+          textStyles={styles.yesTextButton}
         />
       </View>
     </View>
   );
 };
 
-export default NotificationConfirmModal;
+export default ConfirmModal;
 
 const createStyles = (colors: TColors) =>
   StyleSheet.create({
@@ -83,7 +77,7 @@ const createStyles = (colors: TColors) =>
     },
     message: {
       ...textVar.base,
-      color: colors.textMuted,
+      color: colors.text,
       textAlign: 'center',
       lineHeight: moderateScale(28),
     },
@@ -104,8 +98,8 @@ const createStyles = (colors: TColors) =>
       borderWidth: 1,
       borderColor: colors.second,
     },
-    noButtonText: {
-      ...textVar.medium,
+    noTextButton: {
+      ...textVar.base,
       color: colors.text,
     },
     yesButton: {
@@ -113,8 +107,13 @@ const createStyles = (colors: TColors) =>
       borderWidth: 0,
       backgroundColor: colors.second,
     },
-    yesButtonText: {
-      ...textVar.medium,
+    yesTextButton: {
+      ...textVar.base,
       color: colors.textNgt,
+    },
+    yesDangerButton: {
+      width: '100%',
+      borderWidth: 0,
+      backgroundColor: colors.danger,
     },
   });
