@@ -89,7 +89,7 @@ export default ButtonWithIcon;
 const createStyles = (colors: TColors) =>
   StyleSheet.create({
     button: {
-      maxWidth: SCREEN.width100,
+      maxWidth: SCREEN.contentWidth,
       height: SCREEN.heightFixed * 46,
       alignItems: 'center',
       justifyContent: 'center',

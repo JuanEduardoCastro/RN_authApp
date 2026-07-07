@@ -218,7 +218,7 @@ const createStyles = (colors: TColors) =>
       color: colors.danger,
     },
     inputBox: {
-      width: SCREEN.width100,
+      width: SCREEN.contentWidth,
       flex: 1,
       paddingHorizontal: moderateScale(16),
     },

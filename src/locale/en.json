@@ -223,7 +223,6 @@
   "delete-account-warning": "This action is permanent and cannot be undone. All your data will be permanently erased from our servers.",
   "delete-account-warning-message": "Are you sure you want to delete your account?",
   "delete-account-email-label": "Type your email to confirm",
-  "delete-account-email-placeholder": "your@email.com",
   "delete-account-confirm-button": "DELETE",
   "delete-account-cancel": "Cancel",
   "delete-account-cancel-confirm": "Yes!",

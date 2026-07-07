@@ -39,7 +39,7 @@ export default HeaderGoBack;
 const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
-      width: SCREEN.width100,
+      width: SCREEN.contentWidth,
       height: SCREEN.heightFixed * 30,
       flexDirection: 'row',
       alignItems: 'center',

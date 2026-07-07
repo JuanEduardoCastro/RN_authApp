@@ -228,7 +228,7 @@ const createStyles = (colors: TColors) =>
       alignItems: 'center',
     },
     listContent: {
-      width: SCREEN.width100,
+      width: SCREEN.contentWidth,
       paddingHorizontal: moderateScale(16),
       paddingBottom: moderateScale(16),
     },

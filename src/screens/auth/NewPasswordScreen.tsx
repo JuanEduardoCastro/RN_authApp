@@ -279,7 +279,7 @@ const createStyles = (colors: TColors) =>
       color: colors.text,
     },
     inputBox: {
-      width: SCREEN.width100,
+      width: SCREEN.contentWidth,
       paddingHorizontal: moderateScale(16),
     },
     textinput: {
@@ -287,7 +287,7 @@ const createStyles = (colors: TColors) =>
     },
     buttonBox: {
       alignItems: 'center',
-      width: SCREEN.width100,
+      width: SCREEN.contentWidth,
       paddingVertical: verticalScale(12),
     },
     button: {

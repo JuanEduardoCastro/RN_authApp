@@ -159,7 +159,7 @@ const createStyles = (colors: TColors) =>
       color: colors.text,
     },
     listContent: {
-      width: SCREEN.width100,
+      width: SCREEN.contentWidth,
       paddingHorizontal: moderateScale(8),
       paddingBottom: moderateScale(80),
     },

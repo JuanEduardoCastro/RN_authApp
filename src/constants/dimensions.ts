@@ -5,6 +5,12 @@ const { width: SW, height: SH } = Dimensions.get('window');
 const BASE_WIDTH = 393;
 const BASE_HEIGHT = 852;
 
+const MAX_DESIGN_WIDTH = 430;
+const MAX_DESIGN_HEIGHT = 932;
+
+const DW = Math.min(SW, MAX_DESIGN_WIDTH);
+const DH = Math.min(SH, MAX_DESIGN_HEIGHT);
+
 export const scale = (size: number) => Math.round((SW / BASE_WIDTH) * size);
 
 export const verticalScale = (size: number) =>
@@ -16,6 +22,7 @@ export const moderateScale = (size: number, factor = 0.45) =>
 const SCREEN = {
   width100: SW,
   height100: SH,
+  contentWidth: DW,
   width90: SW * 0.9,
   height90: SH * 0.9,
   width80: SW * 0.8,
@@ -26,8 +33,8 @@ const SCREEN = {
   height50: SH * 0.5,
   width25: SW * 0.25,
   height25: SH * 0.25,
-  widthFixed: SW / BASE_WIDTH, // THE SIZE OF THE DESIGNE
-  heightFixed: SH / BASE_HEIGHT, // THE SIZE OF THE DESIGNE
+  widthFixed: DW / BASE_WIDTH, // THE SIZE OF THE DESIGNE
+  heightFixed: DH / BASE_HEIGHT, // THE SIZE OF THE DESIGNE
 };
 
 export { SCREEN, SH, SW };

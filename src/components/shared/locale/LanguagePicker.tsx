@@ -106,7 +106,7 @@ const createStyles = (colors: TColors) =>
       gap: 8,
     },
     commandsBox: {
-      width: SCREEN.width100,
+      width: SCREEN.contentWidth,
       justifyContent: 'space-between',
       paddingHorizontal: moderateScale(18),
       paddingVertical: 8,

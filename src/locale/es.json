@@ -222,10 +222,12 @@
   "delete-account-button": "Eliminar cuenta",
   "delete-account-title": "Eliminar cuenta",
   "delete-account-warning": "Esta acción es permanente y no se puede deshacer. Todos tus datos serán eliminados permanentemente de nuestros servidores.",
+  "delete-account-warning-message": "¿Estás seguro de que deseas eliminar tu cuenta?",
   "delete-account-email-label": "Escribe tu correo para confirmar",
-  "delete-account-email-placeholder": "tu@correo.com",
-  "delete-account-confirm-button": "Eliminar mi cuenta",
+  "delete-account-confirm-button": "ELIMINAR",
   "delete-account-cancel": "Cancelar",
+  "delete-account-cancel-confirm": "¡Sí!",
+  "delete-account-instruction": "Por favor, ingresa tu correo para confirmar la eliminación de tu cuenta.",
   "success-account-deleted": "Tu cuenta ha sido eliminada. ¡Hasta pronto!",
   "error-account-delete": "No se pudo eliminar la cuenta. Por favor intenta de nuevo."
 }

@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     height: SCREEN.heightFixed * 75,
   },
   versionContainer: {
-    width: SCREEN.width100,
+    width: SCREEN.contentWidth,
     alignItems: 'center',
     paddingBottom: Platform.OS === 'ios' ? 8 : 68,
   },

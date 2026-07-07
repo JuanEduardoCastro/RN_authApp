@@ -172,14 +172,14 @@ const createStyles = (colors: TColors) =>
       color: colors.text,
     },
     inputBox: {
-      width: SCREEN.width100,
+      width: SCREEN.contentWidth,
       paddingHorizontal: moderateScale(16),
     },
     textinput: {
       borderColor: colors.second,
     },
     buttonBox: {
-      width: SCREEN.width100,
+      width: SCREEN.contentWidth,
       alignItems: 'center',
       paddingVertical: verticalScale(12),
     },

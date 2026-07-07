@@ -138,7 +138,7 @@ const createStyles = (colors: TColors) =>
       gap: 8,
     },
     commandsBox: {
-      width: SCREEN.width100,
+      width: SCREEN.contentWidth,
       flexDirection: 'row',
       justifyContent: 'space-between',
       paddingHorizontal: moderateScale(18),

@@ -131,7 +131,7 @@ const createStyles = (colors: TColors) =>
       borderRadius: 50,
     },
     commandsBox: {
-      width: SCREEN.width100,
+      width: SCREEN.contentWidth,
       flexDirection: 'row',
       justifyContent: 'space-between',
       paddingHorizontal: moderateScale(24),

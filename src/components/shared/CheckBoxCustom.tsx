@@ -78,7 +78,7 @@ export default CheckBoxCustom;
 const createStyles = (colors: TColors) =>
   StyleSheet.create({
     container: {
-      width: SCREEN.width100,
+      width: SCREEN.contentWidth,
       flexDirection: 'row',
       justifyContent: 'flex-start',
       alignItems: 'center',
