@@ -1,7 +1,7 @@
 {
   "name": "auth.jc",
   "version": "1.2.1",
-  "build": 64,
+  "build": 65,
   "private": true,
   "scripts": {
     "android": "react-native run-android",

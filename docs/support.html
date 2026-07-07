@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Terms &amp; Conditions — Auth.Jc</title>
+    <title>Support — Auth.Jc</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700
-  &display=swap"
+    &display=swap"
       rel="stylesheet" />
     <style>
       *,
@@ -140,8 +140,27 @@
         text-decoration: none;
         transition: color 0.2s;
       }
+
       a:hover {
         color: var(--text);
+      }
+
+      .contact-box {
+        background: #1c1920;
+        border: 1px solid var(--purple-border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .contact-box p {
+        margin-bottom: 0.4rem;
+        font-size: 1.1rem;
+      }
+
+      .contact-box a {
+        font-weight: 600;
+        font-size: 1.2rem;
       }
 
       footer {
@@ -193,113 +212,80 @@
       </a>
     </nav>
     <main>
-      <h1 class="page-title">Terms &amp; Conditions</h1>
-      <p class="page-date">Effective as of 2026-05-20</p>
+      <h1 class="page-title">Support</h1>
+      <p class="page-date">We usually respond within 1–2 business days.</p>
 
-      <p>
-        These terms and conditions apply to the Auth App (hereby referred to as
-        "Application") for mobile devices, created by Juan Castro (hereby
-        referred to as "Service Provider") as a free service.
-      </p>
-      <p>
-        Upon downloading or utilizing the Application, you are automatically
-        agreeing to the following terms. It is strongly advised that you
-        thoroughly read and understand these terms prior to using the
-        Application.
-      </p>
-
-      <br /><strong>Account Responsibility</strong>
-      <p>
-        You are responsible for maintaining the confidentiality of your account
-        credentials and for all activity that occurs under your account. You
-        agree to notify the Service Provider immediately of any unauthorized use
-        of your account.
-      </p>
-
-      <br /><strong>Acceptable Use</strong>
-      <p>
-        You agree not to use the Application for any unlawful purpose or in any
-        way that could damage, disable, or impair the Application or its
-        associated services. Automated access, scraping, or abuse of the API is
-        strictly prohibited.
-      </p>
-
-      <br /><strong>Intellectual Property</strong>
-      <p>
-        Unauthorized copying or modification of the Application, any part of the
-        Application, or its trademarks is strictly prohibited. Any attempts to
-        extract the source code of the Application, translate it into other
-        languages, or create derivative versions are not permitted. All
-        trademarks, copyrights, database rights, and other intellectual property
-        rights related to the Application remain the property of the Service
-        Provider.
-      </p>
-
-      <br /><strong>Third-Party Services</strong>
-      <p>
-        The Application uses third-party services for authentication (Google,
-        GitHub, Apple) and push notifications (Firebase Cloud Messaging). Your
-        use of these features is also subject to the respective terms of service
-        of those providers. The Service Provider is not responsible for the
-        practices of these third parties.
-      </p>
-
-      <br /><strong>Service Availability</strong>
-      <p>
-        The Service Provider is dedicated to ensuring that the Application is as
-        beneficial and efficient as possible. They reserve the right to modify
-        ordiscontinue the Application at any time and for any reason without
-        notice. The Service Provider shall not be liable for any modification,
-        suspension, or discontinuation of the service.
-      </p>
-
-      <br /><strong>Device Security</strong>
-      <p>
-        The Service Provider strongly advises against jailbreaking or rooting
-        your phone. Such actions could compromise your device's security
-        features, expose your stored credentials, and may result in the
-        Application not functioning correctly. Biometric login depends on the
-        integrity of the device's secure enclave and will not function on
-        compromised devices.
-      </p>
-
-      <br /><strong>Disclaimer of Warranties</strong>
-      <p>
-        The Application is provided "AS IS" without warranties of any kind,
-        either express or implied. The Service Provider does not warrant that
-        the Application will be uninterrupted, error-free, or free of viruses or
-        other harmful components.
-      </p>
-
-      <br /><strong>Limitation of Liability</strong>
-      <p>
-        To the maximum extent permitted by applicable law, the Service Provider
-        shall not be liable for any indirect, incidental, special, or
-        consequential damages arising out of or in connection with your use of
-        the Application.
-      </p>
-
-      <br /><strong>Changes to These Terms and Conditions</strong>
-      <p>
-        The Service Provider may periodically update these Terms and Conditions.
-        You are advised to review this page regularly for any changes. Continued
-        use of the Application after changes are posted constitutes your
-        acceptance of the revised terms.
-      </p>
-
-      <br /><strong>Contact Us</strong>
-      <p>
-        If you have any questions or suggestions about these Terms and
-        Conditions, please contact the Service Provider at
+      <div class="contact-box">
+        <p>Need help or have a question about the app?</p>
         <a href="mailto:contact@authdemoapp-jec.com"
           >contact@authdemoapp-jec.com</a
-        >.
+        >
+      </div>
+
+      <br /><strong>How do I reset my password?</strong>
+      <p>
+        On the Login screen, tap "Forgot Password" and enter your email address.
+        If an account exists for that email, you'll receive a reset link. Note
+        that accounts created via Google, GitHub, or Apple Sign-In do not have a
+        password to reset — sign in using the same provider you originally
+        registered with.
+      </p>
+
+      <br /><strong>I'm not receiving the verification or reset email</strong>
+      <p>
+        Check your spam/junk folder first. If it's not there after a few
+        minutes, email us at
+        <a href="mailto:contact@authdemoapp-jec.com"
+          >contact@authdemoapp-jec.com</a
+        >
+        with the email address you used to sign up and we'll look into it.
+      </p>
+
+      <br /><strong
+        >How do I enable or disable Face ID / Touch ID login?</strong
+      >
+      <p>
+        Go to Settings inside the app and toggle Biometric Login. You'll be
+        asked to confirm with a biometric prompt before the change takes effect.
+      </p>
+
+      <br /><strong>I'm not receiving push notifications</strong>
+      <p>
+        Make sure notifications are enabled for the app in your device's system
+        settings. Push notifications also require an active internet connection
+        and a valid session — try logging out and back in if the issue persists.
+      </p>
+
+      <br /><strong>How do I delete my account?</strong>
+      <p>
+        Go to Settings → Delete Account inside the app, type your email address
+        to confirm, and submit. This permanently deletes your account and all
+        associated data. See our
+        <a href="./app-privacy-policy.html">Privacy Policy</a> for details.
+      </p>
+
+      <br /><strong>Still need help?</strong>
+      <p>
+        Email
+        <a href="mailto:contact@authdemoapp-jec.com"
+          >contact@authdemoapp-jec.com</a
+        >
+        with a description of the issue, your device model, and OS version, and
+        we'll get back to you.
       </p>
     </main>
+
     <footer>
       <div class="footer-links">
         <a href="./index.html">Home</a>
         <a href="./app-privacy-policy.html">Privacy Policy</a>
+        <a href="./app-terms-&-conditions.html">Terms &amp; Conditions</a>
+        <a
+          href="https://github.com/juaneduardocastro/RN_authApp"
+          target="_blank"
+          rel="noopener"
+          >GitHub</a
+        >
       </div>
       <p class="footer-copy">&copy; 2026 Auth.Jc &mdash; Juan Eduardo Castro</p>
     </footer>
