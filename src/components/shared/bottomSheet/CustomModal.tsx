@@ -1,10 +1,14 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import {
+  Modal,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 
 import Animated, {
-  SlideInDown,
-  SlideOutDown,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
@@ -14,7 +18,11 @@ import Animated, {
 
 import useStyles from '@hooks/useStyles';
 
-import { moderateScale, SCREEN } from '@constants/dimensions';
+import {
+  clampedHeightRatio,
+  moderateScale,
+  SCREEN,
+} from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 
@@ -33,8 +41,16 @@ const CustomModal = ({
   toggleSheet,
 }: CustomModalProps) => {
   const { styles } = useStyles(createStyles);
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+  const sheetHeight = clampedHeightRatio(windowHeight) * 300;
 
-  const translateY = useSharedValue(0);
+  const translateY = useSharedValue(sheetHeight);
+
+  useEffect(() => {
+    translateY.value = withTiming(modalIsVisible ? 0 : sheetHeight, {
+      duration: 250,
+    });
+  }, [modalIsVisible, sheetHeight, translateY]);
 
   const progress = useDerivedValue(() =>
     withTiming(modalIsVisible ? 0 : 1, { duration: 100 }),
@@ -48,7 +64,7 @@ const CustomModal = ({
   }));
 
   const animatedSheetStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: translateY.value * 2 }],
+    transform: [{ translateY: translateY.value }],
   }));
 
   const handleCancelButton = () => {
@@ -65,13 +81,20 @@ const CustomModal = ({
       transparent={true}
       visible={modalIsVisible}
       onRequestClose={toggleSheet}>
-      <Animated.View style={[styles.backdrop, animatedBackdropStyle]}>
+      <Animated.View
+        style={[
+          styles.backdrop,
+          { width: windowWidth, height: windowHeight },
+          animatedBackdropStyle,
+        ]}>
         <Pressable style={styles.closeButton} onPress={toggleSheet} />
       </Animated.View>
       <Animated.View
-        style={[styles.bottomSheet, animatedSheetStyle]}
-        entering={SlideInDown.springify().damping(60).stiffness(300)}
-        exiting={SlideOutDown}>
+        style={[
+          styles.bottomSheet,
+          { height: sheetHeight },
+          animatedSheetStyle,
+        ]}>
         <View style={styles.header}>
           <View style={styles.cropLine}>
             <Separator borderWidth={3} height={12} />
@@ -98,9 +121,6 @@ const createStyles = (colors: TColors) =>
     container: {},
     backdrop: {
       ...StyleSheet.absoluteFillObject,
-      flex: 1,
-      width: SCREEN.width100,
-      height: SCREEN.height100,
       backgroundColor: colors.gray,
       opacity: 0.5,
       zIndex: 1,
@@ -111,8 +131,7 @@ const createStyles = (colors: TColors) =>
     bottomSheet: {
       backgroundColor: colors.background,
       padding: 8,
-      height: SCREEN.heightFixed * 300,
-      width: '100%',
+      width: SCREEN.width100,
       position: 'absolute',
       bottom: 0,
       borderTopRightRadius: 32,
@@ -124,7 +143,6 @@ const createStyles = (colors: TColors) =>
     header: {
       alignItems: 'center',
     },
-
     cropLine: {
       width: 60,
       overflow: 'hidden',
@@ -146,6 +164,5 @@ const createStyles = (colors: TColors) =>
       flex: 1,
       width: '100%',
       paddingHorizontal: 8,
-      // backgroundColor: 'blue',
     },
   });

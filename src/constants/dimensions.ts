@@ -38,3 +38,6 @@ const SCREEN = {
 };
 
 export { SCREEN, SH, SW };
+
+export const clampedHeightRatio = (windowHeight: number) =>
+  Math.min(windowHeight, MAX_DESIGN_HEIGHT) / BASE_HEIGHT;
