@@ -172,9 +172,11 @@
 
       .hero-cta {
         display: flex;
+        flex-direction: column;
         gap: 1rem;
         flex-wrap: wrap;
         justify-content: center;
+        /* margin-top: 2.5rem; */
       }
 
       .btn-primary {
@@ -198,6 +200,7 @@
       .btn-ghost {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 0.5rem;
         background: transparent;
         color: var(--text-muted);
@@ -212,6 +215,25 @@
       .btn-ghost:hover {
         border-color: var(--purple-border);
         color: var(--text);
+      }
+
+      .badge-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 160px;
+        height: 50px;
+        transition: transform 0.15s, opacity 0.2s;
+      }
+      .badge-link:hover {
+        transform: translateY(-2px);
+        opacity: 0.9;
+      }
+
+      .badge-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
       }
 
       /* STATS */
@@ -425,6 +447,139 @@
         .feature-grid {
           grid-template-columns: 1fr;
         }
+        .badge-link {
+          width: 140px;
+          height: 44px;
+        }
+      }
+
+      /* GOOGLE PLAY MODAL */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        background: rgba(5, 5, 12, 0.72);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+      }
+
+      .modal-overlay.open {
+        display: flex;
+      }
+
+      .modal-box {
+        position: relative;
+        width: 100%;
+        max-width: 580px;
+        max-height: 85vh;
+        overflow-y: auto;
+        background: var(--bg-card);
+        border: 1px solid var(--purple-border);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 0 0 1px #7646c920, 0 30px 80px rgba(0, 0, 0, 0.6);
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: 1px solid #2a2a40;
+        background: transparent;
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: border-color 0.2s, color 0.2s;
+      }
+
+      .modal-close:hover {
+        border-color: var(--purple-border);
+        color: var(--text);
+      }
+
+      .modal-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--purple-faint);
+        border: 1px solid var(--purple-border);
+        border-radius: 999px;
+        padding: 0.3rem 0.9rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--purple-light);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 1.25rem;
+      }
+
+      .modal-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        padding-right: 2rem;
+      }
+
+      .modal-text {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-bottom: 1.25rem;
+        line-height: 1.7;
+      }
+
+      .modal-steps {
+        margin: 0 0 1.25rem 1.1rem;
+        padding: 0;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        line-height: 1.8;
+      }
+
+      .modal-steps li {
+        margin-bottom: 0.5rem;
+      }
+
+      .modal-steps a,
+      .modal-text a {
+        color: var(--purple-light);
+        word-break: break-all;
+      }
+
+      .modal-note {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        background: #ffffff07;
+        border: 1px solid #ffffff10;
+        border-radius: 10px;
+        padding: 0.85rem 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .modal-note a {
+        color: var(--purple-light);
+        word-break: break-all;
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      @media (max-width: 480px) {
+        .modal-box {
+          padding: 1.5rem;
+        }
       }
     </style>
   </head>
@@ -462,31 +617,57 @@
         JWT refresh, push notifications, and end-to-end security — built with
         React Native 0.82.
       </p>
+      <!-- <a href="#features" class="btn-ghost">
+        See features
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M12 5v14M5 12l7 7 7-7" />
+        </svg>
+      </a> -->
       <div class="hero-cta">
+        <div class="badge-box">
+          <a
+            href="https://apps.apple.com/ar/app/auth-jc/id6771492376?l=en-GB"
+            target="_blank"
+            rel="noopener"
+            class="badge-link"
+            aria-label="Download on the App Store">
+            <img
+              src="./assets/svg/App_Store_Badge_US-UK.svg"
+              alt="Download on the App Store"
+              class="badge-img badge-img--apple" />
+          </a>
+          <a
+            href="#"
+            class="badge-link"
+            onclick="openPlayStoreModal(event)"
+            role="button"
+            aria-haspopup="dialog"
+            aria-controls="playstore-modal"
+            aria-label="Get it on Google Play">
+            <img
+              src="./assets/svg/Google_Play_Badge_EN.svg"
+              alt="Get it on Google Play"
+              class="badge-img badge-img--google" />
+          </a>
+        </div>
         <a
           href="https://github.com/juaneduardocastro/RN_authApp"
           target="_blank"
           rel="noopener"
-          class="btn-primary">
+          class="btn-ghost">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path
               d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
           </svg>
           View on GitHub
-        </a>
-        <a href="#features" class="btn-ghost">
-          See features
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.2"
-            stroke-linecap="round"
-            stroke-linejoin="round">
-            <path d="M12 5v14M5 12l7 7 7-7" />
-          </svg>
         </a>
       </div>
 
@@ -662,5 +843,89 @@
       </div>
       <p class="footer-copy">&copy; 2026 Auth.Jc &mdash; Juan Eduardo Castro</p>
     </footer>
+    <!-- GOOGLE PLAY CLOSED TESTING MODAL -->
+    <div
+      class="modal-overlay"
+      id="playstore-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="playstore-modal-title"
+      onclick="handleOverlayClick(event)">
+      <div class="modal-box">
+        <button
+          class="modal-close"
+          type="button"
+          aria-label="Close"
+          onclick="closePlayStoreModal()">
+          &times;
+        </button>
+        <span class="modal-badge">Closed Testing</span>
+        <h3 class="modal-title" id="playstore-modal-title">
+          Join the Auth.Jc Test Group
+        </h3>
+        <p class="modal-text">
+          To install the app on Android, you need to join the closed testing
+          group first. Follow these steps:
+        </p>
+        <ol class="modal-steps">
+          <li>
+            Join the Google Group first:
+            <a
+              href="https://groups.google.com/g/authjc-closed-testing-v1/members"
+              target="_blank"
+              rel="noopener"
+              >Auth.Jc group</a
+            >
+          </li>
+          <li>
+            Once you're in, you'll get a welcome message with the testing link —
+            click it and tap "Become a tester". After that, you can install the
+            app from the Play Store.
+          </li>
+        </ol>
+        <div class="modal-note">
+          Direct testing link, in case you need it again:<br />
+          <a
+            href="https://play.google.com/apps/testing/com.juancastro.authapp"
+            target="_blank"
+            rel="noopener"
+            >https://play.google.com/apps/testing/com.juancastro.authapp</a
+          >
+        </div>
+        <p class="modal-text" style="margin-bottom: 1.5rem">
+          You don't need to do anything else — just having the app installed for
+          a few days is enough.
+        </p>
+        <div class="modal-actions">
+          <button
+            class="btn-primary"
+            type="button"
+            onclick="closePlayStoreModal()">
+            Got it
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function openPlayStoreModal(e) {
+        e.preventDefault();
+        document.getElementById('playstore-modal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closePlayStoreModal() {
+        document.getElementById('playstore-modal').classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      function handleOverlayClick(e) {
+        if (e.target === e.currentTarget) closePlayStoreModal();
+      }
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closePlayStoreModal();
+      });
+    </script>
   </body>
 </html>
