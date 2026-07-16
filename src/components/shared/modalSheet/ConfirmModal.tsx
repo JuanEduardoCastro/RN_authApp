@@ -1,3 +1,11 @@
+/**
+ * ConfirmModal
+ * Generic confirm/cancel dialog body (optional title + message + outlined
+ * cancel button + filled confirm button). Consolidated replacement for what
+ * were six near-identical modals (logout, biometric opt-in/confirm, delete
+ * message, etc.) — callers pass in their own translated strings.
+ * `confirmDanger` switches the confirm button to a destructive (red) style.
+ */
 import React from 'react';
 
 import { StyleSheet, View } from 'react-native';

@@ -1,3 +1,9 @@
+/**
+ * SessionExpCard
+ * Info card (used in `SettingsScreen`) showing when the current JWT access
+ * token expires, decoded client-side from the token stored in Redux
+ * (`userAuth` selector) via `jwt-decode`.
+ */
 import React, { useMemo } from 'react';
 
 import { StyleSheet, View } from 'react-native';

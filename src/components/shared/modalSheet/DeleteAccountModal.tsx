@@ -1,3 +1,10 @@
+/**
+ * DeleteAccountModal
+ * Two-step account-deletion confirmation: an initial warning, then a
+ * typed-email confirmation step where Delete only enables once the input
+ * matches the account's email exactly. Kept separate from ConfirmModal
+ * due to this two-step flow and its TextInput.
+ */
 import React, { useState } from 'react';
 
 import { StyleSheet, View } from 'react-native';

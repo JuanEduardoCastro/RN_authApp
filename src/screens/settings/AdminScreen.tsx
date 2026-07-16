@@ -1,3 +1,9 @@
+/**
+ * AdminScreen
+ * Superadmin-only screen for composing and sending push/in-app/both
+ * messages to selected users, backed by a debounced, paginated,
+ * searchable user list (`fetchUsers`) and `sendAdminMessage`.
+ */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import {

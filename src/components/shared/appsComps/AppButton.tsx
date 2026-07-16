@@ -1,3 +1,9 @@
+/**
+ * AppButton
+ * The canonical filled pill button used across the app (login/submit/
+ * confirm actions), with a press-scale animation. Prefer this over a raw
+ * `Pressable` for any primary action button.
+ */
 import React from 'react';
 
 import {

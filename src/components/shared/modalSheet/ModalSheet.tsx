@@ -1,3 +1,10 @@
+/**
+ * ModalSheet
+ * Generic centered-card modal wrapper (backdrop + rounded card) — the app's
+ * most common modal container. Hosts ConfirmModal, DeleteAccountModal,
+ * InfoPasswordModal, etc. as children. Distinct from CustomModal/BottomSheet,
+ * which are bottom-sheet style.
+ */
 import React, { ReactNode } from 'react';
 
 import { Modal, StyleSheet, View } from 'react-native';

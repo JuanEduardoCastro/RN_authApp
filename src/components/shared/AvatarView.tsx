@@ -1,3 +1,9 @@
+/**
+ * AvatarView
+ * Read-only circular avatar: shows the current user's `avatarURL` from
+ * Redux auth state, or a bundled default placeholder if none is set.
+ * Used wherever a profile picture is displayed but not editable.
+ */
 import React from 'react';
 
 import { Image, PressableProps, StyleSheet, View } from 'react-native';

@@ -1,3 +1,9 @@
+/**
+ * LoginScreen
+ * Email/password login form for returning users; links to password reset
+ * and back to WelcomeScreen. Dispatches `loginUser`, then the switch to
+ * HomeNavigator happens implicitly via the `isAuthorized` Redux flag.
+ */
 import React from 'react';
 
 import {

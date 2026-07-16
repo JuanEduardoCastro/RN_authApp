@@ -1,3 +1,9 @@
+/**
+ * Separator
+ * Generic vertical spacer/divider, optionally rendering a horizontal line.
+ * Used throughout modals and screens for consistent vertical rhythm instead
+ * of ad-hoc margins.
+ */
 import React from 'react';
 
 import { ColorValue, StyleSheet, View } from 'react-native';

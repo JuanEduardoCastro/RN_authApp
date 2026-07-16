@@ -1,3 +1,10 @@
+/**
+ * MessageCard
+ * Inbox list-item card: sender, date, title (highlighted + unread dot when
+ * unread), and a 2-line-clamped expandable body. Supports swipe-left-to-
+ * reveal-delete via a custom Reanimated pan gesture, enabled only when
+ * `onDeletePress` is passed (i.e. only for already-read messages).
+ */
 import React from 'react';
 
 import { Pressable, StyleSheet, View } from 'react-native';

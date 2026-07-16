@@ -1,3 +1,9 @@
+/**
+ * ButtonWithIcon
+ * Filled pill-shaped button with an optional icon in a configurable
+ * row/column layout, plus the same press-scale animation as `ButtonNoBorder`.
+ * Used for OAuth provider buttons (Google/GitHub/Apple) and similar actions.
+ */
 import React, { ElementType } from 'react';
 
 import {

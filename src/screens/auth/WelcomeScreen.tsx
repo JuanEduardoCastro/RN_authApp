@@ -1,3 +1,10 @@
+/**
+ * WelcomeScreen
+ * Auth-stack landing screen offering every sign-in method (biometric, email,
+ * Google, GitHub, Apple) plus a path to registration. Also configures the
+ * Google Sign-In SDK at module load and drives the biometric auto-login path
+ * via `validateRefreshToken`.
+ */
 import React, { useState } from 'react';
 
 import { Platform, StyleSheet, View } from 'react-native';

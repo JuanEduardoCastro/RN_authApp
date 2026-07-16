@@ -1,3 +1,9 @@
+/**
+ * InboxScreen
+ * Per-user list of admin-sent messages (push/in-app/both). Supports
+ * expand-to-read, swipe-to-delete (read messages only), pull-to-refresh,
+ * and keeps the tab badge count in sync via `useBadgeCount`.
+ */
 import React, { useCallback, useState } from 'react';
 
 import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';

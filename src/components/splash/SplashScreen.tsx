@@ -1,3 +1,10 @@
+/**
+ * SplashScreen / Splash
+ * Animated splash sequence gating the app's real content until session
+ * checks finish. SplashScreen renders `children` once ready, plus the
+ * `Splash` overlay; `Splash` runs the fade-in/wait/fade-out state machine
+ * and triggers `useCheckToken` (auto-login/biometric/refresh-token check).
+ */
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 
 import { Animated, Platform, StyleSheet, View } from 'react-native';

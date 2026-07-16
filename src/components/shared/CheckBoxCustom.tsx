@@ -1,3 +1,9 @@
+/**
+ * CheckBoxCustom
+ * Labeled checkbox bound to a `react-hook-form` field (e.g. "Remember Me").
+ * Wraps `@react-native-community/checkbox` with platform-specific scaling
+ * and theme colors from `useStyles`.
+ */
 import React from 'react';
 
 import { Platform, Pressable, StyleSheet, View } from 'react-native';

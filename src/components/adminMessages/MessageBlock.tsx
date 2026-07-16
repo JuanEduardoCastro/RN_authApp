@@ -1,3 +1,10 @@
+/**
+ * MessageBlock
+ * Compose panel for AdminScreen: title/body inputs with character counters,
+ * a push/in_app/both type selector, and a send button. Purely controlled/
+ * presentational — all state (title, body, messageType, etc.) lives in the
+ * parent screen.
+ */
 import React from 'react';
 
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';

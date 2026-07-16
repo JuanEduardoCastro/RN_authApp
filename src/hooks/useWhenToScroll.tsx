@@ -1,3 +1,9 @@
+/**
+ * useWhenToScroll
+ * Given a measured content height, computes whether it overflows the
+ * visible screen (after estimated header/tab-bar heights and safe-area
+ * insets), so a screen can conditionally enable scrolling.
+ */
 import { useMemo } from 'react';
 
 import { Platform, useWindowDimensions } from 'react-native';

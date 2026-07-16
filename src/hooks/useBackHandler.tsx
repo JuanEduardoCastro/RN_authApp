@@ -1,3 +1,9 @@
+/**
+ * useBackHandler
+ * Implements Android's "press back again to exit" pattern: the first
+ * hardware back-press while a screen is focused shows a toast, a second
+ * press within 2 seconds exits the app. No-ops on iOS.
+ */
 import { useCallback, useRef } from 'react';
 
 import { BackHandler, Platform, ToastAndroid } from 'react-native';

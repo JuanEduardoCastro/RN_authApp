@@ -1,3 +1,10 @@
+/**
+ * useCheckToken
+ * Drives the splash-screen auto-login sequence: checks biometric
+ * enrollment or the Remember-Me flag, validates the stored refresh token,
+ * and dispatches `validateRefreshToken` to restore the session. Clears
+ * Keychain / disables biometrics on failure or expiry.
+ */
 import { useEffect, useState } from 'react';
 
 import { Platform } from 'react-native';

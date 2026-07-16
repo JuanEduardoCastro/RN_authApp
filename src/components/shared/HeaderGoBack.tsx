@@ -1,3 +1,8 @@
+/**
+ * HeaderGoBack
+ * Reusable screen header row with a back-chevron button and a title, used
+ * at the top of stack-navigated screens.
+ */
 import React from 'react';
 
 import { Pressable, StyleSheet, View } from 'react-native';

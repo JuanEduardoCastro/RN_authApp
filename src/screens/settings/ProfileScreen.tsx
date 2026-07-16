@@ -1,3 +1,9 @@
+/**
+ * ProfileScreen
+ * View/edit the current user's profile (name, phone, occupation, avatar).
+ * Starts read-only; an Edit button toggles the form into editable mode and
+ * dispatches `editUser` on submit.
+ */
 import React, { useState } from 'react';
 
 import { Keyboard, Platform, Pressable, StyleSheet, View } from 'react-native';

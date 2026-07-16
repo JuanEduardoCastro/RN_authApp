@@ -1,3 +1,9 @@
+/**
+ * useStyles
+ * Factory hook used across screens/components to build theme-aware
+ * `StyleSheet` objects: takes a `createStyles(colors) => T` function,
+ * reads `colors` from `useMode()`, and memoizes the result.
+ */
 import { useMemo } from 'react';
 
 import { StyleSheet } from 'react-native';

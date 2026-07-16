@@ -1,3 +1,9 @@
+/**
+ * useBiometricAuth
+ * Reports device biometric capability and whether biometric login is
+ * enabled, for components that react to biometric state (mainly the
+ * Settings toggle). Returns `{ isAvailable, isEnabled, biometricType, recheck }`.
+ */
 import { useCallback, useEffect, useState } from 'react';
 
 import * as Keychain from 'react-native-keychain';

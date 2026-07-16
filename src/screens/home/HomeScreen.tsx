@@ -1,3 +1,10 @@
+/**
+ * HomeScreen
+ * First screen of the authenticated HomeNavigator tab stack. Shows the
+ * user's info/session cards and owns three post-login modals: logout
+ * confirmation, "complete your profile" nudge, and the biometric opt-in
+ * offer (reads `pendingBiometricOffer` from `authSlice`, see CLAUDE.md for why).
+ */
 import React, { useEffect, useState } from 'react';
 
 import { StyleSheet } from 'react-native';

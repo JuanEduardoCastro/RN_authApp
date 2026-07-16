@@ -1,3 +1,9 @@
+/**
+ * useLogoutUser
+ * Centralizes the logout flow so screens don't duplicate it: dispatches
+ * `logoutUser` and navigates to `WelcomeScreen` on both success and
+ * failure (fail-safe logout). Returns `{ handleLogout }`.
+ */
 import { useTranslation } from 'react-i18next';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 

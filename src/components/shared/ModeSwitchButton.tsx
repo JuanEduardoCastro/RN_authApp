@@ -1,3 +1,9 @@
+/**
+ * ModeSwitchButton
+ * Animated light/dark mode toggle switch (pill with a sliding knob). Reads
+ * `mode`/`toggleMode` from `useMode` (theme Context) to drive both the
+ * toggle state and the slide animation.
+ */
 import React from 'react';
 
 import { Pressable, StyleSheet } from 'react-native';

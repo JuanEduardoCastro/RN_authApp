@@ -1,3 +1,9 @@
+/**
+ * UserInfoCard
+ * Profile summary card: avatar, name (or translated default), email, and
+ * locale-formatted "member since" date. Used on `ProfileScreen`/
+ * `SettingsScreen`.
+ */
 import React from 'react';
 
 import { Pressable, StyleSheet, View } from 'react-native';

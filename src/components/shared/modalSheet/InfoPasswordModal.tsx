@@ -1,3 +1,9 @@
+/**
+ * InfoPasswordModal
+ * Static informational modal listing the password rules (length, case,
+ * number, symbol). Opened from the "ⓘ" button next to password fields in
+ * InputAuthField.
+ */
 import React from 'react';
 
 import { StyleSheet, View } from 'react-native';

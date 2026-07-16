@@ -1,3 +1,9 @@
+/**
+ * Loader
+ * Full-screen overlay spinner shown while the Redux global `loader` state
+ * is true (e.g. a thunk pending). Custom animation: 8 dots of increasing
+ * size arranged in a circle, continuously rotating via Reanimated.
+ */
 import React, { useEffect } from 'react';
 
 import { StyleSheet, View } from 'react-native';

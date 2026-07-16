@@ -1,3 +1,9 @@
+/**
+ * MailContactBox
+ * Tappable "contact us" box that opens the device's mail client with a
+ * pre-filled subject/body addressed to a given email, with an `Alert`
+ * fallback if no mail app is configured.
+ */
 import React from 'react';
 
 import { Alert, Linking, Pressable, StyleSheet, View } from 'react-native';

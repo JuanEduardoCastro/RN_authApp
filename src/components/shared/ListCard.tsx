@@ -1,3 +1,9 @@
+/**
+ * ListCard
+ * Generic pressable list row with an optional leading icon, a title, and an
+ * optional trailing checkmark. Used throughout `SettingsScreen`/`AdminScreen`
+ * for navigable/selectable list items.
+ */
 import React, { ReactNode } from 'react';
 
 import { Pressable, StyleSheet, View } from 'react-native';

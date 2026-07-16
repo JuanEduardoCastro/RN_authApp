@@ -1,3 +1,9 @@
+/**
+ * useBadgeCount
+ * Keeps the OS app-icon badge in sync with unread inbox messages via
+ * `fetchUnreadCount` and `notifee`. Returns `syncBadge`/`clearBadge`, used
+ * after marking a message read and by a 30s poll in `HomeNavigation`.
+ */
 import { useTranslation } from 'react-i18next';
 
 import notifee from '@notifee/react-native';

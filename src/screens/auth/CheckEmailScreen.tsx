@@ -1,3 +1,9 @@
+/**
+ * CheckEmailScreen
+ * Collects an email for two flows (new-account verification / password reset),
+ * dispatches the matching thunk, then shows a resend countdown that survives
+ * app backgrounding via `AppState`.
+ */
 import React, { useEffect, useRef, useState } from 'react';
 
 import {

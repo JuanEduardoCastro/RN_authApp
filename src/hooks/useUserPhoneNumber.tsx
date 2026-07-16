@@ -1,3 +1,9 @@
+/**
+ * useUserPhoneNumber
+ * Manages phone-number-picker state: pre-fills from the user's saved
+ * phone number or derives a default country/dial code from device
+ * locale, and tracks the selected country index. Backs `PhoneNumberPicker`.
+ */
 import { useEffect, useMemo, useState } from 'react';
 
 import { getLocales, Locale } from 'react-native-localize';

@@ -1,3 +1,9 @@
+/**
+ * BorderMaskGradient
+ * Transparent → background → transparent gradient used as a MaskedView
+ * maskElement to fade the edges of scrollable lists (e.g. the country picker).
+ * Purely presentational — no props, no local state.
+ */
 import React from 'react';
 
 import { StyleSheet } from 'react-native';

@@ -1,3 +1,9 @@
+/**
+ * AvatarViewButton
+ * Editable avatar button for profile-editing forms: shows the current photo
+ * (bound to a `react-hook-form` field) and opens the native image cropper on
+ * tap. Writes the cropped result back into the form field as a base64 URI.
+ */
 import React from 'react';
 
 import {

@@ -1,3 +1,9 @@
+/**
+ * SearchBox
+ * Header block for AdminScreen's user list: title, search input, and a
+ * select-all/deselect-all row with a live selection counter. Purely
+ * controlled/presentational — state lives in the parent screen.
+ */
 import React from 'react';
 
 import { Pressable, StyleSheet, View } from 'react-native';

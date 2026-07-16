@@ -1,3 +1,10 @@
+/**
+ * KeyboardScrollView
+ * Thin wrapper around `react-native-keyboard-controller`'s
+ * `KeyboardAwareScrollView`, standardizing keyboard-avoidance behavior
+ * across screens with forms. Uses `useKeyboardEvents` to force scrolling
+ * enabled while the keyboard is open.
+ */
 import React, { ReactNode } from 'react';
 
 import { ScrollView, StyleSheet } from 'react-native';

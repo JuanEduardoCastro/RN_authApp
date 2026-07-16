@@ -1,3 +1,10 @@
+/**
+ * CustomModal
+ * Bottom-sheet modal with a Cancel/Done header, used for pickers like the
+ * language selector. Reference fix for the iPad "Designed for iPhone" bug:
+ * reads `useWindowDimensions()` reactively and drives its own `translateY`
+ * with `withTiming` instead of Reanimated's SlideInDown/SlideOutDown presets.
+ */
 import React, { ReactNode, useEffect } from 'react';
 
 import {

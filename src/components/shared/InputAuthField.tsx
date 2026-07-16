@@ -1,3 +1,10 @@
+/**
+ * InputAuthField
+ * Labeled text input bound to `react-hook-form`, used across all auth forms
+ * (login, registration, password reset). Handles password-visibility
+ * toggling, the "ⓘ" password-rules info modal, email lowercasing, and
+ * inline validation error display.
+ */
 import React, { useState } from 'react';
 
 import {

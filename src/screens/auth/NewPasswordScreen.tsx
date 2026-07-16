@@ -1,3 +1,10 @@
+/**
+ * NewPasswordScreen
+ * Deep-link destination (`authapp://app/new-password/:emailToken`) where the
+ * user sets a password, either finishing registration or a password reset.
+ * Decodes and validates the emailed JWT before showing the form, then
+ * dispatches `createUser` or `updatePassword` depending on the token.
+ */
 import React, { useEffect, useState } from 'react';
 
 import {

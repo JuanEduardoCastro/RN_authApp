@@ -1,3 +1,11 @@
+/**
+ * BottomSheet
+ * Generic animated bottom-sheet modal (backdrop + sliding panel) — hosts the
+ * phone-number country picker. Open/close state is driven externally via a
+ * Reanimated SharedValue<boolean> rather than local component state.
+ * Uses a static `SCREEN.heightFixed` sheet height, unlike CustomModal — a
+ * candidate for the same iPad-compatibility fix if it shows the same bug.
+ */
 import React, { ReactNode, useEffect, useState } from 'react';
 
 import { Modal, Pressable, StyleSheet, View } from 'react-native';

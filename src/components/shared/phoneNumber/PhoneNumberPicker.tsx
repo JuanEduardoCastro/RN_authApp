@@ -1,3 +1,10 @@
+/**
+ * PhoneNumberPicker
+ * Composite phone-number input: a country/dial-code picker button (opens
+ * PhoneListContainer in a BottomSheet) plus a numeric field, bound to a
+ * single react-hook-form object field. Uses `useUserPhoneNumber` to derive
+ * the default country/dial-code/scroll-index from the current user.
+ */
 import React, { useMemo, useState } from 'react';
 
 import {

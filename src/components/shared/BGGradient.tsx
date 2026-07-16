@@ -1,3 +1,9 @@
+/**
+ * BGGradient
+ * Full-bleed diagonal linear-gradient background wrapper that also applies
+ * safe-area inset padding to its children. Used as the base background for
+ * the splash screen and auth screens.
+ */
 import React, { ReactNode } from 'react';
 
 import { StyleSheet, View } from 'react-native';

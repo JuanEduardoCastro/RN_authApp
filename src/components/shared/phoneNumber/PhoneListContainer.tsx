@@ -1,3 +1,10 @@
+/**
+ * PhoneListContainer
+ * Scrollable country list (flag + dial code + name) with edge-fade masking,
+ * rendered inside the BottomSheet hosted by PhoneNumberPicker. Auto-scrolls
+ * to the current selection on open; commits the chosen index back via
+ * `onSelectCountry`.
+ */
 import React, { useRef, useState } from 'react';
 
 import {

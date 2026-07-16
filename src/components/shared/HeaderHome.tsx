@@ -1,3 +1,9 @@
+/**
+ * HeaderHome
+ * Header shown on `HomeScreen` displaying which auth provider the current
+ * session used ("Signed in from Google/GitHub/Apple/email") with a matching
+ * icon. Reads `user.provider` from the Redux `userAuth` selector.
+ */
 import React from 'react';
 
 import { StyleSheet, View } from 'react-native';

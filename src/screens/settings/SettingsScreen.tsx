@@ -1,3 +1,9 @@
+/**
+ * SettingsScreen
+ * Central settings hub: logout, navigation to Profile/Admin, language
+ * picker, biometric and push-notification toggles, theme mode/color-theme
+ * switches (via `useMode`), delete account, and a support-contact box.
+ */
 import React, { useEffect, useState } from 'react';
 
 import {

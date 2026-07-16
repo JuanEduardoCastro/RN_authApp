@@ -1,3 +1,8 @@
+/**
+ * ButtonNoBorder
+ * Minimal text-only "link style" pressable with a subtle press-scale
+ * animation (Reanimated). Used for secondary actions like "Go back" links.
+ */
 import React from 'react';
 
 import { Pressable, PressableProps, StyleSheet, TextStyle } from 'react-native';

@@ -1,3 +1,10 @@
+/**
+ * NotificationBanner
+ * Global animated banner (mounted once in App.tsx) showing success/error/
+ * warning/information messages. Fully driven by Redux `authSlice` state
+ * (`notificationMessage`/`messageType`) rather than local props, and
+ * auto-dismisses after 4 seconds.
+ */
 import React, { useCallback, useEffect } from 'react';
 
 import { Platform, Pressable, StyleSheet, View } from 'react-native';

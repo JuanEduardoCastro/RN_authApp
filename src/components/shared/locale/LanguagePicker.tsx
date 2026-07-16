@@ -1,3 +1,10 @@
+/**
+ * LanguagePicker
+ * Scrollable list of app languages (from i18next resources) letting the
+ * user switch locale. Persists the choice to Keychain (`secureSetStorage`)
+ * and highlights the currently stored/device language on open.
+ * Typically hosted inside CustomModal.
+ */
 import React, { useEffect, useRef, useState } from 'react';
 
 import { FlatList, Platform, Pressable, StyleSheet, View } from 'react-native';
