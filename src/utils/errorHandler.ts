@@ -3,12 +3,17 @@ import { TFunction } from 'i18next';
 
 import { ApiErrorResponse, ParsedError } from '@store/types';
 
+import { recordCrashlyticsError } from '@utils/crashlytics';
+
 export const parseApiError = (
   error: unknown,
   t: TFunction,
   fallbackMessage: string = 'error-unknown',
 ): ParsedError => {
   if (!axios.isAxiosError(error)) {
+    if (error instanceof Error) {
+      recordCrashlyticsError(error);
+    }
     return {
       type: 'unknown',
       message: t(fallbackMessage),
@@ -21,6 +26,7 @@ export const parseApiError = (
     axiosError.code === 'ECONNABORTED' ||
     axiosError.message.includes('timeout')
   ) {
+    recordCrashlyticsError(axiosError);
     return {
       type: 'timeout',
       message: t('error-request-timeout'),
@@ -33,6 +39,7 @@ export const parseApiError = (
     axiosError.message === 'Network Error' ||
     !axiosError.response
   ) {
+    recordCrashlyticsError(axiosError);
     return {
       type: 'network',
       message: t('error-network'),
@@ -42,6 +49,7 @@ export const parseApiError = (
 
   const statusCode = axiosError.response?.status;
   if (statusCode && statusCode >= 500) {
+    recordCrashlyticsError(axiosError);
     return {
       type: 'server',
       message: t('error-server'),
@@ -59,6 +67,7 @@ export const parseApiError = (
     };
   }
 
+  recordCrashlyticsError(axiosError);
   return {
     type: 'unknown',
     message: t(fallbackMessage),

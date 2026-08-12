@@ -146,6 +146,7 @@
 			buildPhases = (
 				69300E1D6361D51D47C68BCA /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
+				ADAB003F302CFD11008FE752 /* Crashlitycs */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
@@ -153,6 +154,7 @@
 				67B303BD29F25445DE532C6E /* [CP] Embed Pods Frameworks */,
 				2F676C3B765678D6B7022DBE /* [CP] Copy Pods Resources */,
 				56C49D81E8EDBDCAE7D82E67 /* [CP-User] [RNFB] Core Configuration */,
+				4F3C440C0E60CD0D41C78B43 /* [CP-User] [RNFB] Crashlytics Configuration */,
 			);
 			buildRules = (
 			);
@@ -255,6 +257,22 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RN_authApp/Pods-RN_authApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		4F3C440C0E60CD0D41C78B43 /* [CP-User] [RNFB] Crashlytics Configuration */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "[CP-User] [RNFB] Crashlytics Configuration";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\nif [[ ${PODS_ROOT} ]]; then\n  echo \"info: Exec FirebaseCrashlytics Run from Pods\"\n  \"${PODS_ROOT}/FirebaseCrashlytics/run\"\nelse\n  echo \"info: Exec FirebaseCrashlytics Run from framework\"\n  \"${PROJECT_DIR}/FirebaseCrashlytics.framework/run\"\nfi\n";
+		};
 		56C49D81E8EDBDCAE7D82E67 /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -330,6 +348,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "HERMES_FRAMEWORK_DSYM=\"${PODS_ROOT}/hermes-engine/destroot/Library/Frameworks/unive\n  rsal/hermes.xcframework/ios-arm64/hermes.framework.dSYM\"\n\n  if [ -f \"${HERMES_FRAMEWORK_DSYM}/Contents/Resources/DWARF/hermes\" ]; then\n    cp -r \"${HERMES_FRAMEWORK_DSYM}\" \"${DWARF_DSYM_FOLDER_PATH}\"\n  fi\n";
+		};
+		ADAB003F302CFD11008FE752 /* Crashlitycs */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = Crashlitycs;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"  \n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

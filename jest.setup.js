@@ -24,6 +24,12 @@ jest.mock('@react-native-firebase/messaging', () => ({
     onTokenRefresh: jest.fn(() => jest.fn()),
   })),
 }));
+jest.mock('@react-native-firebase/crashlytics', () => ({
+  getCrashlytics: jest.fn(() => ({})),
+  log: jest.fn(),
+  recordError: jest.fn(),
+  setCrashlyticsCollectionEnabled: jest.fn(() => Promise.resolve()),
+}));
 
 jest.mock('@react-native-google-signin/google-signin', () => ({
   GoogleSignin: {

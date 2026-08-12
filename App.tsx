@@ -37,6 +37,7 @@ import { SplashScreen } from '@components/splash/SplashScreen';
 import { useBadgeCount } from '@hooks/useBadgeCount';
 import { ModeProvider } from '@context/ModeContext';
 
+import { initializeCrashlytics } from '@utils/crashlytics';
 import { getNotificationsEnabled } from '@utils/notifications/notificationPreferences';
 import {
   requestPermissionForNotification,
@@ -58,6 +59,7 @@ if (__DEV__) {
 }
 
 initializePinning();
+initializeCrashlytics();
 
 const AppWrapper = () => {
   return (

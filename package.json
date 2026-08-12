@@ -19,6 +19,7 @@
     "@react-native-community/blur": "^4.4.1",
     "@react-native-community/checkbox": "^0.5.20",
     "@react-native-firebase/app": "^23.5.0",
+    "@react-native-firebase/crashlytics": "^23.7.0",
     "@react-native-firebase/messaging": "^23.5.0",
     "@react-native-google-signin/google-signin": "^16.0.0",
     "@react-native-masked-view/masked-view": "^0.3.2",
