@@ -8,11 +8,10 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { getLocales, Locale } from 'react-native-localize';
 
+import { userAuth } from '@store/authSlice';
 import { useAppSelector } from '@store/hooks';
 
 import { countriesList } from '@constants/countriesList';
-
-import { userAuth } from 'src/store/authSlice';
 
 const useUserPhoneNumber = () => {
   const { user } = useAppSelector(userAuth);

@@ -3,12 +3,18 @@
  * Generic animated bottom-sheet modal (backdrop + sliding panel) — hosts the
  * phone-number country picker. Open/close state is driven externally via a
  * Reanimated SharedValue<boolean> rather than local component state.
- * Uses a static `SCREEN.heightFixed` sheet height, unlike CustomModal — a
- * candidate for the same iPad-compatibility fix if it shows the same bug.
+ * Applies the same iPad fix as CustomModal: reads `useWindowDimensions()`
+ * reactively to get the screen height.
  */
 import React, { ReactNode, useEffect, useState } from 'react';
 
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import {
+  Modal,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 
 import Animated, {
   SharedValue,
@@ -21,7 +27,7 @@ import Animated, {
 
 import useStyles from '@hooks/useStyles';
 
-import { SCREEN } from '@constants/dimensions';
+import { clampedHeightRatio, SCREEN } from '@constants/dimensions';
 import { TColors } from '@constants/types';
 
 import Separator from '../Separator';
@@ -40,6 +46,8 @@ const BottomSheet = ({
   children,
 }: BottomSheetProps) => {
   const { styles } = useStyles(createStyles);
+  const { height: windowHeight } = useWindowDimensions();
+  const sheetHeight = clampedHeightRatio(windowHeight) * 300;
   const height = useSharedValue(0);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -79,7 +87,7 @@ const BottomSheet = ({
         onLayout={e => {
           height.value = e.nativeEvent.layout.height;
         }}
-        style={[styles.sheet, styleSheet]}>
+        style={[styles.sheet, styleSheet, { height: sheetHeight }]}>
         <View style={styles.cropLine}>
           <Separator borderWidth={3} height={12} />
         </View>
@@ -106,7 +114,6 @@ const createStyles = (colors: TColors) =>
     sheet: {
       backgroundColor: colors.background,
       padding: 8,
-      height: SCREEN.heightFixed * 300,
       width: '100%',
       position: 'absolute',
       bottom: 0,

@@ -52,7 +52,7 @@ export const createUser = createAsyncThunk(
 );
 
 export const editUser = createAsyncThunk(
-  'users/:id',
+  'users/editUser',
   async (data: EditUserPayload, { getState, rejectWithValue }) => {
     const { t, userData } = data;
     const { auth } = getState() as RootState;
@@ -100,7 +100,7 @@ export const editUser = createAsyncThunk(
 );
 
 export const deleteAccount = createAsyncThunk(
-  'user/deleteAccount',
+  'users/deleteAccount',
   async (data: DeleteAccountPayload, { getState, rejectWithValue }) => {
     const { t } = data;
     const { auth } = getState() as RootState;

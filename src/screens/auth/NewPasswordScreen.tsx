@@ -21,6 +21,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { jwtDecode } from 'jwt-decode';
 
+import { setNotificationMessage } from '@store/authSlice';
 import { useAppDispatch } from '@store/hooks';
 import { createUser, updatePassword } from '@store/thunks';
 import { CreateUserPayload, UpdatePasswordPayload } from '@store/types';
@@ -45,8 +46,6 @@ import {
   validateEmailToken,
   validatePasswordInput,
 } from '@utils/validationHelper';
-
-import { setNotificationMessage } from 'src/store/authSlice';
 
 interface FormNewDataProps {
   email: string;

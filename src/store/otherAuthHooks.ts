@@ -206,7 +206,7 @@ export const githubLogin = createAsyncThunk(
 );
 
 export const appleLogin = createAsyncThunk(
-  'user/applesignin',
+  'users/applesignin',
   async (data: { t: TFunction }, { rejectWithValue }) => {
     const { t } = data;
 

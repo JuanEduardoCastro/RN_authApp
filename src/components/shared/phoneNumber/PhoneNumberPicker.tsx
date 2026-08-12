@@ -39,7 +39,6 @@ type PhoneNumberPickerProps = {
   name: string;
   control: Control<any>;
   rules?: any;
-  setValue?: any;
   label?: string;
   labelStyles?: ViewStyle;
   inputStyles?: TextStyle;
@@ -49,7 +48,6 @@ const PhoneNumberPicker = ({
   name,
   control,
   rules,
-  setValue: _setValue,
   label,
   labelStyles,
   inputStyles,
@@ -62,10 +60,8 @@ const PhoneNumberPicker = ({
   const isOpen = useSharedValue(false);
   const [isVisible, setIsVisible] = useState(false);
 
-  // Let react-hook-form be the single source of truth.
   const currentFieldValue = field.value || {};
 
-  // Update the 'number' part of the form value.
   const handleNumberChange = (text: string) => {
     field.onChange({
       ...currentFieldValue,
@@ -73,7 +69,6 @@ const PhoneNumberPicker = ({
     });
   };
 
-  // Update the country details of the form value.
   const handleCountryChange = (index: number) => {
     const selectedCountry = countriesList[index];
     field.onChange({
@@ -88,7 +83,6 @@ const PhoneNumberPicker = ({
     setIsVisible(!isVisible);
   };
 
-  // Memoize the flag to prevent re-calculating on every render.
   const displayFlag = useMemo(() => {
     const countryCode = currentFieldValue.code || defaultCountryCode;
     const country = countriesList.find(c => c.code === countryCode);
@@ -160,7 +154,6 @@ const PhoneNumberPicker = ({
         {isVisible && (
           <PhoneListContainer
             toggleSheet={toggleSheet}
-            selectedValue={currentFieldValue}
             indexToScroll={indexToScroll}
             onSelectCountry={handleCountryChange}
           />

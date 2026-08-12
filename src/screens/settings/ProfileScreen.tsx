@@ -12,9 +12,12 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { userAuth } from '@store/authSlice';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { editUser } from '@store/thunks';
 import { EditUserPayload } from '@store/types';
+
+import { SettingsStackScreenProps } from '@navigation/types';
 
 import AppText from '@components/shared/appsComps/AppText';
 import AvatarViewButton from '@components/shared/AvatarViewButton';
@@ -31,9 +34,6 @@ import useUserPhoneNumber from '@hooks/useUserPhoneNumber';
 import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
-
-import { SettingsStackScreenProps } from 'src/navigation/types';
-import { userAuth } from 'src/store/authSlice';
 
 interface ProfileDataProps {
   firstName: string;

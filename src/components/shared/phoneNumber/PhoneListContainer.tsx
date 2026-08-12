@@ -30,11 +30,6 @@ import BorderMaskGradient from '../borderMaskGradient/BorderMaskGradient';
 
 type PhoneListContainerProps = {
   toggleSheet: () => void;
-  selectedValue: {
-    code: string | null;
-    dialCode: string | null;
-    number: string | null;
-  } | null;
   indexToScroll: number | null;
   onSelectCountry: (index: number) => void;
 } & ViewProps;
@@ -50,7 +45,6 @@ const PhoneListContainer = ({
     indexToScroll,
   );
 
-  // A robust way to scroll to the initial index once the layout is ready.
   const handleOnLayout = () => {
     if (indexToScroll !== null && flatListRef.current) {
       flatListRef.current.scrollToIndex({

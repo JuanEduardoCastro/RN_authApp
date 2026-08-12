@@ -17,6 +17,7 @@ import {
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { addSslPinningErrorListener } from 'react-native-ssl-public-key-pinning';
 import { Provider } from 'react-redux';
 import { LinkingOptions, NavigationContainer } from '@react-navigation/native';
 
@@ -111,6 +112,20 @@ function App() {
   const { loader } = useAppSelector(userAuth);
   const { syncBadge } = useBadgeCount();
   const [isAppReady, setIsAppReady] = useState(false);
+
+  useEffect(() => {
+    const pinningErrorSubscription = addSslPinningErrorListener(error => {
+      __DEV__ &&
+        console.log(
+          'XX -> App.tsx -> SSL PINNING ERROR -> serverHostname:',
+          error.serverHostname,
+        );
+    });
+
+    return () => {
+      pinningErrorSubscription.remove();
+    };
+  }, []);
 
   useEffect(() => {
     let unsubscribe = () => {};

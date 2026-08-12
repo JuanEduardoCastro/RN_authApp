@@ -11,23 +11,7 @@ const store = configureStore({
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
-      // serializableCheck: false,
       serializableCheck: {
-        ignoredActions: [
-          'users/token/refresh',
-          'users/login',
-          'users/create',
-          'users/:id',
-          'users/logout',
-          'users/check-email',
-          'users/reset-password',
-          'users/password',
-          'admin/fetchUsers',
-          'admin/sendMessage',
-          'admin/fetchMessages',
-          'admin/unreadCount',
-          'admin/markRead',
-        ],
         ignoredActionPaths: ['payload.t', 'meta.arg.t'],
       },
     }),

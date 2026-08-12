@@ -23,13 +23,7 @@ import { TColors } from '@constants/types';
 
 import AppText from './appsComps/AppText';
 
-type HeaderHomeProps = {
-  toggleModalSheet: () => void;
-};
-
-const HeaderHome = ({
-  toggleModalSheet: _toggleModalSheet,
-}: HeaderHomeProps) => {
+const HeaderHome = () => {
   const { colors, styles } = useStyles(createStyles);
   const { user } = useAppSelector(userAuth);
   const { t } = useTranslation();

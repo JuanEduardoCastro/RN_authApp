@@ -91,7 +91,7 @@ export const sendAdminMessage = createAsyncThunk(
 );
 
 export const fetchMessages = createAsyncThunk(
-  'admin/fetchMyMessages',
+  'admin/fetchMessages',
   async (data: FetchMessagesPayload, { rejectWithValue, getState }) => {
     const { t, unreadOnly = false } = data;
     const { auth } = getState() as RootState;

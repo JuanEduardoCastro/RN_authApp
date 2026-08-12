@@ -57,8 +57,6 @@ const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
     Keyboard.dismiss();
     try {
       await dispatch(loginUser({ ...data, t })).unwrap();
-
-      // navigation.navigate('HomeNavigator', { screen: 'HomeScreen' });
     } catch (error) {
       __DEV__ &&
         console.log('XX -> LoginScreen.tsx:48 -> onSubmit -> error :', error);

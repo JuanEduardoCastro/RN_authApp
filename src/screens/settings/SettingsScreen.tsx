@@ -18,8 +18,11 @@ import { useTranslation } from 'react-i18next';
 import * as Keychain from 'react-native-keychain';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { setNotificationMessage, userAuth } from '@store/authSlice';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { deleteAccount } from '@store/thunks';
+
+import { SettingsStackScreenProps } from '@navigation/types';
 
 import AppText from '@components/shared/appsComps/AppText';
 import CustomModal from '@components/shared/bottomSheet/CustomModal';
@@ -50,6 +53,7 @@ import {
   TouchIdIcon,
 } from '@assets/svg/icons';
 
+import { calm, gold, luxury, passion } from '@constants/colors';
 import { moderateScale, SCREEN } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
@@ -61,9 +65,6 @@ import {
   enableNotifications,
   getNotificationsEnabled,
 } from '@utils/notifications/notificationPreferences';
-
-import { SettingsStackScreenProps } from 'src/navigation/types';
-import { setNotificationMessage, userAuth } from 'src/store/authSlice';
 
 const SettingsScreen = ({
   navigation,
@@ -267,25 +268,49 @@ const SettingsScreen = ({
           <ListCard
             title={t('luxury-button')}
             onPress={() => setColorTheme('luxury')}
-            icon={<CircleFullIcon width={14} height={14} color={'#7646c9'} />}
+            icon={
+              <CircleFullIcon
+                width={14}
+                height={14}
+                color={luxury.lightMode.base}
+              />
+            }
             checkBox={themeName === 'luxury'}
           />
           <ListCard
             title={t('calm-button')}
             onPress={() => setColorTheme('calm')}
-            icon={<CircleFullIcon width={14} height={14} color={'#41737c'} />}
+            icon={
+              <CircleFullIcon
+                width={14}
+                height={14}
+                color={calm.lightMode.base}
+              />
+            }
             checkBox={themeName === 'calm'}
           />
           <ListCard
             title={t('gold-button')}
             onPress={() => setColorTheme('gold')}
-            icon={<CircleFullIcon width={14} height={14} color={'#FFC337'} />}
+            icon={
+              <CircleFullIcon
+                width={14}
+                height={14}
+                color={gold.lightMode.base}
+              />
+            }
             checkBox={themeName === 'gold'}
           />
           <ListCard
             title={t('passion-button')}
             onPress={() => setColorTheme('passion')}
-            icon={<CircleFullIcon width={14} height={14} color={'#CD6D94'} />}
+            icon={
+              <CircleFullIcon
+                width={14}
+                height={14}
+                color={passion.lightMode.base}
+              />
+            }
             checkBox={themeName === 'passion'}
           />
           <Separator height={40} />
