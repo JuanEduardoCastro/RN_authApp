@@ -13,9 +13,9 @@ import { useTranslation } from 'react-i18next';
 
 import { UserSummary } from '@store/types';
 
+import Button from '@components/shared/appsComps/AppButton';
 import AppText from '@components/shared/appsComps/AppText';
 import AppTextInput from '@components/shared/appsComps/AppTextInput';
-import Button from '@components/shared/appsComps/AppButton';
 import Separator from '@components/shared/Separator';
 
 import useStyles from '@hooks/useStyles';

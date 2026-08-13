@@ -20,6 +20,7 @@ export const defaultAuthState: AuthState = {
   isAuthorized: false,
   messageType: null,
   notificationMessage: null,
+  pendingBiometricOffer: false,
 };
 
 const rootReducer = combineReducers({ auth: authReducer });

@@ -141,6 +141,7 @@ describe('logoutUser', () => {
           isAuthorized: true,
           messageType: null,
           notificationMessage: null,
+          pendingBiometricOffer: false,
         },
       },
     });
@@ -154,11 +155,11 @@ describe('logoutUser', () => {
 
 describe('loginUser — backend 429 rate limit', () => {
   beforeEach(() => {
-    (mockAxios.isAxiosError as jest.Mock).mockReturnValue(true);
+    (mockAxios.isAxiosError as unknown as jest.Mock).mockReturnValue(true);
   });
 
   afterEach(() => {
-    (mockAxios.isAxiosError as jest.Mock).mockReset();
+    (mockAxios.isAxiosError as unknown as jest.Mock).mockReset();
   });
 
   it('rejects with server rate-limit message and does not record a failed attempt', async () => {
