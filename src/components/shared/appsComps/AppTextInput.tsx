@@ -6,8 +6,14 @@
  */
 import { TextInput, TextInputProps } from 'react-native';
 
-const AppTextInput = (props: TextInputProps) => {
-  return <TextInput {...props} allowFontScaling={false} />;
+type AppTextInputProps = TextInputProps & {
+  testId?: string;
+};
+
+const AppTextInput = (props: AppTextInputProps) => {
+  return (
+    <TextInput {...props} testID={props.testId} allowFontScaling={false} />
+  );
 };
 
 export default AppTextInput;

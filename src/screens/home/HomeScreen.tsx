@@ -115,7 +115,7 @@ const HomeScreen = ({ navigation }: HomeTabScreenProps<'HomeScreen'>) => {
 
   return (
     <>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} testID="home-screen">
         <HeaderHome />
         <Separator border={false} />
         <UserInfoCard user={user!} onPress={handlePressToProfile} />

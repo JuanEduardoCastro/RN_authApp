@@ -83,6 +83,7 @@ const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
                 <View style={styles.inputBox}>
                   <Separator borderWidth={0} />
                   <InputAuthField
+                    testId="login-email-input"
                     inputStyles={styles.textinput}
                     name="email"
                     label={t('email-label')}
@@ -97,6 +98,7 @@ const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
                     placeholder={t('enter-email-placeholder')}
                   />
                   <InputAuthField
+                    testId="login-password-input"
                     inputStyles={styles.textinput}
                     name="password"
                     label={t('password-label')}
@@ -123,6 +125,7 @@ const LoginScreen = ({ navigation }: AuthStackScreenProps<'LoginScreen'>) => {
                 <Separator borderWidth={0} height={16} />
                 <View style={styles.buttonBox}>
                   <Button
+                    testID="login-submit-button"
                     title={t('login-button')}
                     onPress={handleSubmit(onSubmit)}
                     buttonStyles={styles.button}

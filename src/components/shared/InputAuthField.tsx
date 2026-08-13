@@ -33,6 +33,7 @@ import ModalSheet from './modalSheet/ModalSheet';
 
 type InputAuthFieldProps = {
   name: string;
+  testId?: string;
   control: Control<any>;
   label?: string;
   rules?: any;
@@ -42,6 +43,7 @@ type InputAuthFieldProps = {
 
 const InputAuthField = ({
   name,
+  testId,
   control,
   label,
   rules,
@@ -84,6 +86,7 @@ const InputAuthField = ({
           !props.editable && styles.completeInput,
         ]}>
         <AppTextInput
+          testId={testId}
           style={[
             styles.input,
             props.editable === false && {

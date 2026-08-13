@@ -212,7 +212,7 @@ const WelcomeScreen = ({
       colorEnd={colors.dark}
       angle={160}
       angleCenter={{ x: 0.7, y: 0.9 }}>
-      <View style={styles.container}>
+      <View style={styles.container} testID="welcome-screen">
         <View style={styles.titleBox}>
           <AppText style={styles.title}>{t('welcome-title')} </AppText>
           <AppText style={styles.subTitle}>{t('welcome-subtitle')}</AppText>
@@ -241,6 +241,7 @@ const WelcomeScreen = ({
             />
           )}
           <ButtonWithIcon
+            testID="welcome-email-login-button"
             accessibilityLabel={t('accessibility-email-login')}
             buttonStyles={{ backgroundColor: colors.light }}
             title={t('with-email')}

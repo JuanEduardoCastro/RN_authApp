@@ -49,6 +49,7 @@ const ConfirmModal = ({
       <Separator border={false} height={60} />
       <View style={styles.buttonBox}>
         <Button
+          testID="cancel-button"
           title={cancelLabel}
           onPress={onCancel}
           style={styles.buttonSize}
@@ -56,6 +57,7 @@ const ConfirmModal = ({
           textStyles={styles.noTextButton}
         />
         <Button
+          testID="confirm-button"
           title={confirmLabel}
           onPress={onConfirm}
           style={styles.buttonSize}

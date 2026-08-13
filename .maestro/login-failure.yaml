@@ -1,0 +1,22 @@
+appId: org.reactjs.native.example.RN-authApp
+---
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: 'welcome-screen'
+    timeout: 150000
+- waitForAnimationToEnd:
+    timeout: 10000
+- tapOn:
+    id: 'welcome-email-login-button'
+- tapOn:
+    id: 'login-email-input'
+- inputText: '${EMAIL}'
+- tapOn:
+    id: 'login-password-input'
+- inputText: '${PASSWORD}'
+- hideKeyboard
+- tapOn:
+    id: 'login-submit-button'
+- assertVisible:
+    text: 'Notification:.*'
