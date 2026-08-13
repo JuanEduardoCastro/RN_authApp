@@ -86,6 +86,7 @@ yarn-error.log
 /.env.test
 env.d.ts
 /env.d.ts
+!.env.test
 
 # npm
 .npmrc
@@ -95,10 +96,6 @@ env.d.ts
 
 #old-version
 old-version/
-
-#Firebase
-/ios/GoogleService-Info.plist
-/android/app/google-services.json
 
 
 #AWS S3 
