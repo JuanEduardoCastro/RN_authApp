@@ -80,13 +80,8 @@ yarn-error.log
 # .env
 .env.development
 .env.production
-.env.test
 /.env.development
 /.env.production
-/.env.test
-env.d.ts
-/env.d.ts
-!.env.test
 
 # npm
 .npmrc
