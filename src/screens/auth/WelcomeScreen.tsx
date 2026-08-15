@@ -14,6 +14,7 @@ import * as Keychain from 'react-native-keychain';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import { setNotificationMessage } from '@store/authSlice';
+import { buildGithubAuthUrl } from '@store/config/githubAuthConfig';
 import { useAppDispatch } from '@store/hooks';
 import { validateRefreshToken } from '@store/thunks';
 import { GITHUB_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env';
@@ -43,6 +44,7 @@ import { moderateScale, SCREEN, verticalScale } from '@constants/dimensions';
 import { textVar } from '@constants/textVar';
 import { TColors } from '@constants/types';
 import { authenticateWithBiometrics } from '@utils/biometricAuth';
+import { performGithubAuthorization } from '@utils/githubOAuthBridge';
 import { KeychainService, secureGetStorage } from '@utils/secureStorage';
 
 import { appleLogin, githubLogin, googleLogin } from 'src/store/otherAuthHooks';
@@ -121,7 +123,12 @@ const WelcomeScreen = ({
   const handleGitHubLogin = async () => {
     setGithubButtonDisabled(true);
     try {
-      const data = { t };
+      const { code } = await performGithubAuthorization(
+        buildGithubAuthUrl,
+        'com.authdemoapp.github://',
+      );
+
+      const data = { code, t };
       await dispatch(githubLogin(data)).unwrap();
       setGithubButtonDisabled(false);
     } catch (error) {

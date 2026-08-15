@@ -1,4 +1,3 @@
-import { authorize } from 'react-native-app-auth';
 import appleAuth from '@invertase/react-native-apple-authentication';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -10,7 +9,6 @@ import { loginRateLimiter } from '@utils/persistentRateLimiter';
 import { KeychainService, secureSetStorage } from '@utils/secureStorage';
 
 import api from './apiService';
-import { githubAuthConfig } from './config/githubAuthConfig';
 
 export const googleLogin = createAsyncThunk(
   'users/googlesignin',
@@ -112,8 +110,8 @@ export const googleLogin = createAsyncThunk(
 
 export const githubLogin = createAsyncThunk(
   'users/githubsignin',
-  async (data: { t: TFunction }, { rejectWithValue }) => {
-    const { t } = data;
+  async (data: { code: string; t: TFunction }, { rejectWithValue }) => {
+    const { code, t } = data;
 
     const rateLimit = await loginRateLimiter.checkRateLimit();
 
@@ -141,20 +139,10 @@ export const githubLogin = createAsyncThunk(
     }
 
     try {
-      const authResult = await authorize(githubAuthConfig);
-      if (!authResult.accessToken) {
-        return rejectWithValue({
-          messageType: 'error',
-          notificationMessage: t('error-github-unknown'),
-        });
-      }
-      const validateGithubResponse = await api.post(
-        '/users/github-login',
-        {},
-        {
-          headers: { Authorization: `Bearer ${authResult.accessToken}` },
-        },
-      );
+      const validateGithubResponse = await api.post('/users/github-login', {
+        code,
+      });
+
       if (validateGithubResponse.status === 200) {
         const { refreshToken } = validateGithubResponse.data.data;
         const saveResult = await secureSetStorage(
