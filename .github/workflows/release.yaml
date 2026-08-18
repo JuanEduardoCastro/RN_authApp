@@ -53,3 +53,39 @@ jobs:
         with:
           name: app-release-aab
           path: android/app/build/outputs/bundle/release/app-release.aab
+
+  ios-release:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+
+      - name: Restore .env.production
+        env:
+          ENV_PRODUCTION: ${{ secrets.ENV_PRODUCTION }}
+        run: printf '%s\n' "$ENV_PRODUCTION" > .env.production
+
+      - name: Install CocoaPods dependencies
+        working-directory: ios
+        run: |
+          bundle install
+          bundle exec pod install
+
+      - name: Build & sign release IPA
+        working-directory: ios
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION}}
+          APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
+          APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+          APPSTORE_KEY_CONTENT: ${{ secrets.APPSTORE_KEY_CONTENT }}
+        run: bundle exec fastlane ios release_build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-release-ipa
+          path: ios/*.ipa

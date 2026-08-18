@@ -1,0 +1,4 @@
+git_url("git@github.com:JuanEduardoCastro/RN_authApp_certs.git")
+  storage_mode("git")
+  type("appstore")
+  app_identifier(["com.juancastro.authapp"])

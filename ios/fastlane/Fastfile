@@ -1,0 +1,37 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  before_all do
+    app_store_connect_api_key(
+      key_id: ENV["APPSTORE_KEY_ID"],
+      issuer_id: ENV["APPSTORE_ISSUER_ID"],
+      key_content: ENV["APPSTORE_KEY_CONTENT"],
+      is_key_content_base64: false,
+    )
+  end
+
+  desc "Build a signed release IPA using match-managed App Store certs"
+  lane :release_build do
+    match(type: "appstore", readonly: true)
+    build_app(
+      workspace: "RN_authApp.xcworkspace",
+      scheme: "RN_authApp",
+      export_method: "app-store",
+    )
+  end
+end
