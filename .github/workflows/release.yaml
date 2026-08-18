@@ -15,6 +15,9 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundle-cache: true
       - run: npm ci
       - uses: actions/setup-java@v5
         with:
@@ -53,6 +56,15 @@ jobs:
         with:
           name: app-release-aab
           path: android/app/build/outputs/bundle/release/app-release.aab
+
+      - name: Restore Play Store service account key
+        env:
+          PLAY_STORE_JSON_KEY: ${{ secrets.PLAY_STORE_JSON_KEY }}
+        run: printf '%s' "$PLAY_STORE_JSON_KEY" > android/play-store-key.json
+
+      - name: Publish to Play Console (internal track)
+        working-directory: android
+        run: bundle exec fastlane android publish_internal
 
   ios-release:
     runs-on: macos-latest

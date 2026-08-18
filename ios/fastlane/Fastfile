@@ -18,7 +18,7 @@ default_platform(:ios)
 platform :ios do
   before_all do
     setup_ci if ENV["CI"]
-    
+
     app_store_connect_api_key(
       key_id: ENV["APPSTORE_KEY_ID"],
       issuer_id: ENV["APPSTORE_ISSUER_ID"],
@@ -27,7 +27,7 @@ platform :ios do
     )
   end
 
-  desc "Build a signed release IPA using match-managed App Store certs"
+  desc "Build a signed release IPA using match-managed App Store certs, then upload to TestFlight"
   lane :release_build do
     match(
       type: "appstore", 
@@ -38,6 +38,9 @@ platform :ios do
       workspace: "RN_authApp.xcworkspace",
       scheme: "RN_authApp",
       export_method: "app-store",
+    )
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
     )
   end
 end
