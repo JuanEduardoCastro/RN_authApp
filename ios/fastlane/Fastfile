@@ -27,7 +27,11 @@ platform :ios do
 
   desc "Build a signed release IPA using match-managed App Store certs"
   lane :release_build do
-    match(type: "appstore", readonly: true)
+    match(
+      type: "appstore", 
+      readonly: true, 
+      git_url: ENV["CI"] ? "https://github.com/JuanEduardoCastro/RN_authApp_certs.git" : "git@github.com:JuanEduardoCastro/RN_authApp_certs.git",
+    ) 
     build_app(
       workspace: "RN_authApp.xcworkspace",
       scheme: "RN_authApp",
