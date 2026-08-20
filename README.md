@@ -8,6 +8,8 @@
 
 A full-featured authentication demo for iOS and Android built with React Native. Google, GitHub, and Apple Sign-In, biometric login (Face ID / Touch ID), JWT token management with silent refresh, push notifications, deep linking, and a multi-theme UI — all backed by a live REST API.
 
+**[Landing page](https://juaneduardocastro.github.io/RN_authApp/index.html)** · **[iOS — App Store](https://apps.apple.com/us/app/auth-jc/id6771492376)** · **[Android — closed testing](https://groups.google.com/g/authjc-closed-testing-v1/members)**
+
 ---
 
 ## Screenshots
@@ -45,7 +47,7 @@ A full-featured authentication demo for iOS and Android built with React Native.
 ## Features
 
 - **Google Sign-In** — OAuth 2.0 via `@react-native-google-signin/google-signin`
-- **GitHub Sign-In** — OAuth 2.0 with PKCE via `react-native-app-auth` (no client secret stored)
+- **GitHub Sign-In** — OAuth 2.0 with PKCE; authorization code is exchanged for a token server-side (no client secret ever ships in the app)
 - **Apple Sign-In** — Sign in with Apple (iOS only) via `@invertase/react-native-apple-authentication`
 - **Biometric login** — Face ID / Touch ID opt-in flow; access-controlled Keychain entry invalidated on new biometric enrollment
 - **JWT token management** — access + refresh token pair; silent proactive refresh when token expires within 5 minutes
@@ -61,6 +63,7 @@ A full-featured authentication demo for iOS and Android built with React Native.
 - **i18n** — English and Spanish via `react-i18next`; language preference persisted to Keychain
 - **Responsive layout** — pixel-perfect scaling based on 393×852 design reference; portrait-locked on all platforms
 - **Input sanitisation** — XSS prevention on all user-provided data before API calls
+- **Crash reporting** — Firebase Crashlytics wired at app startup
 
 ---
 
@@ -73,13 +76,15 @@ A full-featured authentication demo for iOS and Android built with React Native.
 | Navigation | React Navigation 7 — Stack + Bottom Tab |
 | State | Redux Toolkit 2 + Redux Thunk |
 | HTTP | Axios + custom interceptor |
-| Auth (OAuth) | Google Sign-In, react-native-app-auth (GitHub PKCE), Apple Authentication |
+| Auth (OAuth) | Google Sign-In, GitHub PKCE (server-side token exchange), Apple Authentication |
 | Secure storage | react-native-keychain (Keychain / Android Keystore) |
 | Push notifications | Firebase Cloud Messaging (`@react-native-firebase`) |
+| Crash reporting | Firebase Crashlytics |
 | Animations | React Native Reanimated 4 |
 | Gestures | React Native Gesture Handler |
 | i18n | react-i18next |
-| Testing | Jest 29 + React Native Testing Library 13 |
+| Testing | Jest 29 + React Native Testing Library 13, Maestro (E2E) |
+| CI/CD | GitHub Actions — lint/typecheck/test/build, plus signed release → Play Console + TestFlight |
 
 ---
 
@@ -230,7 +235,11 @@ npm run start-cache        # Metro with cache reset
 ### Test
 
 ```bash
-npm test
+npm test                                       # Jest unit tests
+
+# E2E (Maestro, requires a booted iOS Simulator + a dedicated test account)
+maestro test .maestro/login-success.yaml --env EMAIL=... --env PASSWORD=...
+maestro test .maestro/login-failure.yaml --env EMAIL=... --env PASSWORD=...
 ```
 
 ### Lint
@@ -241,9 +250,18 @@ npm run lint
 
 ---
 
+## CI/CD
+
+Two GitHub Actions workflows:
+
+- **`ci.yaml`** — runs on every push: lint, typecheck, Jest tests, plus unsigned Android and iOS build validation.
+- **`release.yaml`** — manual `workflow_dispatch` or a `v*.*.*` tag: signs and publishes both platforms. Android is signed with Gradle and pushed to the Play Console **internal testing** track; iOS is signed via fastlane `match` and pushed to **TestFlight**.
+
+---
+
 ## Security highlights
 
-- **No client secrets in the app** — GitHub OAuth uses PKCE; no `clientSecret` is stored anywhere in the codebase
+- **No client secrets in the app** — GitHub OAuth's authorization code is exchanged for a token server-side; no `clientSecret` is ever bundled into the app
 - **SSL pinning** — active on all API calls via `react-native-ssl-public-key-pinning`
 - **Biometric entry invalidation** — `BIOMETRY_CURRENT_SET` access control means a new fingerprint or face enrollment automatically invalidates the stored credential
 - **XSS prevention** — `sanitizeUserInput()` and `cleanUserData()` applied to all user input before API calls
@@ -254,10 +272,10 @@ npm run lint
 
 ## Platform support
 
-| Platform | Minimum version |
-|---|---|
-| iOS | 15.1 |
-| Android | 7.0 (API 24) |
+| Platform | Minimum version | Availability |
+|---|---|---|
+| iOS | 15.1 | [App Store](https://apps.apple.com/us/app/auth-jc/id6771492376) (unlisted) |
+| Android | 7.0 (API 24) | [Play Store closed testing](https://groups.google.com/g/authjc-closed-testing-v1/members) — join the tester group to opt in |
 
 ---
 
